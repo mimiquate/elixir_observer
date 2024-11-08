@@ -22,4 +22,14 @@ defmodule Hexpm do
   end
 end
 
-Hexpm.get()
+{
+  :ok,
+  {
+    {_, 200, _},
+    _headers,
+    packages_data
+  }
+} =
+  Hexpm.get()
+
+File.write!("packages.json", packages_data)
