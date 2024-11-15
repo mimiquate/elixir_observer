@@ -15,9 +15,9 @@ defmodule ElixirToolboxWeb.CoreComponents do
   Icons are provided by [heroicons](https://heroicons.com). See `icon/1` for usage.
   """
   use Phoenix.Component
+  use Gettext, backend: ElixirToolboxWeb.Gettext
 
   alias Phoenix.LiveView.JS
-  import ElixirToolboxWeb.Gettext
 
   @doc """
   Renders a modal.

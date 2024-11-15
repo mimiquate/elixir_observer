@@ -43,7 +43,7 @@ defmodule ElixirToolboxWeb do
         layouts: [html: ElixirToolboxWeb.Layouts]
 
       import Plug.Conn
-      import ElixirToolboxWeb.Gettext
+      use Gettext, backend: ElixirToolboxWeb.Gettext
 
       unquote(verified_routes())
     end
@@ -85,7 +85,7 @@ defmodule ElixirToolboxWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import ElixirToolboxWeb.CoreComponents
-      import ElixirToolboxWeb.Gettext
+      use Gettext, backend: ElixirToolboxWeb.Gettext
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
