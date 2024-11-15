@@ -1,0 +1,50 @@
+name: Elixir CI
+
+on: push
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    name: Build and test
+    runs-on: ubuntu-22.04
+
+    services:
+      postgres:
+        image: postgres:15.3
+        env:
+          POSTGRES_USER: elixir_toolbox
+          POSTGRES_PASSWORD: elixir_toolbox
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: erlef/setup-beam@v1
+      id: beam
+      with:
+        version-file: '.tool-versions'
+        version-type: 'strict'
+    - name: Restore dependencies cache
+      uses: actions/cache@v4
+      with:
+        path: deps
+        key: ${{ runner.os }}-mix-deps-${{ hashFiles('**/mix.lock') }}
+    - name: Restore compilation cache
+      uses: actions/cache@v4
+      with:
+        path: _build
+        key: ${{ runner.os }}-mix-build-${{ steps.beam.outputs.elixir-version }}-${{ steps.beam.outputs.otp-version }}-${{ hashFiles('**/mix.lock') }}
+    - run: mix deps.get
+    - run: mix deps.unlock --check-unused
+    - run: mix compile --warnings-as-errors
+    - run: mix format --check-formatted
+    - run: mix test
