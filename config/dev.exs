@@ -2,8 +2,8 @@ import Config
 
 # Configure your database
 config :elixir_toolbox, ElixirToolbox.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "elixir_toolbox",
+  password: "elixir_toolbox",
   hostname: "localhost",
   database: "elixir_toolbox_dev",
   stacktrace: true,
