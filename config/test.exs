@@ -18,7 +18,7 @@ config :toolbox, Toolbox.Repo,
 config :toolbox, ToolboxWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
   secret_key_base: "n97pFWhp6ucf5DQFj4PD6Lj+Ty2JalCUyHsOTXqe62Lp+sjUqKtp6kElZPQKmltC",
-  server: false
+  server: true
 
 # Print only warnings and errors during test
 config :logger, level: :warning
@@ -29,3 +29,10 @@ config :phoenix, :plug_init_mode, :runtime
 # Enable helpful, but potentially expensive runtime checks
 config :phoenix_live_view,
   enable_expensive_runtime_checks: true
+
+config :wallaby,
+  otp_app: :toolbox,
+  chromedriver: [
+    # Attempt to fix https://github.com/elixir-wallaby/wallaby/issues/787
+    binary: ""
+  ]

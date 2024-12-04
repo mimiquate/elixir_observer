@@ -61,7 +61,8 @@ defmodule Toolbox.MixProject do
       {:phoenix_live_reload, "~> 1.2", only: :dev},
 
       # Test
-      {:floki, ">= 0.30.0", only: :test}
+      {:floki, ">= 0.30.0", only: :test},
+      {:wallaby, "~> 0.30.9", runtime: false, only: :test}
     ]
   end
 
