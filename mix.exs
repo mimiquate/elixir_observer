@@ -1,9 +1,9 @@
-defmodule ElixirToolbox.MixProject do
+defmodule Toolbox.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :elixir_toolbox,
+      app: :toolbox,
       version: "0.1.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -18,7 +18,7 @@ defmodule ElixirToolbox.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {ElixirToolbox.Application, []},
+      mod: {Toolbox.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -78,10 +78,10 @@ defmodule ElixirToolbox.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["tailwind elixir_toolbox", "esbuild elixir_toolbox"],
+      "assets.build": ["tailwind toolbox", "esbuild toolbox"],
       "assets.deploy": [
-        "tailwind elixir_toolbox --minify",
-        "esbuild elixir_toolbox --minify",
+        "tailwind toolbox --minify",
+        "esbuild toolbox --minify",
         "phx.digest"
       ]
     ]

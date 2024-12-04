@@ -1,7 +1,7 @@
 import Config
 
 # Configure your database
-config :elixir_toolbox, ElixirToolbox.Repo,
+config :toolbox, Toolbox.Repo,
   username: "elixir_toolbox",
   password: "elixir_toolbox",
   hostname: "localhost",
@@ -16,17 +16,17 @@ config :elixir_toolbox, ElixirToolbox.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we can use it
 # to bundle .js and .css sources.
-config :elixir_toolbox, ElixirToolboxWeb.Endpoint,
+config :toolbox, ToolboxWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [ip: {127, 0, 0, 1}, port: 4000],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "iQwp5jO8BQ5mQpHQsUxGqqNrWa2wNtlwiHUUWQ/bg8CXSrkglXGPhsA/0Idyt6gK",
+  secret_key_base: "bfQlTJ5DdnKLJPpw/NkVf/IkorHeq0VhRVHnksOOE2lze9LDFgBm1T8XRWVH+3et",
   watchers: [
-    esbuild: {Esbuild, :install_and_run, [:elixir_toolbox, ~w(--sourcemap=inline --watch)]},
-    tailwind: {Tailwind, :install_and_run, [:elixir_toolbox, ~w(--watch)]}
+    esbuild: {Esbuild, :install_and_run, [:toolbox, ~w(--sourcemap=inline --watch)]},
+    tailwind: {Tailwind, :install_and_run, [:toolbox, ~w(--watch)]}
   ]
 
 # ## SSL Support
@@ -53,17 +53,17 @@ config :elixir_toolbox, ElixirToolboxWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :elixir_toolbox, ElixirToolboxWeb.Endpoint,
+config :toolbox, ToolboxWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/elixir_toolbox_web/(controllers|live|components)/.*(ex|heex)$"
+      ~r"lib/toolbox_web/(controllers|live|components)/.*(ex|heex)$"
     ]
   ]
 
 # Enable dev routes for dashboard and mailbox
-config :elixir_toolbox, dev_routes: true
+config :toolbox, dev_routes: true
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"

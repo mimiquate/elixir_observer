@@ -1,4 +1,4 @@
-defmodule ElixirToolboxWeb.ConnCase do
+defmodule ToolboxWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -11,7 +11,7 @@ defmodule ElixirToolboxWeb.ConnCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use ElixirToolboxWeb.ConnCase, async: true`, although
+  by setting `use ToolboxWeb.ConnCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -20,19 +20,19 @@ defmodule ElixirToolboxWeb.ConnCase do
   using do
     quote do
       # The default endpoint for testing
-      @endpoint ElixirToolboxWeb.Endpoint
+      @endpoint ToolboxWeb.Endpoint
 
-      use ElixirToolboxWeb, :verified_routes
+      use ToolboxWeb, :verified_routes
 
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
-      import ElixirToolboxWeb.ConnCase
+      import ToolboxWeb.ConnCase
     end
   end
 
   setup tags do
-    ElixirToolbox.DataCase.setup_sandbox(tags)
+    Toolbox.DataCase.setup_sandbox(tags)
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 end

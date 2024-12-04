@@ -5,7 +5,7 @@ import Config
 # The MIX_TEST_PARTITION environment variable can be used
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
-config :elixir_toolbox, ElixirToolbox.Repo,
+config :toolbox, Toolbox.Repo,
   username: "elixir_toolbox",
   password: "elixir_toolbox",
   hostname: "localhost",
@@ -15,9 +15,9 @@ config :elixir_toolbox, ElixirToolbox.Repo,
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
-config :elixir_toolbox, ElixirToolboxWeb.Endpoint,
+config :toolbox, ToolboxWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
-  secret_key_base: "opkwa0Sacm/YJfzKwHi7e+/acuQ2kBLGv0jQVIXBkv7Dqj9BGu2UQErj922GBMi5",
+  secret_key_base: "n97pFWhp6ucf5DQFj4PD6Lj+Ty2JalCUyHsOTXqe62Lp+sjUqKtp6kElZPQKmltC",
   server: false
 
 # Print only warnings and errors during test

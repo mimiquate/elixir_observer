@@ -1,5 +1,5 @@
-defmodule ElixirToolboxWeb.PageControllerTest do
-  use ElixirToolboxWeb.ConnCase
+defmodule ToolboxWeb.PageControllerTest do
+  use ToolboxWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get(conn, ~p"/")

@@ -1,13 +1,13 @@
-defmodule ElixirToolboxWeb.Endpoint do
-  use Phoenix.Endpoint, otp_app: :elixir_toolbox
+defmodule ToolboxWeb.Endpoint do
+  use Phoenix.Endpoint, otp_app: :toolbox
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.
   @session_options [
     store: :cookie,
-    key: "_elixir_toolbox_key",
-    signing_salt: "BF1imvEB",
+    key: "_toolbox_key",
+    signing_salt: "RhD4O0/3",
     same_site: "Lax"
   ]
 
@@ -21,9 +21,9 @@ defmodule ElixirToolboxWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
-    from: :elixir_toolbox,
+    from: :toolbox,
     gzip: false,
-    only: ElixirToolboxWeb.static_paths()
+    only: ToolboxWeb.static_paths()
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
@@ -31,7 +31,7 @@ defmodule ElixirToolboxWeb.Endpoint do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
     plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
-    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :elixir_toolbox
+    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :toolbox
   end
 
   plug Phoenix.LiveDashboard.RequestLogger,
@@ -49,5 +49,5 @@ defmodule ElixirToolboxWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
-  plug ElixirToolboxWeb.Router
+  plug ToolboxWeb.Router
 end

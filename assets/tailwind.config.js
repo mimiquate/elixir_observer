@@ -8,8 +8,8 @@ const path = require("path")
 module.exports = {
   content: [
     "./js/**/*.js",
-    "../lib/elixir_toolbox_web.ex",
-    "../lib/elixir_toolbox_web/**/*.*ex"
+    "../lib/toolbox_web.ex",
+    "../lib/toolbox_web/**/*.*ex"
   ],
   theme: {
     extend: {

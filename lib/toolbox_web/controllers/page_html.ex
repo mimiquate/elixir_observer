@@ -1,10 +1,10 @@
-defmodule ElixirToolboxWeb.PageHTML do
+defmodule ToolboxWeb.PageHTML do
   @moduledoc """
   This module contains pages rendered by PageController.
 
   See the `page_html` directory for all templates available.
   """
-  use ElixirToolboxWeb, :html
+  use ToolboxWeb, :html
 
   embed_templates "page_html/*"
 end

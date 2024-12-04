@@ -1,4 +1,4 @@
-defmodule ElixirToolboxWeb.Telemetry do
+defmodule ToolboxWeb.Telemetry do
   use Supervisor
   import Telemetry.Metrics
 
@@ -52,23 +52,23 @@ defmodule ElixirToolboxWeb.Telemetry do
       ),
 
       # Database Metrics
-      summary("elixir_toolbox.repo.query.total_time",
+      summary("toolbox.repo.query.total_time",
         unit: {:native, :millisecond},
         description: "The sum of the other measurements"
       ),
-      summary("elixir_toolbox.repo.query.decode_time",
+      summary("toolbox.repo.query.decode_time",
         unit: {:native, :millisecond},
         description: "The time spent decoding the data received from the database"
       ),
-      summary("elixir_toolbox.repo.query.query_time",
+      summary("toolbox.repo.query.query_time",
         unit: {:native, :millisecond},
         description: "The time spent executing the query"
       ),
-      summary("elixir_toolbox.repo.query.queue_time",
+      summary("toolbox.repo.query.queue_time",
         unit: {:native, :millisecond},
         description: "The time spent waiting for a database connection"
       ),
-      summary("elixir_toolbox.repo.query.idle_time",
+      summary("toolbox.repo.query.idle_time",
         unit: {:native, :millisecond},
         description:
           "The time the connection spent waiting before being checked out for the query"
@@ -86,7 +86,7 @@ defmodule ElixirToolboxWeb.Telemetry do
     [
       # A module, function and arguments to be invoked periodically.
       # This function must call :telemetry.execute/3 and a metric must be added above.
-      # {ElixirToolboxWeb, :count_users, []}
+      # {ToolboxWeb, :count_users, []}
     ]
   end
 end

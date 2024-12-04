@@ -1,31 +1,31 @@
+# General application configuration
 # This file is responsible for configuring your application
 # and its dependencies with the aid of the Config module.
 #
 # This configuration file is loaded before any dependency and
 # is restricted to this project.
 
-# General application configuration
 import Config
 
-config :elixir_toolbox,
-  ecto_repos: [ElixirToolbox.Repo],
+config :toolbox,
+  ecto_repos: [Toolbox.Repo],
   generators: [timestamp_type: :utc_datetime]
 
 # Configures the endpoint
-config :elixir_toolbox, ElixirToolboxWeb.Endpoint,
+config :toolbox, ToolboxWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,
   render_errors: [
-    formats: [html: ElixirToolboxWeb.ErrorHTML, json: ElixirToolboxWeb.ErrorJSON],
+    formats: [html: ToolboxWeb.ErrorHTML, json: ToolboxWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: ElixirToolbox.PubSub,
-  live_view: [signing_salt: "U4j3uirz"]
+  pubsub_server: Toolbox.PubSub,
+  live_view: [signing_salt: "pI1I5EQU"]
 
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.17.11",
-  elixir_toolbox: [
+  toolbox: [
     args:
       ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
     cd: Path.expand("../assets", __DIR__),
@@ -35,7 +35,7 @@ config :esbuild,
 # Configure tailwind (the version is required)
 config :tailwind,
   version: "3.4.3",
-  elixir_toolbox: [
+  toolbox: [
     args: ~w(
       --config=tailwind.config.js
       --input=css/app.css

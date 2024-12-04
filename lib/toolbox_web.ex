@@ -1,12 +1,12 @@
-defmodule ElixirToolboxWeb do
+defmodule ToolboxWeb do
   @moduledoc """
   The entrypoint for defining your web interface, such
   as controllers, components, channels, and so on.
 
   This can be used in your application as:
 
-      use ElixirToolboxWeb, :controller
-      use ElixirToolboxWeb, :html
+      use ToolboxWeb, :controller
+      use ToolboxWeb, :html
 
   The definitions below will be executed for every controller,
   component, etc, so keep them short and clean, focused
@@ -40,10 +40,10 @@ defmodule ElixirToolboxWeb do
     quote do
       use Phoenix.Controller,
         formats: [:html, :json],
-        layouts: [html: ElixirToolboxWeb.Layouts]
+        layouts: [html: ToolboxWeb.Layouts]
 
       import Plug.Conn
-      use Gettext, backend: ElixirToolboxWeb.Gettext
+      use Gettext, backend: ToolboxWeb.Gettext
 
       unquote(verified_routes())
     end
@@ -52,7 +52,7 @@ defmodule ElixirToolboxWeb do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {ElixirToolboxWeb.Layouts, :app}
+        layout: {ToolboxWeb.Layouts, :app}
 
       unquote(html_helpers())
     end
@@ -84,8 +84,8 @@ defmodule ElixirToolboxWeb do
       # HTML escaping functionality
       import Phoenix.HTML
       # Core UI components and translation
-      import ElixirToolboxWeb.CoreComponents
-      use Gettext, backend: ElixirToolboxWeb.Gettext
+      import ToolboxWeb.CoreComponents
+      use Gettext, backend: ToolboxWeb.Gettext
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
@@ -98,9 +98,9 @@ defmodule ElixirToolboxWeb do
   def verified_routes do
     quote do
       use Phoenix.VerifiedRoutes,
-        endpoint: ElixirToolboxWeb.Endpoint,
-        router: ElixirToolboxWeb.Router,
-        statics: ElixirToolboxWeb.static_paths()
+        endpoint: ToolboxWeb.Endpoint,
+        router: ToolboxWeb.Router,
+        statics: ToolboxWeb.static_paths()
     end
   end
 

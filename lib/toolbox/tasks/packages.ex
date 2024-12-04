@@ -1,4 +1,4 @@
-defmodule ElixirToolbox.Tasks.Packages do
+defmodule Toolbox.Tasks.Packages do
   defmodule Hexpm do
     @base_url "https://hex.pm/api"
 
