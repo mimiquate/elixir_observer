@@ -19,6 +19,8 @@ defmodule ToolboxWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    get "/packages/:name", PackageController, :show
   end
 
   # Other scopes may use custom stacks.
