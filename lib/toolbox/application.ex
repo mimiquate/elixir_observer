@@ -15,7 +15,8 @@ defmodule Toolbox.Application do
       # Start a worker by calling: Toolbox.Worker.start_link(arg)
       # {Toolbox.Worker, arg},
       # Start to serve requests, typically the last entry
-      ToolboxWeb.Endpoint
+      ToolboxWeb.Endpoint,
+      Toolbox.PackagesFetcher
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

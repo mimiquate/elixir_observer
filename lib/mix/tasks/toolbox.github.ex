@@ -1,9 +1,9 @@
-defmodule Mix.Tasks.Packages do
+defmodule Mix.Tasks.Toolbox.Github do
   use Mix.Task
 
   @impl Mix.Task
   def run(_args) do
     Mix.Task.run("app.start")
-    Toolbox.Tasks.Packages.run()
+    Toolbox.Tasks.Github.run()
   end
 end
