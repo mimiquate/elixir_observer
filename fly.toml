@@ -1,0 +1,33 @@
+# fly.toml app configuration file generated for ex-tools on 2024-12-10T14:41:24-03:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'ex-tools'
+primary_region = 'scl'
+kill_signal = 'SIGTERM'
+
+[build]
+
+[deploy]
+  release_command = '/app/bin/migrate'
+
+[env]
+  PHX_HOST = 'ex-tools.fly.dev'
+  PORT = '8080'
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+  [http_service.concurrency]
+    type = 'connections'
+    hard_limit = 1000
+    soft_limit = 1000
+
+[[vm]]
+  size = 'shared-cpu-1x'

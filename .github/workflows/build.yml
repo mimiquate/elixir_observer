@@ -48,3 +48,16 @@ jobs:
     - run: mix compile --warnings-as-errors
     - run: mix format --check-formatted
     - run: mix test
+
+  deploy:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    needs: build
+    name: Deploy to Fly
+    runs-on: ubuntu-22.04
+    concurrency: deploy-group
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

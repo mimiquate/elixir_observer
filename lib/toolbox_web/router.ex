@@ -8,6 +8,7 @@ defmodule ToolboxWeb.Router do
     plug :put_root_layout, html: {ToolboxWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :basic_auth
   end
 
   pipeline :api do
@@ -39,5 +40,9 @@ defmodule ToolboxWeb.Router do
 
       live_dashboard "/dashboard", metrics: ToolboxWeb.Telemetry
     end
+  end
+
+  defp basic_auth(conn, _opts) do
+    Plug.BasicAuth.basic_auth(conn, Application.fetch_env!(:toolbox, :basic_auth))
   end
 end

@@ -97,3 +97,9 @@ if config_env() == :prod do
   #
   # Check `Plug.SSL` for all available options in `force_ssl`.
 end
+
+config :toolbox,
+  basic_auth: [
+    username: System.get_env("BASIC_AUTH_USERNAME", "admin"),
+    password: System.get_env("BASIC_AUTH_PASSWORD", "secret")
+  ]
