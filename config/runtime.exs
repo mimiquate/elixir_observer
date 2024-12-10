@@ -107,3 +107,7 @@ config :toolbox,
     username: System.get_env("BASIC_AUTH_USERNAME", "admin"),
     password: System.get_env("BASIC_AUTH_PASSWORD", "secret")
   ]
+
+config :tower_slack,
+  webhook_url: System.get_env("TOWER_SLACK_WEBHOOK_URL"),
+  environment: System.get_env("DEPLOYMENT_ENV", to_string(config_env()))
