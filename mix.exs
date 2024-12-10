@@ -58,6 +58,7 @@ defmodule Toolbox.MixProject do
       {:telemetry_poller, "~> 1.0"},
 
       # Dev
+      {:dotenv_parser, "~> 2.0", only: :dev},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
 
       # Test
