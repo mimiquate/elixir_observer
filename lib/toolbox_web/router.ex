@@ -18,7 +18,7 @@ defmodule ToolboxWeb.Router do
   scope "/", ToolboxWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", HomeLive
 
     get "/packages/:name", PackageController, :show
   end

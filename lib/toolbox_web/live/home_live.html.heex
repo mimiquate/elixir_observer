@@ -1,0 +1,27 @@
+<div class="text-2xl">Elixir Toolbox</div>
+
+<div>
+  <.simple_form for={@form} phx-submit="search">
+    <.input field={@form[:term]} placeholder="Search for packages" />
+    <:actions>
+      <.button>Search</.button>
+    </:actions>
+  </.simple_form>
+</div>
+
+<div class="mt-12 text-xl">Popular packages</div>
+
+<ul>
+  <li class="mt-1">
+    <.link navigate={~p"/packages/phoenix"}>phoenix</.link>
+  </li>
+  <li class="mt-1">
+    <.link navigate={~p"/packages/telemetry"}>telemetry</.link>
+  </li>
+  <li class="mt-1">
+    <.link navigate={~p"/packages/plug"}>plug</.link>
+  </li>
+  <li class="mt-1">
+    <.link navigate={~p"/packages/ecto"}>ecto</.link>
+  </li>
+</ul>
