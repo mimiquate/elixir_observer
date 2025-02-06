@@ -7,22 +7,20 @@ defmodule Toolbox.Application do
 
   @impl true
   def start(_type, _args) do
-    children = [
-      ToolboxWeb.Telemetry,
-      Toolbox.Repo,
-      {DNSCluster, query: Application.get_env(:toolbox, :dns_cluster_query) || :ignore},
-      {Phoenix.PubSub, name: Toolbox.PubSub},
-      # Start a worker by calling: Toolbox.Worker.start_link(arg)
-      # {Toolbox.Worker, arg},
-      # Start to serve requests, typically the last entry
-      ToolboxWeb.Endpoint,
-      Toolbox.PackagesFetcher
-    ]
-
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Toolbox.Supervisor]
-    Supervisor.start_link(children, opts)
+    Supervisor.start_link(
+      [
+        ToolboxWeb.Telemetry,
+        Toolbox.Repo,
+        {DNSCluster, query: Application.get_env(:toolbox, :dns_cluster_query) || :ignore},
+        {Phoenix.PubSub, name: Toolbox.PubSub},
+        ToolboxWeb.Endpoint,
+        Toolbox.PackagesFetcher
+      ],
+      # See https://hexdocs.pm/elixir/Supervisor.html
+      # for other strategies and supported options
+      strategy: :one_for_one,
+      name: Toolbox.Supervisor
+    )
   end
 
   # Tell Phoenix to update the endpoint configuration
