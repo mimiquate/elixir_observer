@@ -4,7 +4,10 @@ defmodule Toolbox.PackagesFetcher do
       id: __MODULE__,
       run: &run/0,
       every: :timer.hours(1),
-      when: fn -> match?(%Time{hour: 5}, Time.utc_now()) end,
+      when: fn ->
+        now = DateTime.utc_now()
+        Date.day_of_week(now) == 7 && match?(%DateTime{hour: 5}, now)
+      end,
       on_overlap: :stop_previous
     )
   end
