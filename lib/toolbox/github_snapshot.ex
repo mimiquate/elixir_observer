@@ -11,8 +11,8 @@ defmodule Toolbox.GithubSnapshot do
   end
 
   @doc false
-  def changeset(package, attrs) do
-    package
+  def changeset(github_snapshot, attrs) do
+    github_snapshot
     |> cast(attrs, [:data, :package_id])
     |> validate_required([:data, :package_id])
   end

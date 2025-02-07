@@ -11,8 +11,8 @@ defmodule Toolbox.HexpmSnapshot do
   end
 
   @doc false
-  def changeset(package, attrs) do
-    package
+  def changeset(hexpm_snapshot, attrs) do
+    hexpm_snapshot
     |> cast(attrs, [:data, :package_id])
     |> validate_required([:data, :package_id])
   end
