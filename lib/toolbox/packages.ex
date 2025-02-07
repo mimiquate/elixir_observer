@@ -12,6 +12,26 @@ defmodule Toolbox.Packages do
     |> Repo.one()
   end
 
+  def last_hexpm_snapshot(package) do
+    from(
+      hs in HexpmSnapshot,
+      where: hs.package_id == ^package.id,
+      order_by: [desc: :id],
+      limit: 1
+    )
+    |> Repo.one()
+  end
+
+  def last_github_snapshot(package) do
+    from(
+      hs in GithubSnapshot,
+      where: hs.package_id == ^package.id,
+      order_by: [desc: :id],
+      limit: 1
+    )
+    |> Repo.one()
+  end
+
   def create_package(attributes \\ %{}) do
     %Package{}
     |> Package.changeset(attributes)
