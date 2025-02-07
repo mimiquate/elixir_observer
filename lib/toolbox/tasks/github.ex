@@ -7,7 +7,7 @@ defmodule Toolbox.Tasks.Github do
       links = hexpm_snapshot.data["meta"]["links"]
 
       if github_link = links["GitHub"] || links["Github"] || links["github"] do
-        ["https:", "", "github.com", owner, repository_name] = String.split(github_link, "/")
+        ["https:", "", "github.com", owner, repository_name | _] = String.split(github_link, "/")
 
         {
           :ok,
