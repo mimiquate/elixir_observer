@@ -22,7 +22,7 @@
           Recent downloads
         </dt>
         <dd class="mt-1 text-sm/6 text-gray-700 dark:text-gray-400 sm:col-span-2 sm:mt-0">
-          {@package.recent_downloads}
+          {humanized_number(@package.recent_downloads)}
         </dd>
       </div>
       <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -30,7 +30,7 @@
           Total downloads
         </dt>
         <dd class="mt-1 text-sm/6 text-gray-700 dark:text-gray-400 sm:col-span-2 sm:mt-0">
-          {@package.total_downloads}
+          {humanized_number(@package.total_downloads)}
         </dd>
       </div>
       <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -55,7 +55,7 @@
           Stargazers
         </dt>
         <dd class="mt-1 text-sm/6 text-gray-700 dark:text-gray-400 sm:col-span-2 sm:mt-0">
-          {@package.stargazers_count}
+          {humanized_number(@package.stargazers_count)}
         </dd>
       </div>
       <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
