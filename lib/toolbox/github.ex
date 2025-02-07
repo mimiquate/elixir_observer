@@ -10,8 +10,10 @@ defmodule Toolbox.Github do
       :get,
       {
         ~c"#{@base_url}/#{path}",
-        # [{~c"authorization", "Bearer #{token}"}]
-        [{~c"user-agent", "elixir client"}]
+        [
+          {~c"authorization", "Bearer #{authorization_token()}"},
+          {~c"user-agent", "elixir client"}
+        ]
       },
       [
         ssl: [
@@ -25,5 +27,9 @@ defmodule Toolbox.Github do
       ],
       []
     )
+  end
+
+  defp authorization_token do
+    Application.fetch_env!(:toolbox, :github_authorization_token)
   end
 end

@@ -102,12 +102,17 @@ if config_env() == :prod do
   # Check `Plug.SSL` for all available options in `force_ssl`.
 end
 
+if config_env() in [:prod, :dev] do
+  config :toolbox,
+    github_authorization_token: System.fetch_env!("GITHUB_AUTHORIZATION_TOKEN")
+
+  config :tower_slack,
+    webhook_url: System.get_env("TOWER_SLACK_WEBHOOK_URL"),
+    environment: System.get_env("DEPLOYMENT_ENV", to_string(config_env()))
+end
+
 config :toolbox,
   basic_auth: [
     username: System.get_env("BASIC_AUTH_USERNAME", "admin"),
     password: System.get_env("BASIC_AUTH_PASSWORD", "secret")
   ]
-
-config :tower_slack,
-  webhook_url: System.get_env("TOWER_SLACK_WEBHOOK_URL"),
-  environment: System.get_env("DEPLOYMENT_ENV", to_string(config_env()))
