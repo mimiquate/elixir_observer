@@ -1,4 +1,6 @@
 defmodule Toolbox.Tasks.Github do
+  require Logger
+
   def run do
     Toolbox.Packages.list_packages()
     |> Enum.each(fn package ->
@@ -7,27 +9,44 @@ defmodule Toolbox.Tasks.Github do
       links = hexpm_snapshot.data["meta"]["links"]
 
       if github_link = links["GitHub"] || links["Github"] || links["github"] do
-        ["https:", "", "github.com", owner, repository_name | _] = String.split(github_link, "/")
+        Regex.named_captures(
+          ~r/^https?:\/\/(?:www\.)?github.com\/(?<owner>[^\/]*)\/(?<repo>[^\/\n]*)/,
+          github_link
+        )
+        |> case do
+          nil ->
+            Logger.warning("COULDN'T PARSE github link #{github_link}")
 
-        {
-          :ok,
-          {
-            {_, 200, _},
-            _headers,
-            repository_data
-          }
-        } =
-          Toolbox.Github.get_repo(owner, repository_name)
+          %{"owner" => owner, "repo" => repository_name} ->
+            Toolbox.Github.get_repo(owner, repository_name)
+            |> case do
+              {
+                :ok,
+                {
+                  {_, 404, _},
+                  _headers,
+                  _data
+                }
+              } ->
+                Logger.warning("GITHUB REPO for #{github_link} NOT FOUND")
 
-        Toolbox.Packages.create_github_snapshot(%{
-          package_id: package.id,
-          data: Jason.decode!(repository_data)
-        })
+              {
+                :ok,
+                {
+                  {_, 200, _},
+                  _headers,
+                  repository_data
+                }
+              } ->
+                Toolbox.Packages.create_github_snapshot(%{
+                  package_id: package.id,
+                  data: Jason.decode!(repository_data)
+                })
 
-        Process.sleep(:timer.seconds(1))
+                Process.sleep(:timer.seconds(1))
+            end
+        end
       else
-        require Logger
-
         Logger.warning(
           "Couldn't find GitHub URL for package #{package.name}",
           metadata: %{data: inspect(hexpm_snapshot.data)}
