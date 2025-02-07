@@ -30,4 +30,5 @@ http_service:
     soft_limit: 1000
 
 vm:
-  - size: shared-cpu-1x
+  size: shared-cpu-1x
+  memory: "512mb"
