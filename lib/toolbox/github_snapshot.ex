@@ -13,7 +13,7 @@ defmodule Toolbox.GithubSnapshot do
   @doc false
   def changeset(package, attrs) do
     package
-    |> cast(attrs, [:data])
-    |> validate_required([:data])
+    |> cast(attrs, [:data, :package_id])
+    |> validate_required([:data, :package_id])
   end
 end
