@@ -53,7 +53,7 @@ defmodule Toolbox.MixProject do
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_dashboard, "~> 0.8.3"},
       {:phoenix_live_view, "~> 1.0"},
-      {:postgrex, "~> 0.19.3"},
+      {:postgrex, "~> 0.20.0"},
       {:tailwind, "~> 0.2.0", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
