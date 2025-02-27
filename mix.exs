@@ -35,7 +35,7 @@ defmodule Toolbox.MixProject do
       {:bandit, "~> 1.5"},
       {:dns_cluster, "~> 0.1.1"},
       {:ecto_sql, "~> 3.10"},
-      {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
+      {:esbuild, "~> 0.9.0", runtime: Mix.env() == :dev},
       {:gettext, "~> 0.20"},
       {
         :heroicons,
