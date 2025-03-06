@@ -6,6 +6,7 @@
 app: ex-tools
 primary_region: scl
 kill_signal: SIGTERM
+console_command: "/app/bin/toolbox remote"
 
 deploy:
   release_command: /app/bin/migrate
