@@ -45,7 +45,7 @@ defmodule Toolbox.MixProject do
       {
         :heroicons,
         github: "tailwindlabs/heroicons",
-        tag: "v2.1.1",
+        tag: "v2.2.0",
         sparse: "optimized",
         app: false,
         compile: false,
@@ -59,7 +59,7 @@ defmodule Toolbox.MixProject do
       {:phoenix_live_dashboard, "~> 0.8.3"},
       {:phoenix_live_view, "~> 1.0"},
       {:postgrex, "~> 0.20.0"},
-      {:tailwind, "~> 0.2.0", runtime: Mix.env() == :dev},
+      {:tailwind, "~> 0.3.1", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
       {:tower_slack, "~> 0.6.0"},
