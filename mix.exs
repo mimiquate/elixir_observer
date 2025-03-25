@@ -5,7 +5,7 @@ defmodule Toolbox.MixProject do
     [
       app: :toolbox,
       version: "0.1.0",
-      elixir: "~> 1.18.2",
+      elixir: "~> 1.18.3",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
