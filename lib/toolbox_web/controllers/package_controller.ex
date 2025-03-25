@@ -10,6 +10,21 @@ defmodule ToolboxWeb.PackageController do
     hexpm_data = Toolbox.Packages.last_hexpm_snapshot(package).data
     github_data = Toolbox.Packages.last_github_snapshot(package).data
 
+    IO.inspect(hexpm_data)
+    [%{"version" => version} | _] = hexpm_data["releases"]
+
+    {
+      :ok,
+      {
+        {_, 200, _},
+        _headers,
+        release_data
+      }
+    } = Toolbox.Hexpm.get_package_release(name, version)
+
+    release_data = Phoenix.json_library().decode!(release_data)
+    IO.inspect(release_data)
+
     %{
       name: package.name,
       description: hexpm_data["meta"]["description"],
@@ -21,6 +36,7 @@ defmodule ToolboxWeb.PackageController do
       github_repo_url: github_data["url"],
       stargazers_count: github_data["stargazers_count"],
       topics: github_data["topics"],
+      release: release_data,
       github_created_at: github_data["created_at"],
       hexpm_created_at: hexpm_data["inserted_at"]
     }

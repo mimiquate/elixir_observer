@@ -77,6 +77,17 @@
           </div>
         </dd>
       </div>
+      <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-200">
+          Requirements
+        </dt>
+        <dd class="mt-1 text-sm/6 text-gray-700 dark:text-gray-400 sm:col-span-2 sm:mt-0">
+          <%= for {name, %{"requirement" => version_requirement}} <- @package.release["requirements"] do %>
+            {name} {version_requirement}
+            <br />
+          <% end %>
+        </dd>
+      </div>
     </dl>
   </div>
 </div>
