@@ -10,6 +10,19 @@ defmodule ToolboxWeb.PackageController do
     hexpm_data = Toolbox.Packages.last_hexpm_snapshot(package).data
     github_data = Toolbox.Packages.last_github_snapshot(package).data
 
+    # IO.inspect(github_data, limit: :infinity)
+    {
+      :ok,
+      {
+        {_, 200, _},
+        _headers,
+        contributors_data
+      }
+    } =
+      Toolbox.Github.get_repo_contributors(github_data["full_name"])
+
+    contributors_data = Phoenix.json_library().decode!(contributors_data)
+
     %{
       name: package.name,
       description: hexpm_data["meta"]["description"],
@@ -21,6 +34,7 @@ defmodule ToolboxWeb.PackageController do
       github_repo_url: github_data["url"],
       stargazers_count: github_data["stargazers_count"],
       topics: github_data["topics"],
+      contributors: contributors_data,
       github_created_at: github_data["created_at"],
       hexpm_created_at: hexpm_data["inserted_at"]
     }
