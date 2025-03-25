@@ -12,6 +12,21 @@ defmodule ToolboxWeb.PackageLive do
         s.data
       end
 
+    {
+      :ok,
+      {
+        {_, 200, _},
+        _headers,
+        activity_data
+      }
+    } =
+      Toolbox.Github.get_repo_activity(github_data["full_name"])
+
+    activity_data =
+      Phoenix.json_library().decode!(activity_data)
+      |> IO.inspect(limit: :infinity)
+
+
     versions = versions(hexpm_data)
     version = hexpm_data["latest_stable_version"]
 

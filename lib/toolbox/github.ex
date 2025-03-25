@@ -5,6 +5,10 @@ defmodule Toolbox.Github do
     get("repos/#{owner}/#{repository_name}")
   end
 
+  def get_repo_activity(path) do
+    get("repos/#{path}/activity")
+  end
+
   defp get(path) do
     :httpc.request(
       :get,
