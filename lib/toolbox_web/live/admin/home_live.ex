@@ -4,7 +4,11 @@ defmodule ToolboxWeb.Admin.HomeLive do
   def mount(_params, _session, socket) do
     {
       :ok,
-      socket
+      assign(
+        socket,
+        packages_total_count: Toolbox.Packages.total_count(),
+        packages: Toolbox.Packages.list_packages()
+      )
     }
   end
 end
