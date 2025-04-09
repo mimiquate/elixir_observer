@@ -5,6 +5,10 @@ defmodule Toolbox.Github do
     get("repos/#{owner}/#{repository_name}")
   end
 
+  def get_repo2(owner, repository_name) do
+    graphql_query("repository(owner: \\\"#{owner}\\\", name: \\\"#{repository_name}\\\") { issues(last: 20) { edges { node { state } } } }")
+  end
+
   defp get(path) do
     :httpc.request(
       :get,
@@ -14,6 +18,36 @@ defmodule Toolbox.Github do
           {~c"authorization", "Bearer #{authorization_token()}"},
           {~c"user-agent", "elixir client"}
         ]
+      },
+      [
+        ssl: [
+          verify: :verify_peer,
+          cacerts: :public_key.cacerts_get(),
+          # Support wildcard certificates
+          customize_hostname_check: [
+            match_fun: :public_key.pkix_verify_hostname_match_fun(:https)
+          ]
+        ]
+      ],
+      []
+    )
+  end
+
+  defp graphql_query(query) do
+    post("graphql", "{\"query\": \"query { #{query} }\"}")
+  end
+
+  defp post(path, body) do
+    :httpc.request(
+      :post,
+      {
+        ~c"#{@base_url}/#{path}",
+        [
+          {~c"authorization", "bearer #{authorization_token()}"},
+          {~c"user-agent", "elixir client"}
+        ],
+        ~c"application/json",
+        body|>IO.inspect()
       },
       [
         ssl: [
