@@ -7,7 +7,7 @@
   Hex.pm Snapshot
   </summary>
   <pre>
-    {inspect(Toolbox.Packages.last_hexpm_snapshot(@package), pretty: true)}
+    {inspect(Toolbox.Packages.last_hexpm_snapshot(@package), limit: :infinity, pretty: true)}
   </pre>
 </details>
 
@@ -16,6 +16,6 @@
   GitHub Snapshot
   </summary>
   <pre>
-    {inspect(Toolbox.Packages.last_github_snapshot(@package), pretty: true)}
+    {inspect(Toolbox.Packages.last_github_snapshot(@package), limit: :infinity, pretty: true)}
   </pre>
 </details>
