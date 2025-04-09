@@ -31,6 +31,8 @@ defmodule ToolboxWeb.Router do
   scope "/admin", ToolboxWeb do
     pipe_through [:browser, :admin]
 
+    live "/", Admin.HomeLive
+
     import Phoenix.LiveDashboard.Router
     live_dashboard "/dashboard", metrics: ToolboxWeb.Telemetry
   end

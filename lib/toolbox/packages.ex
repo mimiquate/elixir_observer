@@ -7,6 +7,10 @@ defmodule Toolbox.Packages do
     Repo.all(Package)
   end
 
+  def total_count do
+    Repo.aggregate(Package, :count)
+  end
+
   def get_package_by_name(name) do
     from(p in Package, where: p.name == ^name)
     |> Repo.one()
