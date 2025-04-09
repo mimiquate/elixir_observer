@@ -1,0 +1,21 @@
+<h2>
+  {@package.name}
+</h2>
+
+<details>
+  <summary>
+  Hex.pm Snapshot
+  </summary>
+  <pre>
+    {inspect(Toolbox.Packages.last_hexpm_snapshot(@package), pretty: true)}
+  </pre>
+</details>
+
+<details>
+  <summary>
+  GitHub Snapshot
+  </summary>
+  <pre>
+    {inspect(Toolbox.Packages.last_github_snapshot(@package), pretty: true)}
+  </pre>
+</details>
