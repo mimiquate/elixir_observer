@@ -62,6 +62,7 @@ defmodule Toolbox.MixProject do
       {:tailwind, "~> 0.2.0", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
+      {:tower_rollbar, "~> 0.6.3"},
       {:tower_slack, "~> 0.6.0"},
 
       # Dev

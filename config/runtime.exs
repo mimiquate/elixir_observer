@@ -109,6 +109,10 @@ if config_env() in [:prod, :dev] do
   config :tower_slack,
     webhook_url: System.get_env("TOWER_SLACK_WEBHOOK_URL"),
     environment: System.get_env("DEPLOYMENT_ENV", to_string(config_env()))
+
+  config :tower_rollbar,
+    access_token: System.get_env("ROLLBAR_SERVER_ACCESS_TOKEN"),
+    environment: System.get_env("DEPLOYMENT_ENV", to_string(config_env()))
 end
 
 config :toolbox,
