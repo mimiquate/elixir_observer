@@ -8,7 +8,10 @@
     </p>
 
     <div>
-      <span :for={topic <- @package.topics} class="text-xs mr-1 py-1 px-2 rounded-full bg-zinc-800">
+      <span
+        :for={topic <- @package.topics}
+        class="text-xs mr-1 py-1 px-2 rounded-full bg-zinc-800"
+      >
         {topic}
       </span>
     </div>
