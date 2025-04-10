@@ -18,13 +18,23 @@
   </div>
 
   <div class="mt-8">
-    <a class="bg-zinc-100 dark:bg-zinc-800 px-4 py-3" href={@package.html_url}>Package</a>
-    <a class="bg-zinc-100 dark:bg-zinc-800 px-4 py-3" href={@package.github_repo_url}>
+    <.link class="bg-zinc-100 dark:bg-zinc-800 px-4 py-3" href={@package.html_url} target="_blank">
+      Package
+    </.link>
+    <.link
+      class="bg-zinc-100 dark:bg-zinc-800 px-4 py-3"
+      href={@package.github_repo_url}
+      target="_blank"
+    >
       Source Code
-    </a>
-    <a class="bg-zinc-100 dark:bg-zinc-800 px-4 py-3" href={@package.docs_html_url}>
+    </.link>
+    <.link
+      class="bg-zinc-100 dark:bg-zinc-800 px-4 py-3"
+      href={@package.docs_html_url}
+      target="_blank"
+    >
       Documentation
-    </a>
+    </.link>
   </div>
 
   <div class="mt-8 flex flex-row">
