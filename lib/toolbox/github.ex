@@ -6,7 +6,19 @@ defmodule Toolbox.Github do
   end
 
   def get_repo2(owner, repository_name) do
-    graphql_query("repository(owner: \\\"#{owner}\\\", name: \\\"#{repository_name}\\\") { issues(last: 20) { edges { node { state } } } }")
+    graphql_query(
+      # FIXME: newline escaping needed
+      """
+      repository(owner: \\\"#{owner}\\\", name: \\\"#{repository_name}\\\") {
+        issues(last: 20) { edges { node { state } } }
+        pullRequests(last: 20) { edges { node { state } } }
+        repositoryTopics
+        licenseInfo
+        languages
+        stargazerCount
+      }
+      """
+    )
   end
 
   defp get(path) do
