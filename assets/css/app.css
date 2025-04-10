@@ -1,5 +1,17 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+/* Why `source(none)` below ? https://github.com/phoenixframework/phoenix/pull/6109#discussion_r1993092360 */
+@import "tailwindcss" source(none);
+
+@source "../css";
+@source "../js";
+@source "../../lib/toolbox_web";
+
+@plugin "@tailwindcss/forms";
+@plugin "../vendor/heroicons.js";
+
+@custom-variant phx-click-loading ([".phx-click-loading&", ".phx-click-loading &"]);
+@custom-variant phx-submit-loading ([".phx-submit-loading&", ".phx-submit-loading &"]);
+@custom-variant phx-change-loading ([".phx-change-loading&", ".phx-change-loading &"]);
+
+/* @theme {} */
 
 /* This file is for your main application CSS */
