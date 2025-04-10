@@ -22,7 +22,7 @@ defmodule Toolbox.Number do
         delimit(number, 1_000_000_000_000_000, "Q")
 
       true ->
-        number_to_delimited(number, precision: 1)
+        number_to_delimited(number, precision: 0)
     end
   end
 
