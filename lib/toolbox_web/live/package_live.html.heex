@@ -105,7 +105,7 @@
       <div :for={
         {name, %{"requirement" => requirement, "optional" => optional}} <- @version.requirements
       }>
-        {name} {requirement} {if optional, do: " (optional)"}
+        <.link navigate={~p"/packages/#{name}"}>{name}</.link> {requirement} {if optional, do: " (optional)"}
       </div>
     </div>
 
