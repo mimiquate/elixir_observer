@@ -97,7 +97,7 @@
       Published {humanized_datetime(@version.published_at)} by {@version.published_by}
     </div>
 
-    <div class="mt-2" :if={@version.retirement}>
+    <div :if={@version.retirement} class="mt-2">
       RETIRED with message "{@version.retirement["message"]}"
     </div>
 
@@ -109,7 +109,8 @@
       <div :for={
         {name, %{"requirement" => requirement, "optional" => optional}} <- @version.requirements
       }>
-        <.link navigate={~p"/packages/#{name}"}>{name}</.link> {requirement} {if optional, do: " (optional)"}
+        <.link navigate={~p"/packages/#{name}"}>{name}</.link> {requirement} {if optional,
+          do: " (optional)"}
       </div>
     </div>
 
