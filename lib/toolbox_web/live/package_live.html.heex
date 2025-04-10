@@ -97,6 +97,10 @@
       Published {humanized_datetime(@version.published_at)} by {@version.published_by}
     </div>
 
+    <div class="mt-2" :if={@version.retirement}>
+      RETIRED with message "{@version.retirement["message"]}"
+    </div>
+
     <div class="mt-2">
       Elixir {@version.elixir_requirement || "(version requirement not defined)"}
     </div>

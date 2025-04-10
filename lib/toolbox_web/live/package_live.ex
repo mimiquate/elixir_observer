@@ -68,6 +68,7 @@ defmodule ToolboxWeb.PackageLive do
 
     %{
       version: version,
+      retirement: data["retirement"],
       elixir_requirement: data["meta"]["elixir"],
       requirements: data["requirements"],
       published_at: data["inserted_at"],
