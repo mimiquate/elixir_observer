@@ -108,5 +108,13 @@
         {name} {requirement} {if optional, do: " (optional)"}
       </div>
     </div>
+
+    <.link
+      class="mt-2 inline-block bg-zinc-100 dark:bg-zinc-800 px-4 py-3"
+      href={@package.docs_html_url <> @version.version}
+      target="_blank"
+    >
+      Documentation for {@version.version}
+    </.link>
   </div>
 </div>
