@@ -1,5 +1,5 @@
 defmodule Toolbox.Number do
-  import Number.Delimit, only: [number_to_delimited: 1]
+  import Number.Delimit, only: [number_to_delimited: 2]
   import Number.Decimal, only: [compare: 2]
 
   def to_human(number) do
@@ -22,7 +22,7 @@ defmodule Toolbox.Number do
         delimit(number, 1_000_000_000_000_000, "Q")
 
       true ->
-        number_to_delimited(number)
+        number_to_delimited(number, precision: 1)
     end
   end
 
@@ -30,7 +30,7 @@ defmodule Toolbox.Number do
     number =
       number
       |> Decimal.div(divisor)
-      |> number_to_delimited()
+      |> number_to_delimited(precision: 1)
 
     number <> " " <> label
   end
