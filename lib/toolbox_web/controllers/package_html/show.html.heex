@@ -1,12 +1,19 @@
 <div>
   <div class="px-4 sm:px-0">
-    <h3 class="text-base/7 font-semibold">
+    <h3 class="text-4xl font-bold">
       {@package.name}
     </h3>
-    <p class="mt-1 max-w-2xl text-sm/6 text-gray-500">
+    <p class="mt-1 max-w-2xl text-md font-mono text-gray-400">
       {@package.description}
     </p>
+
+    <div>
+      <span :for={topic <- @package.topics} class="text-xs mr-1 py-1 px-2 rounded-full bg-zinc-800">
+        {topic}
+      </span>
+    </div>
   </div>
+
   <div class="mt-6 border-t border-gray-100 dark:border-gray-700">
     <dl class="divide-y divide-gray-100 dark:divide-gray-700">
       <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -40,14 +47,6 @@
         <dd class="mt-1 text-sm/6 text-gray-700 dark:text-gray-400 sm:col-span-2 sm:mt-0">
           <a href={@package.html_url}>Package</a>, <a href={@package.docs_html_url}>Docs</a>,
           <a href={@package.github_repo_url}>GitHub</a>
-        </dd>
-      </div>
-      <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-200">
-          Topics
-        </dt>
-        <dd class="mt-1 text-sm/6 text-gray-700 dark:text-gray-400 sm:col-span-2 sm:mt-0">
-          {@package.topics |> Enum.join(", ")}
         </dd>
       </div>
       <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
