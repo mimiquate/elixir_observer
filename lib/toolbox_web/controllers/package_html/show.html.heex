@@ -14,32 +14,27 @@
     </div>
   </div>
 
+  <div class="mt-4 flex flex-row">
+    <div class="flex flex-col">
+      <span class="text-sm text-gray-400">
+        Stars
+      </span>
+      <span class="text-2xl font-bold">
+        {humanized_number(@package.stargazers_count)}
+      </span>
+    </div>
+    <div class="flex flex-col">
+      <span class="text-sm text-gray-400">
+        Recent Downloads
+      </span>
+      <span class="text-2xl font-bold">
+        {humanized_number(@package.recent_downloads)}
+      </span>
+    </div>
+  </div>
+
   <div class="mt-6 border-t border-gray-100 dark:border-gray-700">
     <dl class="divide-y divide-gray-100 dark:divide-gray-700">
-      <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-200">
-          Latest stable version
-        </dt>
-        <dd class="mt-1 text-sm/6 text-gray-700 dark:text-gray-400 sm:col-span-2 sm:mt-0">
-          {@package.latest_stable_version}
-        </dd>
-      </div>
-      <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-200">
-          Recent downloads
-        </dt>
-        <dd class="mt-1 text-sm/6 text-gray-700 dark:text-gray-400 sm:col-span-2 sm:mt-0">
-          {humanized_number(@package.recent_downloads)}
-        </dd>
-      </div>
-      <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-200">
-          Total downloads
-        </dt>
-        <dd class="mt-1 text-sm/6 text-gray-700 dark:text-gray-400 sm:col-span-2 sm:mt-0">
-          {humanized_number(@package.total_downloads)}
-        </dd>
-      </div>
       <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
         <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-200">
           Links
@@ -51,10 +46,10 @@
       </div>
       <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
         <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-200">
-          Stargazers
+          Latest stable version
         </dt>
         <dd class="mt-1 text-sm/6 text-gray-700 dark:text-gray-400 sm:col-span-2 sm:mt-0">
-          {humanized_number(@package.stargazers_count)}
+          {@package.latest_stable_version}
         </dd>
       </div>
       <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">

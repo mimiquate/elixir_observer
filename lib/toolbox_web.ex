@@ -93,17 +93,8 @@ defmodule ToolboxWeb do
       # Routes generation with the ~p sigil
       unquote(verified_routes())
 
-      # Borrowed from https://github.com/hexpm/hexpm/blob/1dfb4b6c0ce1e5e2ada4e9c496faa77e61528193/lib/hexpm_web/views/view_helpers.ex#L244-L254
       def humanized_number(number) do
-        number
-        |> to_string()
-        |> String.to_charlist()
-        |> Enum.reverse()
-        |> Enum.chunk_every(3)
-        |> Enum.intersperse(?\s)
-        |> List.flatten()
-        |> Enum.reverse()
-        |> :erlang.list_to_binary()
+        Toolbox.Number.to_human(number)
       end
     end
   end
