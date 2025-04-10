@@ -74,8 +74,20 @@
     <span class="text-2xl font-bold">
       Version
     </span>
-    <span>
-      Last version: {@package.latest_stable_version}
-    </span>
+    <form phx-change="version-change">
+      <select name="version" class="dark:bg-zinc-800">
+        <option
+          :for={version <- @package.versions}
+          value={version}
+          selected={version == @selected_version}
+        >
+          {version}
+        </option>
+      </select>
+    </form>
+
+    <div :for={{name, %{"requirement" => requirement, "optional" => optional}} <- @requirements}>
+      {name} {requirement} {if optional, do: " (optional)"}
+    </div>
   </div>
 </div>

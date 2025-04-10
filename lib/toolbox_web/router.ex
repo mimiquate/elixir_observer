@@ -25,7 +25,7 @@ defmodule ToolboxWeb.Router do
 
     live "/", HomeLive
 
-    get "/packages/:name", PackageController, :show
+    live "/packages/:name", PackageLive
   end
 
   scope "/admin", ToolboxWeb do
