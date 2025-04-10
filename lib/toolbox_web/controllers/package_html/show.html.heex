@@ -14,63 +14,58 @@
     </div>
   </div>
 
-  <div class="mt-4 flex flex-row">
-    <div class="flex flex-col">
-      <span class="text-sm text-gray-400">
-        Stars
-      </span>
-      <span class="text-2xl font-bold">
-        {humanized_number(@package.stargazers_count)}
-      </span>
+  <div class="mt-8">
+    <a class="bg-zinc-800 p-4" href={@package.html_url}>Package</a>
+    <a class="bg-zinc-800 p-4" href={@package.github_repo_url}>Source Code</a>
+    <a class="bg-zinc-800 p-4" href={@package.docs_html_url}>Documentation</a>
+  </div>
+
+  <div class="mt-8 flex flex-row">
+    <div class="mt-4 flex flex-row justify-between bg-zinc-800 rounded-md grow">
+      <div class="flex flex-col p-4">
+        <span class="text-sm text-gray-400">
+          Stars
+        </span>
+        <span class="text-2xl font-bold">
+          {humanized_number(@package.stargazers_count)}
+        </span>
+      </div>
+      <div class="flex flex-col p-4">
+        <span class="text-sm text-gray-400">
+          Recent Downloads
+        </span>
+        <span class="text-2xl font-bold">
+          {humanized_number(@package.recent_downloads)}
+        </span>
+      </div>
     </div>
-    <div class="flex flex-col">
-      <span class="text-sm text-gray-400">
-        Recent Downloads
-      </span>
-      <span class="text-2xl font-bold">
-        {humanized_number(@package.recent_downloads)}
-      </span>
+
+    <div class="mt-4 ml-4 flex flex-row justify-between bg-zinc-800 rounded-md grow">
+      <div class="flex flex-col p-4">
+        <span class="text-sm text-gray-400">
+          First Release
+        </span>
+        <span class="text-2xl font-bold">
+          {Calendar.strftime(
+            NaiveDateTime.from_iso8601!(@package.hexpm_created_at),
+            "%b %Y"
+          )}
+        </span>
+      </div>
+      <div class="flex flex-col p-4">
+        <span class="text-sm text-gray-400">
+          Last Commit
+        </span>
+        <span class="text-2xl font-bold">
+          ?
+        </span>
+      </div>
     </div>
   </div>
 
-  <div class="mt-6 border-t border-gray-100 dark:border-gray-700">
-    <dl class="divide-y divide-gray-100 dark:divide-gray-700">
-      <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-200">
-          Links
-        </dt>
-        <dd class="mt-1 text-sm/6 text-gray-700 dark:text-gray-400 sm:col-span-2 sm:mt-0">
-          <a href={@package.html_url}>Package</a>, <a href={@package.docs_html_url}>Docs</a>,
-          <a href={@package.github_repo_url}>GitHub</a>
-        </dd>
-      </div>
-      <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-200">
-          Latest stable version
-        </dt>
-        <dd class="mt-1 text-sm/6 text-gray-700 dark:text-gray-400 sm:col-span-2 sm:mt-0">
-          {@package.latest_stable_version}
-        </dd>
-      </div>
-      <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-200">
-          Created
-        </dt>
-        <dd class="mt-1 text-sm/6 text-gray-700 dark:text-gray-400 sm:col-span-2 sm:mt-0">
-          <div>
-            GitHub: {Calendar.strftime(
-              NaiveDateTime.from_iso8601!(@package.github_created_at),
-              "%b %Y"
-            )}
-          </div>
-          <div>
-            Package: {Calendar.strftime(
-              NaiveDateTime.from_iso8601!(@package.hexpm_created_at),
-              "%b %Y"
-            )}
-          </div>
-        </dd>
-      </div>
-    </dl>
+  <div class="mt-8">
+    <span class="text-2xl font-bold">
+      Version
+    </span>
   </div>
 </div>
