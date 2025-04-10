@@ -103,17 +103,23 @@
 
     <div class="mt-2">
       <span class="text-xl">
-        Dependencies ({Enum.count(@version.requirements)})
+        Dependencies ({Enum.count(@version.required)})
       </span>
 
       <div class="mt-2">
-        <div :for={
-          {name, %{"requirement" => requirement, "optional" => optional}} <- @version.requirements
-        }>
-          <.link navigate={~p"/packages/#{name}"}>{name}</.link> {requirement} {if optional,
-            do: " (optional)"}
+        <div :for={{name, %{"requirement" => requirement}} <- @version.required}>
+          <.link navigate={~p"/packages/#{name}"}>{name}</.link> {requirement}
         </div>
       </div>
+
+      <details :if={Enum.count(@version.optional) > 0}>
+        <summary>Optional ({Enum.count(@version.optional)})</summary>
+        <div class="mt-2">
+          <div :for={{name, %{"requirement" => requirement}} <- @version.optional}>
+            <.link navigate={~p"/packages/#{name}"}>{name}</.link> {requirement}
+          </div>
+        </div>
+      </details>
     </div>
 
     <.link

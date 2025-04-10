@@ -67,11 +67,15 @@ defmodule ToolboxWeb.PackageLive do
       |> to_string()
       |> JSON.decode!()
 
+    {optional, required} =
+      Enum.split_with(data["requirements"], fn {_, %{"optional" => optional}} -> optional end)
+
     %{
       version: version,
       retirement: data["retirement"],
       elixir_requirement: data["meta"]["elixir"],
-      requirements: data["requirements"],
+      required: required,
+      optional: optional,
       published_at: data["inserted_at"],
       published_by: data["publisher"]["username"]
     }
