@@ -17,4 +17,21 @@ defmodule Toolbox.Hexpm do
       []
     )
   end
+
+  def get(path) do
+    :httpc.request(
+      :get,
+      {
+        ~c"#{@base_url}/#{path}",
+        [{~c"user-agent", "httpc"}]
+      },
+      [
+        ssl: [
+          verify: :verify_peer,
+          cacerts: :public_key.cacerts_get()
+        ]
+      ],
+      []
+    )
+  end
 end
