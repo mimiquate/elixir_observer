@@ -88,7 +88,7 @@
           value={version}
           selected={version == @version.version}
         >
-          {version}
+          {version} {if @package.latest_stable_version == version, do: "Latest stable"}
         </option>
       </select>
     </form>

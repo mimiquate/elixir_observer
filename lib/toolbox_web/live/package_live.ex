@@ -8,7 +8,7 @@ defmodule ToolboxWeb.PackageLive do
     hexpm_data = Toolbox.Packages.last_hexpm_snapshot(package).data
     github_data = Toolbox.Packages.last_github_snapshot(package).data
     versions = versions(hexpm_data)
-    version = hd(versions)
+    version = hexpm_data["latest_stable_version"]
 
     {
       :ok,
@@ -20,6 +20,7 @@ defmodule ToolboxWeb.PackageLive do
           description: hexpm_data["meta"]["description"],
           recent_downloads: hexpm_data["downloads"]["recent"],
           versions: versions,
+          latest_stable_version: version,
           html_url: hexpm_data["html_url"],
           docs_html_url: hexpm_data["docs_html_url"],
           github_repo_url: github_data["html_url"],
