@@ -96,6 +96,13 @@ defmodule ToolboxWeb do
       def humanized_number(number) do
         Toolbox.Number.to_human(number)
       end
+
+      def humanized_datetime(datetime) do
+        Calendar.strftime(
+          NaiveDateTime.from_iso8601!(datetime),
+          "%b %Y"
+        )
+      end
     end
   end
 

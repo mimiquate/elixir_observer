@@ -63,10 +63,7 @@
           First Release
         </span>
         <span class="text-2xl font-bold">
-          {Calendar.strftime(
-            NaiveDateTime.from_iso8601!(@package.hexpm_created_at),
-            "%b %Y"
-          )}
+          {humanized_datetime(@package.hexpm_created_at)}
         </span>
       </div>
       <div class="flex flex-col p-4">
@@ -89,15 +86,27 @@
         <option
           :for={version <- @package.versions}
           value={version}
-          selected={version == @selected_version}
+          selected={version == @version.version}
         >
           {version}
         </option>
       </select>
     </form>
 
-    <div :for={{name, %{"requirement" => requirement, "optional" => optional}} <- @requirements}>
-      {name} {requirement} {if optional, do: " (optional)"}
+    <div class="mt-2">
+      Published {humanized_datetime(@version.published_at)} by {@version.published_by}
+    </div>
+
+    <div class="mt-2">
+      Elixir {@version.elixir_requirement}
+    </div>
+
+    <div class="mt-2">
+      <div :for={
+        {name, %{"requirement" => requirement, "optional" => optional}} <- @version.requirements
+      }>
+        {name} {requirement} {if optional, do: " (optional)"}
+      </div>
     </div>
   </div>
 </div>

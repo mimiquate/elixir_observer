@@ -6,7 +6,7 @@ defmodule ToolboxWeb.PackageLive do
     hexpm_data = Toolbox.Packages.last_hexpm_snapshot(package).data
     github_data = Toolbox.Packages.last_github_snapshot(package).data
     versions = versions(hexpm_data)
-    selected_version = hd(versions)
+    version = hd(versions)
 
     {
       :ok,
@@ -25,8 +25,7 @@ defmodule ToolboxWeb.PackageLive do
           topics: github_data["topics"],
           hexpm_created_at: hexpm_data["inserted_at"]
         },
-        selected_version: selected_version,
-        requirements: requirements(package.name, selected_version)
+        version: version(package.name, version)
       )
     }
   end
@@ -38,11 +37,7 @@ defmodule ToolboxWeb.PackageLive do
       ) do
     {
       :noreply,
-      assign(
-        socket,
-        selected_version: version,
-        requirements: requirements(name, version)
-      )
+      assign(socket, version: version(name, version))
     }
   end
 
@@ -53,7 +48,7 @@ defmodule ToolboxWeb.PackageLive do
     end)
   end
 
-  defp requirements(name, version) do
+  defp version(name, version) do
     {
       :ok,
       {
@@ -64,11 +59,17 @@ defmodule ToolboxWeb.PackageLive do
     } =
       Toolbox.Hexpm.get("packages/#{name}/releases/#{version}")
 
-    version_data =
+    data =
       version_data
       |> to_string()
       |> JSON.decode!()
 
-    version_data["requirements"]
+    %{
+      version: version,
+      elixir_requirement: data["meta"]["elixir"],
+      requirements: data["requirements"],
+      published_at: data["inserted_at"],
+      published_by: data["publisher"]["username"]
+    }
   end
 end
