@@ -30,7 +30,11 @@ defmodule ToolboxWeb.PackageLive do
     }
   end
 
-  def handle_event("version-change", %{"version" => version}, %{assigns: %{package: %{name: name}}} = socket) do
+  def handle_event(
+        "version-change",
+        %{"version" => version},
+        %{assigns: %{package: %{name: name}}} = socket
+      ) do
     {
       :noreply,
       assign(

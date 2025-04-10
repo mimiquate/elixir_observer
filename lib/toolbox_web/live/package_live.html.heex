@@ -76,7 +76,11 @@
     </span>
     <form phx-change="version-change">
       <select name="version" class="dark:bg-zinc-800">
-        <option :for={version <- @package.versions} value={version} selected={version == @selected_version}>
+        <option
+          :for={version <- @package.versions}
+          value={version}
+          selected={version == @selected_version}
+        >
           {version}
         </option>
       </select>
