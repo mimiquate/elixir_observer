@@ -20,7 +20,7 @@ defmodule ToolboxWeb.PackageLive do
           versions: versions,
           html_url: hexpm_data["html_url"],
           docs_html_url: hexpm_data["docs_html_url"],
-          github_repo_url: github_data["url"],
+          github_repo_url: github_data["html_url"],
           stargazers_count: github_data["stargazers_count"],
           topics: github_data["topics"],
           hexpm_created_at: hexpm_data["inserted_at"]
