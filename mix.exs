@@ -64,6 +64,7 @@ defmodule Toolbox.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:tower_rollbar, "~> 0.6.3"},
       {:tower_slack, "~> 0.6.0"},
+      {:number, "~> 1.0"},
 
       # Dev
       {:dotenv_parser, "~> 2.0", only: :dev},
