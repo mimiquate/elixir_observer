@@ -32,6 +32,6 @@ defmodule Toolbox.Number do
       |> Decimal.div(divisor)
       |> number_to_delimited(precision: 1)
 
-    number <> " " <> label
+    number <> label
   end
 end
