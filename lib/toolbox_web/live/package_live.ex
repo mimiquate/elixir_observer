@@ -12,6 +12,7 @@ defmodule ToolboxWeb.PackageLive do
       :ok,
       assign(
         socket,
+        page_title: package.name,
         package: %{
           name: package.name,
           description: hexpm_data["meta"]["description"],
