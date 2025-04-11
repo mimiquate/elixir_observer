@@ -101,7 +101,10 @@
       <div class="flex justify-end text-sm">
         <div>
           Published {humanized_datetime(@version.published_at)}
-          <br /> by {@version.published_by_username}
+          <br /> by
+          <.link href={"https://hex.pm/users/#{@version.published_by_username}"} target="_blank">
+            {@version.published_by_username}
+          </.link>
         </div>
         <img class="ml-2 rounded-full" src={gravatar_url(@version.published_by_email)} />
       </div>
