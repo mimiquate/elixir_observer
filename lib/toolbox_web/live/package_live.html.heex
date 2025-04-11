@@ -78,31 +78,39 @@
   </div>
 
   <div class="mt-8">
-    <span class="text-2xl font-bold">
-      Version
-    </span>
-    <form phx-change="version-change">
-      <select name="version" class="dark:bg-zinc-800">
-        <option
-          :for={version <- @package.versions}
-          value={version}
-          selected={version == @version.version}
-        >
-          {version} {if @package.latest_stable_version == version, do: "(Last stable)"}
-        </option>
-      </select>
-    </form>
+    <div class="flex justify-between">
+      <span class="text-2xl font-bold">
+        Version
+      </span>
 
-    <div class="mt-2">
-      Published {humanized_datetime(@version.published_at)} by {@version.published_by_username}
-      <img class="rounded-full" src={gravatar_url(@version.published_by_email)} />
+      <form phx-change="version-change">
+        <select name="version" class="dark:bg-zinc-800">
+          <option
+            :for={version <- @package.versions}
+            value={version}
+            selected={version == @version.version}
+          >
+            {version} {if @package.latest_stable_version == version, do: "(Last stable)"}
+          </option>
+        </select>
+      </form>
     </div>
 
-    <div :if={@version.retirement} class="mt-2">
+    <div class="mt-4">
+      <div class="flex justify-end text-sm">
+        <div>
+          Published {humanized_datetime(@version.published_at)}
+          <br /> by {@version.published_by_username}
+        </div>
+        <img class="ml-2 rounded-full" src={gravatar_url(@version.published_by_email)} />
+      </div>
+    </div>
+
+    <div :if={@version.retirement} class="mt-4">
       RETIRED with message "{@version.retirement["message"]}"
     </div>
 
-    <div class="mt-2 bg-zinc-100 dark:bg-zinc-800 p-4 rounded">
+    <div class="mt-4 bg-zinc-100 dark:bg-zinc-800 p-4 rounded">
       <span class="text-xl font-semibold">
         Dependencies
       </span>
