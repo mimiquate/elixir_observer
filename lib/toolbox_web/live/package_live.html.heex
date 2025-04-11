@@ -94,7 +94,8 @@
     </form>
 
     <div class="mt-2">
-      Published {humanized_datetime(@version.published_at)} by {@version.published_by}
+      Published {humanized_datetime(@version.published_at)} by {@version.published_by_username}
+      <img class="rounded-full" src={gravatar_url(@version.published_by_email)} />
     </div>
 
     <div :if={@version.retirement} class="mt-2">

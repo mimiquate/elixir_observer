@@ -103,6 +103,20 @@ defmodule ToolboxWeb do
           "%b %Y"
         )
       end
+
+      def gravatar_url(email, size \\ 48)
+
+      def gravatar_url(nil, size) do
+        "https://www.gravatar.com/avatar/#{String.duplicate("0", 32)}?s=#{size}&d=mp"
+      end
+
+      def gravatar_url(email, size) do
+        hash =
+          :crypto.hash(:sha256, String.trim(email))
+          |> Base.encode16(case: :lower)
+
+        "https://www.gravatar.com/avatar/#{hash}?s=#{size}&d=retro"
+      end
     end
   end
 

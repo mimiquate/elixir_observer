@@ -77,7 +77,8 @@ defmodule ToolboxWeb.PackageLive do
       required: required,
       optional: optional,
       published_at: data["inserted_at"],
-      published_by: data["publisher"]["username"]
+      published_by_username: data["publisher"]["username"],
+      published_by_email: data["publisher"]["email"]
     }
   end
 end
