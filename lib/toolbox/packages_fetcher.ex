@@ -14,6 +14,6 @@ defmodule Toolbox.PackagesFetcher do
 
   defp run do
     Toolbox.Tasks.Hexpm.run()
-    Toolbox.Tasks.Github.run()
+    Toolbox.Tasks.SCM.run()
   end
 end
