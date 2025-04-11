@@ -44,7 +44,7 @@
         <span class="text-sm text-gray-400">
           Stars
         </span>
-        <span class="text-2xl font-bold">
+        <span :if={@package.stargazers_count} class="text-2xl font-bold">
           {humanized_number(@package.stargazers_count)}
         </span>
       </div>
