@@ -71,10 +71,7 @@ defmodule ToolboxWeb.PackageLive do
     {optional, required} =
       data["requirements"]
       |> Enum.map(fn {name, data} ->
-        package = Toolbox.Packages.get_package_by_name(name)
-        hexpm_data = Toolbox.Packages.last_hexpm_snapshot(package).data
-
-        {name, Map.put(data, "description", hexpm_data["meta"]["description"])}
+        {name, Map.put(data, "description", package_description(name))}
       end)
       |> Enum.split_with(fn {_, %{"optional" => optional}} -> optional end)
 
@@ -88,5 +85,13 @@ defmodule ToolboxWeb.PackageLive do
       published_by_username: data["publisher"]["username"],
       published_by_email: data["publisher"]["email"]
     }
+  end
+
+  defp package_description(name) do
+    with %Toolbox.Package{} = package <- Toolbox.Packages.get_package_by_name(name),
+         %Toolbox.HexpmSnapshot{} = hexpm_snapshot <-
+           Toolbox.Packages.last_hexpm_snapshot(package) do
+      hexpm_snapshot.data["meta"]["description"]
+    end
   end
 end
