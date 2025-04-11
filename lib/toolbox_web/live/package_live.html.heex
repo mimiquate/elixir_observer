@@ -111,7 +111,13 @@
       </span>
 
       <div class="mt-2">
-        <div :for={{name, %{"requirement" => requirement, "description" => description}} <- @version.required} class="mt-1">
+        <div
+          :for={
+            {name, %{"requirement" => requirement, "description" => description}} <-
+              @version.required
+          }
+          class="mt-1"
+        >
           <.link navigate={~p"/packages/#{name}"} class="font-semibold">
             {name}
           </.link>
