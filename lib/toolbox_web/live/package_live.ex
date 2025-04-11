@@ -68,7 +68,14 @@ defmodule ToolboxWeb.PackageLive do
       |> JSON.decode!()
 
     {optional, required} =
-      Enum.split_with(data["requirements"], fn {_, %{"optional" => optional}} -> optional end)
+      data["requirements"]
+      |> Enum.map(fn {name, data} ->
+        package = Toolbox.Packages.get_package_by_name(name)
+        hexpm_data = Toolbox.Packages.last_hexpm_snapshot(package).data
+
+        {name, Map.put(data, "description", hexpm_data["meta"]["description"])}
+      end)
+      |> Enum.split_with(fn {_, %{"optional" => optional}} -> optional end)
 
     %{
       version: version,

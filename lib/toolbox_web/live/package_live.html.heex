@@ -111,12 +111,20 @@
       </span>
 
       <div class="mt-2">
-        <div :for={{name, %{"requirement" => requirement}} <- @version.required}>
-          <.link navigate={~p"/packages/#{name}"}>{name}</.link> {requirement}
+        <div :for={{name, %{"requirement" => requirement, "description" => description}} <- @version.required} class="mt-1">
+          <.link navigate={~p"/packages/#{name}"} class="font-semibold">
+            {name}
+          </.link>
+          <span class="text-sm dark:text-zinc-300">
+            {requirement}
+          </span>
+          <div class="text-xs dark:text-zinc-300">
+            {description}
+          </div>
         </div>
       </div>
 
-      <details :if={Enum.count(@version.optional) > 0}>
+      <details :if={Enum.count(@version.optional) > 0} class="mt-2">
         <summary>Optional ({Enum.count(@version.optional)})</summary>
         <div class="mt-2">
           <div :for={{name, %{"requirement" => requirement}} <- @version.optional}>
