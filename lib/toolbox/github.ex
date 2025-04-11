@@ -2,29 +2,27 @@ defmodule Toolbox.Github do
   @graphql_api_url ~c"https://api.github.com/graphql"
 
   def get_repo(owner, repository_name) do
-    query(
-      """
-      repository(owner: \"#{owner}\", name: \"#{repository_name}\") {
-        repositoryTopics(first: 20) {
-          nodes {
-            topic {
-              name
-            }
-          }
-        }
-        licenseInfo {
-          key
-          name
-        }
-        languages(first: 20) {
-          nodes {
+    query("""
+    repository(owner: \"#{owner}\", name: \"#{repository_name}\") {
+      repositoryTopics(first: 20) {
+        nodes {
+          topic {
             name
           }
         }
-        stargazerCount
       }
-      """
-    )
+      licenseInfo {
+        key
+        name
+      }
+      languages(first: 20) {
+        nodes {
+          name
+        }
+      }
+      stargazerCount
+    }
+    """)
   end
 
   defp query(query) do
