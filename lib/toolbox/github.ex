@@ -2,27 +2,60 @@ defmodule Toolbox.Github do
   @graphql_api_url ~c"https://api.github.com/graphql"
 
   def get_repo(owner, repository_name) do
-    query("""
-    repository(owner: \"#{owner}\", name: \"#{repository_name}\") {
-      repositoryTopics(first: 20) {
-        nodes {
-          topic {
+    year_ago =
+      DateTime.utc_now(:second)
+      |> DateTime.shift(month: -12)
+
+    query(
+      # FIXME: GitHub graphql doesn't support pullRequest filterBy
+      # https://github.com/orgs/community/discussions/24323
+      """
+      repository(owner: \"#{owner}\", name: \"#{repository_name}\") {
+        collaborators(first: 100) {
+          nodes {
+            login
+          }
+        }
+        createdAt
+        description
+        isArchived
+        issues(first: 100, filterBy: {since: \"#{DateTime.to_iso8601(year_ago)}\"}) {
+          nodes {
+            state
+          }
+        }
+        languages(first: 20) {
+          nodes {
             name
           }
         }
-      }
-      licenseInfo {
-        key
-        name
-      }
-      languages(first: 20) {
-        nodes {
+        licenseInfo {
+          key
           name
         }
+        nameWithOwner
+        pullRequests(first: 100, filterBy: {since: \"#{DateTime.to_iso8601(year_ago)}\"}) {
+          nodes {
+            state
+          }
+        }
+        pushedAt
+        repositoryTopics(first: 100) {
+          nodes {
+            topic {
+              name
+            }
+          }
+        }
+        stargazerCount
+        updatedAt
+        watchers {
+          totalCount
+        }
       }
-      stargazerCount
-    }
-    """)
+      """
+      |> IO.inspect()
+    )
   end
 
   defp query(query) do
