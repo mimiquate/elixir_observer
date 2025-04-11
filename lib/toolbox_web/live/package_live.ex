@@ -20,6 +20,7 @@ defmodule ToolboxWeb.PackageLive do
           description: hexpm_data["meta"]["description"],
           recent_downloads: hexpm_data["downloads"]["recent"],
           versions: versions,
+          latest_version_at: hd(hexpm_data["releases"])["inserted_at"],
           latest_stable_version: version,
           html_url: hexpm_data["html_url"],
           docs_html_url: hexpm_data["docs_html_url"],
