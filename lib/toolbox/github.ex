@@ -1,65 +1,43 @@
 defmodule Toolbox.Github do
-  @base_url "https://api.github.com"
+  @graphql_api_url ~c"https://api.github.com/graphql"
 
   def get_repo(owner, repository_name) do
-    get("repos/#{owner}/#{repository_name}")
-  end
-
-  def get_repo2(owner, repository_name) do
-    graphql_query(
-      # FIXME: newline escaping needed
+    query(
       """
-      repository(owner: \\\"#{owner}\\\", name: \\\"#{repository_name}\\\") {
-        issues(last: 20) { edges { node { state } } }
-        pullRequests(last: 20) { edges { node { state } } }
-        repositoryTopics
-        licenseInfo
-        languages
+      repository(owner: \"#{owner}\", name: \"#{repository_name}\") {
+        repositoryTopics(first: 20) {
+          nodes {
+            topic {
+              name
+            }
+          }
+        }
+        licenseInfo {
+          key
+          name
+        }
+        languages(first: 20) {
+          nodes {
+            name
+          }
+        }
         stargazerCount
       }
       """
     )
   end
 
-  defp get(path) do
-    :httpc.request(
-      :get,
-      {
-        ~c"#{@base_url}/#{path}",
-        [
-          {~c"authorization", "Bearer #{authorization_token()}"},
-          {~c"user-agent", "elixir client"}
-        ]
-      },
-      [
-        ssl: [
-          verify: :verify_peer,
-          cacerts: :public_key.cacerts_get(),
-          # Support wildcard certificates
-          customize_hostname_check: [
-            match_fun: :public_key.pkix_verify_hostname_match_fun(:https)
-          ]
-        ]
-      ],
-      []
-    )
-  end
-
-  defp graphql_query(query) do
-    post("graphql", "{\"query\": \"query { #{query} }\"}")
-  end
-
-  defp post(path, body) do
+  defp query(query) do
     :httpc.request(
       :post,
       {
-        ~c"#{@base_url}/#{path}",
+        @graphql_api_url,
         [
           {~c"authorization", "bearer #{authorization_token()}"},
           {~c"user-agent", "elixir client"}
         ],
         ~c"application/json",
-        body|>IO.inspect()
+        JSON.encode!(%{"query" => "query { #{query} }"})
       },
       [
         ssl: [
