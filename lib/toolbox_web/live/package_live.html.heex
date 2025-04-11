@@ -156,8 +156,8 @@
       Documentation for {@version.version}
     </.link>
 
-    <div class="mt-2">
-      Elixir version requirement {@version.elixir_requirement || "(not defined)"}
+    <div :if={@version.elixir_requirement} class="mt-2">
+      Elixir version requirement {@version.elixir_requirement}
     </div>
   </div>
 </div>
