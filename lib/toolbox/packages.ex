@@ -11,6 +11,10 @@ defmodule Toolbox.Packages do
     Repo.aggregate(Package, :count)
   end
 
+  def search(term) do
+    [get_package_by_name(term)]
+  end
+
   def get_package_by_name(name) do
     from(p in Package, where: p.name == ^name)
     |> Repo.one()

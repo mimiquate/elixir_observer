@@ -1,0 +1,9 @@
+<div class="text-2xl">Search Results</div>
+
+<ul>
+  <li :for={package <- @packages} class="mt-1">
+    <.link navigate={~p"/packages/#{package.name}"}>
+      {package.name}
+    </.link>
+  </li>
+</ul>

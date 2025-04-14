@@ -9,6 +9,6 @@ defmodule ToolboxWeb.HomeLive do
   end
 
   def handle_event("search", %{"term" => term}, socket) do
-    {:noreply, redirect(socket, to: ~p"/packages/#{term}")}
+    {:noreply, redirect(socket, to: ~p"/searches/#{term}")}
   end
 end
