@@ -4,7 +4,11 @@ defmodule ToolboxWeb.SearchLive do
   def mount(%{"term" => term}, _session, socket) do
     {
       :ok,
-      assign(socket, packages: Toolbox.Packages.search(term))
+      assign(
+        socket,
+        term: term,
+        packages: Toolbox.Packages.search(term)
+      )
     }
   end
 end
