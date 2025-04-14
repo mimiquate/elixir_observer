@@ -8,6 +8,6 @@ defmodule ToolboxWeb.Features.HomeTest do
 
     session
     |> visit("#{scheme}://admin:secret@#{host}:#{port}/")
-    |> assert_text("Elixir Toolbox")
+    |> assert_text("Observer")
   end
 end
