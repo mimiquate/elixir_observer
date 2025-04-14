@@ -85,6 +85,7 @@ defmodule ToolboxWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import ToolboxWeb.CoreComponents
+      import ToolboxWeb.HelperComponents
       use Gettext, backend: ToolboxWeb.Gettext
 
       # Shortcut for generating JS commands

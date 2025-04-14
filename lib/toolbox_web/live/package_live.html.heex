@@ -78,6 +78,22 @@
     </div>
   </div>
 
+  <div class="mt-8 bg-zinc-100 dark:bg-zinc-800 rounded-md p-4">
+    <span class="text-md font-bold">
+      Owners
+    </span>
+
+    <div class="mt-2 flex flex-col">
+      <div :for={owner <- @package.owners} class="mt-2 flex items-center">
+        <img class="rounded-full" src={gravatar_url(owner["email"])} />
+
+        <span class="ml-2">
+          <.user_link username={owner["username"]} />
+        </span>
+      </div>
+    </div>
+  </div>
+
   <div class="mt-8">
     <div class="flex justify-between">
       <span class="text-2xl font-bold">
@@ -101,10 +117,7 @@
       <div class="flex justify-end text-sm">
         <div>
           Published {humanized_datetime(@version.published_at)}
-          <br /> by
-          <.link href={"https://hex.pm/users/#{@version.published_by_username}"} target="_blank">
-            {@version.published_by_username}
-          </.link>
+          <br /> by <.user_link username={@version.published_by_username} />
         </div>
         <img class="ml-2 rounded-full" src={gravatar_url(@version.published_by_email)} />
       </div>

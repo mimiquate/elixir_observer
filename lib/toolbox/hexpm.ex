@@ -21,4 +21,21 @@ defmodule Toolbox.Hexpm do
       []
     )
   end
+
+  def get_package_owners(package_name) do
+    :httpc.request(
+      :get,
+      {
+        ~c"#{@base_url}/packages/#{package_name}/owners",
+        [{~c"user-agent", "httpc"}]
+      },
+      [
+        ssl: [
+          verify: :verify_peer,
+          cacerts: :public_key.cacerts_get()
+        ]
+      ],
+      []
+    )
+  end
 end
