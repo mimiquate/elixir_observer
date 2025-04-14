@@ -12,7 +12,13 @@ defmodule Toolbox.Packages do
   end
 
   def search(term) do
-    [get_package_by_name(term)]
+    like_term = "%#{term}%"
+
+    from(
+      p in Package,
+      where: like(p.name, ^like_term)
+    )
+    |> Repo.all()
   end
 
   def get_package_by_name(name) do
