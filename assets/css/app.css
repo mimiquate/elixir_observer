@@ -12,6 +12,18 @@
 @custom-variant phx-submit-loading ([".phx-submit-loading&", ".phx-submit-loading &"]);
 @custom-variant phx-change-loading ([".phx-change-loading&", ".phx-change-loading &"]);
 
-/* @theme {} */
+@theme {
+  /* Custom fonts fetched in root.html.heex */
+
+  /* The below is the re-definition of tailwindcss `--font-sans` var to include custom fonts prepended to the
+   * original talwindcss --font-sans value.
+   *
+   * Couldn't find a way to actually re-define `--font-sans` more programatically by prepending the value
+   * to the original, and not hard-coding the original list.
+   */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-serif: "Bitter", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-mono: "Space Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
 
 /* This file is for your main application CSS */
