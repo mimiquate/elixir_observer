@@ -8,6 +8,6 @@ defmodule ToolboxWeb.Features.HomeTest do
 
     session
     |> visit("#{scheme}://admin:secret@#{host}:#{port}/")
-    |> assert_text("Observer")
+    |> fill_in(Query.text_field("Find packages"), with: "bandit")
   end
 end
