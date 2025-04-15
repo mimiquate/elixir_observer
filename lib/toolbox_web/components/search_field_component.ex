@@ -4,7 +4,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
   def render(assigns) do
     ~H"""
     <div>
-      <.form phx-submit="search" phx-target={@myself}>
+      <.form for={nil} phx-submit="search" phx-target={@myself}>
         <input type="search" name="term" placeholder="Search for packages" class="dark:text-black" />
       </.form>
     </div>
