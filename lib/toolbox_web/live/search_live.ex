@@ -7,6 +7,7 @@ defmodule ToolboxWeb.SearchLive do
       assign(
         socket,
         term: term,
+        page_title: "\"#{term}\"",
         packages: Toolbox.Packages.search(term)
       )
     }
