@@ -2,18 +2,11 @@ defmodule ToolboxWeb.SearchFieldComponent do
   use ToolboxWeb, :live_component
 
   def render(assigns) do
-    assigns =
-      assigns
-      |> assign(form: to_form(%{}))
-
     ~H"""
     <div>
-      <.simple_form for={@form} phx-submit="search" phx-target={@myself}>
-        <.input field={@form[:term]} placeholder="Search for packages" />
-        <:actions>
-          <.button>Search</.button>
-        </:actions>
-      </.simple_form>
+      <.form phx-submit="search" phx-target={@myself}>
+        <input type="search" name="term" placeholder="Search for packages" class="dark:text-black" />
+      </.form>
     </div>
     """
   end
