@@ -4,8 +4,22 @@ defmodule ToolboxWeb.SearchFieldComponent do
   def render(assigns) do
     ~H"""
     <div>
-      <.form for={nil} phx-submit="search" phx-target={@myself}>
-        <input type="search" name="term" placeholder="Search for packages" class="dark:text-black" />
+      <.form
+        for={nil}
+        phx-submit="search"
+        phx-target={@myself}
+        class="flex border rounded dark:bg-zinc-800"
+      >
+        <input
+          type="search"
+          name="term"
+          placeholder="Find packages"
+          class="grow border-0 focus:ring-0 bg-transparent dark:text-white"
+          required
+        />
+        <button class="p-2">
+          <.icon name="hero-magnifying-glass" />
+        </button>
       </.form>
     </div>
     """
