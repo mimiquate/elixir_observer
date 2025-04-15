@@ -1,5 +1,17 @@
 <main class="px-4 py-20 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-2xl">
+    <div class="mb-10">
+      <.link navigate="/">
+        Observer
+      </.link>
+
+      <.live_component
+        :if={not match?(%{view: ToolboxWeb.HomeLive}, @socket)}
+        module={ToolboxWeb.SearchFieldComponent}
+        id="search-field"
+      />
+    </div>
+
     <.flash_group flash={@flash} />
     {@inner_content}
   </div>
