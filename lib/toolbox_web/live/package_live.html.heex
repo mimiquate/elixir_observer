@@ -180,4 +180,18 @@
       Elixir version requirement {@version.elixir_requirement}
     </div>
   </div>
+
+  <div class="mt-8">
+    <span class="text-lg font-semibold">
+      Similar packages
+    </span>
+    <div :for={%{name: name} <- @package.similar}>
+      <.link navigate={~p"/packages/#{name}"} class="font-semibold">
+        {name}
+      </.link>
+      <div class="text-xs dark:text-zinc-300">
+        Loren ipsum
+      </div>
+    </div>
+  </div>
 </div>
