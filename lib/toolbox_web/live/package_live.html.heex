@@ -41,17 +41,23 @@
   <div class="mt-8 flex flex-col sm:flex-row">
     <div class="flex flex-row justify-between bg-zinc-100 dark:bg-zinc-800 rounded-md grow">
       <div class="flex flex-col p-4">
-        <span class="text-sm text-gray-400">
-          Stars
-        </span>
+        <div class="flex items-center text-sm text-gray-400">
+          <.icon name="hero-star h-5" />
+          <span>
+            Stars
+          </span>
+        </div>
         <span :if={@package.stargazers_count} class="text-2xl font-bold">
           {humanized_number(@package.stargazers_count)}
         </span>
       </div>
       <div class="flex flex-col p-4">
-        <span class="text-sm text-gray-400">
-          Recent Downloads
-        </span>
+        <div class="flex items-center text-sm text-gray-400">
+          <.icon name="hero-arrow-down-tray h-5" />
+          <span>
+            Recent Downloads
+          </span>
+        </div>
         <span class="text-2xl font-bold">
           {humanized_number(@package.recent_downloads)}
         </span>
