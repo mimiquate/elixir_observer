@@ -1,6 +1,8 @@
 defmodule ToolboxWeb.SearchFieldComponent do
   use ToolboxWeb, :live_component
 
+  attr :autofocus, :boolean, default: false
+
   def render(assigns) do
     ~H"""
     <div>
@@ -16,6 +18,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
           placeholder="Find packages"
           class="grow border-0 focus:ring-0 bg-transparent dark:text-white"
           required
+          autofocus={@autofocus}
         />
         <button class="p-2">
           <.icon name="hero-magnifying-glass" />
