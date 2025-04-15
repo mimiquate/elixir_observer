@@ -26,6 +26,7 @@ defmodule ToolboxWeb.Router do
     live "/", HomeLive
 
     live "/packages/:name", PackageLive
+    live "/searches/:term", SearchLive
   end
 
   scope "/admin", ToolboxWeb do

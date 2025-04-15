@@ -11,6 +11,16 @@ defmodule Toolbox.Packages do
     Repo.aggregate(Package, :count)
   end
 
+  def search(term) do
+    like_term = "%#{term}%"
+
+    from(
+      p in Package,
+      where: like(p.name, ^like_term)
+    )
+    |> Repo.all()
+  end
+
   def get_package_by_name(name) do
     from(p in Package, where: p.name == ^name)
     |> Repo.one()
