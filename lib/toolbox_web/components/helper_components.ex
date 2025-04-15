@@ -26,8 +26,8 @@ defmodule ToolboxWeb.HelperComponents do
     ~H"""
     <svg
       class={["fill-black dark:fill-white", @class]}
-      width="63"
-      height="63"
+      width="48"
+      height="48"
       viewBox="0 0 63 63"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
