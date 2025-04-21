@@ -127,8 +127,9 @@
       </div>
     </div>
 
-    <div :if={@version.retirement} class="mt-4">
-      RETIRED with reason "{@version.retirement["reason"]}" and message "{@version.retirement["message"]}"
+    <div :if={@version.retirement} class="mt-4 text-red-500">
+      Version was retired.<br /> Reason: "{@version.retirement["reason"]}"<br />
+      Message: "{@version.retirement["message"]}"
     </div>
 
     <div class="mt-4 bg-zinc-100 dark:bg-zinc-800 p-4 rounded">
