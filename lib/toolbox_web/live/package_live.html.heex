@@ -18,6 +18,12 @@
     </div>
   </div>
 
+  <%= if Enum.all?(@package.versions, fn {_, is_retired?} -> is_retired? end) do %>
+    <p class="mt-8 text-red-500 font-bold text-2xl">
+      All versions of this package are retired
+    </p>
+  <% end %>
+
   <div class="mt-8 flex flex-col sm:flex-row">
     <.link class="bg-zinc-100 dark:bg-zinc-800 px-4 py-3" href={@package.html_url} target="_blank">
       Package
