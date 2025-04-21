@@ -67,7 +67,9 @@ defmodule ToolboxWeb.PackageLive do
   defp versions(hexpm_data) do
     hexpm_data["releases"]
     |> Enum.map(fn release ->
-      release["version"]
+      version = release["version"]
+
+      {version, !!hexpm_data["retirements"][version]}
     end)
   end
 

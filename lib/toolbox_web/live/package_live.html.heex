@@ -103,11 +103,15 @@
       <form phx-change="version-change">
         <select name="version" class="dark:bg-zinc-800">
           <option
-            :for={version <- @package.versions}
+            :for={{version, is_retired?} <- @package.versions}
             value={version}
             selected={version == @version.version}
           >
-            {version} {if @package.latest_stable_version == version, do: "(Last stable)"}
+            <%= if is_retired? do %>
+              {version} (Retired)
+            <% else %>
+              {version} {if @package.latest_stable_version == version, do: "(Last stable)"}
+            <% end %>
           </option>
         </select>
       </form>
