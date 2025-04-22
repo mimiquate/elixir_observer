@@ -24,7 +24,7 @@ config :toolbox, ToolboxWeb.Endpoint,
 
 # Configure esbuild (the version is required)
 config :esbuild,
-  version: "0.25.0",
+  version: "0.25.2",
   toolbox: [
     args:
       ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
@@ -34,7 +34,7 @@ config :esbuild,
 
 # Configure tailwind (the version is required)
 config :tailwind,
-  version: "4.0.17",
+  version: "4.1.4",
   toolbox: [
     args: ~w(
       --input=assets/css/app.css

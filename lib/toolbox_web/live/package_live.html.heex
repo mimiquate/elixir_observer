@@ -18,11 +18,12 @@
     </div>
   </div>
 
-  <%= if Enum.all?(@package.versions, fn {_, is_retired?} -> is_retired? end) do %>
-    <p class="mt-8 text-red-500 font-bold text-2xl">
-      All versions of this package are retired
-    </p>
-  <% end %>
+  <p
+    :if={Enum.all?(@package.versions, fn {_, is_retired?} -> is_retired? end)}
+    class="mt-4 rounded bg-red-300 dark:bg-red-900 p-4"
+  >
+    All versions are retired
+  </p>
 
   <div class="mt-8 flex flex-col sm:flex-row">
     <.link class="bg-zinc-100 dark:bg-zinc-800 px-4 py-3" href={@package.html_url} target="_blank">
@@ -107,7 +108,7 @@
       </span>
 
       <form phx-change="version-change">
-        <select name="version" class="dark:bg-zinc-800">
+        <select name="version" class="border rounded dark:bg-zinc-800">
           <option
             :for={{version, is_retired?} <- @package.versions}
             value={version}
@@ -123,9 +124,9 @@
       </form>
     </div>
 
-    <div :if={@version.retirement} class="mt-4 text-red-500">
-      Version was retired.<br /> Reason: "{@version.retirement["reason"]}"<br />
-      Message: "{@version.retirement["message"]}"
+    <div :if={@version.retirement} class="mt-4 rounded bg-red-300 dark:bg-red-900 p-4">
+      Version {@version.version} was retired.<br /><br />Reason: {@version.retirement["reason"]}<br />
+      Message: {@version.retirement["message"]}
     </div>
 
     <div class="mt-4 bg-zinc-100 dark:bg-zinc-800 p-4 rounded">
@@ -169,28 +170,32 @@
       </details>
     </div>
 
-    <div class="flex justify-between">
-      <.link
-        class="mt-3 inline-block bg-zinc-100 dark:bg-zinc-800 px-4 py-3"
-        href={@package.docs_html_url <> @version.version}
-        target="_blank"
-      >
-        Documentation for {@version.version}
-      </.link>
+    <div :if={@version.elixir_requirement} class="mt-3 bg-zinc-100 dark:bg-zinc-800 px-4 py-3">
+      <div class="text-xl font-semibold">
+        Elixir version requirement
+      </div>
 
-      <div class="mt-3">
-        <div class="flex text-sm">
-          <div>
-            Published {humanized_datetime(@version.published_at)}
-            <br /> by <.user_link username={@version.published_by_username} />
-          </div>
-          <img class="ml-2 rounded-full" src={gravatar_url(@version.published_by_email)} />
-        </div>
+      <div class="mt-2">
+        elixir {@version.elixir_requirement}
       </div>
     </div>
 
-    <div :if={@version.elixir_requirement} class="mt-2">
-      Elixir version requirement {@version.elixir_requirement}
+    <.link
+      class="mt-3 block bg-zinc-100 dark:bg-zinc-800 px-4 py-3"
+      href={@package.docs_html_url <> @version.version}
+      target="_blank"
+    >
+      Documentation for {@version.version}
+    </.link>
+
+    <div class="mt-3 flex justify-end">
+      <div class="flex text-sm">
+        <div>
+          Published {humanized_datetime(@version.published_at)}
+          <br /> by <.user_link username={@version.published_by_username} />
+        </div>
+        <img class="ml-2 rounded-full" src={gravatar_url(@version.published_by_email)} />
+      </div>
     </div>
   </div>
 </div>
