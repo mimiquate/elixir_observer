@@ -175,7 +175,7 @@
         <div>
           <div
             :if={@version.elixir_requirement}
-            class="bg-zinc-100 dark:bg-zinc-800 px-4 py-3 rounded"
+            class="mb-3 bg-zinc-100 dark:bg-zinc-800 px-4 py-3 rounded"
           >
             <div class="text-xl font-semibold">
               Elixir version requirement
@@ -187,7 +187,7 @@
           </div>
 
           <.link
-            class="mt-3 block bg-zinc-100 dark:bg-zinc-800 px-4 py-3 rounded"
+            class="block bg-zinc-100 dark:bg-zinc-800 px-4 py-3 rounded"
             href={@package.docs_html_url <> @version.version}
             target="_blank"
           >
