@@ -104,7 +104,7 @@
   <div class="mt-8">
     <div class="flex justify-between">
       <span class="text-2xl font-bold">
-        Version
+        Version {@version.version}
       </span>
 
       <form phx-change="version-change">
@@ -122,16 +122,6 @@
           </option>
         </select>
       </form>
-    </div>
-
-    <div class="mt-4">
-      <div class="flex justify-end text-sm">
-        <div>
-          Published {humanized_datetime(@version.published_at)}
-          <br /> by <.user_link username={@version.published_by_username} />
-        </div>
-        <img class="ml-2 rounded-full" src={gravatar_url(@version.published_by_email)} />
-      </div>
     </div>
 
     <div :if={@version.retirement} class="mt-4 rounded bg-red-300 dark:bg-red-900 p-4">
@@ -197,5 +187,15 @@
     >
       Documentation for {@version.version}
     </.link>
+
+    <div class="mt-3 flex justify-end">
+      <div class="flex text-sm">
+        <div>
+          Published {humanized_datetime(@version.published_at)}
+          <br /> by <.user_link username={@version.published_by_username} />
+        </div>
+        <img class="ml-2 rounded-full" src={gravatar_url(@version.published_by_email)} />
+      </div>
+    </div>
   </div>
 </div>
