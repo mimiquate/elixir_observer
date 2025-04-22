@@ -18,11 +18,12 @@
     </div>
   </div>
 
-  <%= if Enum.all?(@package.versions, fn {_, is_retired?} -> is_retired? end) do %>
-    <p class="mt-8 text-red-500 font-bold text-2xl">
-      All versions of this package are retired
-    </p>
-  <% end %>
+  <p
+    :if={Enum.all?(@package.versions, fn {_, is_retired?} -> is_retired? end)}
+    class="mt-4 rounded bg-red-300 dark:bg-red-900 p-4"
+  >
+    All versions are retired
+  </p>
 
   <div class="mt-8 flex flex-col sm:flex-row">
     <.link class="bg-zinc-100 dark:bg-zinc-800 px-4 py-3" href={@package.html_url} target="_blank">
@@ -133,9 +134,9 @@
       </div>
     </div>
 
-    <div :if={@version.retirement} class="mt-4 text-red-500">
-      Version was retired.<br /> Reason: "{@version.retirement["reason"]}"<br />
-      Message: "{@version.retirement["message"]}"
+    <div :if={@version.retirement} class="mt-4 rounded bg-red-300 dark:bg-red-900 p-4">
+      Version {@version.version} was retired.<br /><br />Reason: {@version.retirement["reason"]}<br />
+      Message: {@version.retirement["message"]}
     </div>
 
     <div class="mt-4 bg-zinc-100 dark:bg-zinc-800 p-4 rounded">
