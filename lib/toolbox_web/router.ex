@@ -40,7 +40,11 @@ defmodule ToolboxWeb.Router do
   end
 
   defp basic_auth(conn, _opts) do
-    Plug.BasicAuth.basic_auth(conn, Application.fetch_env!(:toolbox, :basic_auth))
+    if System.get_env("BASIC_AUTH") do
+      Plug.BasicAuth.basic_auth(conn, Application.fetch_env!(:toolbox, :basic_auth))
+    else
+      conn
+    end
   end
 
   defp admin_basic_auth(conn, _opts) do
