@@ -8,7 +8,9 @@
         <.logo />
       </.link>
 
-      <.live_component module={ToolboxWeb.SearchFieldComponent} id="search-field" />
+      <div class="max-md:mt-4">
+        <.live_component module={ToolboxWeb.SearchFieldComponent} id="search-field" />
+      </div>
     </nav>
 
     <.flash_group flash={@flash} />
