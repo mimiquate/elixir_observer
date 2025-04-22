@@ -24,6 +24,15 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-serif: "Bitter", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --font-mono: "Space Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  --color-stroke: #343434;
+  --color-surface: #1d1d1d;
+  --color-surface-alt: #252525;
+  --color-secondary-text: #C0C0C0;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
 }
 
 /* This file is for your main application CSS */

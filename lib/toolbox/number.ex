@@ -5,21 +5,21 @@ defmodule Toolbox.Number do
   def to_human(number) do
     cond do
       compare(number, 999) == :gt && compare(number, 1_000_000) == :lt ->
-        delimit(number, 1_000, "K")
+        delimit(number, 1_000, "k")
 
       compare(number, 1_000_000) in [:gt, :eq] and compare(number, 1_000_000_000) == :lt ->
-        delimit(number, 1_000_000, "M")
+        delimit(number, 1_000_000, "m")
 
       compare(number, 1_000_000_000) in [:gt, :eq] and
           compare(number, 1_000_000_000_000) == :lt ->
-        delimit(number, 1_000_000_000, "B")
+        delimit(number, 1_000_000_000, "b")
 
       compare(number, 1_000_000_000_000) in [:gt, :eq] and
           compare(number, 1_000_000_000_000_000) == :lt ->
-        delimit(number, 1_000_000_000_000, "T")
+        delimit(number, 1_000_000_000_000, "t")
 
       compare(number, 1_000_000_000_000_000) in [:gt, :eq] ->
-        delimit(number, 1_000_000_000_000_000, "Q")
+        delimit(number, 1_000_000_000_000_000, "q")
 
       true ->
         number_to_delimited(number, precision: 0)

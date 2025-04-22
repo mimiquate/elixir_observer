@@ -44,58 +44,75 @@
     </.link>
   </div>
 
-  <div class="mt-8 flex flex-col sm:flex-row">
-    <div class="flex flex-row justify-between bg-zinc-100 dark:bg-zinc-800 rounded-md grow">
-      <div class="flex flex-col p-4">
-        <span class="text-sm text-gray-400">
-          Stars
-        </span>
-        <span :if={@package.stargazers_count} class="text-2xl font-bold">
+  <div class="grid grid-cols-1 md:grid-cols-5 gap-8 mt-8">
+    <div class="md:col-span-2 flex bg-zinc-100 dark:bg-surface rounded-md px-4 py-6 border border-stroke">
+      <div class="w-1/2">
+        <div class="flex">
+          <div class="p-1 bg-surface-alt w-fit rounded-md">
+            <img src={~p"/images/star-icon.svg"} />
+          </div>
+          <h4 class="text-[18px] text-secondary-text ml-1">
+            Stars
+          </h4>
+        </div>
+        <div :if={@package.stargazers_count} class="text-[32px] mt-4 font-semibold">
           {humanized_number(@package.stargazers_count)}
-        </span>
+        </div>
       </div>
-      <div class="flex flex-col p-4">
-        <span class="text-sm text-gray-400">
-          Recent Downloads
-        </span>
-        <span class="text-2xl font-bold">
+      <div class="w-1/2">
+        <div>
+          <h4 class="text-[18px] text-secondary-text">
+            Recent Downloads
+          </h4>
+        </div>
+        <div class="text-[32px] mt-4 font-semibold">
           {humanized_number(@package.recent_downloads)}
-        </span>
+        </div>
       </div>
     </div>
 
-    <div class="max-sm:mt-4 sm:ml-4 flex flex-row justify-between bg-zinc-100 dark:bg-zinc-800 rounded-md grow">
-      <div class="flex flex-col p-4">
-        <span class="text-sm text-gray-400">
-          First Release
-        </span>
-        <span class="text-2xl font-bold">
+    <div class="md:col-span-2 flex bg-zinc-100 dark:bg-surface rounded-md px-4 py-6 border border-stroke">
+      <div class="w-1/2">
+        <div class="flex">
+          <div class="p-1 bg-surface-alt w-fit rounded-md">
+            <img src={~p"/images/calendar-icon.svg"} />
+          </div>
+          <h4 class="text-[18px] text-secondary-text ml-1">
+            First Release
+          </h4>
+        </div>
+        <div class="text-[32px] mt-4 font-semibold">
           {humanized_datetime(@package.hexpm_created_at)}
-        </span>
+        </div>
       </div>
-      <div class="flex flex-col p-4">
-        <span class="text-sm text-gray-400">
-          Last Release
-        </span>
-        <span class="text-2xl font-bold">
+      <div class="w-1/2">
+        <div class="flex">
+          <div class="p-1 bg-surface-alt w-fit rounded-md">
+            <img src={~p"/images/calendar-icon.svg"} />
+          </div>
+          <h4 class="text-[18px] text-secondary-text ml-1">
+            Last Release
+          </h4>
+        </div>
+        <div class="text-[32px] mt-4 font-semibold">
           {humanized_datetime(@package.latest_version_at)}
-        </span>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="mt-8 bg-zinc-100 dark:bg-zinc-800 rounded-md p-4">
-    <span class="text-md font-bold">
-      Owners
-    </span>
+    <div class="bg-zinc-100 dark:bg-surface rounded-md py-6 px-4 border border-stroke">
+      <span class="text-[18px] text-secondary-text">
+        Owners
+      </span>
 
-    <div class="mt-2 flex flex-col">
-      <div :for={owner <- @package.owners} class="mt-2 flex items-center">
-        <img class="rounded-full" src={gravatar_url(owner["email"])} />
+      <div class="mt-2 flex flex-col">
+        <div :for={owner <- @package.owners} class="mt-2 flex items-center">
+          <img class="rounded-full" src={gravatar_url(owner["email"])} />
 
-        <span class="ml-2">
-          <.user_link username={owner["username"]} />
-        </span>
+          <span class="ml-2">
+            <.user_link username={owner["username"]} />
+          </span>
+        </div>
       </div>
     </div>
   </div>
