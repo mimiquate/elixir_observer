@@ -1,6 +1,6 @@
 defmodule Toolbox.Tasks.Hexpm do
   def run do
-    1..20
+    1..40
     |> Enum.each(fn page ->
       {
         :ok,
