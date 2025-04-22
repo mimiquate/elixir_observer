@@ -103,7 +103,7 @@
   <div class="mt-8">
     <div class="flex justify-between">
       <span class="text-2xl font-bold">
-        Version
+        Version {@version.version}
       </span>
 
       <form phx-change="version-change">
@@ -121,16 +121,6 @@
           </option>
         </select>
       </form>
-    </div>
-
-    <div class="mt-4">
-      <div class="flex justify-end text-sm">
-        <div>
-          Published {humanized_datetime(@version.published_at)}
-          <br /> by <.user_link username={@version.published_by_username} />
-        </div>
-        <img class="ml-2 rounded-full" src={gravatar_url(@version.published_by_email)} />
-      </div>
     </div>
 
     <div :if={@version.retirement} class="mt-4 text-red-500">
@@ -179,13 +169,25 @@
       </details>
     </div>
 
-    <.link
-      class="mt-3 inline-block bg-zinc-100 dark:bg-zinc-800 px-4 py-3"
-      href={@package.docs_html_url <> @version.version}
-      target="_blank"
-    >
-      Documentation for {@version.version}
-    </.link>
+    <div class="flex justify-between">
+      <.link
+        class="mt-3 inline-block bg-zinc-100 dark:bg-zinc-800 px-4 py-3"
+        href={@package.docs_html_url <> @version.version}
+        target="_blank"
+      >
+        Documentation for {@version.version}
+      </.link>
+
+      <div class="mt-3">
+        <div class="flex text-sm">
+          <div>
+            Published {humanized_datetime(@version.published_at)}
+            <br /> by <.user_link username={@version.published_by_username} />
+          </div>
+          <img class="ml-2 rounded-full" src={gravatar_url(@version.published_by_email)} />
+        </div>
+      </div>
+    </div>
 
     <div :if={@version.elixir_requirement} class="mt-2">
       Elixir version requirement {@version.elixir_requirement}
