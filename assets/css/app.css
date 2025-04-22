@@ -1,6 +1,8 @@
 /* Why `source(none)` below ? https://github.com/phoenixframework/phoenix/pull/6109#discussion_r1993092360 */
 @import "tailwindcss" source(none);
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @source "../css";
 @source "../js";
 @source "../../lib/toolbox_web";
