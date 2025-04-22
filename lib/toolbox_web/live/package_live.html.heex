@@ -108,7 +108,7 @@
       </span>
 
       <form phx-change="version-change">
-        <select name="version" class="dark:bg-zinc-800">
+        <select name="version" class="border rounded dark:bg-zinc-800">
           <option
             :for={{version, is_retired?} <- @package.versions}
             value={version}
