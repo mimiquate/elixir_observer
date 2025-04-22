@@ -199,9 +199,16 @@
           <div class="flex text-sm">
             <div>
               Published {humanized_datetime(@version.published_at)}
-              <br /> by <.user_link username={@version.published_by_username} />
+              <br />
+              <span :if={@version.published_by_username}>
+                by <.user_link username={@version.published_by_username} />
+              </span>
             </div>
-            <img class="ml-2 rounded-full" src={gravatar_url(@version.published_by_email)} />
+            <img
+              :if={@version.published_by_email}
+              class="ml-2 rounded-full"
+              src={gravatar_url(@version.published_by_email)}
+            />
           </div>
         </div>
       </div>
