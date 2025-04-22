@@ -129,72 +129,78 @@
       Message: {@version.retirement["message"]}
     </div>
 
-    <div class="mt-4 bg-zinc-100 dark:bg-zinc-800 p-4 rounded">
-      <span class="text-xl font-semibold">
-        Dependencies
-      </span>
-      <span class="bg-zinc-200 dark:bg-zinc-700 rounded-full px-2 inline-block font-mono font-semibold text-sm">
-        {Enum.count(@version.required)}
-      </span>
+    <div class="mt-4 md:flex">
+      <div class="bg-zinc-100 dark:bg-zinc-800 p-4 rounded md:grow">
+        <span class="text-xl font-semibold">
+          Dependencies
+        </span>
+        <span class="bg-zinc-200 dark:bg-zinc-700 rounded-full px-2 inline-block font-mono font-semibold text-sm">
+          {Enum.count(@version.required)}
+        </span>
 
-      <div class="mt-2">
-        <div
-          :for={
-            {name, %{"requirement" => requirement, "description" => description}} <-
-              @version.required
-          }
-          class="mt-1"
-        >
-          <.link navigate={~p"/packages/#{name}"} class="font-semibold">
-            {name}
-          </.link>
-          <span class="text-sm dark:text-zinc-300">
-            {requirement}
-          </span>
-          <div class="text-xs dark:text-zinc-300">
-            {description}
-          </div>
-        </div>
-      </div>
-
-      <details :if={Enum.count(@version.optional) > 0} class="mt-2">
-        <summary>Optional</summary>
         <div class="mt-2">
-          <p class="mb-2 text-xs dark:text-zinc-300">
-            Dependencies that are not required by default but can be installed or enable additional features or functionality
-          </p>
-          <div :for={{name, %{"requirement" => requirement}} <- @version.optional}>
-            <.link navigate={~p"/packages/#{name}"}>{name}</.link> {requirement}
+          <div
+            :for={
+              {name, %{"requirement" => requirement, "description" => description}} <-
+                @version.required
+            }
+            class="mt-1"
+          >
+            <.link navigate={~p"/packages/#{name}"} class="font-semibold">
+              {name}
+            </.link>
+            <span class="text-sm dark:text-zinc-300">
+              {requirement}
+            </span>
+            <div class="text-xs dark:text-zinc-300">
+              {description}
+            </div>
           </div>
         </div>
-      </details>
-    </div>
 
-    <div :if={@version.elixir_requirement} class="mt-3 bg-zinc-100 dark:bg-zinc-800 px-4 py-3">
-      <div class="text-xl font-semibold">
-        Elixir version requirement
+        <details :if={Enum.count(@version.optional) > 0} class="mt-2">
+          <summary>Optional</summary>
+          <div class="mt-2">
+            <p class="mb-2 text-xs dark:text-zinc-300">
+              Dependencies that are not required by default but can be installed or enable additional features or functionality
+            </p>
+            <div :for={{name, %{"requirement" => requirement}} <- @version.optional}>
+              <.link navigate={~p"/packages/#{name}"}>{name}</.link> {requirement}
+            </div>
+          </div>
+        </details>
       </div>
 
-      <div class="mt-2">
-        elixir {@version.elixir_requirement}
-      </div>
-    </div>
-
-    <.link
-      class="mt-3 block bg-zinc-100 dark:bg-zinc-800 px-4 py-3"
-      href={@package.docs_html_url <> @version.version}
-      target="_blank"
-    >
-      Documentation for {@version.version}
-    </.link>
-
-    <div class="mt-3 flex justify-end">
-      <div class="flex text-sm">
+      <div class="max-md:mt-3 md:ml-4 md:grow md:flex md:flex-col md:justify-between">
         <div>
-          Published {humanized_datetime(@version.published_at)}
-          <br /> by <.user_link username={@version.published_by_username} />
+          <div :if={@version.elixir_requirement} class="bg-zinc-100 dark:bg-zinc-800 px-4 py-3">
+            <div class="text-xl font-semibold">
+              Elixir version requirement
+            </div>
+
+            <div class="mt-2">
+              elixir {@version.elixir_requirement}
+            </div>
+          </div>
+
+          <.link
+            class="mt-3 block bg-zinc-100 dark:bg-zinc-800 px-4 py-3"
+            href={@package.docs_html_url <> @version.version}
+            target="_blank"
+          >
+            Documentation for {@version.version}
+          </.link>
         </div>
-        <img class="ml-2 rounded-full" src={gravatar_url(@version.published_by_email)} />
+
+        <div class="mt-3 flex justify-end">
+          <div class="flex text-sm">
+            <div>
+              Published {humanized_datetime(@version.published_at)}
+              <br /> by <.user_link username={@version.published_by_username} />
+            </div>
+            <img class="ml-2 rounded-full" src={gravatar_url(@version.published_by_email)} />
+          </div>
+        </div>
       </div>
     </div>
   </div>
