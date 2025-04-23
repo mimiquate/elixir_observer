@@ -45,49 +45,26 @@
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-5 gap-8 mt-8">
-    <div class="md:col-span-2 flex bg-zinc-100 dark:bg-surface rounded-md px-4 py-6 border border-stroke">
-      <div class="w-1/2">
-        <div class="flex">
-          <div class="p-1 bg-surface-alt w-fit rounded-md">
-            <img src={~p"/images/star-icon.svg"} />
-          </div>
-          <h4 class="text-[18px] text-secondary-text ml-2">
-            Stars
-          </h4>
-        </div>
-        <div :if={@package.stargazers_count} class="text-[32px] mt-4 font-semibold">
+    <div class="md:col-span-2 flex border border-stroke rounded-md">
+      <.stats_card class="w-1/2" title="Stars" icon_path={~p"/images/star-icon.svg"}>
+        <div :if={@package.stargazers_count} class="text-[32px] font-semibold">
           {humanized_number(@package.stargazers_count)}
         </div>
-      </div>
-      <div class="w-1/2">
+      </.stats_card>
+
+      <.stats_card class="w-1/2" title="Recent downloads" icon_path={~p"/images/download-icon.svg"}>
         <div class="flex">
-          <div class="p-1 bg-surface-alt w-fit rounded-md">
-            <img src={~p"/images/download-icon.svg"} />
-          </div>
-          <h4 class="text-[18px] text-secondary-text ml-2">
-            Recent downloads
-          </h4>
-        </div>
-        <div class="flex mt-4">
           <h3 class="text-[32px] font-semibold">
             {humanized_number(@package.recent_downloads)}
           </h3>
           <span class="self-center ml-2 text-secondary-text">In the last year</span>
         </div>
-      </div>
+      </.stats_card>
     </div>
 
-    <div class="md:col-span-2 flex bg-zinc-100 dark:bg-surface rounded-md px-4 py-6 border border-stroke">
-      <div class="w-1/2">
+    <div class="md:col-span-2 flex border border-stroke rounded-md">
+      <.stats_card class="w-1/2" title="First Release" icon_path={~p"/images/calendar-icon.svg"}>
         <div class="flex">
-          <div class="p-1 bg-surface-alt w-fit rounded-md">
-            <img src={~p"/images/calendar-icon.svg"} />
-          </div>
-          <h4 class="text-[18px] text-secondary-text ml-2">
-            First Release
-          </h4>
-        </div>
-        <div class="flex mt-4">
           <% {created_at_number, created_relative_label} = relative_datetime(@package.hexpm_created_at) %>
           <%= if created_at_number do %>
             <h3 class="text-[32px] font-semibold">
@@ -96,17 +73,10 @@
           <% end %>
           <span class="self-center ml-2 text-secondary-text">{created_relative_label}</span>
         </div>
-      </div>
-      <div class="w-1/2">
+      </.stats_card>
+
+      <.stats_card class="w-1/2" title="Last Release" icon_path={~p"/images/calendar-icon.svg"}>
         <div class="flex">
-          <div class="p-1 bg-surface-alt w-fit rounded-md">
-            <img src={~p"/images/calendar-icon.svg"} />
-          </div>
-          <h4 class="text-[18px] text-secondary-text ml-2">
-            Last Release
-          </h4>
-        </div>
-        <div class="flex mt-4">
           <% {last_release_number, last_release_label} = relative_datetime(@package.latest_version_at) %>
           <%= if last_release_number do %>
             <h3 class="text-[32px] font-semibold">
@@ -115,7 +85,7 @@
           <% end %>
           <span class="self-center ml-2 text-secondary-text">{last_release_label}</span>
         </div>
-      </div>
+      </.stats_card>
     </div>
 
     <div class="bg-zinc-100 dark:bg-surface rounded-md py-6 px-4 border border-stroke">
@@ -123,7 +93,7 @@
         Owners
       </span>
 
-      <div class="mt-2 flex flex-col">
+      <div class="flex flex-col">
         <div :for={owner <- @package.owners} class="mt-2 flex items-center">
           <img width="32px" height="32px" class="rounded-full" src={gravatar_url(owner["email"])} />
 
