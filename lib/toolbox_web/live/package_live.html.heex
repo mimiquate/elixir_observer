@@ -51,7 +51,7 @@
           <div class="p-1 bg-surface-alt w-fit rounded-md">
             <img src={~p"/images/star-icon.svg"} />
           </div>
-          <h4 class="text-[18px] text-secondary-text ml-1">
+          <h4 class="text-[18px] text-secondary-text ml-2">
             Stars
           </h4>
         </div>
@@ -60,13 +60,19 @@
         </div>
       </div>
       <div class="w-1/2">
-        <div>
-          <h4 class="text-[18px] text-secondary-text">
-            Recent Downloads
+        <div class="flex">
+          <div class="p-1 bg-surface-alt w-fit rounded-md">
+            <img src={~p"/images/download-icon.svg"} />
+          </div>
+          <h4 class="text-[18px] text-secondary-text ml-2">
+            Recent downloads
           </h4>
         </div>
-        <div class="text-[32px] mt-4 font-semibold">
-          {humanized_number(@package.recent_downloads)}
+        <div class="flex mt-4">
+          <h3 class="text-[32px] font-semibold">
+            {humanized_number(@package.recent_downloads)}
+          </h3>
+          <span class="self-center ml-2 text-secondary-text">In the last year</span>
         </div>
       </div>
     </div>
@@ -77,7 +83,7 @@
           <div class="p-1 bg-surface-alt w-fit rounded-md">
             <img src={~p"/images/calendar-icon.svg"} />
           </div>
-          <h4 class="text-[18px] text-secondary-text ml-1">
+          <h4 class="text-[18px] text-secondary-text ml-2">
             First Release
           </h4>
         </div>
@@ -90,7 +96,7 @@
           <div class="p-1 bg-surface-alt w-fit rounded-md">
             <img src={~p"/images/calendar-icon.svg"} />
           </div>
-          <h4 class="text-[18px] text-secondary-text ml-1">
+          <h4 class="text-[18px] text-secondary-text ml-2">
             Last Release
           </h4>
         </div>
