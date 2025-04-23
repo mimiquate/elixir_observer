@@ -125,9 +125,9 @@
 
       <div class="mt-2 flex flex-col">
         <div :for={owner <- @package.owners} class="mt-2 flex items-center">
-          <img class="rounded-full" src={gravatar_url(owner["email"])} />
+          <img width="32px" height="32px" class="rounded-full" src={gravatar_url(owner["email"])} />
 
-          <span class="ml-2">
+          <span class="text-[14px] ml-2">
             <.user_link username={owner["username"]} />
           </span>
         </div>
