@@ -15,11 +15,11 @@ defmodule ToolboxWeb.Components.StatsCard do
           <img src={@icon_path} />
         </div>
         <h4 class="text-[18px] text-secondary-text ml-2">
-          <%= @title %>
+          {@title}
         </h4>
       </div>
       <div class="mt-4">
-        <%= render_slot(@inner_block) %>
+        {render_slot(@inner_block)}
       </div>
     </div>
     """

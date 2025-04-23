@@ -52,7 +52,11 @@
         </div>
       </.stats_card>
 
-      <.stats_card class="w-1/2" title="Recent downloads" icon_path={~p"/images/download-icon.svg"}>
+      <.stats_card
+        class="w-1/2"
+        title="Recent downloads"
+        icon_path={~p"/images/download-icon.svg"}
+      >
         <div class="flex">
           <h3 class="text-[32px] font-semibold">
             {humanized_number(@package.recent_downloads)}
@@ -65,7 +69,8 @@
     <div class="md:col-span-2 flex border border-stroke rounded-md">
       <.stats_card class="w-1/2" title="First Release" icon_path={~p"/images/calendar-icon.svg"}>
         <div class="flex">
-          <% {created_at_number, created_relative_label} = relative_datetime(@package.hexpm_created_at) %>
+          <% {created_at_number, created_relative_label} =
+            relative_datetime(@package.hexpm_created_at) %>
           <%= if created_at_number do %>
             <h3 class="text-[32px] font-semibold">
               {created_at_number}
@@ -77,7 +82,8 @@
 
       <.stats_card class="w-1/2" title="Last Release" icon_path={~p"/images/calendar-icon.svg"}>
         <div class="flex">
-          <% {last_release_number, last_release_label} = relative_datetime(@package.latest_version_at) %>
+          <% {last_release_number, last_release_label} =
+            relative_datetime(@package.latest_version_at) %>
           <%= if last_release_number do %>
             <h3 class="text-[32px] font-semibold">
               {last_release_number}
