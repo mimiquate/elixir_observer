@@ -87,8 +87,14 @@
             First Release
           </h4>
         </div>
-        <div class="text-[32px] mt-4 font-semibold">
-          {relative_datetime(@package.hexpm_created_at)}
+        <div class="flex mt-4">
+          <% {created_at_number, created_relative_label} = relative_datetime(@package.hexpm_created_at) %>
+          <%= if created_at_number do %>
+            <h3 class="text-[32px] font-semibold">
+              {created_at_number}
+            </h3>
+          <% end %>
+          <span class="self-center ml-2 text-secondary-text">{created_relative_label}</span>
         </div>
       </div>
       <div class="w-1/2">
@@ -100,8 +106,14 @@
             Last Release
           </h4>
         </div>
-        <div class="text-[32px] mt-4 font-semibold">
-          {relative_datetime(@package.latest_version_at)}
+        <div class="flex mt-4">
+          <% {last_release_number, last_release_label} = relative_datetime(@package.latest_version_at) %>
+          <%= if last_release_number do %>
+            <h3 class="text-[32px] font-semibold">
+              {last_release_number}
+            </h3>
+          <% end %>
+          <span class="self-center ml-2 text-secondary-text">{last_release_label}</span>
         </div>
       </div>
     </div>

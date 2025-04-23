@@ -117,13 +117,13 @@ defmodule ToolboxWeb do
 
         if diff do
           cond do
-            diff <= 5 -> "now"
-            diff <= 60 -> "#{diff}s ago"
-            diff <= @hour -> "#{div(diff, @minute)} minutes ago"
-            diff > @hour && diff <= @day -> "#{div(diff, @hour)} hours ago"
-            diff > @day && diff <= @month -> "#{div(diff, @day)} days ago"
-            diff > @month && diff <= @year -> "#{div(diff, @month)} months ago"
-            true -> "#{div(diff, @year)} years ago"
+            diff <= 5 -> {nil, "now"}
+            diff <= 60 -> {diff, "seconds ago"}
+            diff <= @hour -> {div(diff, @minute), "minutes ago"}
+            diff > @hour && diff <= @day -> {div(diff, @hour), "hours ago"}
+            diff > @day && diff <= @month -> {div(diff, @day), "days ago"}
+            diff > @month && diff <= @year -> {div(diff, @month), "months ago"}
+            true -> {div(diff, @year), "years ago"}
           end
         end
       end
