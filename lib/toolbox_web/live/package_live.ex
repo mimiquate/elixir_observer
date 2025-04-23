@@ -33,7 +33,8 @@ defmodule ToolboxWeb.PackageLive do
           github_repo_url: github_data["html_url"],
           stargazers_count: github_data["stargazers_count"],
           topics: (github_data["topics"] || []) -- @ignored_topics,
-          hexpm_created_at: hexpm_data["inserted_at"]
+          hexpm_created_at: hexpm_data["inserted_at"],
+          similar: Toolbox.Packages.similar(package)
         },
         version: version(package.name, version)
       )

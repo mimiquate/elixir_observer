@@ -21,6 +21,11 @@ defmodule Toolbox.Packages do
     |> Repo.all()
   end
 
+  def similar(package) do
+    search(package.name)
+    |> Enum.reject(fn %{name: name} -> name == package.name end)
+  end
+
   def get_package_by_name(name) do
     from(p in Package, where: p.name == ^name)
     |> Repo.one()
