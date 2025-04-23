@@ -82,7 +82,7 @@
           </h4>
         </div>
         <div class="text-[32px] mt-4 font-semibold">
-          {humanized_datetime(@package.hexpm_created_at)}
+          {relative_datetime(@package.hexpm_created_at)}
         </div>
       </div>
       <div class="w-1/2">
@@ -95,7 +95,7 @@
           </h4>
         </div>
         <div class="text-[32px] mt-4 font-semibold">
-          {humanized_datetime(@package.latest_version_at)}
+          {relative_datetime(@package.latest_version_at)}
         </div>
       </div>
     </div>
