@@ -1,5 +1,5 @@
 <article>
-  <section class="flex flex-wrap sm:flex-nowrap min-w-40 justify-between pb-6 sm:pb-15">
+  <section class="flex flex-wrap sm:flex-nowrap min-w-40 justify-between pb-6 sm:pb-10">
     <div class="px-4 sm:px-0">
       <h3 class="text-6xl font-semibold font-serif break-all">
         {@package.name}
@@ -53,7 +53,7 @@
     All versions are retired
   </p>
 
-  <section class="grid grid-cols-1 md:grid-cols-5 gap-2 sm:gap-8 mt-3 sm:mt-8">
+  <section class="grid grid-cols-1 md:grid-cols-5 gap-2 sm:gap-8 mt-3 sm:0">
     <div class="md:col-span-2 flex border border-stroke rounded-md">
       <.stats_card class="w-1/2" title="Stars" icon_path={~p"/images/star-icon.svg"}>
         <div :if={@package.stargazers_count} class="text-[20px] sm:text-[32px] font-semibold">
