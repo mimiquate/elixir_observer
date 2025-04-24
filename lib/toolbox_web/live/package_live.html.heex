@@ -43,6 +43,14 @@
     >
       Documentation
     </.link>
+    <.link
+      :if={@package.changelog_url}
+      class="bg-zinc-100 dark:bg-zinc-800 px-4 py-3"
+      href={@package.changelog_url}
+      target="_blank"
+    >
+      Changelog
+    </.link>
   </div>
 
   <div class="mt-8 flex flex-col sm:flex-row">

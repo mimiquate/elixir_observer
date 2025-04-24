@@ -31,6 +31,7 @@ defmodule ToolboxWeb.PackageLive do
           latest_version_at: hd(hexpm_data["releases"])["inserted_at"],
           latest_stable_version: version,
           html_url: hexpm_data["html_url"],
+          changelog_url: changelog_url(hexpm_data),
           docs_html_url: hexpm_data["docs_html_url"],
           github_repo_url: github_data["html_url"],
           stargazers_count: github_data["stargazers_count"],
@@ -116,5 +117,11 @@ defmodule ToolboxWeb.PackageLive do
            Toolbox.Packages.last_hexpm_snapshot(package) do
       hexpm_snapshot.data["meta"]["description"]
     end
+  end
+
+  defp changelog_url(hexpm_data) do
+    links = hexpm_data["meta"]["links"]
+
+    links["Changelog"] || links["CHANGELOG"]
   end
 end
