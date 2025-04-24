@@ -2,6 +2,7 @@ defmodule ToolboxWeb.PackageLive do
   use ToolboxWeb, :live_view
 
   import ToolboxWeb.Components.StatsCard
+  import ToolboxWeb.Components.PackageLink
 
   @ignored_topics ["elixir"]
 
@@ -36,6 +37,7 @@ defmodule ToolboxWeb.PackageLive do
           changelog_url: changelog_url(hexpm_data),
           docs_html_url: hexpm_data["docs_html_url"],
           github_repo_url: github_data["html_url"],
+          github_fullname: github_data["full_name"],
           stargazers_count: github_data["stargazers_count"],
           topics: (github_data["topics"] || []) -- @ignored_topics,
           hexpm_created_at: hexpm_data["inserted_at"]
