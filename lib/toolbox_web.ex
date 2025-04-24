@@ -105,6 +105,29 @@ defmodule ToolboxWeb do
         )
       end
 
+      @minute 60
+      @hour @minute * 60
+      @day @hour * 24
+      @month @day * 30
+      @year @month * 12
+
+      def relative_datetime(datetime) do
+        {:ok, datetime, _} = DateTime.from_iso8601(datetime)
+        diff = DateTime.diff(DateTime.utc_now(), datetime)
+
+        if diff do
+          cond do
+            diff <= 5 -> {nil, "now"}
+            diff <= 60 -> {diff, "seconds ago"}
+            diff <= @hour -> {div(diff, @minute), "minutes ago"}
+            diff > @hour && diff <= @day -> {div(diff, @hour), "hours ago"}
+            diff > @day && diff <= @month -> {div(diff, @day), "days ago"}
+            diff > @month && diff <= @year -> {div(diff, @month), "months ago"}
+            true -> {div(diff, @year), "years ago"}
+          end
+        end
+      end
+
       def gravatar_url(email, size \\ 48)
 
       def gravatar_url(nil, size) do

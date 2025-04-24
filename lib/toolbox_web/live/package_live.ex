@@ -1,6 +1,8 @@
 defmodule ToolboxWeb.PackageLive do
   use ToolboxWeb, :live_view
 
+  import ToolboxWeb.Components.StatsCard
+
   @ignored_topics ["elixir"]
 
   def mount(%{"name" => name}, _session, socket) do
