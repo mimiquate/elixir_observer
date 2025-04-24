@@ -44,10 +44,10 @@
     </.link>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-5 gap-8 mt-8">
+  <div class="grid grid-cols-1 md:grid-cols-5 gap-2 sm:gap-8 mt-3 sm:mt-8">
     <div class="md:col-span-2 flex border border-stroke rounded-md">
       <.stats_card class="w-1/2" title="Stars" icon_path={~p"/images/star-icon.svg"}>
-        <div :if={@package.stargazers_count} class="text-[32px] font-semibold">
+        <div :if={@package.stargazers_count} class="text-[20px] sm:text-[32px] font-semibold">
           {humanized_number(@package.stargazers_count)}
         </div>
       </.stats_card>
@@ -57,39 +57,45 @@
         title="Recent downloads"
         icon_path={~p"/images/download-icon.svg"}
       >
-        <div class="flex">
-          <h3 class="text-[32px] font-semibold">
+        <div class="flex items-center">
+          <h3 class="text-[20px] sm:text-[32px] font-semibold">
             {humanized_number(@package.recent_downloads)}
           </h3>
-          <span class="self-center ml-2 text-secondary-text">In the last year</span>
+          <span class="text-[10px] sm:text-[14px] self-center ml-2 text-secondary-text">
+            In the last year
+          </span>
         </div>
       </.stats_card>
     </div>
 
     <div class="md:col-span-2 flex border border-stroke rounded-md">
       <.stats_card class="w-1/2" title="First Release" icon_path={~p"/images/calendar-icon.svg"}>
-        <div class="flex">
+        <div class="flex items-center">
           <% {created_at_number, created_relative_label} =
             relative_datetime(@package.hexpm_created_at) %>
           <%= if created_at_number do %>
-            <h3 class="text-[32px] font-semibold">
+            <h3 class="text-[20px] sm:text-[32px] font-semibold">
               {created_at_number}
             </h3>
           <% end %>
-          <span class="self-center ml-2 text-secondary-text">{created_relative_label}</span>
+          <span class="self-center ml-2 text-[10px] sm:text-[14px] text-secondary-text">
+            {created_relative_label}
+          </span>
         </div>
       </.stats_card>
 
       <.stats_card class="w-1/2" title="Last Release" icon_path={~p"/images/calendar-icon.svg"}>
-        <div class="flex">
+        <div class="flex items-center">
           <% {last_release_number, last_release_label} =
             relative_datetime(@package.latest_version_at) %>
           <%= if last_release_number do %>
-            <h3 class="text-[32px] font-semibold">
+            <h3 class="text-[20px] sm:text-[32px] font-semibold">
               {last_release_number}
             </h3>
           <% end %>
-          <span class="self-center ml-2 text-secondary-text">{last_release_label}</span>
+          <span class="self-center ml-2 text-[10px] sm:text-[14px] text-secondary-text">
+            {last_release_label}
+          </span>
         </div>
       </.stats_card>
     </div>
