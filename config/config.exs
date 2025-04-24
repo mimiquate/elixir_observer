@@ -51,7 +51,9 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :tower, :reporters, [TowerSlack, TowerRollbar]
+config :tower,
+  reporters: [TowerSlack, TowerRollbar],
+  logger_metadata: [:package]
 
 config :tower_slack, otp_app: :toolbox
 

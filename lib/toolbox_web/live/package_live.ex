@@ -4,6 +4,8 @@ defmodule ToolboxWeb.PackageLive do
   @ignored_topics ["elixir"]
 
   def mount(%{"name" => name}, _session, socket) do
+    Logger.metadata(package: %{name: name})
+
     package = Toolbox.Packages.get_package_by_name(name)
     hexpm_data = Toolbox.Packages.last_hexpm_snapshot(package).data
 
