@@ -1,22 +1,50 @@
-<div>
-  <div class="px-4 sm:px-0">
-    <h3 class="text-6xl font-semibold font-serif break-all">
-      {@package.name}
-    </h3>
+<article>
+  <section class="flex flex-wrap sm:flex-nowrap min-w-40 justify-between pb-6 sm:pb-10">
+    <div class="px-4 sm:px-0">
+      <h3 class="text-6xl font-semibold font-serif break-all">
+        {@package.name}
+      </h3>
 
-    <p class="mt-3 max-w-2xl text-md font-mono text-gray-400">
-      {@package.description}
-    </p>
+      <p class="mt-3 max-w-2xl text-md font-mono text-gray-400">
+        {@package.description}
+      </p>
 
-    <div class="mt-2">
-      <span
-        :for={topic <- @package.topics}
-        class="text-xs mt-1 mr-1 py-1 px-2 rounded-full bg-zinc-100 dark:bg-zinc-800 inline-block"
-      >
-        {topic}
-      </span>
+      <div class="mt-2">
+        <span
+          :for={topic <- @package.topics}
+          class="text-xs mt-1 mr-1 py-1 px-2 rounded-full bg-zinc-100 dark:bg-zinc-800 inline-block"
+        >
+          {topic}
+        </span>
+      </div>
     </div>
-  </div>
+
+    <div class="w-1/1 dark:bg-surface px-3 py-3 sm:self-baseline sm:w-auto sm:px-4 sm:w-auto sm:basis-70 rounded-md mt-6 sm:mt-0">
+      <h3 class="text-[14px] mb-4 sm:hidden">Package Resources</h3>
+
+      <div class="flex flex-col">
+        <.package_link
+          href={@package.html_url}
+          icon_path={~p"/images/hex-icon.svg"}
+          text={@package.name}
+        />
+        <div class="w-auto sm:hidden border border-divider"></div>
+        <.package_link
+          href={@package.github_repo_url}
+          icon_path={~p"/images/gh-icon.svg"}
+          text={@package.github_fullname}
+        />
+        <div class="w-auto sm:hidden border border-divider"></div>
+        <.package_link
+          href={@package.docs_html_url}
+          icon_path={~p"/images/doc-icon.svg"}
+          text="documentation"
+        />
+        <div class="w-auto sm:hidden border border-divider"></div>
+        <.package_link href="#history" icon_path={~p"/images/history-icon.svg"} text="changelog" />
+      </div>
+    </div>
+  </section>
 
   <p
     :if={Enum.all?(@package.versions, fn {_, is_retired?} -> is_retired? end)}
@@ -25,35 +53,7 @@
     All versions are retired
   </p>
 
-  <div class="mt-8 flex flex-col sm:flex-row">
-    <.link class="bg-zinc-100 dark:bg-zinc-800 px-4 py-3" href={@package.html_url} target="_blank">
-      Package
-    </.link>
-    <.link
-      class="bg-zinc-100 dark:bg-zinc-800 px-4 py-3"
-      href={@package.github_repo_url}
-      target="_blank"
-    >
-      Source Code
-    </.link>
-    <.link
-      class="bg-zinc-100 dark:bg-zinc-800 px-4 py-3"
-      href={@package.docs_html_url}
-      target="_blank"
-    >
-      Documentation
-    </.link>
-    <.link
-      :if={@package.changelog_url}
-      class="bg-zinc-100 dark:bg-zinc-800 px-4 py-3"
-      href={@package.changelog_url}
-      target="_blank"
-    >
-      Changelog
-    </.link>
-  </div>
-
-  <div class="grid grid-cols-1 md:grid-cols-5 gap-2 sm:gap-8 mt-3 sm:mt-8">
+  <section class="grid grid-cols-1 md:grid-cols-5 gap-2 sm:gap-8 mt-3 sm:0">
     <div class="md:col-span-2 flex border border-stroke rounded-md">
       <.stats_card class="w-1/2" title="Stars" icon_path={~p"/images/star-icon.svg"}>
         <div :if={@package.stargazers_count} class="text-[20px] sm:text-[32px] font-semibold">
@@ -124,9 +124,9 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="mt-8">
+  <section class="mt-8">
     <div class="flex justify-between">
       <span class="text-2xl font-bold">
         Version {@version.version}
@@ -241,5 +241,5 @@
         </div>
       </div>
     </div>
-  </div>
-</div>
+  </section>
+</article>
