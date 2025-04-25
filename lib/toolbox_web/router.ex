@@ -48,6 +48,6 @@ defmodule ToolboxWeb.Router do
   end
 
   defp admin_basic_auth(conn, _opts) do
-    Plug.BasicAuth.basic_auth(conn, Application.fetch_env!(:toolbox, :basic_auth))
+    Plug.BasicAuth.basic_auth(conn, Application.fetch_env!(:toolbox, :admin_basic_auth))
   end
 end
