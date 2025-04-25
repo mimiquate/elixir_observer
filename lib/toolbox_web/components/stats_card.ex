@@ -9,7 +9,7 @@ defmodule ToolboxWeb.Components.StatsCard do
 
   def stats_card(assigns) do
     ~H"""
-    <div class={"bg-zinc-100 dark:bg-surface p-3 sm:px-4 sm:py-6 #{@class}"}>
+    <div class={"p-3 sm:px-4 sm:py-6 #{@class}"}>
       <div class="flex items-center">
         <div class="p-1 bg-surface-alt w-fit rounded-md">
           <img src={@icon_path} />

@@ -59,7 +59,7 @@
   </p>
 
   <section class="grid grid-cols-1 md:grid-cols-5 gap-2 sm:gap-8 mt-3 sm:0">
-    <div class="md:col-span-2 flex border border-stroke rounded-md">
+    <div class="md:col-span-2 flex border border-stroke rounded-md bg-zinc-100 dark:bg-surface">
       <.stats_card class="w-1/2" title="Stars" icon_path={~p"/images/star-icon.svg"}>
         <div :if={@package.stargazers_count} class="text-[20px] sm:text-[32px] font-semibold">
           {humanized_number(@package.stargazers_count)}
@@ -82,7 +82,7 @@
       </.stats_card>
     </div>
 
-    <div class="md:col-span-2 flex border border-stroke rounded-md">
+    <div class="md:col-span-2 flex border border-stroke rounded-md bg-zinc-100 dark:bg-surface">
       <.stats_card class="w-1/2" title="First Release" icon_path={~p"/images/calendar-icon.svg"}>
         <div class="flex items-center">
           <% {created_at_number, created_relative_label} =
