@@ -38,14 +38,14 @@
         <.package_link
           href={@package.docs_html_url}
           icon_path={~p"/images/doc-icon.svg"}
-          text="documentation"
+          text="Documentation"
         />
         <div class="w-auto sm:hidden border border-divider"></div>
         <.package_link
           :if={@package.changelog_url}
           href={@package.changelog_url}
           icon_path={~p"/images/history-icon.svg"}
-          text="changelog"
+          text="Changelog"
         />
       </div>
     </div>
