@@ -10,7 +10,7 @@ defmodule ToolboxWeb.Components.PackageLink do
     ~H"""
     <.link class="flex items-center text-[14px] py-2 sm:px-4" href={@href} target="_blank">
       <img src={@icon_path} class="mr-2 sm:w-4" />
-      <span class="sm:mt-0">{@text}</span>
+      <span class="sm:mt-0 mr-2">{@text}</span>
       <img src={~p"/images/right-chevron-icon.svg"} class="mr-2 ml-auto" />
     </.link>
     """
