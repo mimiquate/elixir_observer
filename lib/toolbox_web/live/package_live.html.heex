@@ -139,7 +139,7 @@
         </span>
 
         <form phx-change="version-change">
-          <select name="version" class="border rounded dark:bg-zinc-800">
+          <select name="version" class="border border-stroke rounded dark:bg-surface-alt">
             <option
               :for={{version, is_retired?} <- @package.versions}
               value={version}
@@ -161,11 +161,11 @@
       </div>
 
       <div class="mt-4 md:flex">
-        <div class="bg-zinc-100 dark:bg-zinc-800 p-4 rounded md:grow">
+        <div class="dark:bg-surface-alt p-4 rounded md:grow border border-stroke">
           <span class="text-xl font-semibold">
             Dependencies
           </span>
-          <span class="bg-zinc-200 dark:bg-zinc-700 rounded-full px-2 inline-block font-mono font-semibold text-sm">
+          <span class="rounded-full px-2 inline-block font-mono font-semibold text-sm">
             {Enum.count(@version.required)}
           </span>
 
@@ -206,7 +206,7 @@
           <div>
             <div
               :if={@version.elixir_requirement}
-              class="mb-3 bg-zinc-100 dark:bg-zinc-800 px-4 py-3 rounded"
+              class="mb-3 dark:bg-surface-alt px-4 py-3 rounded border border-stroke"
             >
               <div class="text-xl font-semibold">
                 Elixir version requirement
@@ -221,7 +221,7 @@
             </div>
 
             <.link
-              class="block bg-zinc-100 dark:bg-zinc-800 px-4 py-3 rounded"
+              class="block dark:bg-surface-alt px-4 py-3 rounded border border-stroke"
               href={@package.docs_html_url <> @version.version}
               target="_blank"
             >
