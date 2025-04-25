@@ -43,7 +43,8 @@ defmodule ToolboxWeb.PackageLive do
           github_fullname: github_data["full_name"],
           stargazers_count: github_data["stargazers_count"],
           topics: (github_data["topics"] || []) -- @ignored_topics,
-          hexpm_created_at: hexpm_data["inserted_at"]
+          hexpm_created_at: hexpm_data["inserted_at"],
+          activities: []
         }
       )
     }
