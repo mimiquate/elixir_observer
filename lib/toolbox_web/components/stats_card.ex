@@ -14,7 +14,7 @@ defmodule ToolboxWeb.Components.StatsCard do
         <div class="p-1 bg-surface-alt w-fit rounded-md">
           <img src={@icon_path} />
         </div>
-        <h4 class="text-[12px] sm:text-[18px] text-secondary-text ml-2">
+        <h4 class="text-[12px] sm:text-[18px] ml-2">
           {@title}
         </h4>
       </div>
