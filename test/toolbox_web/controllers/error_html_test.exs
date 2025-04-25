@@ -5,7 +5,8 @@ defmodule ToolboxWeb.ErrorHTMLTest do
   import Phoenix.Template
 
   test "renders 404.html" do
-    assert render_to_string(ToolboxWeb.ErrorHTML, "404", "html", []) == "Not Found"
+    assert render_to_string(ToolboxWeb.ErrorHTML, "404", "html", []) =~
+             "Sorry, we couldn't find what you were looking for"
   end
 
   test "renders 500.html" do

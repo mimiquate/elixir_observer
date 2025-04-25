@@ -17,6 +17,7 @@ config :toolbox, ToolboxWeb.Endpoint,
   adapter: Bandit.PhoenixAdapter,
   render_errors: [
     formats: [html: ToolboxWeb.ErrorHTML, json: ToolboxWeb.ErrorJSON],
+    root_layout: [html: {ToolboxWeb.Layouts, :root}, json: false],
     layout: false
   ],
   pubsub_server: Toolbox.PubSub,
