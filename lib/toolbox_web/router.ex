@@ -8,6 +8,9 @@ defmodule ToolboxWeb.Router do
     plug :put_root_layout, html: {ToolboxWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+  end
+
+  pipeline :auth do
     plug :basic_auth
   end
 
@@ -21,7 +24,7 @@ defmodule ToolboxWeb.Router do
   end
 
   scope "/", ToolboxWeb do
-    pipe_through :browser
+    pipe_through [:browser, :auth]
 
     live "/", HomeLive
 
