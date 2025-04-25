@@ -1,4 +1,4 @@
-<main class="px-4 py-12 sm:px-6 lg:px-8">
+<main class="min-h-screen flex flex-col justify-between px-4 py-12 sm:px-6 lg:px-8">
   <div class="container mx-auto">
     <nav
       :if={not match?(%{view: ToolboxWeb.HomeLive}, @socket)}
@@ -16,4 +16,10 @@
     <.flash_group flash={@flash} />
     {@inner_content}
   </div>
+
+  <footer class="mt-24 container mx-auto text-secondary-text text-sm">
+    <div>
+      Built by <.link href="https://mimiquate.com" target="_blank" class="underline">Mimiquate</.link>.
+    </div>
+  </footer>
 </main>
