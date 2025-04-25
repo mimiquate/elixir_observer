@@ -1,4 +1,10 @@
-<div class="text-2xl font-bold">{length(@packages)} results for "{@term}"</div>
+<div class="text-2xl font-bold">
+  {length(@packages)}{if(@more?, do: "+")} results for "{@term}"
+</div>
+
+<div :if={@more?} class="mt-2 text-sm text-secondary-text">
+  Only showing first {length(@packages)}
+</div>
 
 <div class="mt-8">
   <div

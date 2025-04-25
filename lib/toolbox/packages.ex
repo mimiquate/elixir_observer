@@ -12,13 +12,20 @@ defmodule Toolbox.Packages do
   end
 
   def search(term) do
+    limit = 50
     like_term = "%#{term}%"
 
-    from(
-      p in Package,
-      where: like(p.name, ^like_term)
-    )
-    |> Repo.all()
+    {packages, rest} =
+      from(
+        p in Package,
+        where: like(p.name, ^like_term),
+        # TODO: Remove limit once we implement search result pagination
+        limit: ^limit + 1
+      )
+      |> Repo.all()
+      |> Enum.split(limit)
+
+    {packages, length(rest) > 0}
   end
 
   def get_package_by_name(name) do

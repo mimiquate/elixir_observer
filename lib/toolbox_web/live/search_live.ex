@@ -3,12 +3,7 @@ defmodule ToolboxWeb.SearchLive do
   alias Toolbox.Packages
 
   def mount(%{"term" => term}, _session, socket) do
-    packages =
-      Packages.search(term)
-      |> Enum.map(fn package ->
-        # Fix N+1 Query
-        {package, Packages.last_hexpm_snapshot(package).data}
-      end)
+    {packages, more?} = Packages.search(term)
 
     {
       :ok,
@@ -16,7 +11,12 @@ defmodule ToolboxWeb.SearchLive do
         socket,
         term: term,
         page_title: "\"#{term}\"",
-        packages: packages
+        packages:
+          Enum.map(packages, fn p ->
+            # Fix N+1 Query
+            {p, Packages.last_hexpm_snapshot(p).data}
+          end),
+        more?: more?
       )
     }
   end
