@@ -189,17 +189,28 @@
             </div>
           </div>
 
-          <details :if={Enum.count(@version.optional) > 0} class="mt-4">
-            <summary>Optional</summary>
+          <div :if={Enum.count(@version.optional) > 0} class="mt-8">
+            <span class="text-lg font-semibold">
+              Optional
+            </span>
+
             <div class="mt-2">
               <p class="mb-2 text-xs dark:text-zinc-300">
                 Dependencies that are not required by default but can be installed or enable additional features or functionality
               </p>
-              <div :for={{name, %{"requirement" => requirement}} <- @version.optional}>
-                <.link navigate={~p"/packages/#{name}"}>{name}</.link> {requirement}
+              <div
+                :for={{name, %{"requirement" => requirement}} <- @version.optional}
+                class="mt-1"
+              >
+                <.link navigate={~p"/packages/#{name}"} class="font-semibold">
+                  {name}
+                </.link>
+                <span class="text-sm dark:text-zinc-300">
+                  {requirement}
+                </span>
               </div>
             </div>
-          </details>
+          </div>
         </div>
 
         <div class="max-md:mt-3 md:ml-4 md:grow md:flex md:flex-col md:justify-between">
