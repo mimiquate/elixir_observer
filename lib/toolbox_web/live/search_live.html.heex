@@ -1,9 +1,22 @@
-<div class="text-2xl">{length(@packages)} results for "{@term}"</div>
+<div class="text-2xl font-bold">{length(@packages)} results for "{@term}"</div>
 
-<ul class="mt-8">
-  <li :for={package <- @packages} class="mt-2">
-    <.link navigate={~p"/packages/#{package.name}"}>
-      {package.name}
-    </.link>
-  </li>
-</ul>
+<div class="mt-8">
+  <div
+    :for={{package, hexpm_data} <- @packages}
+    class="mt-3 p-2 flex justify-between bg-zinc-100 dark:bg-zinc-800 rounded-md"
+  >
+    <div>
+      <.link navigate={~p"/packages/#{package.name}"}>
+        {package.name}
+      </.link>
+      <div class="my-2 text-sm text-gray-400">
+        {hexpm_data["meta"]["description"]}
+      </div>
+    </div>
+    <div>
+      <div class="text-sm text-gray-400">Recent Downloads</div>
+      <span class="bold">{humanized_number(hexpm_data["downloads"]["recent"])}</span>
+      <span class="text-sm text-gray-400"> Last 90 days </span>
+    </div>
+  </div>
+</div>
