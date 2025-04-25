@@ -26,6 +26,11 @@ defmodule Toolbox.Packages do
     |> Repo.one()
   end
 
+  def get_package_by_name!(name) do
+    from(p in Package, where: p.name == ^name)
+    |> Repo.one!()
+  end
+
   def last_hexpm_snapshot(package) do
     from(
       hs in HexpmSnapshot,
