@@ -41,7 +41,12 @@
           text="documentation"
         />
         <div class="w-auto sm:hidden border border-divider"></div>
-        <.package_link href="#history" icon_path={~p"/images/history-icon.svg"} text="changelog" />
+        <.package_link
+          :if={@package.changelog_url}
+          href={@package.changelog_url}
+          icon_path={~p"/images/history-icon.svg"}
+          text="changelog"
+        />
       </div>
     </div>
   </section>
