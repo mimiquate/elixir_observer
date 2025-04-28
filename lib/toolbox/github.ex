@@ -7,23 +7,23 @@ defmodule Toolbox.Github do
       |> DateTime.shift(month: -12)
 
     query(
-      # FIXME: GitHub graphql doesn't support pullRequest filterBy
-      # https://github.com/orgs/community/discussions/24323
       """
+      openIssueCount: search(type: ISSUE, query: "type:issue repo:#{owner}/#{repository_name} is:open created:>=#{Calendar.strftime(year_ago, "%x")}") {
+        issueCount
+      }
+      closedIssueCount: search(type: ISSUE, query: "type:issue repo:#{owner}/#{repository_name} is:closed created:>=#{Calendar.strftime(year_ago, "%x")}") {
+        issueCount
+      }
+      openPRCount: search(type: ISSUE, query: "type:pr repo:#{owner}/#{repository_name} is:open created:>=#{Calendar.strftime(year_ago, "%x")}") {
+        issueCount
+      }
+      mergedPRCount: search(type: ISSUE, query: "type:pr repo:#{owner}/#{repository_name} is:merged created:>=#{Calendar.strftime(year_ago, "%x")}") {
+        issueCount
+      }
       repository(owner: \"#{owner}\", name: \"#{repository_name}\") {
-        collaborators(first: 100) {
-          nodes {
-            login
-          }
-        }
         createdAt
         description
         isArchived
-        issues(first: 100, filterBy: {since: \"#{DateTime.to_iso8601(year_ago)}\"}) {
-          nodes {
-            state
-          }
-        }
         languages(first: 20) {
           nodes {
             name
@@ -34,9 +34,13 @@ defmodule Toolbox.Github do
           name
         }
         nameWithOwner
-        pullRequests(first: 100, filterBy: {since: \"#{DateTime.to_iso8601(year_ago)}\"}) {
+        pullRequests(last: 5, states: [MERGED]) {
           nodes {
-            state
+            createdAt
+            mergedBy {
+              login
+            }
+            title
           }
         }
         pushedAt

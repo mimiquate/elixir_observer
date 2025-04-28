@@ -119,22 +119,50 @@
         Activity
       </h3>
 
-      <%= if Enum.any?(@package.activities) do %>
-        <ul class="pt-6">
-          <li>
-          </li>
-        </ul>
-      <% else %>
-        <div class="flex">
-          <div class="flex flex-col items-center mx-auto my-9">
-            <img class="mb-3" src={~p"/images/observer-brief-icon.svg"}/>
-            <h3 class="text-[24px] font-medium mb-2">No activity in {@package.github_fullname}</h3>
-            <p class="text-[14px] text-secondary-text">
-              No pushes or merges by owners in the last year.
-            </p>
+      <div class="grid sm:grid-cols-3 sm:grid-rows-2">
+        <div class="sm:col-span-1 sm:row-span-1">
+          <h3>Pull requests</h3>
+          <div>
+            <div class="flex space-between">
+              <span>Open</span>
+              <span>321</span>
+            </div>
+            <div class="flex space-between">
+              <span>Merged</span>
+              <span>2</span>
+            </div>
           </div>
         </div>
-      <% end %>
+        <%= if Enum.any?(@package.activities) do %>
+          <ul class="pt-6 sm:col-span-2" sm:row-span-2>
+            <li>
+            </li>
+          </ul>
+        <% else %>
+          <div class="flex sm:col-span-2 sm:row-span-2">
+            <div class="flex flex-col items-center mx-auto my-9">
+              <img class="mb-3" src={~p"/images/observer-brief-icon.svg"}/>
+              <h3 class="text-[24px] font-medium mb-2">No activity in {@package.github_fullname}</h3>
+              <p class="text-[14px] text-secondary-text">
+                No pushes or merges by owners in the last year.
+              </p>
+            </div>
+          </div>
+        <% end %>
+        <div class="col-span-1">
+          <h3>Issues</h3>
+          <div>
+            <div class="flex space-between">
+              <span>Open</span>
+              <span>321</span>
+            </div>
+            <div class="flex space-between">
+              <span>Closed</span>
+              <span>2</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="md:col-span-2 bg-zinc-100 dark:bg-surface rounded-md py-6 px-4 border border-stroke">
@@ -143,7 +171,7 @@
       </h3>
 
       <ul class="flex flex-col">
-        <li :for={owner <- (@package.owners ++ @package.owners ++ @package.owners)} class="mt-2 flex items-center">
+        <li :for={owner <- @package.owners} class="flex items-center mb-3">
           <img width="32px" height="32px" class="rounded-full" src={gravatar_url(owner["email"])} />
 
           <span class="text-[14px] ml-2">

@@ -21,6 +21,34 @@ defmodule ToolboxWeb.PackageLive do
         s.data
       end
 
+    [repo_owner, repo] = github_data["full_name"] |> String.split("/")
+
+    {:ok, {{_, 200, _}, _headers, full_gh_data}} = Toolbox.Github.get_repo(repo_owner, repo)
+
+    full_gh_data = full_gh_data |> Jason.decode! |> IO.inspect
+
+    %{
+      "data" => %{
+        "repository" => %{
+          "pullRequests" => %{
+            "nodes" => pulls
+          },
+        }
+      }
+    } = full_gh_data
+
+    year_ago = DateTime.utc_now() |> DateTime.add(-365, :day)
+
+    pulls = Enum.filter(pulls, fn p ->
+      {:ok, p_created_at, _} = DateTime.from_iso8601(p["createdAt"])
+
+      DateTime.diff(p_created_at, year_ago) > 0
+    end)
+
+    IO.inspect(pulls, label: "pull requests", limit: :infinity)
+    # IO.inspect(issues, label: "ISSUES")
+    # IO.inspect(Enum.count(issues), label: "ISSUES COUNT")
+
     versions = versions(hexpm_data)
 
     {
