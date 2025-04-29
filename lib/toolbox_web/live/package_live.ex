@@ -10,7 +10,7 @@ defmodule ToolboxWeb.PackageLive do
 
   @ignored_topics ["elixir"]
 
-  def mount(%{"name" => name} = params, _session, socket) do
+  def mount(%{"name" => name}, _session, socket) do
     Logger.metadata(package: %{name: name})
 
     package = Toolbox.Packages.get_package_by_name!(name)
@@ -22,7 +22,6 @@ defmodule ToolboxWeb.PackageLive do
       end
 
     versions = versions(hexpm_data)
-    version = params["version"] || hexpm_data["latest_stable_version"]
 
     {
       :ok,
@@ -45,10 +44,16 @@ defmodule ToolboxWeb.PackageLive do
           stargazers_count: github_data["stargazers_count"],
           topics: (github_data["topics"] || []) -- @ignored_topics,
           hexpm_created_at: hexpm_data["inserted_at"]
-        },
-        version: version(package.name, version)
+        }
       )
     }
+  end
+
+  def handle_params(params, _uri, socket) do
+    %{name: name, latest_stable_version: lsv} = socket.assigns.package
+    version = params["version"] || lsv
+
+    {:noreply, assign(socket, %{version: version(name, version)})}
   end
 
   def handle_event(
@@ -56,11 +61,10 @@ defmodule ToolboxWeb.PackageLive do
         %{"version" => version},
         %{assigns: %{package: %{name: name, latest_stable_version: lsv}}} = socket
       ) do
-    # XXX Move this to push_patch and handle_params
     if version == lsv do
-      {:noreply, push_navigate(socket, to: ~p"/packages/#{name}")}
+      {:noreply, push_patch(socket, to: ~p"/packages/#{name}")}
     else
-      {:noreply, push_navigate(socket, to: ~p"/packages/#{name}/#{version}")}
+      {:noreply, push_patch(socket, to: ~p"/packages/#{name}/#{version}")}
     end
   end
 
