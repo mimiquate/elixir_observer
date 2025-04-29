@@ -26,10 +26,12 @@ defmodule Toolbox.Packages do
       from(
         p in Package,
         where: like(p.name, ^like_term),
+        join: s in subquery(latest_hexpm_snaphost_query()), on: s.package_id == p.id,
         preload: [
           latest_hexpm_snapshot: ^latest_hexpm_snaphost_query(),
           latest_github_snapshot: ^latest_github_snaphost_query()
         ],
+        order_by: [desc: json_extract_path(s.data, ["downloads", "recent"])],
         # TODO: Remove limit once we implement search result pagination
         limit: ^limit + 1
       )
