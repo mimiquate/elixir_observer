@@ -4,6 +4,10 @@ defmodule ToolboxWeb.PackageLive do
   import ToolboxWeb.Components.StatsCard
   import ToolboxWeb.Components.PackageLink
 
+  defmodule HexpmVersionNotFoundError do
+    defexception [:message, plug_status: 404]
+  end
+
   @ignored_topics ["elixir"]
 
   def mount(%{"name" => name}, _session, socket) do
@@ -18,7 +22,6 @@ defmodule ToolboxWeb.PackageLive do
       end
 
     versions = versions(hexpm_data)
-    version = hexpm_data["latest_stable_version"]
 
     {
       :ok,
@@ -32,7 +35,7 @@ defmodule ToolboxWeb.PackageLive do
           recent_downloads: hexpm_data["downloads"]["recent"],
           versions: versions,
           latest_version_at: hd(hexpm_data["releases"])["inserted_at"],
-          latest_stable_version: version,
+          latest_stable_version: hexpm_data["latest_stable_version"],
           html_url: hexpm_data["html_url"],
           changelog_url: changelog_url(hexpm_data),
           docs_html_url: hexpm_data["docs_html_url"],
@@ -41,21 +44,28 @@ defmodule ToolboxWeb.PackageLive do
           stargazers_count: github_data["stargazers_count"],
           topics: (github_data["topics"] || []) -- @ignored_topics,
           hexpm_created_at: hexpm_data["inserted_at"]
-        },
-        version: version(package.name, version)
+        }
       )
     }
+  end
+
+  def handle_params(params, _uri, socket) do
+    %{name: name, latest_stable_version: lsv} = socket.assigns.package
+    version = params["version"] || lsv
+
+    {:noreply, assign(socket, %{version: version(name, version)})}
   end
 
   def handle_event(
         "version-change",
         %{"version" => version},
-        %{assigns: %{package: %{name: name}}} = socket
+        %{assigns: %{package: %{name: name, latest_stable_version: lsv}}} = socket
       ) do
-    {
-      :noreply,
-      assign(socket, version: version(name, version))
-    }
+    if version == lsv do
+      {:noreply, push_patch(socket, to: ~p"/packages/#{name}")}
+    else
+      {:noreply, push_patch(socket, to: ~p"/packages/#{name}/#{version}")}
+    end
   end
 
   defp owners(package_name) do
@@ -81,15 +91,14 @@ defmodule ToolboxWeb.PackageLive do
   end
 
   defp version(name, version) do
-    {
-      :ok,
-      {
-        {_, 200, _},
-        _headers,
-        version_data
-      }
-    } =
-      Toolbox.Hexpm.get("packages/#{name}/releases/#{version}")
+    version_data =
+      case Toolbox.Hexpm.get("packages/#{name}/releases/#{version}") do
+        {:ok, {{_, 200, _}, _headers, version_data}} ->
+          version_data
+
+        {:ok, {{_, status, _}, _headers, _version_data}} when status in [400, 404] ->
+          raise HexpmVersionNotFoundError, "#{version} not found for #{name}"
+      end
 
     data =
       version_data

@@ -29,6 +29,7 @@ defmodule ToolboxWeb.Router do
     live "/", HomeLive
 
     live "/packages/:name", PackageLive
+    live "/packages/:name/:version", PackageLive
     live "/searches/:term", SearchLive
   end
 
