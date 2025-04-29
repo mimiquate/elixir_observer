@@ -41,12 +41,16 @@
     </div>
 
     <div class="hidden sm:flex items-center">
-      <div class="flex items-center min-w-23 justify-start" :if={package.latest_github_snapshot}>
+      <div class="flex items-center min-w-23 justify-start">
         <div class="p-1 bg-surface-alt w-fit rounded-md">
           <img width="20px" src={~p"/images/star-icon.svg"} />
         </div>
         <span class="text-[18px] ml-2">
-          {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
+          <%= if package.latest_github_snapshot do %>
+            {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
+          <% else %>
+            -
+          <% end %>
         </span>
       </div>
       <div class="flex items-center min-w-50 justify-start">
