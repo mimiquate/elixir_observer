@@ -21,13 +21,13 @@
       </div>
 
       <div class="flex items-center mt-3 sm:hidden">
-        <div class="p-1 bg-surface-alt rounded-md">
+        <div class="p-1 bg-surface-alt rounded-md":if={package.latest_github_snapshot}>
           <img width="14px" height="20px" src={~p"/images/star-icon.svg"} />
         </div>
-        <span class="ml-1 text-[12px] sm:text-[16px]">
+        <span class="ml-1 text-[12px] sm:text-[16px]" :if={package.latest_github_snapshot}>
           {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
         </span>
-        <span class="mx-1 text-[12px] sm:hidden">•</span>
+        <span class="mx-1 text-[12px] sm:hidden" :if={package.latest_github_snapshot}>•</span>
         <div class="flex items-center justify-end sm:hidden">
           <div class="p-1 bg-surface-alt w-fit rounded-md">
             <img width="14px" src={~p"/images/download-icon.svg"} />
@@ -41,7 +41,7 @@
     </div>
 
     <div class="hidden sm:flex items-center">
-      <div class="flex items-center min-w-20 justify-start">
+      <div class="flex items-center min-w-23 justify-start" :if={package.latest_github_snapshot}>
         <div class="p-1 bg-surface-alt w-fit rounded-md">
           <img width="20px" src={~p"/images/star-icon.svg"} />
         </div>
