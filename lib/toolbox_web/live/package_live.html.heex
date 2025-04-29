@@ -32,7 +32,7 @@
         <.package_link
           href={@package.github_repo_url}
           icon_path={~p"/images/gh-icon.svg"}
-          text={@package.github_fullname}
+          text={@package.github_fullname || "Github"}
         />
         <div class="w-auto sm:hidden border border-divider"></div>
         <.package_link
@@ -42,7 +42,6 @@
         />
         <div class="w-auto sm:hidden border border-divider"></div>
         <.package_link
-          :if={@package.changelog_url}
           href={@package.changelog_url}
           icon_path={~p"/images/history-icon.svg"}
           text="Changelog"
@@ -61,14 +60,18 @@
   <section class="grid grid-cols-1 md:grid-cols-5 gap-2 sm:gap-8 mt-3 sm:0">
     <div class="md:col-span-2 flex border border-stroke rounded-md bg-zinc-100 dark:bg-surface">
       <.stats_card class="w-1/2" title="Stars" icon_path={~p"/images/star-icon.svg"}>
-        <div :if={@package.stargazers_count} class="text-[20px] sm:text-[32px] font-semibold">
-          {humanized_number(@package.stargazers_count)}
+        <div class="text-[20px] sm:text-[32px] font-semibold">
+          <%= if @package.stargazers_count do %>
+            {humanized_number(@package.stargazers_count)}
+          <% else %>
+            -
+          <% end %>
         </div>
       </.stats_card>
 
       <.stats_card
         class="w-1/2"
-        title="Recent downloads"
+        title="Recent Downloads"
         icon_path={~p"/images/download-icon.svg"}
       >
         <div class="flex items-center">
@@ -231,13 +234,19 @@
               </div>
             </div>
 
-            <.link
-              class="block dark:bg-surface-alt px-4 py-3 rounded border border-stroke"
-              href={@package.docs_html_url <> @version.version}
-              target="_blank"
-            >
-              Documentation for {@version.version}
-            </.link>
+            <%= if @package.docs_html_url do %>
+              <.link
+                class="block dark:bg-surface-alt px-4 py-3 rounded border border-stroke"
+                href={@package.docs_html_url <> @version.version}
+                target="_blank"
+              >
+                Documentation for {@version.version}
+              </.link>
+            <% else %>
+              <span class="block dark:bg-surface-alt px-4 py-3 rounded border border-stroke">
+                No documentation for {@version.version}
+              </span>
+            <% end %>
           </div>
 
           <div class="mt-3 flex justify-end">

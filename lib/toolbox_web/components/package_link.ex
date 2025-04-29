@@ -6,13 +6,22 @@ defmodule ToolboxWeb.Components.PackageLink do
   attr :icon_path, :string, required: true
   attr :text, :string, required: true
 
-  def package_link(assigns) do
+  def package_link(%{href: href} = assigns) when is_binary(href) do
     ~H"""
     <.link class="flex items-center text-[14px] py-2" href={@href} target="_blank">
       <img src={@icon_path} class="mr-2 sm:w-4" />
       <span class="sm:mt-0 mr-2">{@text}</span>
       <img src={~p"/images/right-chevron-icon.svg"} class="ml-auto" />
     </.link>
+    """
+  end
+
+  def package_link(assigns) do
+    ~H"""
+    <span class="flex items-center text-[14px] py-2">
+      <img src={@icon_path} class="mr-2 sm:w-4" />
+      <span class="sm:mt-0 mr-2">No {@text}</span>
+    </span>
     """
   end
 end
