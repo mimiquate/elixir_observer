@@ -115,50 +115,62 @@
     </div>
 
     <div class="md:col-span-6 bg-zinc-100 dark:bg-surface rounded-md py-6 px-4 border border-stroke">
-      <h3 class="text-[24px] font-medium">
+      <h3 class="text-[24px] font-medium sm:mb-6">
         Activity
       </h3>
 
-      <div class="grid sm:grid-cols-3 sm:grid-rows-2">
-        <div class="sm:col-span-1 sm:row-span-1">
-          <h3>Pull requests</h3>
-          <div>
-            <div class="flex space-between">
-              <span>Open</span>
-              <span>321</span>
+      <div class="grid sm:grid-cols-3 sm:grid-rows-2 sm:gap-8">
+        <div class="order-1 sm:col-span-1 sm:row-span-1 bg-zinc-100 dark:bg-surface-alt sm:p-5 rounded-md border border-stroke">
+          <h3 class="text-[18px] mb-4">Pull Requests</h3>
+          <div class="w-full">
+            <div class="flex justify-between items-center">
+              <span class="text-secondary-text sm:text-[16px]">Open</span>
+              <span class="font-semibold sm:text-[32px]">{@package.open_pr_count}</span>
             </div>
-            <div class="flex space-between">
-              <span>Merged</span>
-              <span>2</span>
+            <div class="flex justify-between items-center">
+              <span class="text-secondary-text sm:text-[16px]">Merged</span>
+              <span class="font-semibold sm:text-[32px]">{@package.merged_pr_count}</span>
             </div>
           </div>
         </div>
-        <%= if Enum.any?(@package.activities) do %>
-          <ul class="pt-6 sm:col-span-2" sm:row-span-2>
-            <li>
-            </li>
-          </ul>
-        <% else %>
-          <div class="flex sm:col-span-2 sm:row-span-2">
-            <div class="flex flex-col items-center mx-auto my-9">
-              <img class="mb-3" src={~p"/images/observer-brief-icon.svg"}/>
-              <h3 class="text-[24px] font-medium mb-2">No activity in {@package.github_fullname}</h3>
-              <p class="text-[14px] text-secondary-text">
-                No pushes or merges by owners in the last year.
-              </p>
+        <div class="order-3 sm:order-2 sm:col-span-2 sm:row-span-2 sm:p-5 bg-zinc-100 dark:bg-surface-alt rounded-md border border-stroke">
+          <h3 class="text-[18px] mb-2">Lastest Merged Pull Requests</h3>
+          <%= if Enum.any?(@package.pull_requests) do %>
+            <ul class="pt-4 sm:col-span-2" sm:row-span-2>
+              <%= for {pr, i} <- Enum.with_index(@package.pull_requests) do %>
+                <li class="py-2">
+                  <h4 class="sm:text-[16px]">{pr["title"]}</h4>
+                  <div class="flex mt-1">
+                    <img class="rounded-full" src={pr["mergedBy"]["avatarUrl"]} />
+                    <span class="sm:text-[14px] ml-2">{pr["mergedBy"]["login"]}</span>
+                    <% {merged_at_number, merged_at_relative_label} =
+                      relative_datetime(pr["mergedAt"]) %>
+                    <span class="sm:text-[14px] sm:ml-2 text-secondary-text">
+                      merged {merged_at_number} {merged_at_relative_label}
+                    </span>
+                  </div>
+                </li>
+                <div :if={i < 4} class="w-auto border border-divider"></div>
+              <% end %>
+            </ul>
+          <% else %>
+            <div class="flex items-center justify-center h-full mt-2">
+              <h2 class="text-[24px] font-medium h-fit">
+                No activity in <span class="font-bold">{@package.github_fullname}</span>
+              </h2>
             </div>
-          </div>
-        <% end %>
-        <div class="col-span-1">
-          <h3>Issues</h3>
+          <% end %>
+        </div>
+        <div class="order-2 sm:order-3 sm:col-span-1 sm:row-span-1 bg-zinc-100 dark:bg-surface-alt sm:p-5 rounded-md border border-stroke">
+          <h3 class="text-[18px] mb-4">Issues</h3>
           <div>
-            <div class="flex space-between">
-              <span>Open</span>
-              <span>321</span>
+            <div class="flex justify-between items-center">
+              <span class="text-secondary-text sm:text-[16px]">Open</span>
+              <span class="font-semibold sm:text-[32px]">{@package.open_issue_count}</span>
             </div>
-            <div class="flex space-between">
-              <span>Closed</span>
-              <span>2</span>
+            <div class="flex justify-between items-center">
+              <span class="text-secondary-text sm:text-[16px]">Closed</span>
+              <span class="font-semibold sm:text-[32px]">{@package.closed_issue_count}</span>
             </div>
           </div>
         </div>

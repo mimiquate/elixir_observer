@@ -37,8 +37,10 @@ defmodule Toolbox.Github do
         pullRequests(last: 5, states: [MERGED]) {
           nodes {
             createdAt
+            mergedAt
             mergedBy {
               login
+              avatarUrl(size: 24)
             }
             title
           }
