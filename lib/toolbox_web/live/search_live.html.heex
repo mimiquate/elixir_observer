@@ -7,6 +7,9 @@
 </div>
 
 <ul class="mt-8">
+  <li class="hidden sm:flex justify-end px-3">
+    <span class="text-[18px] text-secondary-text">Downloads in the last 90 days</span>
+  </li>
   <li
     :for={package <- @packages}
     class="mt-5 py-3 px-4 flex flex-col md:flex-row md:justify-between bg-surface rounded-md border border-stroke"
@@ -41,7 +44,7 @@
     </div>
 
     <div class="hidden sm:flex items-center">
-      <div class="flex items-center min-w-23 justify-start">
+      <div class="flex items-center min-w-25 justify-start">
         <div class="p-1 bg-surface-alt w-fit rounded-md">
           <img width="20px" src={~p"/images/star-icon.svg"} />
         </div>
@@ -53,14 +56,13 @@
           <% end %>
         </span>
       </div>
-      <div class="flex items-center min-w-50 justify-start">
+      <div class="flex items-center min-w-25 justify-start">
         <div class="p-1 bg-surface-alt w-fit rounded-md ml-2">
           <img width="20px" src={~p"/images/download-icon.svg"} />
         </div>
         <span class="text-[18px] ml-2">
           {humanized_number(package.latest_hexpm_snapshot.data["downloads"]["recent"])}
         </span>
-        <span class="text-[16px] text-secondary-text ml-auto">last 90 days</span>
       </div>
     </div>
   </li>
