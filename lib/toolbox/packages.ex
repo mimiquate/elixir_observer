@@ -38,6 +38,22 @@ defmodule Toolbox.Packages do
     |> Repo.one!()
   end
 
+  def last_hexpm_snapshot(pacakges) when is_list(pacakges) do
+    package_ids = Enum.map(pacakges, & &1.id)
+
+    ranking_query =
+      from h in HexpmSnapshot,
+        select: %{id: h.id, row_number: over(row_number(), :packages_partition)},
+        windows: [packages_partition: [partition_by: :package_id, order_by: [desc: :id]]]
+
+    from(h in HexpmSnapshot,
+      where: h.package_id in ^package_ids,
+      join: r in subquery(ranking_query),
+      on: h.id == r.id and r.row_number == 1
+    )
+    |> Repo.all()
+  end
+
   def last_hexpm_snapshot(package) do
     from(
       hs in HexpmSnapshot,
