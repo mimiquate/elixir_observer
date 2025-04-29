@@ -20,7 +20,7 @@
         {package.latest_hexpm_snapshot.data["meta"]["description"]}
       </div>
 
-      <div class="flex items-center mt-3">
+      <div class="flex items-center mt-3 sm:hidden">
         <div class="p-1 bg-surface-alt rounded-md">
           <img width="14px" height="20px" src={~p"/images/star-icon.svg"} />
         </div>
@@ -35,25 +35,28 @@
           <span class="text-[12px] ml-1">
             {humanized_number(package.latest_hexpm_snapshot.data["downloads"]["recent"])}
           </span>
-          <span class="text-[12px] text-secondary-text ml-1">last 9 days</span>
+          <span class="text-[12px] text-secondary-text ml-1">last 90 days</span>
         </div>
       </div>
     </div>
 
-    <div class="hidden sm:block">
-      <div class="flex">
+    <div class="hidden sm:flex items-center">
+      <div class="flex items-center min-w-20 justify-start">
         <div class="p-1 bg-surface-alt w-fit rounded-md">
-          <img width="14px" src={~p"/images/download-icon.svg"} />
+          <img width="20px" src={~p"/images/star-icon.svg"} />
         </div>
-        <span class="text-[16px] text-secondary-text font-regular ml-2">
-          Recent Downloads
+        <span class="text-[18px] ml-2">
+          {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
         </span>
       </div>
-      <div class="flex items-center justify-end mt-2">
-        <span class="text-[18px]">
+      <div class="flex items-center min-w-50 justify-start">
+        <div class="p-1 bg-surface-alt w-fit rounded-md ml-2">
+          <img width="20px" src={~p"/images/download-icon.svg"} />
+        </div>
+        <span class="text-[18px] ml-2">
           {humanized_number(package.latest_hexpm_snapshot.data["downloads"]["recent"])}
         </span>
-        <span class="text-[16px] text-secondary-text ml-2">last 9 days</span>
+        <span class="text-[16px] text-secondary-text ml-2">last 90 days</span>
       </div>
     </div>
   </li>
