@@ -11,11 +11,7 @@ defmodule ToolboxWeb.SearchLive do
         socket,
         term: term,
         page_title: "\"#{term}\"",
-        packages:
-          Enum.map(packages, fn p ->
-            # Fix N+1 Query
-            {p, Packages.last_hexpm_snapshot(p).data}
-          end),
+        packages: packages,
         more?: more?
       )
     }

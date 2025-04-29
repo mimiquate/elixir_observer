@@ -4,7 +4,14 @@ defmodule Toolbox.Packages do
   import Ecto.Query
 
   def list_packages do
-    Repo.all(Package)
+    from(
+      p in Package,
+      preload: [
+        latest_hexpm_snapshot: ^latest_hexpm_snaphost_query(),
+        latest_github_snapshot: ^latest_github_snaphost_query()
+      ]
+    )
+    |> Repo.all()
   end
 
   def total_count do
@@ -19,6 +26,10 @@ defmodule Toolbox.Packages do
       from(
         p in Package,
         where: like(p.name, ^like_term),
+        preload: [
+          latest_hexpm_snapshot: ^latest_hexpm_snaphost_query(),
+          latest_github_snapshot: ^latest_github_snaphost_query()
+        ],
         # TODO: Remove limit once we implement search result pagination
         limit: ^limit + 1
       )
@@ -29,33 +40,25 @@ defmodule Toolbox.Packages do
   end
 
   def get_package_by_name(name) do
-    from(p in Package, where: p.name == ^name)
+    from(p in Package,
+      where: p.name == ^name,
+      preload: [
+        latest_hexpm_snapshot: ^latest_hexpm_snaphost_query(),
+        latest_github_snapshot: ^latest_github_snaphost_query()
+      ]
+    )
     |> Repo.one()
   end
 
   def get_package_by_name!(name) do
-    from(p in Package, where: p.name == ^name)
+    from(p in Package,
+      where: p.name == ^name,
+      preload: [
+        latest_hexpm_snapshot: ^latest_hexpm_snaphost_query(),
+        latest_github_snapshot: ^latest_github_snaphost_query()
+      ]
+    )
     |> Repo.one!()
-  end
-
-  def last_hexpm_snapshot(package) do
-    from(
-      hs in HexpmSnapshot,
-      where: hs.package_id == ^package.id,
-      order_by: [desc: :id],
-      limit: 1
-    )
-    |> Repo.one()
-  end
-
-  def last_github_snapshot(package) do
-    from(
-      hs in GithubSnapshot,
-      where: hs.package_id == ^package.id,
-      order_by: [desc: :id],
-      limit: 1
-    )
-    |> Repo.one()
   end
 
   def create_package(attributes \\ %{}) do
@@ -74,5 +77,27 @@ defmodule Toolbox.Packages do
     %GithubSnapshot{}
     |> GithubSnapshot.changeset(attributes)
     |> Repo.insert()
+  end
+
+  defp latest_hexpm_snaphost_query() do
+    ranking_query =
+      from h in HexpmSnapshot,
+        select: %{id: h.id, row_number: over(row_number(), :packages_partition)},
+        windows: [packages_partition: [partition_by: :package_id, order_by: [desc: :id]]]
+
+    from h in HexpmSnapshot,
+      join: r in subquery(ranking_query),
+      on: h.id == r.id and r.row_number == 1
+  end
+
+  defp latest_github_snaphost_query() do
+    ranking_query =
+      from g in GithubSnapshot,
+        select: %{id: g.id, row_number: over(row_number(), :packages_partition)},
+        windows: [packages_partition: [partition_by: :package_id, order_by: [desc: :id]]]
+
+    from g in GithubSnapshot,
+      join: r in subquery(ranking_query),
+      on: g.id == r.id and r.row_number == 1
   end
 end

@@ -8,6 +8,9 @@ defmodule Toolbox.Package do
     has_many :hexpm_snapshots, Toolbox.HexpmSnapshot
     has_many :github_snapshots, Toolbox.GithubSnapshot
 
+    has_one :latest_hexpm_snapshot, Toolbox.HexpmSnapshot
+    has_one :latest_github_snapshot, Toolbox.GithubSnapshot
+
     timestamps(type: :utc_datetime)
   end
 
