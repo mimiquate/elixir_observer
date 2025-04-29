@@ -10,10 +10,10 @@ defmodule ToolboxWeb.PackageLive do
     Logger.metadata(package: %{name: name})
 
     package = Toolbox.Packages.get_package_by_name!(name)
-    hexpm_data = Toolbox.Packages.last_hexpm_snapshot(package).data
+    hexpm_data = package.latest_hexpm_snapshot.data
 
     github_data =
-      with %{} = s <- Toolbox.Packages.last_github_snapshot(package) do
+      with %{} = s <- package.latest_github_snapshot do
         s.data
       end
 
@@ -117,8 +117,7 @@ defmodule ToolboxWeb.PackageLive do
 
   defp package_description(name) do
     with %Toolbox.Package{} = package <- Toolbox.Packages.get_package_by_name(name),
-         %Toolbox.HexpmSnapshot{} = hexpm_snapshot <-
-           Toolbox.Packages.last_hexpm_snapshot(package) do
+         %Toolbox.HexpmSnapshot{} = hexpm_snapshot <- package.latest_hexpm_snapshot do
       hexpm_snapshot.data["meta"]["description"]
     end
   end

@@ -17,7 +17,7 @@
       </.link>
 
       <div class="my-2 text-sm text-secondary-text">
-        {@hexpm_snapshots[package.id]["meta"]["description"]}
+        {package.latest_hexpm_snapshot.data["meta"]["description"]}
       </div>
     </div>
 
@@ -26,7 +26,7 @@
         Recent Downloads
       </div>
       <div class="font-bold">
-        {humanized_number(@hexpm_snapshots[package.id]["downloads"]["recent"])}
+        {humanized_number(package.latest_hexpm_snapshot.data["downloads"]["recent"])}
       </div>
     </div>
   </div>

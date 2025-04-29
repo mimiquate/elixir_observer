@@ -5,10 +5,6 @@ defmodule ToolboxWeb.SearchLive do
   def mount(%{"term" => term}, _session, socket) do
     {packages, more?} = Packages.search(term)
 
-    hexpm_snapshots =
-      Packages.last_hexpm_snapshot(packages)
-      |> Enum.into(%{}, fn h -> {h.package_id, h.data} end)
-
     {
       :ok,
       assign(
@@ -16,7 +12,6 @@ defmodule ToolboxWeb.SearchLive do
         term: term,
         page_title: "\"#{term}\"",
         packages: packages,
-        hexpm_snapshots: hexpm_snapshots,
         more?: more?
       )
     }
