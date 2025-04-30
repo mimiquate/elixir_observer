@@ -140,7 +140,18 @@
           </div>
         </div>
         <div class="order-1 px-3 py-5 col-span-2 sm:order-2 sm:row-span-2 sm:p-5 bg-zinc-100 dark:bg-surface-alt rounded-md border border-stroke">
-          <h3 class="text-[16px] sm:text-[18px] mb-2">Lastest Merged Pull Requests</h3>
+          <div class="flex justify-between">
+            <h3 class="text-[16px] sm:text-[18px] mb-2">Lastest Merged Pull Requests</h3>
+            <.link
+              class="cursor-pointer"
+              href={"https://github.com/" <> @package.github_fullname <> "/pulls"}
+              target="_blank"
+            >
+              <.button size={:xsmall}>
+                See all
+              </.button>
+            </.link>
+          </div>
           <%= if Enum.any?(@package.pull_requests) do %>
             <ul class="sm:pt-4 sm:col-span-2" sm:row-span-2>
               <%= for {pr, i} <- Enum.with_index(@package.pull_requests) do %>

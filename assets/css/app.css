@@ -33,6 +33,9 @@
   --color-secondary-text: #C0C0C0;
   --color-divider: #2F2F2F;
   --color-violet: #3F2754;
+  --color-button-primary: #975EC9;
+  --color-button-primary-hover: #AC7ED4;
+  --color-button-primary-focus: #8956B7;
 }
 
 html {

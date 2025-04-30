@@ -222,17 +222,27 @@ defmodule ToolboxWeb.CoreComponents do
   """
   attr :type, :string, default: nil
   attr :class, :string, default: nil
+  attr :size, :atom, values: [:xsmall, :small, :large], default: :small
   attr :rest, :global, include: ~w(disabled form name value)
 
   slot :inner_block, required: true
 
   def button(assigns) do
+    size_specific =
+      case assigns.size do
+        :xsmall -> "text-[12px] px-3 py-1"
+        :small -> "text-[16px] font-medium px-5 py-2"
+        :large -> "text-[16px] font-medium px-8 py-4"
+      end
+
+    assigns = assign(assigns, :size_specific, size_specific)
+
     ~H"""
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 dark:bg-zinc-200 dark:hover:bg-zinc-400 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white dark:text-zinc-900 dark:active:text-zinc-900/80 active:text-white/80",
+        "phx-submit-loading:opacity-75 rounded-sm bg-button-primary hover:bg-button-primary-hover",
+        @size_specific,
         @class
       ]}
       {@rest}
