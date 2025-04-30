@@ -140,7 +140,9 @@
               <%= for {pr, i} <- Enum.with_index(@package.pull_requests) do %>
                 <li class="py-2 last:pb-0">
                   <.link href={pr["permalink"]} target="_blank">
-                    <h4 class="text-[14px] max-h-10 sm:text-[16px]">{pr["title"]}</h4>
+                    <h4 class="text-[14px] sm:text-[16px] line-clamp-2 overflow-hidden">
+                      {pr["title"]}
+                    </h4>
                   </.link>
                   <div class="flex mt-1">
                     <img class="rounded-full" src={pr["mergedBy"]["avatarUrl"]} />
