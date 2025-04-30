@@ -43,6 +43,7 @@ defmodule Toolbox.Github do
               avatarUrl(size: 24)
             }
             title
+            permalink
           }
         }
         pushedAt
