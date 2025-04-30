@@ -31,6 +31,15 @@ defmodule Toolbox.Tasks.SCM do
       gitlab_link = links["GitLab"] || links["Gitlab"] || links["gitlab"] ->
         Toolbox.Tasks.GitLab.run(gitlab_link)
 
+      repo_link = links["Repository"] ->
+        # TODO: Improve this to also detect GitLab based on the URL
+        with {:ok, data} <- Toolbox.Tasks.GitHub.run(repo_link) do
+          Toolbox.Packages.create_github_snapshot(%{
+            package_id: package.id,
+            data: Jason.decode!(data)
+          })
+        end
+
       true ->
         Logger.warning(
           "Couldn't find SCM URL for package #{package.name}",
