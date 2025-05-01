@@ -19,6 +19,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
           class="grow border-0 focus:ring-0 bg-transparent dark:text-white"
           required
           autofocus={@autofocus}
+          autocapitalize="off"
         />
         <button class="p-2">
           <.icon name="hero-magnifying-glass" />
