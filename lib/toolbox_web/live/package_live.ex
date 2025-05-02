@@ -21,35 +21,7 @@ defmodule ToolboxWeb.PackageLive do
         s.data
       end
 
-    [repo_owner, repo] = github_data["full_name"] |> String.split("/")
-
-    # TODO: error handling
-    {:ok, {{_, 200, _}, _headers, full_gh_data}} = Toolbox.Github.get_repo(repo_owner, repo)
-
-    full_gh_data = full_gh_data |> Jason.decode!() |> IO.inspect()
-
-    %{
-      "data" => %{
-        "repository" => %{
-          "pullRequests" => %{
-            "nodes" => pull_requests
-          }
-        },
-        "closedIssueCount" => %{"issueCount" => closed_issue_count},
-        "mergedPRCount" => %{"issueCount" => merged_pr_count},
-        "openIssueCount" => %{"issueCount" => open_issue_count},
-        "openPRCount" => %{"issueCount" => open_pr_count}
-      }
-    } = full_gh_data
-
-    year_ago = DateTime.utc_now() |> DateTime.shift(year: -1)
-
-    pull_requests =
-      Enum.filter(pull_requests, fn p ->
-        {:ok, p_created_at, _} = DateTime.from_iso8601(p["createdAt"])
-
-        DateTime.diff(p_created_at, year_ago) > 0
-      end)
+    activity = Toolbox.Packages.get_github_activity(github_data)
 
     versions = versions(hexpm_data)
 
@@ -71,15 +43,10 @@ defmodule ToolboxWeb.PackageLive do
           docs_html_url: hexpm_data["docs_html_url"],
           github_repo_url: github_data["html_url"],
           github_fullname: github_data["full_name"],
-          closed_issue_count: closed_issue_count,
-          merged_pr_count: merged_pr_count,
-          open_pr_count: open_pr_count,
-          open_issue_count: open_issue_count,
-          pull_requests: Enum.reverse(pull_requests),
           stargazers_count: github_data["stargazers_count"],
           topics: (github_data["topics"] || []) -- @ignored_topics,
           hexpm_created_at: hexpm_data["inserted_at"]
-        }
+        } |> Map.merge(activity)
       )
     }
   end

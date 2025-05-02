@@ -147,6 +147,7 @@
           <div class="flex justify-between">
             <h3 class="text-[16px] sm:text-[18px] mb-2">Lastest Merged Pull Requests</h3>
             <.link
+              :if ={@package.github_fullname}
               class="cursor-pointer"
               href={"https://github.com/" <> @package.github_fullname <> "/pulls"}
               target="_blank"
@@ -181,7 +182,7 @@
           <% else %>
             <div class="flex items-center justify-center min-h-20 sm:min-h-0 sm:h-full mt-2">
               <h2 class="text-[24px] font-medium h-fit">
-                No activity in <span class="font-bold">{@package.github_fullname}</span>
+                No Github activity
               </h2>
             </div>
           <% end %>
