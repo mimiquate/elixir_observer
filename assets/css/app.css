@@ -33,10 +33,14 @@
   --color-surface-alt: #252525;
   --color-secondary-text: #C0C0C0;
   --color-divider: #2F2F2F;
+
   --color-violet: #3F2754;
   --color-button-primary: #975EC9;
   --color-button-primary-hover: #AC7ED4;
   --color-button-primary-focus: #8956B7;
+
+  --color-accent: #975EC9;
+  --color-dark-purple: rgba(33, 16, 90, 0.70);
 }
 
 html {
@@ -46,6 +50,10 @@ html {
 
 [data-phx-main] {
   height: 100%
+}
+
+mark {
+  background: transparent;
 }
 
 /* This file is for your main application CSS */
