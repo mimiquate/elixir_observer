@@ -147,7 +147,7 @@
           <div class="flex justify-between">
             <h3 class="text-[16px] sm:text-[18px] mb-2">Lastest Merged Pull Requests</h3>
             <.link
-              :if ={@package.github_fullname}
+              :if={@package.github_fullname}
               class="cursor-pointer"
               href={"https://github.com/" <> @package.github_fullname <> "/pulls"}
               target="_blank"

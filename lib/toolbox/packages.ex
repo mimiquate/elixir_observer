@@ -134,13 +134,14 @@ defmodule Toolbox.Packages do
 
     year_ago = DateTime.utc_now() |> DateTime.shift(year: -1)
 
-    pull_requests = pull_requests
-    |> Enum.filter(fn p ->
-      {:ok, p_created_at, _} = DateTime.from_iso8601(p["createdAt"])
+    pull_requests =
+      pull_requests
+      |> Enum.filter(fn p ->
+        {:ok, p_created_at, _} = DateTime.from_iso8601(p["createdAt"])
 
-      DateTime.diff(p_created_at, year_ago) > 0
-    end)
-    |> Enum.reverse()
+        DateTime.diff(p_created_at, year_ago) > 0
+      end)
+      |> Enum.reverse()
 
     %{
       open_issue_count: open_issue_count,

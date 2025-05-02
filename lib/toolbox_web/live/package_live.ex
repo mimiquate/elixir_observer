@@ -30,23 +30,25 @@ defmodule ToolboxWeb.PackageLive do
       assign(
         socket,
         page_title: package.name,
-        package: %{
-          name: package.name,
-          description: hexpm_data["meta"]["description"],
-          owners: owners(name),
-          recent_downloads: hexpm_data["downloads"]["recent"],
-          versions: versions,
-          latest_version_at: hd(hexpm_data["releases"])["inserted_at"],
-          latest_stable_version: hexpm_data["latest_stable_version"],
-          html_url: hexpm_data["html_url"],
-          changelog_url: changelog_url(hexpm_data),
-          docs_html_url: hexpm_data["docs_html_url"],
-          github_repo_url: github_data["html_url"],
-          github_fullname: github_data["full_name"],
-          stargazers_count: github_data["stargazers_count"],
-          topics: (github_data["topics"] || []) -- @ignored_topics,
-          hexpm_created_at: hexpm_data["inserted_at"]
-        } |> Map.merge(activity)
+        package:
+          %{
+            name: package.name,
+            description: hexpm_data["meta"]["description"],
+            owners: owners(name),
+            recent_downloads: hexpm_data["downloads"]["recent"],
+            versions: versions,
+            latest_version_at: hd(hexpm_data["releases"])["inserted_at"],
+            latest_stable_version: hexpm_data["latest_stable_version"],
+            html_url: hexpm_data["html_url"],
+            changelog_url: changelog_url(hexpm_data),
+            docs_html_url: hexpm_data["docs_html_url"],
+            github_repo_url: github_data["html_url"],
+            github_fullname: github_data["full_name"],
+            stargazers_count: github_data["stargazers_count"],
+            topics: (github_data["topics"] || []) -- @ignored_topics,
+            hexpm_created_at: hexpm_data["inserted_at"]
+          }
+          |> Map.merge(activity)
       )
     }
   end

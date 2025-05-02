@@ -12,7 +12,6 @@ defmodule Toolbox.Github do
       |> DateTime.shift(month: -12)
       |> Calendar.strftime("%x")
 
-
     query = """
       openIssueCount: search(type: ISSUE, query: "type:issue repo:#{owner}/#{repository_name} is:open created:>=#{year_ago}") {
         issueCount
