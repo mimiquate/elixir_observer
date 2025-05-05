@@ -5,6 +5,10 @@ defmodule Toolbox.Hexpm do
     get("packages?sort=downloads&page=#{page}")
   end
 
+  def get_package(name) do
+    get("packages/#{name}")
+  end
+
   def get(path) do
     :httpc.request(
       :get,
