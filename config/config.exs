@@ -58,6 +58,10 @@ config :tower,
 
 config :tower_slack, otp_app: :toolbox
 
+config :toolbox, Toolbox.Cache,
+  # Max memory size in bytes (e.g., 50MB)
+  allocated_memory: 50_000_000
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

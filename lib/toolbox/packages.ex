@@ -3,6 +3,8 @@ defmodule Toolbox.Packages do
 
   import Ecto.Query
 
+  use Nebulex.Caching, cache: Toolbox.Cache
+
   def list_packages do
     from(
       p in Package,
@@ -102,5 +104,56 @@ defmodule Toolbox.Packages do
     from g in GithubSnapshot,
       join: r in subquery(ranking_query),
       on: g.id == r.id and r.row_number == 1
+  end
+
+  def get_github_activity(nil) do
+    %{
+      open_issue_count: "-",
+      closed_issue_count: "-",
+      open_pr_count: "-",
+      merged_pr_count: "-",
+      pull_requests: []
+    }
+  end
+
+  @decorate cacheable(key: full_name, opts: [ttl: :timer.hours(24)])
+  def get_github_activity(%{"full_name" => full_name}) do
+    [owner, repo] = full_name |> String.split("/")
+    {:ok, {{_, 200, _}, _headers, data}} = Toolbox.Github.get_activity(owner, repo)
+
+    data = data |> Jason.decode!()
+
+    %{
+      "data" => %{
+        "repository" => %{
+          "pullRequests" => %{
+            "nodes" => pull_requests
+          }
+        },
+        "closedIssueCount" => %{"issueCount" => closed_issue_count},
+        "mergedPRCount" => %{"issueCount" => merged_pr_count},
+        "openIssueCount" => %{"issueCount" => open_issue_count},
+        "openPRCount" => %{"issueCount" => open_pr_count}
+      }
+    } = data
+
+    year_ago = DateTime.utc_now() |> DateTime.shift(year: -1)
+
+    pull_requests =
+      pull_requests
+      |> Enum.filter(fn p ->
+        {:ok, p_created_at, _} = DateTime.from_iso8601(p["createdAt"])
+
+        DateTime.diff(p_created_at, year_ago) > 0
+      end)
+      |> Enum.reverse()
+
+    %{
+      open_issue_count: open_issue_count,
+      closed_issue_count: closed_issue_count,
+      open_pr_count: open_pr_count,
+      merged_pr_count: merged_pr_count,
+      pull_requests: pull_requests
+    }
   end
 end

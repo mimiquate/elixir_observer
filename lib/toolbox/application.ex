@@ -9,6 +9,7 @@ defmodule Toolbox.Application do
   def start(_type, _args) do
     Supervisor.start_link(
       [
+        Toolbox.Cache,
         ToolboxWeb.Telemetry,
         Toolbox.Repo,
         {DNSCluster, query: Application.get_env(:toolbox, :dns_cluster_query) || :ignore},
