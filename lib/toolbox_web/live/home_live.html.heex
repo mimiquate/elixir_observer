@@ -1,16 +1,15 @@
-<div>
-  <div class="flex flex-col mx-auto px-4">
-    <h1 class="font-code text-[72px] mt-20">observer</h1>
-    <p class="mt-4 text-[20px] font-mono sm:max-w-115">
-      Find, compare, and explore Elixir packages for your next project.
-    </p>
+<div class="flex flex-col px-4 sm:block sm:mt-40">
+  <h1 class="font-code text-[48px] sm:text-[72px]">observer</h1>
+  <p class="mt-4 sm:text-[14px] sm:text-[20px] font-mono sm:max-w-115">
+    Find, compare, and explore Elixir packages for your next project.
+  </p>
 
-    <div class="mt-8">
-      <.live_component module={ToolboxWeb.SearchFieldComponent} id="search-field" autofocus="true" />
-    </div>
+  <div class="mt-8">
+    <.live_component module={ToolboxWeb.SearchFieldComponent} id="search-field" autofocus="true" />
+  </div>
 
-    <div class="flex justify-end mt-auto">
-      <img src={~p"/images/home-logo.png"} width="515px" alt="Home Logo" class="object-contain rotate-15" />
-    </div>
+  <div class="flex justify-end mt-auto">
+    <img class="hidden sm:block object-contain rotate-15" src={~p"/images/home-logo.png"} width="515px" alt="Home Logo" />
+    <img class="block sm:hidden ml-auto mt-10 object-contain rotate-15" src={~p"/images/home-logo.png"} width="211px" alt="Home Logo" />
   </div>
 </div>
