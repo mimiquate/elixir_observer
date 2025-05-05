@@ -3,6 +3,8 @@ defmodule Toolbox.Packages do
 
   import Ecto.Query
 
+  use Nebulex.Caching, cache: Toolbox.Cache
+
   def list_packages do
     from(
       p in Package,
@@ -102,7 +104,6 @@ defmodule Toolbox.Packages do
   end
 
   def get_github_activity(nil) do
-    # Empty state
     %{
       open_issue_count: "-",
       closed_issue_count: "-",
@@ -112,6 +113,7 @@ defmodule Toolbox.Packages do
     }
   end
 
+  @decorate cacheable(key: full_name, opts: [ttl: :timer.hours(24)])
   def get_github_activity(%{"full_name" => full_name}) do
     [owner, repo] = full_name |> String.split("/")
     {:ok, {{_, 200, _}, _headers, data}} = Toolbox.Github.get_activity(owner, repo)

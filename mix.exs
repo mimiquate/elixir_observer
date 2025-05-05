@@ -65,6 +65,9 @@ defmodule Toolbox.MixProject do
       {:tower_rollbar, "~> 0.6.3"},
       {:tower_slack, "~> 0.6.0"},
       {:number, "~> 1.0"},
+      {:nebulex, "~> 3.0.0-rc.1"},
+      {:nebulex_local, "~> 3.0.0-rc.1"},
+      {:decorator, "~> 1.4"},
 
       # Dev
       {:dotenv_parser, "~> 2.0", only: :dev},
