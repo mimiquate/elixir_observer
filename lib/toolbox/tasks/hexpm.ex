@@ -26,6 +26,7 @@ defmodule Toolbox.Tasks.Hexpm do
     names |> Enum.each(&run/1)
   end
 
+  # Useful for development to fetch only one package
   def run(name) when is_binary(name) do
     {
       :ok,
