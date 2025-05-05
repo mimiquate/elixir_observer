@@ -5,24 +5,24 @@ defmodule ToolboxWeb.SearchFieldComponent do
 
   def render(assigns) do
     ~H"""
-    <div>
+    <div class="sm:w-[489px]">
       <.form
         for={nil}
         phx-submit="search"
         phx-target={@myself}
-        class="flex border rounded dark:bg-zinc-800"
+        class="flex h-[36px] px-3 py-2 justify-between items-center rounded-[6px] border border-black bg-[#1D1D1D]"
       >
         <input
           type="search"
           name="term"
           placeholder="Find packages"
-          class="grow border-0 focus:ring-0 bg-transparent dark:text-white"
+          class="grow border-0 focus:ring-0 bg-transparent text-white placeholder:text-gray-400"
           required
           autofocus={@autofocus}
           autocapitalize="off"
         />
-        <button class="p-2">
-          <.icon name="hero-magnifying-glass" />
+        <button type="submit" class="flex items-center justify-center">
+          <.icon name="hero-magnifying-glass" class="h-5 w-5 text-gray-400" />
         </button>
       </.form>
     </div>
