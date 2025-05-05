@@ -1,25 +1,31 @@
 defmodule Toolbox.Tasks.Hexpm do
   def run do
-    1..40
-    |> Enum.each(fn page ->
-      {
-        :ok,
+    Stream.unfold(1, fn
+      page ->
         {
-          {_, 200, _},
-          _headers,
-          packages_data
-        }
-      } =
-        Toolbox.Hexpm.get_page(page)
+          :ok,
+          {
+            {_, 200, _},
+            _headers,
+            packages_data
+          }
+        } =
+          Toolbox.Hexpm.get_page(page)
 
+        Process.sleep(:timer.seconds(1))
+
+        if packages_data == "[]" do
+          nil
+        else
+          {packages_data, page + 1}
+        end
+    end)
+    |> Stream.each(fn packages_data ->
       packages_data
       |> Jason.decode!()
-      |> Enum.each(fn package_data ->
-        create_hexpm_snapshot(package_data)
-      end)
-
-      Process.sleep(:timer.seconds(1))
+      |> Enum.each(&create_hexpm_snapshot/1)
     end)
+    |> Stream.run()
   end
 
   def run(names) when is_list(names) do
