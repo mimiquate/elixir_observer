@@ -26,6 +26,7 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-serif: "Bitter", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --font-mono: "Space Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-code: "M PLUS 1 Code", monospace;
 
   --color-stroke: #343434;
   --color-surface: #1d1d1d;
@@ -36,6 +37,11 @@
 
 html {
   -webkit-font-smoothing: antialiased;
+  height: 100%;
+}
+
+[data-phx-main] {
+  height: 100%
 }
 
 /* This file is for your main application CSS */

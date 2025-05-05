@@ -1,15 +1,16 @@
-<div class="fixed inset-0 -z-10">
-  <img src={~p"/files/background.svg"} alt="Background" class="w-full h-full object-cover" />
-</div>
+<div>
+  <div class="flex flex-col mx-auto px-4">
+    <h1 class="font-code text-[72px] mt-20">observer</h1>
+    <p class="mt-4 text-[20px] font-mono sm:max-w-115">
+      Find, compare, and explore Elixir packages for your next project.
+    </p>
 
-<div class="mt-20 text-2xl">
-  <.logo />
-</div>
+    <div class="mt-8">
+      <.live_component module={ToolboxWeb.SearchFieldComponent} id="search-field" autofocus="true" />
+    </div>
 
-<div class="mt-4 text-lg font-mono">
-  Find, explore and compare Elixir packages.
-</div>
-
-<div class="mt-6">
-  <.live_component module={ToolboxWeb.SearchFieldComponent} id="search-field" autofocus="true" />
+    <div class="flex justify-end mt-auto">
+      <img src={~p"/images/home-logo.png"} width="515px" alt="Home Logo" class="object-contain rotate-15" />
+    </div>
+  </div>
 </div>
