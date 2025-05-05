@@ -30,6 +30,7 @@ defmodule Toolbox.Github do
           nodes {
             createdAt
             mergedAt
+            permalink
             mergedBy {
               login
               avatarUrl(size: 24)
