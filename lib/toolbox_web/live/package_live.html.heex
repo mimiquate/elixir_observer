@@ -227,137 +227,202 @@
     </div>
   </section>
 
-  <section class="mt-8">
-    <div class="dark:bg-surface rounded p-4 sm:p-6">
-      <div class="flex justify-between">
-        <span class="text-2xl font-bold">
-          Version {@version.version}
-        </span>
+  <section class="sm:mt-8">
+    <div class="flex items-center justify-between mt-8 mb-3 sm:mb-8">
+      <h2 class="text-[20px] sm:text-[32px] font-semibold">
+        Version {@version.version}
+      </h2>
 
-        <form phx-change="version-change">
-          <select name="version" class="border border-stroke rounded dark:bg-surface-alt">
-            <option
-              :for={{version, is_retired?} <- @package.versions}
-              value={version}
-              selected={version == @version.version}
+      <.package_version_selector
+        versions={@package.versions}
+        current_version={@version.version}
+        latest_stable_version={@package.latest_stable_version}
+        class="sm:hidden"
+      />
+    </div>
+    <div class="sm:dark:bg-surface rounded sm:p-6">
+      <div class="flex sm:justify-between">
+        <.package_version_selector
+          versions={@package.versions}
+          current_version={@version.version}
+          latest_stable_version={@package.latest_stable_version}
+          class="hidden sm:block"
+        />
+
+        <div class="mt-3 flex items-center">
+          <img
+            :if={@version.published_by_email}
+            class="w-8 rounded-full"
+            src={gravatar_url(@version.published_by_email)}
+          />
+          <span class="text-[16px] sm:text-[18px] ml-2">Published</span>
+          <span class="text-[16px] sm:text-[18px] ml-2 text-secondary-text">
+            {humanized_datetime(@version.published_at)}
+          </span>
+          <span class="text-[16px] sm:text-[18px] mx-2 text-secondary-text">•</span>
+          <.user_link
+            :if={@version.published_by_username}
+            class="text-[16px] sm:text-[18px]"
+            username={@version.published_by_username}
+          />
+        </div>
+      </div>
+
+      <div
+        :if={@version.retirement}
+        class="mt-4 rounded bg-red-300 dark:bg-error px-3 py-2 sm:px-5 sm:py-3"
+      >
+        <p class="text-[14px] sm:text-[18px]">
+          Version {@version.version} was retired. Reason: {@version.retirement["reason"]}
+        </p>
+        <p class="text-[12px] sm:text-[14px]">{@version.retirement["message"]}</p>
+      </div>
+
+      <div class="mt-6 grid grid-cols-1 order-1 sm:grid-cols-2 gap-4 sm:gap-x-8 sm:gap-y-5">
+        <div class="grid-cols-1 dark:bg-surface sm:dark:bg-surface-alt flex items-center px-3 py-2 sm:px-5 sm:py-3 rounded border border-stroke">
+          <img src={~p"/images/elixir-icon.svg"} />
+          <%= if @version.elixir_requirement do %>
+            <span class="ml-2 text-[16px] sm:text-[18px]">
+              Elixir Version Requirement {@version.elixir_requirement}
+            </span>
+          <% else %>
+            <span class="ml-2 text-[16px] sm:text-[18px]">
+              No Elixir Version Requirement Specified
+            </span>
+          <% end %>
+        </div>
+
+        <div class="h-fit order-2 flex items-center dark:bg-surface sm:dark:bg-surface-alt px-3 py-2 sm:px-5 sm:py-3 rounded border border-stroke">
+          <img src={~p"/images/doc-monochrome-icon.svg"} />
+          <%= if @package.docs_html_url do %>
+            <.link
+              class="block ml-2 text-[16px] sm:text-[18px]"
+              href={@package.docs_html_url <> @version.version}
+              target="_blank"
             >
-              <%= if is_retired? do %>
-                {version} (Retired)
+              Documentation for {@version.version}
+            </.link>
+            <img src={~p"/images/right-chevron-icon.svg"} class="ml-auto" />
+          <% else %>
+            <span class="block ml-2 text-[16px] sm:text-[18px]">
+              No documentation for {@version.version}
+            </span>
+          <% end %>
+        </div>
+
+        <div class="h-fit dark:bg-surface sm:dark:bg-surface-alt px-3 py-2 sm:px-5 sm:py-3 rounded md:grow border border-stroke sm:col-start-1 sm:row-start-2 sm:row-span-2">
+          <div class="flex items-center">
+            <img src={~p"/images/dependencies-icon.svg"} />
+            <% text_size_class =
+              if Enum.count(@version.required) > 0,
+                do: "text-[20px] sm:text-[24px] font-medium",
+                else: "text-[16px] sm:text-[18px] font-regular" %>
+            <h3 class={"ml-2 #{text_size_class}"}>
+              <%= if Enum.count(@version.required) > 0 do %>
+                Dependencies
               <% else %>
-                {version} {if @package.latest_stable_version == version, do: "(Last stable)"}
+                This package has no dependencies
               <% end %>
-            </option>
-          </select>
-        </form>
-      </div>
+            </h3>
+            <span
+              :if={Enum.count(@version.required) > 0}
+              class="ml-2 text-[14px]/[18px] text-center sm:text-[16px] rounded-full bg-surface-alt p-2 w-8 h-8"
+            >
+              {Enum.count(@version.required)}
+            </span>
+          </div>
 
-      <div :if={@version.retirement} class="mt-4 rounded bg-red-300 dark:bg-red-900 p-4">
-        Version {@version.version} was retired.<br /><br />Reason: {@version.retirement["reason"]}<br />
-        Message: {@version.retirement["message"]}
-      </div>
-
-      <div class="mt-4 md:flex">
-        <div class="dark:bg-surface-alt p-4 rounded md:grow border border-stroke">
-          <span class="text-xl font-semibold">
-            Dependencies
-          </span>
-          <span class="rounded-full px-2 inline-block font-mono font-semibold text-sm">
-            {Enum.count(@version.required)}
-          </span>
-
-          <div class="mt-4">
+          <div :if={Enum.count(@version.required) > 0} class="mt-4">
             <div
               :for={
                 {name, %{"requirement" => requirement, "description" => description}} <-
                   @version.required
               }
-              class="mt-3"
+              class="pt-1 pb-1 sm:mt-3 px-3 border-b border-divider last:pb-0 last:border-0"
             >
-              <.link navigate={~p"/packages/#{name}"} class="font-semibold">
+              <.link navigate={~p"/packages/#{name}"} class="sm:text-[18px]">
                 {name}
               </.link>
-              <span class="text-sm dark:text-zinc-300">
+              <span class="text-[14px] mt-1 sm:text-[16px] dark:text-secondary-text">
                 {requirement}
               </span>
-              <div class="text-xs dark:text-zinc-300">
+              <p class="text-[12px] sm:text-[14px] dark:text-secondary-text">
                 {description}
-              </div>
+              </p>
             </div>
           </div>
 
-          <div :if={Enum.count(@version.optional) > 0} class="mt-8">
-            <span class="text-lg font-semibold">
-              Optional
-            </span>
+          <div :if={Enum.count(@version.optional) > 0} class="mt-4 px-3">
+            <div
+              class="flex justify-between cursor-pointer"
+              phx-click={
+                JS.toggle(
+                  to: "#optional-deps-content",
+                  in:
+                    {"transition-all ease-out duration-300", "hidden opacity-0 max-h-0",
+                     "block opacity-100 max-h-[1000px]"},
+                  out:
+                    {"transition-all ease-in duration-200", "block opacity-100 max-h-[1000px]",
+                     "hidden opacity-0 max-h-0"}
+                )
+                |> JS.toggle_class("rotate-90", to: "#optional-deps-chevron")
+                |> JS.toggle_class("-rotate-90", to: "#optional-deps-chevron")
+              }
+            >
+              <h4 class="sm:text-[18px] font-medium">
+                Optional Dependencies
+              </h4>
 
-            <div class="mt-2">
-              <p class="mb-2 text-xs dark:text-zinc-300">
-                Dependencies that are not required by default but can be installed or enable additional features or functionality
-              </p>
+              <img
+                id="optional-deps-chevron"
+                width="24px"
+                src={~p"/images/right-chevron-icon.svg"}
+                class="-rotate-90 transform transition-transform duration-300"
+              />
+            </div>
+
+            <p class="mt-2 mb-2 text-[12px] sm:text-[14px] dark:text-secondary-text">
+              Dependencies that are not required by default but can be installed or enable additional features or functionality
+            </p>
+
+            <div id="optional-deps-content" class="hidden opacity-0 max-h-0 transition-all">
               <div
-                :for={{name, %{"requirement" => requirement}} <- @version.optional}
-                class="mt-1"
+                :for={
+                  {name, %{"requirement" => requirement, "description" => description}} <-
+                    @version.optional
+                }
+                class="pt-1 pb-1 mt-1 border-b border-divider last:pb-0 last:border-0"
               >
-                <.link navigate={~p"/packages/#{name}"} class="font-semibold">
+                <.link navigate={~p"/packages/#{name}"} class="sm:text-[18px]">
                   {name}
                 </.link>
-                <span class="text-sm dark:text-zinc-300">
+                <span class="text-[14px] mt-1 sm:text-[16px] dark:text-secondary-text">
                   {requirement}
                 </span>
+                <p class="text-[12px] sm:text-[14px] dark:text-secondary-text">
+                  {description}
+                </p>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="max-md:mt-3 md:ml-4 md:grow md:flex md:flex-col md:justify-between">
-          <div>
-            <div
-              :if={@version.elixir_requirement}
-              class="mb-3 dark:bg-surface-alt px-4 py-3 rounded border border-stroke"
+        <div class="h-fit flex order-2 items-center dark:bg-surface sm:dark:bg-surface-alt px-3 py-2 sm:px-5 sm:py-3 rounded border border-stroke sm:mt-0">
+          <img src={~p"/images/changelog-monochrome-icon.svg"} />
+          <%= if @package.changelog_url do %>
+            <.link
+              class="block ml-2 text-[16px] sm:text-[18px]"
+              href={@package.changelog_url}
+              target="_blank"
             >
-              <div class="text-xl font-semibold">
-                Elixir version requirement
-              </div>
-
-              <div class="mt-2">
-                <.link href="https://elixir-lang.org" class="font-semibold" target="_blank">
-                  elixir
-                </.link>
-                {@version.elixir_requirement}
-              </div>
-            </div>
-
-            <%= if @package.docs_html_url do %>
-              <.link
-                class="block dark:bg-surface-alt px-4 py-3 rounded border border-stroke"
-                href={@package.docs_html_url <> @version.version}
-                target="_blank"
-              >
-                Documentation for {@version.version}
-              </.link>
-            <% else %>
-              <span class="block dark:bg-surface-alt px-4 py-3 rounded border border-stroke">
-                No documentation for {@version.version}
-              </span>
-            <% end %>
-          </div>
-
-          <div class="mt-3 flex justify-end">
-            <div class="flex text-sm">
-              <div>
-                Published {humanized_datetime(@version.published_at)}
-                <br />
-                <span :if={@version.published_by_username}>
-                  by <.user_link username={@version.published_by_username} />
-                </span>
-              </div>
-              <img
-                :if={@version.published_by_email}
-                class="ml-2 rounded-full"
-                src={gravatar_url(@version.published_by_email)}
-              />
-            </div>
-          </div>
+              Changelog for {@version.version}
+            </.link>
+            <img src={~p"/images/right-chevron-icon.svg"} class="ml-auto" />
+          <% else %>
+            <span class="block ml-2 text-[16px] sm:text-[18px]">
+              No changelog for {@version.version}
+            </span>
+          <% end %>
         </div>
       </div>
     </div>
