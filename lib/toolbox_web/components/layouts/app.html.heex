@@ -1,25 +1,36 @@
-<main class="min-h-screen flex flex-col justify-between px-4 py-12">
-  <div class="container mx-auto">
-    <nav
-      :if={not match?(%{view: ToolboxWeb.HomeLive}, @socket)}
-      class="mb-10 md:flex md:justify-between md:items-center"
-    >
-      <.link navigate="/" class="text-2xl">
-        <.logo />
-      </.link>
+<main class="flex flex-col h-full justify-between">
+  <div class="container mx-auto px-5">
+    <nav class="sm:flex sm:justify-between sm:items-center sm:relative py-3">
+      <div class="flex items-center justify-between">
+        <.link navigate="/" class="text-2xl">
+          <.logo />
+        </.link>
 
-      <div class="max-md:mt-4">
-        <.live_component module={ToolboxWeb.SearchFieldComponent} id="search-field" />
+        <.link navigate={~p"/about"} class="block sm:hidden">
+          <img src={~p"/images/about-icon.svg"} />
+        </.link>
       </div>
+
+      <div class="pt-3 sm:absolute sm:left-[50%] sm:top-[50%] sm:-translate-[50%] sm:w-1/2 sm:pt-0">
+        <.live_component
+          module={ToolboxWeb.SearchFieldComponent}
+          id="search-field"
+          class="w-full"
+        />
+      </div>
+
+      <.link navigate={~p"/about"} class="hidden sm:inline text-[16px] font-medium">
+        About
+      </.link>
     </nav>
 
     <.flash_group flash={@flash} />
     {@inner_content}
   </div>
 
-  <footer class="mt-24 container mx-auto text-secondary-text text-sm">
-    <div>
+  <footer class="flex justify-around mt-auto pb-10 sm:pb-15 container mx-auto text-secondary-text text-[14px] sm:block">
+    <span>
       Built by <.link href="https://mimiquate.com" target="_blank" class="underline">Mimiquate</.link>.
-    </div>
+    </span>
   </footer>
 </main>

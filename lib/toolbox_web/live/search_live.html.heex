@@ -1,69 +1,71 @@
-<div class="text-2xl font-bold">
-  {length(@packages)}{if(@more?, do: "+")} results for "{@term}"
-</div>
+<article class="pt-8 sm:pt-15">
+  <div class="text-2xl font-bold">
+    {length(@packages)}{if(@more?, do: "+")} results for "{@term}"
+  </div>
 
-<div :if={@more?} class="mt-2 text-sm text-secondary-text">
-  Only showing first {length(@packages)}
-</div>
+  <div :if={@more?} class="mt-2 text-sm text-secondary-text">
+    Only showing first {length(@packages)}
+  </div>
 
-<ul class="mt-8">
-  <li class="hidden sm:flex justify-end px-3">
-    <span class="text-[18px] text-secondary-text">Downloads in the last 90 days</span>
-  </li>
-  <li
-    :for={package <- @packages}
-    class="mt-5 py-3 px-4 flex flex-col md:flex-row md:justify-between bg-surface rounded-md border border-stroke"
-  >
-    <div>
-      <.link navigate={~p"/packages/#{package.name}"} class="text-[16px] sm:text-[18px]">
-        {package.name}
-      </.link>
+  <ul class="mt-8">
+    <li class="hidden sm:flex justify-end px-3">
+      <span class="text-[18px] text-secondary-text">Downloads in the last 90 days</span>
+    </li>
+    <li
+      :for={package <- @packages}
+      class="mt-5 py-3 px-4 flex flex-col md:flex-row md:justify-between bg-surface rounded-md border border-stroke"
+    >
+      <div>
+        <.link navigate={~p"/packages/#{package.name}"} class="text-[16px] sm:text-[18px]">
+          {package.name}
+        </.link>
 
-      <div class="mt-2 text-[12px] sm:text-[14px] text-secondary-text">
-        {package.latest_hexpm_snapshot.data["meta"]["description"]}
+        <div class="mt-2 text-[12px] sm:text-[14px] text-secondary-text">
+          {package.latest_hexpm_snapshot.data["meta"]["description"]}
+        </div>
+
+        <div class="flex items-center mt-3 sm:hidden">
+          <div :if={package.latest_github_snapshot} class="p-1 bg-surface-alt rounded-md">
+            <img width="14px" height="20px" src={~p"/images/star-icon.svg"} />
+          </div>
+          <span :if={package.latest_github_snapshot} class="ml-1 text-[12px] sm:text-[16px]">
+            {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
+          </span>
+          <span :if={package.latest_github_snapshot} class="mx-1 text-[12px] sm:hidden">•</span>
+          <div class="flex items-center justify-end sm:hidden">
+            <div class="p-1 bg-surface-alt w-fit rounded-md">
+              <img width="14px" src={~p"/images/download-icon.svg"} />
+            </div>
+            <span class="text-[12px] ml-1">
+              {humanized_number(package.latest_hexpm_snapshot.data["downloads"]["recent"])}
+            </span>
+            <span class="text-[12px] text-secondary-text ml-1">last 90 days</span>
+          </div>
+        </div>
       </div>
 
-      <div class="flex items-center mt-3 sm:hidden">
-        <div :if={package.latest_github_snapshot} class="p-1 bg-surface-alt rounded-md">
-          <img width="14px" height="20px" src={~p"/images/star-icon.svg"} />
-        </div>
-        <span :if={package.latest_github_snapshot} class="ml-1 text-[12px] sm:text-[16px]">
-          {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
-        </span>
-        <span :if={package.latest_github_snapshot} class="mx-1 text-[12px] sm:hidden">•</span>
-        <div class="flex items-center justify-end sm:hidden">
+      <div class="hidden sm:flex items-center">
+        <div class="flex items-center min-w-25 justify-start">
           <div class="p-1 bg-surface-alt w-fit rounded-md">
-            <img width="14px" src={~p"/images/download-icon.svg"} />
+            <img width="20px" src={~p"/images/star-icon.svg"} />
           </div>
-          <span class="text-[12px] ml-1">
+          <span class="text-[18px] ml-2">
+            <%= if package.latest_github_snapshot do %>
+              {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
+            <% else %>
+              -
+            <% end %>
+          </span>
+        </div>
+        <div class="flex items-center min-w-25 justify-start">
+          <div class="p-1 bg-surface-alt w-fit rounded-md ml-2">
+            <img width="20px" src={~p"/images/download-icon.svg"} />
+          </div>
+          <span class="text-[18px] ml-2">
             {humanized_number(package.latest_hexpm_snapshot.data["downloads"]["recent"])}
           </span>
-          <span class="text-[12px] text-secondary-text ml-1">last 90 days</span>
         </div>
       </div>
-    </div>
-
-    <div class="hidden sm:flex items-center">
-      <div class="flex items-center min-w-25 justify-start">
-        <div class="p-1 bg-surface-alt w-fit rounded-md">
-          <img width="20px" src={~p"/images/star-icon.svg"} />
-        </div>
-        <span class="text-[18px] ml-2">
-          <%= if package.latest_github_snapshot do %>
-            {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
-          <% else %>
-            -
-          <% end %>
-        </span>
-      </div>
-      <div class="flex items-center min-w-25 justify-start">
-        <div class="p-1 bg-surface-alt w-fit rounded-md ml-2">
-          <img width="20px" src={~p"/images/download-icon.svg"} />
-        </div>
-        <span class="text-[18px] ml-2">
-          {humanized_number(package.latest_hexpm_snapshot.data["downloads"]["recent"])}
-        </span>
-      </div>
-    </div>
-  </li>
-</ul>
+    </li>
+  </ul>
+</article>

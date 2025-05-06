@@ -1,29 +1,30 @@
 defmodule ToolboxWeb.SearchFieldComponent do
   use ToolboxWeb, :live_component
 
+  attr :class, :string, default: ""
   attr :autofocus, :boolean, default: false
 
   def render(assigns) do
     ~H"""
-    <div class="sm:w-[489px]">
+    <div>
       <.form
         for={nil}
         phx-submit="search"
         phx-target={@myself}
-        class="flex h-[36px] px-3 py-2 justify-between items-center rounded-[6px] border border-black bg-[#1D1D1D]"
+        class={"flex h-[40px] px-3 py-2 justify-between items-center rounded-[6px] border border-black bg-surface #{@class}"}
       >
         <input
           type="search"
           name="term"
           placeholder="Find packages"
-          class="grow border-0 focus:ring-0 bg-transparent text-white placeholder:text-gray-400"
+          class="grow border-0 focus:ring-0 bg-transparent placeholder:text-secondary-text"
           required
           autofocus={@autofocus}
           autocomplete="off"
           autocapitalize="off"
         />
         <button type="submit" class="flex items-center justify-center">
-          <.icon name="hero-magnifying-glass" class="h-5 w-5 text-gray-400" />
+          <.icon name="hero-magnifying-glass" class="h-5 w-5 text-secondary-text" />
         </button>
       </.form>
     </div>
