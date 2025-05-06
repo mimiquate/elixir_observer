@@ -234,11 +234,11 @@
       </h2>
 
       <.package_version_selector
-          versions={@package.versions}
-          current_version={@version.version}
-          latest_stable_version={@package.latest_stable_version}
-          class="sm:hidden"
-          />
+        versions={@package.versions}
+        current_version={@version.version}
+        latest_stable_version={@package.latest_stable_version}
+        class="sm:hidden"
+      />
     </div>
     <div class="sm:dark:bg-surface rounded p-4 sm:p-6">
       <div class="flex sm:justify-between">
@@ -254,11 +254,17 @@
             :if={@version.published_by_email}
             class="w-8 rounded-full"
             src={gravatar_url(@version.published_by_email)}
-            />
+          />
           <span class="text-[16px] sm:text-[18px] ml-2">Published</span>
-          <span class="text-[16px] sm:text-[18px] ml-2 text-secondary-text">{humanized_datetime(@version.published_at)}</span>
+          <span class="text-[16px] sm:text-[18px] ml-2 text-secondary-text">
+            {humanized_datetime(@version.published_at)}
+          </span>
           <span class="text-[16px] sm:text-[18px] mx-2 text-secondary-text">•</span>
-          <.user_link class="text-[16px] sm:text-[18px]" :if={@version.published_by_username} username={@version.published_by_username} />
+          <.user_link
+            :if={@version.published_by_username}
+            class="text-[16px] sm:text-[18px]"
+            username={@version.published_by_username}
+          />
         </div>
       </div>
 
@@ -269,7 +275,7 @@
 
       <div class="mt-6 grid grid-cols-1 order-1 sm:grid-cols-2 gap-4 sm:gap-x-8 sm:gap-y-5">
         <div class="grid-cols-1 dark:bg-surface sm:dark:bg-surface-alt flex items-center px-3 py-2 sm:px-5 sm:py-3 rounded border border-stroke">
-          <img src={~p"/images/elixir-icon.svg"}/>
+          <img src={~p"/images/elixir-icon.svg"} />
           <%= if @version.elixir_requirement do %>
             <span class="ml-2 text-[16px] sm:text-[18px]">
               Elixir version requirement {@version.elixir_requirement}
@@ -282,7 +288,7 @@
         </div>
 
         <div class="h-fit order-2 flex items-center dark:bg-surface sm:dark:bg-surface-alt px-3 py-2 sm:px-5 sm:py-3 rounded border border-stroke">
-          <img src={~p"/images/doc-monochrome-icon.svg"}/>
+          <img src={~p"/images/doc-monochrome-icon.svg"} />
           <%= if @package.docs_html_url do %>
             <.link
               class="block ml-2 text-[16px] sm:text-[18px]"
@@ -301,7 +307,7 @@
 
         <div class="dark:bg-surface sm:dark:bg-surface-alt px-3 py-2 sm:px-5 sm:py-3 rounded md:grow border border-stroke sm:col-start-1 sm:row-start-2 sm:row-span-2">
           <div class="flex items-center">
-            <img src={~p"/images/dependencies-icon.svg"}/>
+            <img src={~p"/images/dependencies-icon.svg"} />
             <h3 class="ml-2 text-[20px] sm:text-[24px] font-medium">
               Dependencies
             </h3>
@@ -313,8 +319,8 @@
           <div class="mt-4">
             <div
               :for={
-              {name, %{"requirement" => requirement, "description" => description}} <-
-              @version.required
+                {name, %{"requirement" => requirement, "description" => description}} <-
+                  @version.required
               }
               class="pt-1 pb-1 sm:mt-3 px-3 border-b border-divider last:pb-0 last:border-0"
             >
@@ -355,7 +361,7 @@
         </div>
 
         <div class="h-fit flex order-2 items-center dark:bg-surface sm:dark:bg-surface-alt px-3 py-2 sm:px-5 sm:py-3 rounded border border-stroke sm:mt-0">
-          <img src={~p"/images/changelog-monochrome-icon.svg"}/>
+          <img src={~p"/images/changelog-monochrome-icon.svg"} />
           <%= if @package.changelog_url do %>
             <.link
               class="block ml-2 text-[16px] sm:text-[18px]"
