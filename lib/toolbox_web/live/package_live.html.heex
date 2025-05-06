@@ -210,16 +210,16 @@
       </div>
     </div>
 
-    <div class="md:col-span-2 bg-zinc-100 dark:bg-surface rounded-md py-6 px-4 border border-stroke">
-      <h3 class="text-[24px] font-medium mb-5">
+    <div class="md:col-span-2 bg-zinc-100 dark:bg-surface rounded-md px-5 py-3 sm:p-8 border border-stroke">
+      <h3 class="text-[14px] sm:text-[24px] font-medium mb-3 sm:mb-5">
         Owners
       </h3>
 
-      <ul class="flex flex-col">
-        <li :for={owner <- @package.owners} class="flex items-center mb-3">
+      <ul class="flex sm:flex-col flex-wrap">
+        <li :for={owner <- @package.owners} class="flex items-center mb-3 w-1/2">
           <img width="32px" height="32px" class="rounded-full" src={gravatar_url(owner["email"])} />
 
-          <span class="text-[14px] ml-2">
+          <span class="text-[14px] text-[16px] ml-2">
             <.user_link username={owner["username"]} />
           </span>
         </li>
