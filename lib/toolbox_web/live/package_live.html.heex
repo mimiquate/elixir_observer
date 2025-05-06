@@ -233,21 +233,11 @@
     </h2>
     <div class="dark:bg-surface rounded p-4 sm:p-6">
       <div class="flex justify-between">
-        <form phx-change="version-change">
-          <select name="version" class="border border-stroke rounded dark:bg-surface-alt sm:w-62 sm:text-[16px]">
-            <option
-              :for={{version, is_retired?} <- @package.versions}
-              value={version}
-              selected={version == @version.version}
-            >
-              <%= if is_retired? do %>
-                {version} (Retired)
-              <% else %>
-                {version} {if @package.latest_stable_version == version, do: "(Last stable)"}
-              <% end %>
-            </option>
-          </select>
-        </form>
+        <.package_version_selector
+          versions={@package.versions}
+          current_version={@version.version}
+          latest_stable_version={@package.latest_stable_version}
+        />
 
         <div class="mt-3 flex items-center">
           <img

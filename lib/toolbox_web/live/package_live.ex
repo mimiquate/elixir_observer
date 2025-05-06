@@ -3,6 +3,7 @@ defmodule ToolboxWeb.PackageLive do
 
   import ToolboxWeb.Components.StatsCard
   import ToolboxWeb.Components.PackageLink
+  import ToolboxWeb.Components.PackageVersionSelector
 
   defmodule HexpmVersionNotFoundError do
     defexception [:message, plug_status: 404]
