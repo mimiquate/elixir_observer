@@ -15,11 +15,12 @@ defmodule ToolboxWeb.Components.PackageVersionSelector do
   attr :versions, :list, required: true, doc: "List of tuples containing version and retirement status"
   attr :current_version, :string, required: true, doc: "Currently selected version"
   attr :latest_stable_version, :string, required: true, doc: "Latest stable version of the package"
+  attr :class, :string, default: "", doc: "Additional classes to be merged with the default ones"
 
   def package_version_selector(assigns) do
     ~H"""
     <form phx-change="version-change">
-      <select name="version" class="border border-stroke rounded dark:bg-surface-alt sm:w-62 sm:text-[16px]">
+      <select name="version" class={"border border-stroke rounded dark:bg-surface-alt sm:w-62 text-[14px] sm:text-[16px] #{@class}"}>
         <option
           :for={{version, is_retired?} <- @versions}
           value={version}
