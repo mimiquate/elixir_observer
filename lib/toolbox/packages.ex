@@ -16,6 +16,11 @@ defmodule Toolbox.Packages do
     |> Repo.all()
   end
 
+  def list_packages_names do
+    from(p in Package, select: p.name)
+    |> Repo.all()
+  end
+
   def total_count do
     Repo.aggregate(Package, :count)
   end

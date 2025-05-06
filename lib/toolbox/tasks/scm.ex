@@ -4,14 +4,15 @@ defmodule Toolbox.Tasks.SCM do
   def run(_args \\ [])
 
   def run([]) do
-    Toolbox.Packages.list_packages()
-    |> Enum.each(&run/1)
+    Toolbox.Packages.list_packages_names()
+    |> run()
   end
 
   def run(names) when is_list(names) do
     names
-    |> Enum.map(&Toolbox.Packages.get_package_by_name(&1))
-    |> Enum.each(&run/1)
+    |> Stream.map(&Toolbox.Packages.get_package_by_name(&1))
+    |> Stream.each(&run/1)
+    |> Stream.run()
   end
 
   def run(%Toolbox.Package{} = package) do
