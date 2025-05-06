@@ -10,10 +10,6 @@ defmodule ToolboxWeb.Router do
     plug :put_secure_browser_headers
   end
 
-  pipeline :auth do
-    plug :basic_auth
-  end
-
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -24,7 +20,7 @@ defmodule ToolboxWeb.Router do
   end
 
   scope "/", ToolboxWeb do
-    pipe_through [:browser, :auth]
+    pipe_through [:browser]
 
     live "/", HomeLive
     live "/about", AboutLive
@@ -42,14 +38,6 @@ defmodule ToolboxWeb.Router do
 
     import Phoenix.LiveDashboard.Router
     live_dashboard "/dashboard", metrics: ToolboxWeb.Telemetry
-  end
-
-  defp basic_auth(conn, _opts) do
-    if System.get_env("BASIC_AUTH") do
-      Plug.BasicAuth.basic_auth(conn, Application.fetch_env!(:toolbox, :basic_auth))
-    else
-      conn
-    end
   end
 
   defp admin_basic_auth(conn, _opts) do

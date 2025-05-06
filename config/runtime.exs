@@ -113,10 +113,6 @@ if config_env() in [:prod, :dev] do
 end
 
 config :toolbox,
-  basic_auth: [
-    username: System.get_env("BASIC_AUTH_USERNAME", "user"),
-    password: System.get_env("BASIC_AUTH_PASSWORD", "secret")
-  ],
   admin_basic_auth: [
     username: System.get_env("ADMIN_BASIC_AUTH_USERNAME", "admin"),
     password: System.get_env("ADMIN_BASIC_AUTH_PASSWORD", "secret")
