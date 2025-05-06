@@ -310,18 +310,29 @@
           <% end %>
         </div>
 
-        <div class="dark:bg-surface sm:dark:bg-surface-alt px-3 py-2 sm:px-5 sm:py-3 rounded md:grow border border-stroke sm:col-start-1 sm:row-start-2 sm:row-span-2">
+        <div class="h-fit dark:bg-surface sm:dark:bg-surface-alt px-3 py-2 sm:px-5 sm:py-3 rounded md:grow border border-stroke sm:col-start-1 sm:row-start-2 sm:row-span-2">
           <div class="flex items-center">
             <img src={~p"/images/dependencies-icon.svg"} />
-            <h3 class="ml-2 text-[20px] sm:text-[24px] font-medium">
-              Dependencies
+            <% text_size_class =
+              if Enum.count(@version.required) > 0,
+                do: "text-[20px] sm:text-[24px] font-medium",
+                else: "text-[16px] sm:text-[18px] font-regular" %>
+            <h3 class={"ml-2 #{text_size_class}"}>
+              <%= if Enum.count(@version.required) > 0 do %>
+                Dependencies
+              <% else %>
+                This package has no dependencies
+              <% end %>
             </h3>
-            <span class="ml-2 text-[14px]/[18px] text-center sm:text-[16px] rounded-full bg-surface-alt p-2 w-8 h-8">
+            <span
+              :if={Enum.count(@version.required) > 0}
+              class="ml-2 text-[14px]/[18px] text-center sm:text-[16px] rounded-full bg-surface-alt p-2 w-8 h-8"
+            >
               {Enum.count(@version.required)}
             </span>
           </div>
 
-          <div class="mt-4">
+          <div :if={Enum.count(@version.required) > 0} class="mt-4">
             <div
               :for={
                 {name, %{"requirement" => requirement, "description" => description}} <-
