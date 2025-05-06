@@ -1,25 +1,31 @@
-<div class="flex flex-col px-4 mt-auto mb-auto sm:block sm:mt-40">
-  <h1 class="font-code text-[48px] sm:text-[72px]">observer</h1>
-  <p class="mt-4 sm:text-[14px] sm:text-[20px] font-mono sm:max-w-115">
-    Find, compare, and explore Elixir packages for your next project.
-  </p>
+<div class="h-full w-full flex items-center">
+  <div class="flex flex-col w-full px-4 mt-auto mb-auto sm:block mt-auto mb-auto">
+    <h1 class="font-code text-[48px] sm:text-[72px]">observer</h1>
+    <p class="mt-4 sm:text-[14px] sm:text-[20px] font-mono sm:max-w-115">
+      Find, compare, and explore Elixir packages for your next project.
+    </p>
 
-  <div class="mt-8">
-    <.live_component module={ToolboxWeb.SearchFieldComponent} id="search-field" autofocus="true" />
-  </div>
+    <div class="mt-8">
+      <.live_component
+        module={ToolboxWeb.SearchFieldComponent}
+        id="search-field"
+        autofocus="true"
+      />
+    </div>
 
-  <div class="flex justify-end mt-auto">
-    <img
-      class="hidden sm:block object-contain rotate-15"
-      src={~p"/images/home-logo.png"}
-      width="515px"
-      alt="Home Logo"
-    />
-    <img
-      class="block sm:hidden ml-auto mt-10 object-contain rotate-15"
-      src={~p"/images/home-logo.png"}
-      width="211px"
-      alt="Home Logo"
-    />
+    <div class="flex justify-end mt-auto">
+      <img
+        class="hidden sm:block object-contain rotate-15"
+        src={~p"/images/home-logo.png"}
+        width="515px"
+        alt="Home Logo"
+      />
+      <img
+        class="block sm:hidden ml-auto mt-10 object-contain rotate-15"
+        src={~p"/images/home-logo.png"}
+        width="211px"
+        alt="Home Logo"
+      />
+    </div>
   </div>
 </div>
