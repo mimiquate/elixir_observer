@@ -240,7 +240,7 @@
         class="sm:hidden"
       />
     </div>
-    <div class="sm:dark:bg-surface rounded p-4 sm:p-6">
+    <div class="sm:dark:bg-surface rounded sm:p-6">
       <div class="flex sm:justify-between">
         <.package_version_selector
           versions={@package.versions}
@@ -330,31 +330,62 @@
               <span class="text-[14px] mt-1 sm:text-[16px] dark:text-secondary-text">
                 {requirement}
               </span>
-              <div class="text-[12px] sm:text-[14px] dark:text-secondary-text">
+              <p class="text-[12px] sm:text-[14px] dark:text-secondary-text">
                 {description}
-              </div>
+              </p>
             </div>
           </div>
 
-          <div :if={Enum.count(@version.optional) > 0}>
-            <h4 class="sm:text-[18px] font-medium">
-              Optional Dependencies
-            </h4>
+          <div :if={Enum.count(@version.optional) > 0} class="mt-4 px-3">
+            <div
+              class="flex justify-between cursor-pointer"
+              phx-click={
+                JS.toggle(
+                  to: "#optional-deps-content",
+                  in:
+                    {"transition-all ease-out duration-300", "hidden opacity-0 max-h-0",
+                     "block opacity-100 max-h-[1000px]"},
+                  out:
+                    {"transition-all ease-in duration-200", "block opacity-100 max-h-[1000px]",
+                     "hidden opacity-0 max-h-0"}
+                )
+                |> JS.toggle_class("rotate-90", to: "#optional-deps-chevron")
+                |> JS.toggle_class("-rotate-90", to: "#optional-deps-chevron")
+              }
+            >
+              <h4 class="sm:text-[18px] font-medium">
+                Optional Dependencies
+              </h4>
 
-            <div class="mt-2">
-              <p class="mb-2 sm:text-[14px] dark:text-secondary-text">
-                Dependencies that are not required by default but can be installed or enable additional features or functionality
-              </p>
+              <img
+                id="optional-deps-chevron"
+                width="24px"
+                src={~p"/images/right-chevron-icon.svg"}
+                class="-rotate-90 transform transition-transform duration-300"
+              />
+            </div>
+
+            <p class="mt-2 mb-2 text-[12px] sm:text-[14px] dark:text-secondary-text">
+              Dependencies that are not required by default but can be installed or enable additional features or functionality
+            </p>
+
+            <div id="optional-deps-content" class="hidden opacity-0 max-h-0 transition-all">
               <div
-                :for={{name, %{"requirement" => requirement}} <- @version.optional}
-                class="mt-1"
+                :for={
+                  {name, %{"requirement" => requirement, "description" => description}} <-
+                    @version.optional
+                }
+                class="pt-1 pb-1 mt-1 border-b border-divider last:pb-0 last:border-0"
               >
                 <.link navigate={~p"/packages/#{name}"} class="sm:text-[18px]">
                   {name}
                 </.link>
-                <span class="sm:text-[16px] dark:text-secondary-text">
+                <span class="text-[14px] mt-1 sm:text-[16px] dark:text-secondary-text">
                   {requirement}
                 </span>
+                <p class="text-[12px] sm:text-[14px] dark:text-secondary-text">
+                  {description}
+                </p>
               </div>
             </div>
           </div>
