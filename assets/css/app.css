@@ -41,6 +41,7 @@
 
   --color-accent: #975EC9;
   --color-dark-purple: rgba(33, 16, 90, 0.70);
+  --color-error: #5C221F;
 }
 
 html {

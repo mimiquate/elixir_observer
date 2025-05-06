@@ -268,9 +268,14 @@
         </div>
       </div>
 
-      <div :if={@version.retirement} class="mt-4 rounded bg-red-300 dark:bg-red-900 p-4">
-        Version {@version.version} was retired.<br /><br />Reason: {@version.retirement["reason"]}<br />
-        Message: {@version.retirement["message"]}
+      <div
+        :if={@version.retirement}
+        class="mt-4 rounded bg-red-300 dark:bg-error px-3 py-2 sm:px-5 sm:py-3"
+      >
+        <p class="text-[14px] sm:text-[18px]">
+          Version {@version.version} was retired. Reason: {@version.retirement["reason"]}
+        </p>
+        <p class="text-[12px] sm:text-[14px]">{@version.retirement["message"]}</p>
       </div>
 
       <div class="mt-6 grid grid-cols-1 order-1 sm:grid-cols-2 gap-4 sm:gap-x-8 sm:gap-y-5">
