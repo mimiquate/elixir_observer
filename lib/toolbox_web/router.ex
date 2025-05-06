@@ -27,6 +27,7 @@ defmodule ToolboxWeb.Router do
     pipe_through [:browser, :auth]
 
     live "/", HomeLive
+    live "/about", AboutLive
 
     live "/packages/:name", PackageLive
     live "/packages/:name/:version", PackageLive
