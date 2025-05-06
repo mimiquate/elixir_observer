@@ -15,7 +15,7 @@ defmodule Toolbox.Tasks.SCM do
   end
 
   def run(%Toolbox.Package{} = package) do
-    %{hexpm_snapshots: [hexpm_snapshot | _]} = Toolbox.Repo.preload(package, [:hexpm_snapshots])
+    hexpm_snapshot = package.latest_hexpm_snapshot
 
     links = hexpm_snapshot.data["meta"]["links"]
 
