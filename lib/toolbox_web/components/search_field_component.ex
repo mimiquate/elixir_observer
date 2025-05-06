@@ -19,6 +19,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
           class="grow border-0 focus:ring-0 bg-transparent text-white placeholder:text-gray-400"
           required
           autofocus={@autofocus}
+          autocomplete="off"
           autocapitalize="off"
         />
         <button type="submit" class="flex items-center justify-center">
