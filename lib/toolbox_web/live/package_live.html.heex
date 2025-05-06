@@ -170,7 +170,7 @@
                     </h4>
                   </.link>
                   <div class="flex mt-1">
-                    <img class="rounded-full" src={pr["mergedBy"]["avatarUrl"]} />
+                    <img class="w-6 rounded-full" src={pr["mergedBy"]["avatarUrl"]} />
                     <span class="text-[14px] ml-2">{pr["mergedBy"]["login"]}</span>
                     <% {merged_at_number, merged_at_relative_label} =
                       relative_datetime(pr["mergedAt"]) %>
