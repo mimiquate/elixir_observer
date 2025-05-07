@@ -1,4 +1,4 @@
-<main class="flex flex-col h-full justify-around sm:justify-between dark:bg-[url('/images/home-bg.svg')] bg-center bg-no-repeat bg-cover px-5">
+<main class="flex flex-col h-full justify-around sm:justify-between bg-black bg-[url('/images/light-home-bg.svg')] dark:bg-[url('/images/home-bg.svg')] bg-center bg-no-repeat bg-cover px-5">
   <div class="container mx-auto grow flex flex-col sm:block">
     <nav class="flex justify-between items-center py-3">
       <.link navigate="/" class="text-2xl">
@@ -6,7 +6,7 @@
       </.link>
       <.link navigate={~p"/about"}>
         <img src={~p"/images/about-icon.svg"} class="sm:hidden" />
-        <span class="hidden sm:inline text-[16px] font-medium">
+        <span class="hidden sm:inline text-[16px] font-medium text-accent  dark:text-primary-text">
           About
         </span>
       </.link>

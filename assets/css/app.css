@@ -12,6 +12,30 @@
 @custom-variant phx-submit-loading ([".phx-submit-loading&", ".phx-submit-loading &"]);
 @custom-variant phx-change-loading ([".phx-change-loading&", ".phx-change-loading &"]);
 
+:root {
+  color-scheme: light dark;
+
+  --color-stroke-source: #C0C0C0;
+  --color-primary-text-source: #161616;
+  --color-secondary-text-source: #A2A2A2;
+  --color-surface-source: white;
+  --color-surface-alt-source: #FCFDFD;
+  --color-divider-source: #C0C0C0;
+
+  --color-button-primary: #975EC9;
+  --color-button-primary-hover: #8450B3;
+  --color-button-primary-focus: #7A44AA;
+
+  @variant dark {
+    --color-stroke-source: #343434;
+    --color-primary-text-source: white;
+    --color-secondary-text-source: #A2A2A2;
+    --color-surface-source: #1D1D1D;
+    --color-surface-alt-source: #252525;
+    --color-divider-source: #2F2F2F;
+  }
+}
+
 @theme {
   /* Custom fonts fetched in root.html.heex */
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -20,12 +44,12 @@
   --font-code: "M PLUS 1 Code", monospace;
 
   /* Light mode colors (default) */
-  --color-stroke: #666666;
-  --color-surface: #ffffff;
-  --color-surface-alt: #f5f5f5;
-  --color-primary-text: #161616;
-  --color-secondary-text: #666666;
-  --color-divider: #e5e5e5;
+  --color-stroke: var(--color-stroke-source);
+  --color-primary-text: var(--color-primary-text-source);
+  --color-surface: var(--color-surface-source);
+  --color-surface-alt: var(--color-surface-alt-source);
+  --color-secondary-text: var(--color-secondary-text-source);
+  --color-divider: var(--color-divider-source);
 
   --color-violet: #6B3F8F;
   --color-button-primary: #975EC9;
@@ -35,17 +59,11 @@
   --color-accent: #975EC9;
   --color-dark-purple: rgba(33, 16, 90, 0.15);
   --color-error: #FDE8E7;
-
-  @variant dark {
-    --color-primary-text-sape: white;
-  }
 }
 
 html {
   -webkit-font-smoothing: antialiased;
   height: 100%;
-  background-color: var(--color-surface);
-  color: var(--color-primary-text);
 }
 
 [data-phx-main] {
