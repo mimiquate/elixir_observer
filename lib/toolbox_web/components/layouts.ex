@@ -11,4 +11,20 @@ defmodule ToolboxWeb.Layouts do
   use ToolboxWeb, :html
 
   embed_templates "layouts/*"
+
+  def og_title(%{package: %{name: name}}) do
+    name
+  end
+
+  def og_title(_) do
+    "Elixir Observer"
+  end
+
+  def og_description(%{package: %{description: description}}) do
+    description
+  end
+
+  def og_description(_) do
+    "Find, compare, and explore Elixir packages for your next project."
+  end
 end
