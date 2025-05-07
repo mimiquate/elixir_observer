@@ -1,8 +1,6 @@
 /* Why `source(none)` below ? https://github.com/phoenixframework/phoenix/pull/6109#discussion_r1993092360 */
 @import "tailwindcss" source(none);
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 @source "../css";
 @source "../js";
 @source "../../lib/toolbox_web";
@@ -16,37 +14,38 @@
 
 @theme {
   /* Custom fonts fetched in root.html.heex */
-
-  /* The below is the re-definition of tailwindcss `--font-sans` var to include custom fonts prepended to the
-   * original talwindcss --font-sans value.
-   *
-   * Couldn't find a way to actually re-define `--font-sans` more programatically by prepending the value
-   * to the original, and not hard-coding the original list.
-   */
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-serif: "Bitter", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --font-mono: "Space Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --font-code: "M PLUS 1 Code", monospace;
 
-  --color-stroke: #343434;
-  --color-surface: #1d1d1d;
-  --color-surface-alt: #252525;
-  --color-secondary-text: #C0C0C0;
-  --color-divider: #2F2F2F;
+  /* Light mode colors (default) */
+  --color-stroke: #666666;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f5f5f5;
+  --color-primary-text: #161616;
+  --color-secondary-text: #666666;
+  --color-divider: #e5e5e5;
 
-  --color-violet: #3F2754;
+  --color-violet: #6B3F8F;
   --color-button-primary: #975EC9;
-  --color-button-primary-hover: #AC7ED4;
-  --color-button-primary-focus: #8956B7;
+  --color-button-primary-hover: #8450B3;
+  --color-button-primary-focus: #7A44AA;
 
   --color-accent: #975EC9;
-  --color-dark-purple: rgba(33, 16, 90, 0.70);
-  --color-error: #5C221F;
+  --color-dark-purple: rgba(33, 16, 90, 0.15);
+  --color-error: #FDE8E7;
+
+  @variant dark {
+    --color-primary-text-sape: white;
+  }
 }
 
 html {
   -webkit-font-smoothing: antialiased;
   height: 100%;
+  background-color: var(--color-surface);
+  color: var(--color-primary-text);
 }
 
 [data-phx-main] {
