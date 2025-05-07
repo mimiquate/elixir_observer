@@ -5,9 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
     <link rel="icon" href={~p"/files/favicon.svg"} type="image/svg+xml" />
-    <.live_title suffix=" · Observer">
+    <.live_title suffix=" · Elixir Observer">
       {assigns[:page_title] || "Home"}
     </.live_title>
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Elixir Observer" />
+    <meta property="og:title" content={og_title(assigns)} />
+    <meta property="og:description" content={og_description(assigns)} />
+
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
 
     <%!-- Custom Fonts --%>
