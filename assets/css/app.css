@@ -17,14 +17,14 @@
 
   --color-stroke-source: #C0C0C0;
   --color-primary-text-source: #161616;
-  --color-secondary-text-source: #A2A2A2;
+  --color-secondary-text-source: #5D5D5D;
   --color-surface-source: white;
   --color-surface-alt-source: #FCFDFD;
   --color-divider-source: #C0C0C0;
+  --color-background-source: #F6F8F9;
+  --color-chip-bg-source: white;
 
-  --color-button-primary: #975EC9;
-  --color-button-primary-hover: #8450B3;
-  --color-button-primary-focus: #7A44AA;
+  --color-text-secondary-button-source: #8956B7;
 
   @variant dark {
     --color-stroke-source: #343434;
@@ -33,6 +33,9 @@
     --color-surface-source: #1D1D1D;
     --color-surface-alt-source: #252525;
     --color-divider-source: #2F2F2F;
+    --color-background-source: #161616;
+    --color-chip-bg-source: #A2A2A2;
+    --color-text-secondary-button-source: #A2A2A2;
   }
 }
 
@@ -50,6 +53,9 @@
   --color-surface-alt: var(--color-surface-alt-source);
   --color-secondary-text: var(--color-secondary-text-source);
   --color-divider: var(--color-divider-source);
+  --color-background: var(--color-background-source);
+  --color-chip-bg: var(--color-chip-bg-source);
+  --color-text-secondary-button: var(--color-text-secondary-button-source);
 
   --color-violet: #6B3F8F;
   --color-button-primary: #975EC9;

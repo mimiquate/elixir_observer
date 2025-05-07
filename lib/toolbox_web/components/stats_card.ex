@@ -11,10 +11,10 @@ defmodule ToolboxWeb.Components.StatsCard do
     ~H"""
     <div class={"p-3 sm:px-4 sm:py-6 #{@class}"}>
       <div class="flex items-center">
-        <div class="p-1 bg-surface-alt w-fit rounded-md">
+        <div class="p-1 w-fit rounded-md">
           <img src={@icon_path} />
         </div>
-        <h4 class="text-[12px] sm:text-[18px] ml-2">
+        <h4 class="text-[12px] sm:text-[18px] ml-2 text-primary-text">
           {@title}
         </h4>
       </div>

@@ -31,7 +31,7 @@
           <div :if={package.latest_github_snapshot} class="p-1 bg-surface-alt rounded-md">
             <img width="14px" height="20px" src={~p"/images/star-icon.svg"} />
           </div>
-          <span :if={package.latest_github_snapshot} class="ml-1 text-[12px] sm:text-[16px]">
+          <span :if={package.latest_github_snapshot} class="ml-1 text-primary-text text-[12px] sm:text-[16px]">
             {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
           </span>
           <span :if={package.latest_github_snapshot} class="mx-1 text-[12px] sm:hidden">•</span>
@@ -39,7 +39,7 @@
             <div class="p-1 bg-surface-alt w-fit rounded-md">
               <img width="14px" src={~p"/images/download-icon.svg"} />
             </div>
-            <span class="text-[12px] ml-1">
+            <span class="text-[12px] text-primary-text ml-1">
               {humanized_number(package.latest_hexpm_snapshot.data["downloads"]["recent"])}
             </span>
             <span class="text-[12px] text-secondary-text ml-1">last 90 days</span>
