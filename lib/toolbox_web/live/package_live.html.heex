@@ -12,7 +12,7 @@
       <div class="mt-2">
         <span
           :for={topic <- @package.topics}
-          class="text-xs mt-1 mr-1 py-1 px-2 rounded-full border-[0.5px] text-text-secondary-button border-stroke bg-chip-bg inline-block"
+          class="text-xs mt-1 mr-1 py-1 px-2 rounded-full border-[0.5px] text-text-secondary-button dark:text-primary-text border-stroke bg-chip-bg inline-block"
         >
           {topic}
         </span>
@@ -23,29 +23,29 @@
       <h3 class="text-[14px] mb-4 sm:hidden">Package Resources</h3>
 
       <div class="flex flex-col">
-        <.package_link
-          href={@package.html_url}
-          icon_path={~p"/images/hex-icon.svg"}
-          text={@package.name}
-        />
+        <.package_link href={@package.html_url} text={@package.name}>
+          <:icon>
+            <.hex_icon class="w-6 mr-2" />
+          </:icon>
+        </.package_link>
         <div class="w-auto sm:hidden border-t-[0.5px] border-divider"></div>
-        <.package_link
-          href={@package.github_repo_url}
-          icon_path={~p"/images/gh-icon.svg"}
-          text={@package.github_fullname || "Github"}
-        />
+        <.package_link href={@package.github_repo_url} text={@package.github_fullname || "Github"}>
+          <:icon>
+            <.github_icon class="w-6 mr-2" />
+          </:icon>
+        </.package_link>
         <div class="w-auto sm:hidden border-t-[0.5px] border-divider"></div>
-        <.package_link
-          href={@package.docs_html_url}
-          icon_path={~p"/images/doc-icon.svg"}
-          text="Documentation"
-        />
+        <.package_link href={@package.docs_html_url} text="Documentation">
+          <:icon>
+            <.doc_icon class="w-6 mr-2" />
+          </:icon>
+        </.package_link>
         <div class="w-auto sm:hidden border-t-[0.5px] border-divider"></div>
-        <.package_link
-          href={@package.changelog_url}
-          icon_path={~p"/images/history-icon.svg"}
-          text="Changelog"
-        />
+        <.package_link icon_path={~p"/images/history-icon.svg"} text="Changelog">
+          <:icon>
+            <.changelog_icon class="w-6 mr-2" />
+          </:icon>
+        </.package_link>
       </div>
     </div>
   </section>
@@ -59,7 +59,10 @@
 
   <section class="grid grid-cols-1 md:grid-cols-8 gap-2 sm:gap-8 mt-3 sm:0">
     <div class="md:col-span-4 flex border border-stroke rounded-md bg-surface">
-      <.stats_card class="w-1/2" title="Stars" icon_path={~p"/images/star-icon.svg"}>
+      <.stats_card class="w-1/2" title="Stars">
+        <:icon>
+          <.star_icon class="w-6" />
+        </:icon>
         <div class="text-[20px] sm:text-[32px] font-semibold text-primary-text">
           <%= if @package.stargazers_count do %>
             {humanized_number(@package.stargazers_count)}
@@ -69,11 +72,10 @@
         </div>
       </.stats_card>
 
-      <.stats_card
-        class="w-1/2"
-        title="Recent Downloads"
-        icon_path={~p"/images/download-icon.svg"}
-      >
+      <.stats_card class="w-1/2" title="Recent Downloads">
+        <:icon>
+          <.download_icon class="w-6" />
+        </:icon>
         <div class="flex items-center">
           <h3 class="text-[20px] sm:text-[32px] font-semibold text-primary-text">
             {humanized_number(@package.recent_downloads)}
@@ -86,7 +88,10 @@
     </div>
 
     <div class="md:col-span-4 flex border border-stroke rounded-md bg-surface">
-      <.stats_card class="w-1/2" title="First Release" icon_path={~p"/images/calendar-icon.svg"}>
+      <.stats_card class="w-1/2" title="First Release">
+        <:icon>
+          <.calendar_icon class="w-6" />
+        </:icon>
         <div class="flex items-center">
           <% {created_at_number, created_relative_label} =
             relative_datetime(@package.hexpm_created_at) %>
@@ -101,7 +106,10 @@
         </div>
       </.stats_card>
 
-      <.stats_card class="w-1/2" title="Last Release" icon_path={~p"/images/calendar-icon.svg"}>
+      <.stats_card class="w-1/2" title="Last Release">
+        <:icon>
+          <.calendar_icon class="w-6" />
+        </:icon>
         <div class="flex items-center">
           <% {last_release_number, last_release_label} =
             relative_datetime(@package.latest_version_at) %>
@@ -136,13 +144,13 @@
           <div class="w-full">
             <div class="flex justify-between items-center">
               <span class="text-secondary-text text-[12px] sm:text-[16px]">Open</span>
-              <span class="font-semibold text-[16px] sm:text-[32px]">
+              <span class="font-semibold text-primary-text text-[16px] sm:text-[32px]">
                 {@package.open_pr_count}
               </span>
             </div>
             <div class="flex justify-between items-center">
               <span class="text-secondary-text text-[12px] sm:text-[16px]">Merged</span>
-              <span class="font-semibold text-[16px] sm:text-[32px]">
+              <span class="font-semibold text-primary-text text-[16px] sm:text-[32px]">
                 {@package.merged_pr_count}
               </span>
             </div>
@@ -286,7 +294,7 @@
 
       <div class="mt-6 grid grid-cols-1 order-1 sm:grid-cols-2 gap-4 sm:gap-x-8 sm:gap-y-5">
         <div class="grid-cols-1 bg-surface sm:bg-surface-alt flex items-center px-3 py-2 sm:px-5 sm:py-3 rounded border border-stroke">
-          <img src={~p"/images/elixir-icon.svg"} />
+          <.elixir_icon class="w-5" />
           <%= if @version.elixir_requirement do %>
             <span class="ml-2 text-[16px] text-primary-text sm:text-[18px]">
               Elixir Version Requirement {@version.elixir_requirement}
@@ -299,7 +307,7 @@
         </div>
 
         <div class="h-fit order-2 flex items-center dark:bg-surface sm:dark:bg-surface-alt px-3 py-2 sm:px-5 sm:py-3 rounded border border-stroke">
-          <img src={~p"/images/doc-monochrome-icon.svg"} />
+          <.doc_icon class="w-4" />
           <%= if @package.docs_html_url do %>
             <.link
               class="block ml-2 text-primary-text text-[16px] sm:text-[18px]"
@@ -308,7 +316,7 @@
             >
               Documentation for {@version.version}
             </.link>
-            <img src={~p"/images/right-chevron-icon.svg"} class="ml-auto" />
+            <.chevron_icon class="w-6 ml-auto" />
           <% else %>
             <span class="block ml-2 text-primary-text text-[16px] sm:text-[18px]">
               No documentation for {@version.version}
@@ -318,7 +326,7 @@
 
         <div class="h-fit dark:bg-surface sm:dark:bg-surface-alt px-3 py-2 sm:px-5 sm:py-3 rounded md:grow border border-stroke sm:col-start-1 sm:row-start-2 sm:row-span-2">
           <div class="flex items-center">
-            <img src={~p"/images/dependencies-icon.svg"} />
+            <.dependencies_icon class="h-5 w-5" />
             <% text_size_class =
               if Enum.count(@version.required) > 0,
                 do: "text-[20px] sm:text-[24px] font-medium",
@@ -379,11 +387,9 @@
                 Optional Dependencies
               </h4>
 
-              <img
+              <.chevron_icon
                 id="optional-deps-chevron"
-                width="24px"
-                src={~p"/images/right-chevron-icon.svg"}
-                class="rotate-90 transform transition-transform duration-300"
+                class="w-6 rotate-90 transform transition-transform duration-300"
               />
             </div>
 
@@ -414,7 +420,7 @@
         </div>
 
         <div class="h-fit flex order-2 items-center bg-surface dark:bg-surface-alt px-3 py-2 sm:px-5 sm:py-3 rounded border border-stroke sm:mt-0">
-          <img src={~p"/images/changelog-monochrome-icon.svg"} />
+          <.changelog_icon class="w-4" />
           <%= if @package.changelog_url do %>
             <.link
               class="block ml-2 text-primary-text text-[16px] sm:text-[18px]"
@@ -423,7 +429,7 @@
             >
               Changelog for {@version.version}
             </.link>
-            <img src={~p"/images/right-chevron-icon.svg"} class="ml-auto" />
+            <.chevron_icon class="w-6 ml-auto" />
           <% else %>
             <span class="block text-primary-text ml-2 text-[16px] sm:text-[18px]">
               No changelog for {@version.version}

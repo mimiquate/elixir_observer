@@ -3,8 +3,8 @@ defmodule ToolboxWeb.Components.StatsCard do
 
   attr :class, :string, default: ""
   attr :title, :string, required: true
-  attr :icon_path, :string, required: true
 
+  slot :icon, required: true
   slot :inner_block, required: true
 
   def stats_card(assigns) do
@@ -12,7 +12,7 @@ defmodule ToolboxWeb.Components.StatsCard do
     <div class={"p-3 sm:px-4 sm:py-6 #{@class}"}>
       <div class="flex items-center">
         <div class="p-1 w-fit rounded-md">
-          <img src={@icon_path} />
+          {render_slot(@icon)}
         </div>
         <h4 class="text-[12px] sm:text-[18px] ml-2 text-primary-text">
           {@title}
