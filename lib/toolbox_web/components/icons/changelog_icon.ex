@@ -9,7 +9,7 @@ defmodule ToolboxWeb.Components.Icons.ChangelogIcon do
       viewBox="0 0 21 18"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      class={"fill-accent dark:fill-secondary-text #{@class}"}
+      class={"fill-accent #{@class}"}
     >
       <g>
         <path

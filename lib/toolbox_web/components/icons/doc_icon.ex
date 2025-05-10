@@ -9,7 +9,7 @@ defmodule ToolboxWeb.Components.Icons.DocIcon do
       viewBox="0 0 20 22"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      class={"stroke-accent dark:stroke-secondary-text #{@class}"}
+      class={"stroke-accent #{@class}"}
     >
       <g>
         <path
