@@ -14,7 +14,7 @@ defmodule ToolboxWeb.Components.PackageLink do
     <.link class="flex items-center text-[14px] text-primary-text py-2" href={@href} target="_blank">
       {render_slot(@icon)}
       <span class="sm:mt-0 mr-2">{@text}</span>
-      <.chevron_icon class="w-6 ml-auto" />
+      <.chevron_icon class="w-5 ml-auto" />
     </.link>
     """
   end
