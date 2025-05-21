@@ -9,7 +9,7 @@ defmodule ToolboxWeb.Components.Icons.DownloadIcon do
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      class={" fill-accent stroke-accent dark:fill-secondary-text dark:stroke-secondary-text #{@class}"}
+      class={"fill-accent stroke-accent dark:fill-secondary-text dark:stroke-secondary-text #{@class}"}
     >
       <g class="download-icon">
         <path
