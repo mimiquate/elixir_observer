@@ -37,7 +37,7 @@ defmodule ToolboxWeb.Router do
 
     live "/", Admin.HomeLive
     live "/packages/:name", Admin.PackageLive
-    oban_dashboard "/oban"
+    oban_dashboard("/oban")
 
     import Phoenix.LiveDashboard.Router
     live_dashboard "/dashboard", metrics: ToolboxWeb.Telemetry
