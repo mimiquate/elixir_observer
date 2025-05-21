@@ -15,8 +15,7 @@ defmodule Toolbox.Application do
         {Oban, Application.fetch_env!(:toolbox, Oban)},
         {DNSCluster, query: Application.get_env(:toolbox, :dns_cluster_query) || :ignore},
         {Phoenix.PubSub, name: Toolbox.PubSub},
-        ToolboxWeb.Endpoint,
-        Toolbox.PackagesFetcher
+        ToolboxWeb.Endpoint
       ],
       # See https://hexdocs.pm/elixir/Supervisor.html
       # for other strategies and supported options

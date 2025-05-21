@@ -65,9 +65,14 @@ config :toolbox, Toolbox.Cache,
 config :toolbox, Oban,
   engine: Oban.Engines.Basic,
   plugins: [
-    {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 14}
+    {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 14},
+    {Oban.Plugins.Cron,
+     crontab: [
+       {"0 5 * * MON", Toolbox.Workers.PackageFetcherWorker},
+     ]}
   ],
   queues: [
+    default: [limit: 10],
     github: [limit: 1, dispatch_cooldown: 1000],
     hexpm: [limit: 1, dispatch_cooldown: 1000]
   ],
