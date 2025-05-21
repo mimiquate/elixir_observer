@@ -65,6 +65,7 @@ config :toolbox, Toolbox.Cache,
 config :toolbox, Oban,
   engine: Oban.Engines.Basic,
   plugins: [
+    # Prune jobs after 14 days
     {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 14},
     {Oban.Plugins.Cron,
      crontab: [
@@ -74,7 +75,8 @@ config :toolbox, Oban,
   ],
   queues: [
     hexpm: [limit: 1],
-    scm: [limit: 1, dispatch_cooldown: 1000]
+    # Use 1 second dispatch cooldown to prevent Github's rate limit
+    scm: [limit: 1, dispatch_cooldown: 1_000]
   ],
   notifier: Oban.Notifiers.PG,
   repo: Toolbox.Repo
