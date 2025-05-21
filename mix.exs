@@ -68,6 +68,8 @@ defmodule Toolbox.MixProject do
       {:nebulex, "~> 3.0.0-rc.1"},
       {:nebulex_local, "~> 3.0.0-rc.1"},
       {:decorator, "~> 1.4"},
+      {:oban, "~> 2.19"},
+      {:oban_web, "~> 2.11"},
 
       # Dev
       {:dotenv_parser, "~> 2.0", only: :dev},

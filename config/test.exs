@@ -30,6 +30,8 @@ config :phoenix, :plug_init_mode, :runtime
 config :phoenix_live_view,
   enable_expensive_runtime_checks: true
 
+config :Toolbox, Oban, testing: :manual
+
 config :wallaby,
   otp_app: :toolbox,
   chromedriver: [

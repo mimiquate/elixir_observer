@@ -1,6 +1,8 @@
 defmodule ToolboxWeb.Router do
   use ToolboxWeb, :router
 
+  import Oban.Web.Router
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -35,6 +37,7 @@ defmodule ToolboxWeb.Router do
 
     live "/", Admin.HomeLive
     live "/packages/:name", Admin.PackageLive
+    oban_dashboard "/oban"
 
     import Phoenix.LiveDashboard.Router
     live_dashboard "/dashboard", metrics: ToolboxWeb.Telemetry

@@ -62,6 +62,18 @@ config :toolbox, Toolbox.Cache,
   # Max memory size in bytes (e.g., 50MB)
   allocated_memory: 50_000_000
 
+config :toolbox, Oban,
+  engine: Oban.Engines.Basic,
+  plugins: [
+    {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 14}
+  ],
+  queues: [
+    github: [limit: 1, dispatch_cooldown: 1000],
+    hexpm: [limit: 1, dispatch_cooldown: 1000]
+  ],
+  notifier: Oban.Notifiers.PG,
+  repo: Toolbox.Repo
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
