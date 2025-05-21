@@ -1,6 +1,7 @@
 defmodule ToolboxWeb.HelperComponents do
   use Phoenix.Component
 
+  attr :username, :string, required: true
   attr :class, :string, default: nil
 
   def user_link(assigns) do
