@@ -6,7 +6,7 @@ defmodule Toolbox.Workers.SCMWorker do
     names = Toolbox.Packages.list_packages_names()
 
     names
-    |> Enum.map(&(Toolbox.Workers.SCMWorker.new(%{name: &1})))
+    |> Enum.map(&Toolbox.Workers.SCMWorker.new(%{name: &1}))
     |> Oban.insert_all()
 
     :ok
