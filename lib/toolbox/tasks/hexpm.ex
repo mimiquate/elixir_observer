@@ -14,7 +14,7 @@ defmodule Toolbox.Tasks.Hexpm do
 
         Process.sleep(:timer.seconds(1))
 
-        if packages_data == "[]" do
+        if packages_data == ~c"[]" do
           nil
         else
           {packages_data, page + 1}

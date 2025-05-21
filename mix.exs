@@ -52,7 +52,6 @@ defmodule Toolbox.MixProject do
         depth: 1
       },
       {:jason, "~> 1.2"},
-      {:parent, "~> 0.12.1"},
       {:phoenix, "~> 1.7.14"},
       {:phoenix_ecto, "~> 4.5"},
       {:phoenix_html, "~> 4.1"},
@@ -68,6 +67,8 @@ defmodule Toolbox.MixProject do
       {:nebulex, "~> 3.0.0-rc.1"},
       {:nebulex_local, "~> 3.0.0-rc.1"},
       {:decorator, "~> 1.4"},
+      {:oban, "~> 2.19"},
+      {:oban_web, "~> 2.11"},
 
       # Dev
       {:dotenv_parser, "~> 2.0", only: :dev},

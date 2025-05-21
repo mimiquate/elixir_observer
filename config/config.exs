@@ -62,6 +62,25 @@ config :toolbox, Toolbox.Cache,
   # Max memory size in bytes (e.g., 50MB)
   allocated_memory: 50_000_000
 
+config :toolbox, Oban,
+  engine: Oban.Engines.Basic,
+  plugins: [
+    # Prune jobs after 14 days
+    {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 14},
+    {Oban.Plugins.Cron,
+     crontab: [
+       {"0 5 * * MON", Toolbox.Workers.HexpmWorker},
+       {"0 6 * * MON", Toolbox.Workers.SCMWorker}
+     ]}
+  ],
+  queues: [
+    hexpm: [limit: 1],
+    # Use 1 second dispatch cooldown to prevent Github's rate limit
+    scm: [limit: 1, dispatch_cooldown: 1_000]
+  ],
+  notifier: Oban.Notifiers.PG,
+  repo: Toolbox.Repo
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
