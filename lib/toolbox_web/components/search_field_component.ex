@@ -11,7 +11,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
         for={nil}
         phx-submit="search"
         phx-target={@myself}
-        class={"flex h-[40px] px-3 py-2 justify-between items-center rounded-[6px] border border-black bg-surface #{@class}"}
+        class={"flex h-[40px] px-3 py-2 justify-between items-center rounded-[6px] sm:border border-surface-alt focus-within:border-secondary-text bg-surface #{@class}"}
       >
         <input
           type="search"

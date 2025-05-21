@@ -1,8 +1,6 @@
 /* Why `source(none)` below ? https://github.com/phoenixframework/phoenix/pull/6109#discussion_r1993092360 */
 @import "tailwindcss" source(none);
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 @source "../css";
 @source "../js";
 @source "../../lib/toolbox_web";
@@ -13,6 +11,33 @@
 @custom-variant phx-click-loading ([".phx-click-loading&", ".phx-click-loading &"]);
 @custom-variant phx-submit-loading ([".phx-submit-loading&", ".phx-submit-loading &"]);
 @custom-variant phx-change-loading ([".phx-change-loading&", ".phx-change-loading &"]);
+
+:root {
+  color-scheme: light dark;
+
+  --color-stroke-source: #C0C0C0;
+  --color-primary-text-source: #161616;
+  --color-secondary-text-source: #5D5D5D;
+  --color-surface-source: white;
+  --color-surface-alt-source: #FCFDFD;
+  --color-divider-source: #C0C0C0;
+  --color-background-source: #F6F8F9;
+  --color-chip-bg-source: white;
+
+  --color-text-secondary-button-source: #8956B7;
+
+  @variant dark {
+    --color-stroke-source: #343434;
+    --color-primary-text-source: white;
+    --color-secondary-text-source: #A2A2A2;
+    --color-surface-source: #1D1D1D;
+    --color-surface-alt-source: #252525;
+    --color-divider-source: #2F2F2F;
+    --color-background-source: #161616;
+    --color-chip-bg-source: #252525;
+    --color-text-secondary-button-source: #A2A2A2;
+  }
+}
 
 @theme {
   /* Custom fonts fetched in root.html.heex */
@@ -28,20 +53,25 @@
   --font-mono: "Space Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --font-code: "M PLUS 1 Code", monospace;
 
-  --color-stroke: #343434;
-  --color-surface: #1d1d1d;
-  --color-surface-alt: #252525;
-  --color-secondary-text: #C0C0C0;
-  --color-divider: #2F2F2F;
+  /* Light mode colors (default) */
+  --color-stroke: var(--color-stroke-source);
+  --color-primary-text: var(--color-primary-text-source);
+  --color-surface: var(--color-surface-source);
+  --color-surface-alt: var(--color-surface-alt-source);
+  --color-secondary-text: var(--color-secondary-text-source);
+  --color-divider: var(--color-divider-source);
+  --color-background: var(--color-background-source);
+  --color-chip-bg: var(--color-chip-bg-source);
+  --color-text-secondary-button: var(--color-text-secondary-button-source);
 
-  --color-violet: #3F2754;
+  --color-violet: #6B3F8F;
   --color-button-primary: #975EC9;
-  --color-button-primary-hover: #AC7ED4;
-  --color-button-primary-focus: #8956B7;
+  --color-button-primary-hover: #8450B3;
+  --color-button-primary-focus: #7A44AA;
 
   --color-accent: #975EC9;
-  --color-dark-purple: rgba(33, 16, 90, 0.70);
-  --color-error: #5C221F;
+  --color-dark-purple: rgba(33, 16, 90, 0.15);
+  --color-error: #FDE8E7;
 }
 
 html {

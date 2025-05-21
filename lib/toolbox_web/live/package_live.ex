@@ -5,6 +5,17 @@ defmodule ToolboxWeb.PackageLive do
   import ToolboxWeb.Components.PackageLink
   import ToolboxWeb.Components.PackageVersionSelector
 
+  import ToolboxWeb.Components.Icons.StarIcon
+  import ToolboxWeb.Components.Icons.DownloadIcon
+  import ToolboxWeb.Components.Icons.CalendarIcon
+  import ToolboxWeb.Components.Icons.ChevronIcon
+  import ToolboxWeb.Components.Icons.GithubIcon
+  import ToolboxWeb.Components.Icons.HexIcon
+  import ToolboxWeb.Components.Icons.DocIcon
+  import ToolboxWeb.Components.Icons.ChangelogIcon
+  import ToolboxWeb.Components.Icons.DependenciesIcon
+  import ToolboxWeb.Components.Icons.ElixirIcon
+
   defmodule HexpmVersionNotFoundError do
     defexception [:message, plug_status: 404]
   end

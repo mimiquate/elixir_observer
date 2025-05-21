@@ -28,18 +28,21 @@
         </div>
 
         <div class="flex items-center mt-3 sm:hidden">
-          <div :if={package.latest_github_snapshot} class="p-1 bg-surface-alt rounded-md">
-            <img width="14px" height="20px" src={~p"/images/star-icon.svg"} />
+          <div :if={package.latest_github_snapshot} class="p-1 rounded-md">
+            <.star_icon class="w-3" />
           </div>
-          <span :if={package.latest_github_snapshot} class="ml-1 text-[12px] sm:text-[16px]">
+          <span
+            :if={package.latest_github_snapshot}
+            class="ml-1 text-primary-text text-[12px] sm:text-[16px]"
+          >
             {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
           </span>
           <span :if={package.latest_github_snapshot} class="mx-1 text-[12px] sm:hidden">•</span>
           <div class="flex items-center justify-end sm:hidden">
-            <div class="p-1 bg-surface-alt w-fit rounded-md">
-              <img width="14px" src={~p"/images/download-icon.svg"} />
+            <div class="p-1 w-fit rounded-md">
+              <.download_icon class="w-3" />
             </div>
-            <span class="text-[12px] ml-1">
+            <span class="text-[12px] text-primary-text ml-1">
               {humanized_number(package.latest_hexpm_snapshot.data["downloads"]["recent"])}
             </span>
             <span class="text-[12px] text-secondary-text ml-1">last 90 days</span>
@@ -49,8 +52,8 @@
 
       <div class="hidden sm:flex items-center">
         <div class="flex items-center min-w-25 justify-start">
-          <div class="p-1 bg-surface-alt w-fit rounded-md">
-            <img width="20px" src={~p"/images/star-icon.svg"} />
+          <div class="p-1 w-fit rounded-md">
+            <.star_icon class="w-5" />
           </div>
           <span class="text-[18px] ml-2">
             <%= if package.latest_github_snapshot do %>
@@ -61,8 +64,8 @@
           </span>
         </div>
         <div class="flex items-center min-w-25 justify-start">
-          <div class="p-1 bg-surface-alt w-fit rounded-md ml-2">
-            <img width="20px" src={~p"/images/download-icon.svg"} />
+          <div class="p-1 w-fit rounded-md ml-2">
+            <.download_icon class="w-5" />
           </div>
           <span class="text-[18px] ml-2">
             {humanized_number(package.latest_hexpm_snapshot.data["downloads"]["recent"])}

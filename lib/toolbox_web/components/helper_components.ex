@@ -1,9 +1,12 @@
 defmodule ToolboxWeb.HelperComponents do
   use Phoenix.Component
 
+  attr :username, :string, required: true
+  attr :class, :string, default: nil
+
   def user_link(assigns) do
     ~H"""
-    <.link href={"https://hex.pm/users/#{@username}"} target="_blank">
+    <.link href={"https://hex.pm/users/#{@username}"} target="_blank" class={@class}>
       {@username}
     </.link>
     """

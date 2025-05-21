@@ -241,7 +241,7 @@ defmodule ToolboxWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-sm bg-button-primary hover:bg-button-primary-hover",
+        "phx-submit-loading:opacity-75 rounded-sm text-white bg-button-primary hover:bg-button-primary-hover",
         @size_specific,
         @class
       ]}
