@@ -68,13 +68,13 @@ config :toolbox, Oban,
     {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 14},
     {Oban.Plugins.Cron,
      crontab: [
-       {"0 5 * * MON", Toolbox.Workers.PackageFetcherWorker},
+       {"0 5 * * MON", Toolbox.Workers.HexpmWorker},
+       {"0 6 * * MON", Toolbox.Workers.SCMWorker}
      ]}
   ],
   queues: [
-    default: [limit: 10],
-    github: [limit: 1, dispatch_cooldown: 1000],
-    hexpm: [limit: 1, dispatch_cooldown: 1000]
+    hexpm: [limit: 1],
+    scm: [limit: 1, dispatch_cooldown: 1000]
   ],
   notifier: Oban.Notifiers.PG,
   repo: Toolbox.Repo

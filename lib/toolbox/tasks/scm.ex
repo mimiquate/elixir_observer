@@ -3,9 +3,8 @@ defmodule Toolbox.Tasks.SCM do
 
   def run(_args \\ [])
 
-  def run([]) do
-    Toolbox.Packages.list_packages_names()
-    |> run()
+  def run(name) when is_binary(name) do
+    run([name])
   end
 
   def run(names) when is_list(names) do
