@@ -5,10 +5,9 @@ defmodule Toolbox.Workers.SCMWorker do
   def perform(%Oban.Job{meta: %{"cron" => true}}) do
     names = Toolbox.Packages.list_packages_names()
 
-    for name <- names do
-      Toolbox.Workers.SCMWorker.new(%{name: name})
-      |> Oban.insert()
-    end
+    names
+    |> Enum.map(&(Toolbox.Workers.SCMWorker.new(%{name: &1})))
+    |> Oban.insert_all()
 
     :ok
   end
