@@ -54,7 +54,7 @@ config :phoenix, :json_library, Jason
 
 config :tower,
   reporters: [TowerSlack, TowerRollbar],
-  logger_metadata: [:package]
+  logger_metadata: [:tower]
 
 config :tower_slack, otp_app: :toolbox
 

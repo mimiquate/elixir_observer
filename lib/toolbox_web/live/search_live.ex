@@ -6,6 +6,8 @@ defmodule ToolboxWeb.SearchLive do
   import ToolboxWeb.Components.Icons.DownloadIcon
 
   def mount(%{"term" => term}, _session, socket) do
+    Logger.metadata(tower: %{search_term: term})
+
     {packages, more?} = Packages.search(term)
 
     {
