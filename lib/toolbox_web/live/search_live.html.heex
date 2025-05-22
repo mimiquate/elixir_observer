@@ -1,77 +1,87 @@
 <article class="pt-8 sm:pt-15">
-  <div class="flex items-baseline justify-between">
-    <h1 class="text-[32px] text-primary-text font-bold">
-      {length(@packages)}{if(@more?, do: "+")} results for "{@term}"
-    </h1>
+  <%= if length(@packages) > 0 do %>
+    <div class="flex items-baseline justify-between">
+      <h1 class="text-[32px] text-primary-text font-bold">
+        {length(@packages)}{if(@more?, do: "+")} results for "{@term}"
+      </h1>
 
-    <span :if={@more?} class="text-sm text-secondary-text ml-2 mr-auto">
-      Only showing first {length(@packages)}
-    </span>
+      <span :if={@more?} class="text-sm text-secondary-text ml-2 mr-auto">
+        Only showing first {length(@packages)}
+      </span>
 
-    <li class="hidden sm:flex justify-end px-3">
-      <span class="text-[18px] text-secondary-text">Downloads in the last 90 days</span>
-    </li>
-  </div>
+      <li class="hidden sm:flex justify-end px-3">
+        <span class="text-[18px] text-secondary-text">Downloads in the last 90 days</span>
+      </li>
+    </div>
 
-  <ul class="mt-8">
-    <li
-      :for={package <- @packages}
-      class="mt-5 py-3 px-4 flex flex-col md:flex-row md:justify-between bg-surface rounded-md border border-stroke"
-    >
-      <div>
-        <.link navigate={~p"/packages/#{package.name}"} class="text-[16px] sm:text-[18px]">
-          {package.name}
-        </.link>
+    <ul class="mt-8">
+      <li
+        :for={package <- @packages}
+        class="mt-5 py-3 px-4 flex flex-col md:flex-row md:justify-between bg-surface rounded-md border border-stroke"
+      >
+        <div>
+          <.link navigate={~p"/packages/#{package.name}"} class="text-[16px] sm:text-[18px]">
+            {package.name}
+          </.link>
 
-        <div class="mt-2 text-[12px] sm:text-[14px] text-secondary-text">
-          {package.latest_hexpm_snapshot.data["meta"]["description"]}
+          <div class="mt-2 text-[12px] sm:text-[14px] text-secondary-text">
+            {package.latest_hexpm_snapshot.data["meta"]["description"]}
+          </div>
+
+          <div class="flex items-center mt-3 sm:hidden">
+            <div :if={package.latest_github_snapshot} class="p-1 rounded-md">
+              <.star_icon class="w-3" />
+            </div>
+            <span
+              :if={package.latest_github_snapshot}
+              class="ml-1 text-primary-text text-[12px] sm:text-[16px]"
+            >
+              {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
+            </span>
+            <span :if={package.latest_github_snapshot} class="mx-1 text-[12px] sm:hidden">•</span>
+            <div class="flex items-center justify-end sm:hidden">
+              <div class="p-1 w-fit rounded-md">
+                <.download_icon class="w-3" />
+              </div>
+              <span class="text-[12px] text-primary-text ml-1">
+                {humanized_number(package.latest_hexpm_snapshot.data["downloads"]["recent"])}
+              </span>
+              <span class="text-[12px] text-secondary-text ml-1">last 90 days</span>
+            </div>
+          </div>
         </div>
 
-        <div class="flex items-center mt-3 sm:hidden">
-          <div :if={package.latest_github_snapshot} class="p-1 rounded-md">
-            <.star_icon class="w-3" />
-          </div>
-          <span
-            :if={package.latest_github_snapshot}
-            class="ml-1 text-primary-text text-[12px] sm:text-[16px]"
-          >
-            {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
-          </span>
-          <span :if={package.latest_github_snapshot} class="mx-1 text-[12px] sm:hidden">•</span>
-          <div class="flex items-center justify-end sm:hidden">
+        <div class="hidden sm:flex items-center">
+          <div class="flex items-center min-w-25 justify-start">
             <div class="p-1 w-fit rounded-md">
-              <.download_icon class="w-3" />
+              <.star_icon class="w-5" />
             </div>
-            <span class="text-[12px] text-primary-text ml-1">
+            <span class="text-[18px] ml-2">
+              <%= if package.latest_github_snapshot do %>
+                {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
+              <% else %>
+                -
+              <% end %>
+            </span>
+          </div>
+          <div class="flex items-center min-w-25 justify-start">
+            <div class="p-1 w-fit rounded-md ml-2">
+              <.download_icon class="w-5" />
+            </div>
+            <span class="text-[18px] ml-2">
               {humanized_number(package.latest_hexpm_snapshot.data["downloads"]["recent"])}
             </span>
-            <span class="text-[12px] text-secondary-text ml-1">last 90 days</span>
           </div>
         </div>
+      </li>
+    </ul>
+  <% else %>
+    <section class="h-full flex flex-col items-center justify-around">
+      <div class="flex flex-col items-center">
+        <img src={~p"/images/empty-state-figure.png"} />
+        <h3 class="text-primary-text sm:text-[24px] mt-3">No results for "{@term}"</h3>
+        <p class="text-secondary-text sm:text-[16px]">Please try other search terms</p>
       </div>
-
-      <div class="hidden sm:flex items-center">
-        <div class="flex items-center min-w-25 justify-start">
-          <div class="p-1 w-fit rounded-md">
-            <.star_icon class="w-5" />
-          </div>
-          <span class="text-[18px] ml-2">
-            <%= if package.latest_github_snapshot do %>
-              {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
-            <% else %>
-              -
-            <% end %>
-          </span>
-        </div>
-        <div class="flex items-center min-w-25 justify-start">
-          <div class="p-1 w-fit rounded-md ml-2">
-            <.download_icon class="w-5" />
-          </div>
-          <span class="text-[18px] ml-2">
-            {humanized_number(package.latest_hexpm_snapshot.data["downloads"]["recent"])}
-          </span>
-        </div>
-      </div>
-    </li>
-  </ul>
+    </section>
+  <% end %>
 </article>
