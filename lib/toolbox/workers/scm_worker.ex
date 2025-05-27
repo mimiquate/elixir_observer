@@ -7,7 +7,8 @@ defmodule Toolbox.Workers.SCMWorker do
 
     names
     |> Enum.map(&Toolbox.Workers.SCMWorker.new(%{name: &1}))
-    |> Oban.insert_all()
+    |> Enum.chunk_every(500)
+    |> Enum.map(&Oban.insert_all/1)
 
     :ok
   end
