@@ -4,7 +4,7 @@
 #
 
 app: ex-tools
-primary_region: scl
+primary_region: ewr
 kill_signal: SIGTERM
 console_command: "/app/bin/toolbox remote"
 swap_size_mb: 512
