@@ -51,27 +51,33 @@ defmodule ToolboxWeb.SearchFieldComponent do
         </button>
       </.form>
 
-      <%= if @show_dropdown and length(@search_results) > 0 do %>
+      <%= if @show_dropdown do %>
         <div class="absolute top-full left-0 right-0 z-50 mt-1 bg-surface border border-secondary-text rounded-md shadow-lg max-h-60 overflow-auto">
-          <ul class="py-1">
-            <li
-              :for={{package, index} <- Enum.with_index(@search_results)}
-              class={"px-3 py-2 cursor-pointer border-b border-surface-alt last:border-b-0 #{if index == @selected_index, do: "bg-surface-alt", else: "hover:bg-surface-alt"}"}
-              phx-click="select_result"
-              phx-value-name={package.name}
-              phx-target={@myself}
-            >
-              <div>
-                <span class="text-[16px] text-primary-text">{package.name}</span>
-                <span class="text-[14px] text-secondary-text">
-                  {package.latest_hexpm_snapshot.data["latest_version"]}
+          <%= if length(@search_results) > 0 do %>
+            <ul class="py-1">
+              <li
+                :for={{package, index} <- Enum.with_index(@search_results)}
+                class={"px-3 py-2 cursor-pointer border-b border-surface-alt last:border-b-0 #{if index == @selected_index, do: "bg-surface-alt", else: "hover:bg-surface-alt"}"}
+                phx-click="select_result"
+                phx-value-name={package.name}
+                phx-target={@myself}
+              >
+                <div>
+                  <span class="text-[16px] text-primary-text">{package.name}</span>
+                  <span class="text-[14px] text-secondary-text">
+                    {package.latest_hexpm_snapshot.data["latest_version"]}
+                  </span>
+                </div>
+                <span class="text-[14px] text-secondary-text truncate">
+                  {package.latest_hexpm_snapshot.data["meta"]["description"]}
                 </span>
-              </div>
-              <span class="text-[14px] text-secondary-text truncate">
-                {package.latest_hexpm_snapshot.data["meta"]["description"]}
-              </span>
-            </li>
-          </ul>
+              </li>
+            </ul>
+          <% else %>
+            <div class="p-3">
+              <p>No results for "{@search_term}"</p>
+            </div>
+          <% end %>
         </div>
       <% end %>
     </div>
@@ -90,7 +96,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
     {:noreply,
      assign(socket,
        search_results: search_results,
-       show_dropdown: length(search_results) > 0,
+       show_dropdown: true,
        search_term: term,
        selected_index: -1
      )}
@@ -146,8 +152,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
   end
 
   def handle_event("show_dropdown_if_results", _params, socket) do
-    show_dropdown =
-      length(socket.assigns.search_results) > 0 and String.length(socket.assigns.search_term) >= 2
+    show_dropdown = String.length(socket.assigns.search_term) >= 2
 
     {:noreply, assign(socket, show_dropdown: show_dropdown, selected_index: -1)}
   end
