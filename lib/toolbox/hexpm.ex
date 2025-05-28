@@ -1,6 +1,8 @@
 defmodule Toolbox.Hexpm do
   @base_url "https://hex.pm/api"
 
+  use Nebulex.Caching, cache: Toolbox.Cache
+
   def get_page(page) do
     get("packages?sort=downloads&page=#{page}")
   end
@@ -26,6 +28,7 @@ defmodule Toolbox.Hexpm do
     )
   end
 
+  @decorate cacheable(key: {:hexpm_owner, package_name}, opts: [ttl: :timer.hours(24)])
   def get_package_owners(package_name) do
     :httpc.request(
       :get,
