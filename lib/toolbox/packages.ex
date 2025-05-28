@@ -83,10 +83,19 @@ defmodule Toolbox.Packages do
     |> Repo.insert()
   end
 
-  def create_github_snapshot(attributes \\ %{}) do
-    %GithubSnapshot{}
+  def upsert_github_snapshot(attributes \\ %{}) do
+    from(s in GithubSnapshot,
+      where: s.package_id == ^attributes.package_id,
+      order_by: [desc: :id],
+      limit: 1
+    )
+    |> Repo.one()
+    |> case do
+      nil -> %GithubSnapshot{}
+      s -> s
+    end
     |> GithubSnapshot.changeset(attributes)
-    |> Repo.insert()
+    |> Repo.insert_or_update()
   end
 
   defp latest_hexpm_snaphost_query() do
