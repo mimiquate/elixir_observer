@@ -51,6 +51,25 @@ defmodule Toolbox.Packages do
     {packages, length(rest) > 0}
   end
 
+  def typeahead_search(term) when byte_size(term) < 2 do
+    []
+  end
+
+  def typeahead_search(term) do
+    like_term = "%#{term}%"
+
+    from(
+      p in Package,
+      where: ilike(p.name, ^like_term),
+      join: s in subquery(latest_hexpm_snaphost_query()),
+      on: s.package_id == p.id,
+      select: %{name: p.name, description: json_extract_path(s.data, ["meta", "description"])},
+      order_by: [desc: json_extract_path(s.data, ["downloads", "recent"])],
+      limit: 5
+    )
+    |> Repo.all()
+  end
+
   def get_package_by_name(name) do
     from(p in Package,
       where: p.name == ^name,
