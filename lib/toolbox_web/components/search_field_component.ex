@@ -61,10 +61,15 @@ defmodule ToolboxWeb.SearchFieldComponent do
               phx-value-name={package.name}
               phx-target={@myself}
             >
-              <div class="text-[16px] text-primary-text">{package.name}</div>
-              <div class="text-[14px] text-secondary-text truncate">
-                {package.latest_hexpm_snapshot.data["meta"]["description"]}
+              <div>
+                <span class="text-[16px] text-primary-text">{package.name}</span>
+                <span class="text-[14px] text-secondary-text">
+                  {package.latest_hexpm_snapshot.data["latest_version"]}
+                </span>
               </div>
+              <span class="text-[14px] text-secondary-text truncate">
+                {package.latest_hexpm_snapshot.data["meta"]["description"]}
+              </span>
             </li>
           </ul>
         </div>
