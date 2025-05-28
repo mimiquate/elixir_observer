@@ -1,0 +1,6 @@
+# Allow all
+
+User-agent: *
+Disallow:
+
+Sitemap: https://elixir-observer.com/sitemap.txt
