@@ -1,5 +1,5 @@
-<main class="flex flex-col h-full justify-between px-5 bg-background overflow-auto">
-  <div class="container mx-auto">
+<main class="min-h-screen flex flex-col h-full justify-between px-5 bg-background overflow-auto">
+  <div class="min-h-screen container mx-auto flex flex-col">
     <nav class="sm:flex sm:justify-between sm:items-center sm:relative py-3">
       <div class="flex items-center justify-between">
         <.link navigate="/" class="text-2xl">
@@ -29,11 +29,11 @@
 
     <.flash_group flash={@flash} />
     {@inner_content}
-  </div>
 
-  <footer class="flex justify-around mt-10 pb-10 sm:pb-15 container mx-auto text-secondary-text text-[14px] sm:block">
-    <span>
-      Built by <.link href="https://mimiquate.com" target="_blank" class="underline">Mimiquate</.link>.
-    </span>
-  </footer>
+    <footer class="flex justify-around pt-10 pb-10 sm:pb-15 mx-auto sm:mx-0 text-secondary-text text-[14px] sm:block mt-auto">
+      <span>
+        Built by <.link href="https://mimiquate.com" target="_blank" class="underline">Mimiquate</.link>.
+      </span>
+    </footer>
+  </div>
 </main>
