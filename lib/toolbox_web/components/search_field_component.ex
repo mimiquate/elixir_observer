@@ -55,14 +55,16 @@ defmodule ToolboxWeb.SearchFieldComponent do
         <div class="absolute top-full left-0 right-0 z-50 mt-1 bg-surface border border-secondary-text rounded-md shadow-lg max-h-60 overflow-auto">
           <ul class="py-1">
             <li
-              :for={{result, index} <- Enum.with_index(@search_results)}
+              :for={{package, index} <- Enum.with_index(@search_results)}
               class={"px-3 py-2 cursor-pointer border-b border-surface-alt last:border-b-0 #{if index == @selected_index, do: "bg-surface-alt", else: "hover:bg-surface-alt"}"}
               phx-click="select_result"
-              phx-value-name={result.name}
+              phx-value-name={package.name}
               phx-target={@myself}
             >
-              <div class="text-[16px] text-primary-text">{result.name}</div>
-              <div class="text-[14px] text-secondary-text truncate">{result.description}</div>
+              <div class="text-[16px] text-primary-text">{package.name}</div>
+              <div class="text-[14px] text-secondary-text truncate">
+                {package.latest_hexpm_snapshot.data["meta"]["description"]}
+              </div>
             </li>
           </ul>
         </div>
@@ -72,13 +74,18 @@ defmodule ToolboxWeb.SearchFieldComponent do
   end
 
   def handle_event("typeahead_search", %{"term" => term}, socket) do
-    search_results = Packages.typeahead_search(term)
-    show_dropdown = length(search_results) > 0 and String.length(term) >= 2
+    search_results =
+      if String.length(term) >= 2 do
+        {search_results, _} = Packages.search(term)
+        search_results
+      else
+        []
+      end
 
     {:noreply,
      assign(socket,
        search_results: search_results,
-       show_dropdown: show_dropdown,
+       show_dropdown: length(search_results) > 0,
        search_term: term,
        selected_index: -1
      )}
