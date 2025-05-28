@@ -1,4 +1,4 @@
-<article class="pt-8 sm:pt-15">
+<article class={"pt-8 sm:pt-15 #{if(length(@packages) == 0, do: "h-full")}"}>
   <%= if length(@packages) > 0 do %>
     <div class="flex items-baseline justify-between">
       <h1 class="text-[32px] text-primary-text font-bold">
