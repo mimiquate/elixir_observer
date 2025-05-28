@@ -43,8 +43,20 @@ defmodule Toolbox.Tasks.Hexpm do
       }
     } = Toolbox.Hexpm.get_package(name)
 
+    {
+      :ok,
+      {
+        {_, 200, _},
+        _headers,
+        owners_data
+      }
+    } = Toolbox.Hexpm.get_package_owners(name)
+
+    owners_data = owners_data |> Jason.decode!()
+
     package_data
     |> Jason.decode!()
+    |> Map.put("owners", owners_data)
     |> create_hexpm_snapshot()
   end
 
