@@ -57,7 +57,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
             <ul class="py-1">
               <li
                 :for={{package, index} <- Enum.with_index(@search_results)}
-                class={"px-3 py-2 cursor-pointer border-b border-surface-alt last:border-b-0 #{if index == @selected_index, do: "bg-surface-alt", else: "hover:bg-surface-alt"}"}
+                class={"px-3 py-2 cursor-pointer border-b border-surface-alt last:border-b-0 truncate #{if index == @selected_index, do: "bg-surface-alt", else: "hover:bg-surface-alt"}"}
                 phx-click="select_result"
                 phx-value-name={package.name}
                 phx-target={@myself}
@@ -68,7 +68,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
                     {package.latest_hexpm_snapshot.data["latest_version"]}
                   </span>
                 </div>
-                <span class="text-[14px] text-secondary-text truncate">
+                <span class="text-[14px] text-secondary-text">
                   {package.latest_hexpm_snapshot.data["meta"]["description"]}
                 </span>
               </li>
