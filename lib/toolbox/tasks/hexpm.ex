@@ -23,7 +23,11 @@ defmodule Toolbox.Tasks.Hexpm do
     |> Stream.each(fn packages_data ->
       packages_data
       |> Jason.decode!()
-      |> Enum.each(&create_hexpm_snapshot/1)
+      |> Enum.each(fn package_data ->
+        package_data
+        |> put_owners()
+        |> create_hexpm_snapshot()
+      end)
     end)
     |> Stream.run()
   end
@@ -43,6 +47,13 @@ defmodule Toolbox.Tasks.Hexpm do
       }
     } = Toolbox.Hexpm.get_package(name)
 
+    package_data
+    |> Jason.decode!()
+    |> put_owners()
+    |> create_hexpm_snapshot()
+  end
+
+  defp put_owners(package_data) do
     {
       :ok,
       {
@@ -50,14 +61,12 @@ defmodule Toolbox.Tasks.Hexpm do
         _headers,
         owners_data
       }
-    } = Toolbox.Hexpm.get_package_owners(name)
+    } = Toolbox.Hexpm.get_package_owners(package_data["name"])
 
     owners_data = owners_data |> Jason.decode!()
 
     package_data
-    |> Jason.decode!()
     |> Map.put("owners", owners_data)
-    |> create_hexpm_snapshot()
   end
 
   defp create_hexpm_snapshot(package_data) do
