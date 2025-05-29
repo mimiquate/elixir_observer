@@ -22,9 +22,9 @@ defmodule Toolbox.Tasks.SCM do
     cond do
       github_link = links["GitHub"] || links["Github"] || links["github"] ->
         with {:ok, data} <- Toolbox.Tasks.GitHub.run(github_link) do
-          Toolbox.Packages.create_github_snapshot(%{
+          Toolbox.Packages.upsert_github_snapshot(%{
             package_id: package.id,
-            data: Jason.decode!(data)
+            data: data
           })
         end
 
@@ -34,9 +34,9 @@ defmodule Toolbox.Tasks.SCM do
       repo_link = links["Repository"] ->
         # TODO: Improve this to also detect GitLab based on the URL
         with {:ok, data} <- Toolbox.Tasks.GitHub.run(repo_link) do
-          Toolbox.Packages.create_github_snapshot(%{
+          Toolbox.Packages.upsert_github_snapshot(%{
             package_id: package.id,
-            data: Jason.decode!(data)
+            data: data
           })
         end
 

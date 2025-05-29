@@ -35,7 +35,17 @@ defmodule Toolbox.Tasks.GitHub do
               repository_data
             }
           } ->
-            {:ok, repository_data}
+            {:ok, {{_, 200, _}, _headers, activity_data}} =
+              Toolbox.Github.get_activity(owner, repository_name)
+
+            activity_data = activity_data |> Jason.decode!()
+
+            {
+              :ok,
+              repository_data
+              |> Jason.decode!()
+              |> Map.put("activity", activity_data)
+            }
         end
     end
   end
