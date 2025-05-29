@@ -28,6 +28,11 @@ defmodule Toolbox.Hexpm do
     )
   end
 
+  @decorate cacheable(key: {:hexpm_version, name, version}, opts: [ttl: :timer.hours(24)])
+  def get_package_version(name, version) do
+    get("packages/#{name}/releases/#{version}")
+  end
+
   @decorate cacheable(key: {:hexpm_owner, package_name}, opts: [ttl: :timer.hours(24)])
   def get_package_owners(package_name) do
     :httpc.request(
