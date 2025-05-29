@@ -25,8 +25,8 @@ defmodule Toolbox.Packages do
     Repo.aggregate(Package, :count)
   end
 
-  def search(term) do
-    limit = 50
+  def search(term, opts \\ %{}) do
+    limit = Map.get(opts, :limit, 50)
     like_term = "%#{term}%"
 
     {packages, rest} =
@@ -40,7 +40,7 @@ defmodule Toolbox.Packages do
           latest_github_snapshot: ^latest_github_snaphost_query()
         ],
         order_by: [desc: json_extract_path(s.data, ["downloads", "recent"])],
-        # TODO: Remove limit once we implement search result pagination
+        # TODO: Rework limit once we implement search result page pagination
         limit: ^limit + 1
       )
       |> Repo.all()
