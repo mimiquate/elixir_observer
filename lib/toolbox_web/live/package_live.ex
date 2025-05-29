@@ -46,7 +46,7 @@ defmodule ToolboxWeb.PackageLive do
           %{
             name: package.name,
             description: hexpm_data["meta"]["description"],
-            owners: owners(name),
+            owners: hexpm_data["owners"],
             recent_downloads: hexpm_data["downloads"]["recent"],
             versions: versions,
             latest_version_at: hd(hexpm_data["releases"])["inserted_at"],
@@ -82,19 +82,6 @@ defmodule ToolboxWeb.PackageLive do
     else
       {:noreply, push_patch(socket, to: ~p"/packages/#{name}/#{version}")}
     end
-  end
-
-  defp owners(package_name) do
-    {
-      :ok,
-      {
-        {_, 200, _},
-        _headers,
-        owners_data
-      }
-    } = Toolbox.Hexpm.get_package_owners(package_name)
-
-    Phoenix.json_library().decode!(owners_data)
   end
 
   defp versions(hexpm_data) do
