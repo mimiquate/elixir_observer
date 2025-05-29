@@ -87,7 +87,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
   def handle_event("typeahead_search", %{"term" => term}, socket) do
     search_results =
       if String.length(term) >= 2 do
-        {search_results, _} = Packages.search(term)
+        {search_results, _} = Packages.search(term, %{limit: 5})
         search_results
       else
         []
