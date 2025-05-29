@@ -41,7 +41,7 @@ defmodule Toolbox.PackagesTest do
 
     # Create github snapshots with test data
     {:ok, _} =
-      Packages.create_github_snapshot(%{
+      Packages.upsert_github_snapshot(%{
         package_id: package1.id,
         data: %{
           "stargazers_count" => 1500,
@@ -50,7 +50,7 @@ defmodule Toolbox.PackagesTest do
       })
 
     {:ok, _} =
-      Packages.create_github_snapshot(%{
+      Packages.upsert_github_snapshot(%{
         package_id: package2.id,
         data: %{
           "stargazers_count" => 1200,
@@ -59,7 +59,7 @@ defmodule Toolbox.PackagesTest do
       })
 
     {:ok, _} =
-      Packages.create_github_snapshot(%{
+      Packages.upsert_github_snapshot(%{
         package_id: package3.id,
         data: %{
           "stargazers_count" => 800,
