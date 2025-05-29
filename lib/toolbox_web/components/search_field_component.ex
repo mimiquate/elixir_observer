@@ -93,10 +93,13 @@ defmodule ToolboxWeb.SearchFieldComponent do
         []
       end
 
+    # Only show dropdown if we have a valid search term (>= 2 characters)
+    show_dropdown = String.length(term) >= 2
+
     {:noreply,
      assign(socket,
        search_results: search_results,
-       show_dropdown: true,
+       show_dropdown: show_dropdown,
        search_term: term,
        selected_index: -1
      )}
