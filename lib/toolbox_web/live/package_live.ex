@@ -108,7 +108,7 @@ defmodule ToolboxWeb.PackageLive do
 
   defp version(name, version) do
     version_data =
-      case Toolbox.Hexpm.get("packages/#{name}/releases/#{version}") do
+      case Toolbox.Hexpm.get_package_version(name, version) do
         {:ok, {{_, 200, _}, _headers, version_data}} ->
           version_data
 
