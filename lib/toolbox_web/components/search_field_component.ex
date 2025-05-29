@@ -32,6 +32,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
   end
 
   def handle_event("search", %{"term" => term}, socket) do
+    term = String.trim(term)
     {:noreply, redirect(socket, to: ~p"/searches/#{term}")}
   end
 end
