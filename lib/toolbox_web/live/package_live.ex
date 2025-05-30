@@ -45,7 +45,7 @@ defmodule ToolboxWeb.PackageLive do
         package:
           %{
             name: package.name,
-            description: hexpm_data["meta"]["description"],
+            description: package.description,
             owners: owners(name),
             recent_downloads: hexpm_data["downloads"]["recent"],
             versions: versions,
@@ -121,10 +121,15 @@ defmodule ToolboxWeb.PackageLive do
       |> to_string()
       |> JSON.decode!()
 
+    descriptions = data["requirements"]
+                   |> Enum.map(fn {name, _data} -> name end)
+                   |> Toolbox.Packages.get_packages_by_name()
+                   |> Enum.into(%{}, fn p -> {p.name, p.description} end)
+
     {optional, required} =
       data["requirements"]
       |> Enum.map(fn {name, data} ->
-        {name, Map.put(data, "description", package_description(name))}
+        {name, Map.put(data, "description", descriptions[name])}
       end)
       |> Enum.split_with(fn {_, %{"optional" => optional}} -> optional end)
 
@@ -138,13 +143,6 @@ defmodule ToolboxWeb.PackageLive do
       published_by_username: data["publisher"]["username"],
       published_by_email: data["publisher"]["email"]
     }
-  end
-
-  defp package_description(name) do
-    with %Toolbox.Package{} = package <- Toolbox.Packages.get_package_by_name(name),
-         %Toolbox.HexpmSnapshot{} = hexpm_snapshot <- package.latest_hexpm_snapshot do
-      hexpm_snapshot.data["meta"]["description"]
-    end
   end
 
   defp changelog_url(hexpm_data) do

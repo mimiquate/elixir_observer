@@ -4,6 +4,7 @@ defmodule Toolbox.Package do
 
   schema "packages" do
     field :name, :string
+    field :description, :string
 
     has_many :hexpm_snapshots, Toolbox.HexpmSnapshot
     has_many :github_snapshots, Toolbox.GithubSnapshot
@@ -17,7 +18,7 @@ defmodule Toolbox.Package do
   @doc false
   def changeset(package, attrs) do
     package
-    |> cast(attrs, [:name])
+    |> cast(attrs, [:name, :description])
     |> validate_required([:name])
   end
 end

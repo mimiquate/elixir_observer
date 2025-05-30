@@ -71,6 +71,11 @@ defmodule Toolbox.Packages do
     |> Repo.one!()
   end
 
+  def get_packages_by_name(names) do
+    from(p in Package, where: p.name in ^names)
+    |> Repo.all()
+  end
+
   def create_package(attributes \\ %{}) do
     %Package{}
     |> Package.changeset(attributes)
