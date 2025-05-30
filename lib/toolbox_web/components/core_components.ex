@@ -19,6 +19,48 @@ defmodule ToolboxWeb.CoreComponents do
 
   alias Phoenix.LiveView.JS
 
+  # Test attributes macro for better testing
+  if Mix.env() == :prod do
+    defmacro test_attrs(_attrs), do: []
+  else
+    @doc """
+    Generates data-test- attributes useful for identifying elements in tests without relying on markup.
+    In production the macro is a no-op and no attributes are generated.
+    Because it is a macro, there is no runtime cost.
+
+    ## Examples
+
+        <p {test_attrs(foo: "bar")}>Hello</p>
+        becomes
+        <p data-test-foo="bar">Hello</p>
+
+        <p {test_attrs([:foo, bar: "baz"])}>Hello</p>
+        becomes
+        <p data-test-foo data-test-bar="baz">Hello</p>
+
+        <p {test_attrs(foo: true)}>Hello</p>
+        becomes
+        <p data-test-foo>Hello</p>
+    """
+    defmacro test_attrs(attrs) do
+      attrs
+      |> List.wrap()
+      |> Enum.map(fn
+        {k, v} -> {to_test_attribute(k), v}
+        k -> {to_test_attribute(k), true}
+      end)
+    end
+
+    defp to_test_attribute(attr) do
+      String.to_atom(
+        "data-test-" <>
+          (attr
+           |> to_string()
+           |> String.replace("_", "-"))
+      )
+    end
+  end
+
   @doc """
   Renders a modal.
 
