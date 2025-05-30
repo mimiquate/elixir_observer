@@ -12,6 +12,10 @@ defmodule Toolbox.Package do
     has_one :latest_hexpm_snapshot, Toolbox.HexpmSnapshot
     has_one :latest_github_snapshot, Toolbox.GithubSnapshot
 
+    field :hexpm_owners_sync_at, :utc_datetime
+
+    embeds_many :hexpm_owners, Toolbox.Package.HexpmOwner, on_replace: :delete
+
     timestamps(type: :utc_datetime)
   end
 
@@ -20,5 +24,12 @@ defmodule Toolbox.Package do
     package
     |> cast(attrs, [:name, :description])
     |> validate_required([:name])
+  end
+
+  def owners_changeset(package, attrs) do
+    package
+    |> cast(attrs, [:hexpm_owners_sync_at])
+    |> cast_embed(:hexpm_owners, required: true)
+    |> validate_required([:hexpm_owners_sync_at])
   end
 end

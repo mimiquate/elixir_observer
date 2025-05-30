@@ -30,6 +30,10 @@ defmodule ToolboxWeb.PackageLive do
       }
     )
 
+    if connected?(socket) do
+      Phoenix.PubSub.subscribe(Toolbox.PubSub, "package_live:#{name}")
+    end
+
     package = Toolbox.Packages.get_package_by_name!(name)
     hexpm_data = package.latest_hexpm_snapshot.data
 
@@ -51,7 +55,7 @@ defmodule ToolboxWeb.PackageLive do
           %{
             name: package.name,
             description: package.description,
-            owners: owners(name),
+            owners: owners(package),
             recent_downloads: hexpm_data["downloads"]["recent"],
             versions: versions,
             latest_version_at: hd(hexpm_data["releases"])["inserted_at"],
@@ -89,17 +93,20 @@ defmodule ToolboxWeb.PackageLive do
     end
   end
 
-  defp owners(package_name) do
-    {
-      :ok,
-      {
-        {_, 200, _},
-        _headers,
-        owners_data
-      }
-    } = Toolbox.Hexpm.get_package_owners(package_name)
+  def handle_info(%{action: :refresh_owners, owners: owners}, socket) do
+    p = %{socket.assigns.package | owners: owners}
 
-    Phoenix.json_library().decode!(owners_data)
+    {:noreply, assign(socket, package: p)}
+  end
+
+  defp owners(package) do
+    if !package.hexpm_owners_sync_at do
+      %{action: :get_package_owners, name: package.name}
+      |> Toolbox.Workers.HexpmWorker.new()
+      |> Oban.insert()
+    end
+
+    package.hexpm_owners
   end
 
   defp versions(hexpm_data) do
