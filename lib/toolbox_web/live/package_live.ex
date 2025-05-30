@@ -23,7 +23,12 @@ defmodule ToolboxWeb.PackageLive do
   @ignored_topics ["elixir"]
 
   def mount(%{"name" => name}, _session, socket) do
-    Logger.metadata(tower: %{package_name: name})
+    Logger.metadata(
+      tower: %{
+        package_name: name,
+        user_agent: get_connect_info(socket, :user_agent)
+      }
+    )
 
     package = Toolbox.Packages.get_package_by_name!(name)
     hexpm_data = package.latest_hexpm_snapshot.data
