@@ -39,7 +39,7 @@ defmodule ToolboxWeb.PackageLive do
         s.data
       end
 
-    activity = Toolbox.Packages.get_github_activity(github_data) |> IO.inspect(label: "LALALAL")
+    activity = Toolbox.Packages.get_github_activity(github_data)
 
     versions = versions(hexpm_data)
 
