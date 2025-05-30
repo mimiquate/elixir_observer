@@ -121,10 +121,11 @@ defmodule ToolboxWeb.PackageLive do
       |> to_string()
       |> JSON.decode!()
 
-    descriptions = data["requirements"]
-                   |> Enum.map(fn {name, _data} -> name end)
-                   |> Toolbox.Packages.get_packages_by_name()
-                   |> Enum.into(%{}, fn p -> {p.name, p.description} end)
+    descriptions =
+      data["requirements"]
+      |> Enum.map(fn {name, _data} -> name end)
+      |> Toolbox.Packages.get_packages_by_name()
+      |> Enum.into(%{}, fn p -> {p.name, p.description} end)
 
     {optional, required} =
       data["requirements"]
