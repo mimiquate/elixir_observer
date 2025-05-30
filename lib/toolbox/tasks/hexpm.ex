@@ -62,6 +62,7 @@ defmodule Toolbox.Tasks.Hexpm do
 
   defp create_hexpm_snapshot(package_data) do
     name = package_data["name"]
+    description = package_data["meta"]["description"]
 
     package =
       case Toolbox.Packages.get_package_by_name(name) do
@@ -69,7 +70,7 @@ defmodule Toolbox.Tasks.Hexpm do
           p
 
         _ ->
-          {:ok, p} = Toolbox.Packages.create_package(%{name: name})
+          {:ok, p} = Toolbox.Packages.create_package(%{name: name, description: description})
           p
       end
 
