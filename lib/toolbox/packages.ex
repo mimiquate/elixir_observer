@@ -5,6 +5,16 @@ defmodule Toolbox.Packages do
 
   use Nebulex.Caching, cache: Toolbox.Cache
 
+  defmodule GitHubActivity do
+    defstruct [
+      :open_issue_count,
+      :closed_issue_count,
+      :open_pr_count,
+      :merged_pr_count,
+      :pull_requests
+    ]
+  end
+
   def list_packages do
     from(
       p in Package,
@@ -126,7 +136,7 @@ defmodule Toolbox.Packages do
   end
 
   def get_github_activity(nil) do
-    %{
+    %GitHubActivity{
       open_issue_count: "-",
       closed_issue_count: "-",
       open_pr_count: "-",
@@ -138,41 +148,42 @@ defmodule Toolbox.Packages do
   @decorate cacheable(key: full_name, opts: [ttl: :timer.hours(24)])
   def get_github_activity(%{"full_name" => full_name}) do
     [owner, repo] = full_name |> String.split("/")
-    {:ok, {{_, 200, _}, _headers, data}} = Toolbox.Github.get_activity(owner, repo)
 
-    data = data |> Jason.decode!()
+    with {:ok, {{_, 200, _}, _headers, data}} <- Toolbox.Github.get_activity(owner, repo),
+         %{
+           "data" => %{
+             "repository" => %{
+               "pullRequests" => %{
+                 "nodes" => pull_requests
+               }
+             },
+             "closedIssueCount" => %{"issueCount" => closed_issue_count},
+             "mergedPRCount" => %{"issueCount" => merged_pr_count},
+             "openIssueCount" => %{"issueCount" => open_issue_count},
+             "openPRCount" => %{"issueCount" => open_pr_count}
+           }
+         } <- Jason.decode!(data) do
+      year_ago = DateTime.utc_now() |> DateTime.shift(year: -1)
 
-    %{
-      "data" => %{
-        "repository" => %{
-          "pullRequests" => %{
-            "nodes" => pull_requests
-          }
-        },
-        "closedIssueCount" => %{"issueCount" => closed_issue_count},
-        "mergedPRCount" => %{"issueCount" => merged_pr_count},
-        "openIssueCount" => %{"issueCount" => open_issue_count},
-        "openPRCount" => %{"issueCount" => open_pr_count}
+      pull_requests =
+        pull_requests
+        |> Enum.filter(fn p ->
+          {:ok, p_created_at, _} = DateTime.from_iso8601(p["createdAt"])
+
+          DateTime.diff(p_created_at, year_ago) > 0
+        end)
+        |> Enum.reverse()
+
+      %GitHubActivity{
+        open_issue_count: open_issue_count,
+        closed_issue_count: closed_issue_count,
+        open_pr_count: open_pr_count,
+        merged_pr_count: merged_pr_count,
+        pull_requests: pull_requests
       }
-    } = data
-
-    year_ago = DateTime.utc_now() |> DateTime.shift(year: -1)
-
-    pull_requests =
-      pull_requests
-      |> Enum.filter(fn p ->
-        {:ok, p_created_at, _} = DateTime.from_iso8601(p["createdAt"])
-
-        DateTime.diff(p_created_at, year_ago) > 0
-      end)
-      |> Enum.reverse()
-
-    %{
-      open_issue_count: open_issue_count,
-      closed_issue_count: closed_issue_count,
-      open_pr_count: open_pr_count,
-      merged_pr_count: merged_pr_count,
-      pull_requests: pull_requests
-    }
+    else
+      _ ->
+        {:error, "Couldn't load recent activity data from GitHub"}
+    end
   end
 end
