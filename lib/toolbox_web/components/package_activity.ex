@@ -1,7 +1,7 @@
 defmodule ToolboxWeb.Components.PackageActivity do
   use ToolboxWeb, :html
 
-  alias Toolbox.Packages.GitHubActivity
+  alias Toolbox.Github.GithubActivity
 
   @doc """
   Renders the activity section for a package.
@@ -28,7 +28,7 @@ defmodule ToolboxWeb.Components.PackageActivity do
           Activity
         </h3>
 
-        <%= if match?(%GitHubActivity{}, @activity) do %>
+        <%= if match?(%GithubActivity{}, @activity) do %>
           <div
             class="flex justify-center items-center gap 2 h-fit py-1 px-3 sm:px-5 rounded-2xl border border-accent dark:border-violet bg-white dark:bg-violet"
             {test_attrs(last_year_badge: true)}
@@ -41,7 +41,7 @@ defmodule ToolboxWeb.Components.PackageActivity do
       </div>
 
       <div class="grid gap-x-2 gap-y-4 grid-cols-2 sm:grid-cols-3 sm:grid-rows-2 sm:gap-8">
-        <%= if match?(%GitHubActivity{}, @activity) do %>
+        <%= if match?(%GithubActivity{}, @activity) do %>
           <div
             class="order-3 p-3 sm:col-span-1 sm:row-span-1 bg-surface-alt sm:p-5 rounded-md border border-stroke"
             {test_attrs(pull_requests_section: true)}

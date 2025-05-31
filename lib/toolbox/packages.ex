@@ -1,19 +1,9 @@
 defmodule Toolbox.Packages do
-  alias Toolbox.{HexpmSnapshot, GithubSnapshot, Package, Repo}
+  alias Toolbox.{GithubSnapshot, Github.GithubActivity, HexpmSnapshot, Package, Repo}
 
   import Ecto.Query
 
   use Nebulex.Caching, cache: Toolbox.Cache
-
-  defmodule GitHubActivity do
-    defstruct [
-      :open_issue_count,
-      :closed_issue_count,
-      :open_pr_count,
-      :merged_pr_count,
-      :pull_requests
-    ]
-  end
 
   def list_packages do
     from(
@@ -136,7 +126,7 @@ defmodule Toolbox.Packages do
   end
 
   def get_github_activity(nil) do
-    %GitHubActivity{
+    %GithubActivity{
       open_issue_count: "-",
       closed_issue_count: "-",
       open_pr_count: "-",
@@ -174,7 +164,7 @@ defmodule Toolbox.Packages do
         end)
         |> Enum.reverse()
 
-      %GitHubActivity{
+      %GithubActivity{
         open_issue_count: open_issue_count,
         closed_issue_count: closed_issue_count,
         open_pr_count: open_pr_count,
