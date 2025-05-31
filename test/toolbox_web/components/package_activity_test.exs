@@ -4,11 +4,11 @@ defmodule ToolboxWeb.Components.PackageActivityTest do
   import Phoenix.LiveViewTest
   import ToolboxWeb.Components.PackageActivity
 
-  alias Toolbox.Packages.GitHubActivity
+  alias Toolbox.Github.GithubActivity
 
   describe "package_activity/1" do
     test "renders activity section with GitHub activity data" do
-      activity = %GitHubActivity{
+      activity = %GithubActivity{
         open_issue_count: 5,
         closed_issue_count: 23,
         open_pr_count: 2,
@@ -146,7 +146,7 @@ defmodule ToolboxWeb.Components.PackageActivityTest do
     end
 
     test "renders activity section with no pull requests" do
-      activity = %GitHubActivity{
+      activity = %GithubActivity{
         open_issue_count: 0,
         closed_issue_count: 5,
         open_pr_count: 0,
@@ -190,7 +190,7 @@ defmodule ToolboxWeb.Components.PackageActivityTest do
       assert Floki.text(closed_issue_count) =~ "5"
     end
 
-    test "renders error state when activity is not GitHubActivity struct" do
+    test "renders error state when activity is not GithubActivity struct" do
       html =
         render_component(&package_activity/1,
           activity: {:error, "Failed to load"},
@@ -229,7 +229,7 @@ defmodule ToolboxWeb.Components.PackageActivityTest do
     end
 
     test "handles pull requests with dividers correctly" do
-      activity = %GitHubActivity{
+      activity = %GithubActivity{
         open_issue_count: 1,
         closed_issue_count: 2,
         open_pr_count: 3,

@@ -2,6 +2,16 @@ defmodule Toolbox.Github do
   @base_url "https://api.github.com"
   @graphql_api_url ~c"https://api.github.com/graphql"
 
+  defmodule GithubActivity do
+    defstruct [
+      :open_issue_count,
+      :closed_issue_count,
+      :open_pr_count,
+      :merged_pr_count,
+      :pull_requests
+    ]
+  end
+
   def get_repo(owner, repository_name) do
     get("repos/#{owner}/#{repository_name}")
   end
