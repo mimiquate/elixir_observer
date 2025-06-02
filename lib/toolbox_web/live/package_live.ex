@@ -104,9 +104,8 @@ defmodule ToolboxWeb.PackageLive do
 
   def update_owners_if_oudated(package) do
     sync_at = package.hexpm_owners_sync_at
-    sync_at_plus_7_days = DateTime.add(sync_at, 7 * 24 * 60 * 60)
 
-    if !sync_at or DateTime.compare(sync_at_plus_7_days, DateTime.utc_now()) == :lt do
+    if !sync_at or DateTime.before?(DateTime.add(sync_at, 7, :day), DateTime.utc_now()) do
       %{action: :get_package_owners, name: package.name}
       |> Toolbox.Workers.HexpmWorker.new()
       |> Oban.insert()
