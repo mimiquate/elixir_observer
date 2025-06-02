@@ -9,6 +9,8 @@
       {assigns[:page_title] || "Home"}
     </.live_title>
 
+    { Application.get_env(:live_debugger, :live_debugger_tags) }
+
     <meta property="og:locale" content="en" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Elixir Observer" />
