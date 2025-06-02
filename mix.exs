@@ -73,6 +73,7 @@ defmodule Toolbox.MixProject do
       # Dev
       {:dotenv_parser, "~> 2.0", only: :dev},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
+      {:live_debugger, "~> 0.2.0", only: :dev},
 
       # Test
       {:floki, "~> 0.37.0", only: :test},

@@ -84,6 +84,12 @@ defmodule Toolbox.Packages do
     |> Repo.insert()
   end
 
+  def update_package_owners(package, attributes \\ %{}) do
+    package
+    |> Package.owners_changeset(attributes)
+    |> Repo.update()
+  end
+
   def create_hexpm_snapshot(attributes \\ %{}) do
     %HexpmSnapshot{}
     |> HexpmSnapshot.changeset(attributes)

@@ -32,6 +32,12 @@ defmodule ToolboxWeb.PackageLive do
     )
 
     package = Toolbox.Packages.get_package_by_name!(name)
+
+    if connected?(socket) do
+      Phoenix.PubSub.subscribe(Toolbox.PubSub, "package_live:#{name}")
+      update_owners_if_oudated(package)
+    end
+
     hexpm_data = package.latest_hexpm_snapshot.data
 
     github_data =
@@ -51,7 +57,8 @@ defmodule ToolboxWeb.PackageLive do
         package: %{
           name: package.name,
           description: package.description,
-          owners: owners(name),
+          owners_sync_at: package.hexpm_owners_sync_at,
+          owners: package.hexpm_owners,
           recent_downloads: hexpm_data["downloads"]["recent"],
           versions: versions,
           latest_version_at: hd(hexpm_data["releases"])["inserted_at"],
@@ -89,17 +96,20 @@ defmodule ToolboxWeb.PackageLive do
     end
   end
 
-  defp owners(package_name) do
-    {
-      :ok,
-      {
-        {_, 200, _},
-        _headers,
-        owners_data
-      }
-    } = Toolbox.Hexpm.get_package_owners(package_name)
+  def handle_info(%{action: :refresh_owners, owners: owners, owners_sync_at: sync_at}, socket) do
+    p = %{socket.assigns.package | owners: owners, owners_sync_at: sync_at}
 
-    Phoenix.json_library().decode!(owners_data)
+    {:noreply, assign(socket, package: p)}
+  end
+
+  def update_owners_if_oudated(package) do
+    sync_at = package.hexpm_owners_sync_at
+
+    if !sync_at or DateTime.before?(DateTime.add(sync_at, 7, :day), DateTime.utc_now()) do
+      %{action: :get_package_owners, name: package.name}
+      |> Toolbox.Workers.HexpmWorker.new()
+      |> Oban.insert()
+    end
   end
 
   defp versions(hexpm_data) do
