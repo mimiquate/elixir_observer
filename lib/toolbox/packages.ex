@@ -1,6 +1,8 @@
 defmodule Toolbox.Packages do
   alias Toolbox.{GithubSnapshot, Github.GithubActivity, HexpmSnapshot, Package, Repo}
 
+  require Logger
+
   import Ecto.Query
 
   use Nebulex.Caching, cache: Toolbox.Cache
@@ -172,7 +174,12 @@ defmodule Toolbox.Packages do
         pull_requests: pull_requests
       }
     else
-      _ ->
+      err ->
+        Logger.warning(%{
+          name: "Unable to fetch github activity for #{full_name}",
+          err: err
+        })
+
         {:error, "Couldn't load recent activity data from GitHub"}
     end
   end
