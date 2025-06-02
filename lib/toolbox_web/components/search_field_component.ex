@@ -22,12 +22,18 @@ defmodule ToolboxWeb.SearchFieldComponent do
 
   def render(assigns) do
     ~H"""
-    <div class="relative" phx-click-away="hide_dropdown_immediately" phx-target={@myself}>
+    <div
+      class="relative"
+      phx-click-away="hide_dropdown_immediately"
+      phx-target={@myself}
+      {test_attrs(search_container: true)}
+    >
       <.form
         for={nil}
         phx-submit="search"
         phx-target={@myself}
         class={"flex h-[40px] pr-3 py-2 justify-between items-center rounded-[6px] sm:border border-surface-alt focus-within:border-secondary-text bg-surface #{@class}"}
+        {test_attrs(search_form: true)}
       >
         <input
           type="search"
@@ -45,36 +51,47 @@ defmodule ToolboxWeb.SearchFieldComponent do
           phx-debounce="300"
           phx-blur="hide_dropdown"
           phx-focus="show_dropdown_if_results"
+          {test_attrs(search_input: true)}
         />
-        <button type="submit" class="flex items-center justify-center">
+        <button
+          type="submit"
+          class="flex items-center justify-center"
+          {test_attrs(search_button: true)}
+        >
           <.icon name="hero-magnifying-glass" class="h-5 w-5 text-secondary-text" />
         </button>
       </.form>
 
       <%= if @show_dropdown do %>
-        <div class="absolute top-full left-0 right-0 z-50 mt-1 bg-surface border border-secondary-text rounded-md shadow-lg max-h-60 overflow-auto">
+        <div
+          class="absolute top-full left-0 right-0 z-50 mt-1 bg-surface border border-secondary-text rounded-md shadow-lg max-h-60 overflow-auto"
+          {test_attrs(search_dropdown: true)}
+        >
           <%= if length(@search_results) > 0 do %>
-            <ul class="py-1">
+            <ul class="py-1" {test_attrs(search_results_list: true)}>
               <li
                 :for={{package, index} <- Enum.with_index(@search_results)}
                 class={"px-3 py-2 cursor-pointer border-b border-surface-alt last:border-b-0 truncate #{if index == @selected_index, do: "bg-surface-alt", else: "hover:bg-surface-alt"}"}
                 phx-click="select_result"
                 phx-value-name={package.name}
                 phx-target={@myself}
+                {test_attrs(search_result_item: package.name, search_result_index: index)}
               >
                 <div>
-                  <span class="text-[16px] text-primary-text">{package.name}</span>
-                  <span class="text-[14px] text-secondary-text">
+                  <span class="text-[16px] text-primary-text" {test_attrs(package_name: true)}>
+                    {package.name}
+                  </span>
+                  <span class="text-[14px] text-secondary-text" {test_attrs(package_version: true)}>
                     {package.latest_hexpm_snapshot.data["latest_version"]}
                   </span>
                 </div>
-                <span class="text-[14px] text-secondary-text">
+                <span class="text-[14px] text-secondary-text" {test_attrs(package_description: true)}>
                   {package.latest_hexpm_snapshot.data["meta"]["description"]}
                 </span>
               </li>
             </ul>
           <% else %>
-            <div class="p-3">
+            <div class="p-3" {test_attrs(no_results_message: true)}>
               <p>No results for "{@search_term}"</p>
             </div>
           <% end %>

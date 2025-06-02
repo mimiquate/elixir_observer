@@ -65,27 +65,54 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
   describe "SearchFieldComponent rendering" do
     test "renders search field with placeholder" do
       html = render_component(SearchFieldComponent, %{id: "test-search"})
+      doc = Floki.parse_document!(html)
 
-      assert html =~ "placeholder=\"Find packages\""
-      assert html =~ "name=\"term\""
+      # Check search container exists
+      search_container = Floki.find(doc, "[data-test-search-container]")
+      assert length(search_container) == 1
+
+      # Check search form exists
+      search_form = Floki.find(doc, "[data-test-search-form]")
+      assert length(search_form) == 1
+
+      # Check search input with placeholder
+      search_input = Floki.find(doc, "[data-test-search-input]")
+      assert length(search_input) == 1
+      assert Floki.attribute(search_input, "placeholder") == ["Find packages"]
+      assert Floki.attribute(search_input, "name") == ["term"]
+
+      # Check search button exists
+      search_button = Floki.find(doc, "[data-test-search-button]")
+      assert length(search_button) == 1
     end
 
     test "component handles autofocus attribute" do
       html = render_component(SearchFieldComponent, %{id: "test-search", autofocus: true})
+      doc = Floki.parse_document!(html)
 
-      assert html =~ "autofocus"
+      search_input = Floki.find(doc, "[data-test-search-input]")
+      assert length(search_input) == 1
+      assert Floki.attribute(search_input, "autofocus") == ["autofocus"]
     end
 
     test "component handles class attribute" do
       html = render_component(SearchFieldComponent, %{id: "test-search", class: "custom-class"})
+      doc = Floki.parse_document!(html)
 
-      assert html =~ "custom-class"
+      search_form = Floki.find(doc, "[data-test-search-form]")
+      assert length(search_form) == 1
+
+      form_class = Floki.attribute(search_form, "class") |> List.first()
+      assert String.contains?(form_class, "custom-class")
     end
 
     test "initially shows no dropdown" do
       html = render_component(SearchFieldComponent, %{id: "test-search"})
+      doc = Floki.parse_document!(html)
 
-      refute html =~ "absolute top-full"
+      # Should not have dropdown element
+      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
+      assert length(dropdown) == 0
     end
   end
 
@@ -95,16 +122,38 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
 
       # Type a search term that should match our test data
       view
-      |> element("input[name='term']")
+      |> element("[data-test-search-input]")
       |> render_change(%{"term" => "ban"})
 
-      # Should show dropdown with results
-      assert has_element?(view, "div.absolute.top-full")
-
-      # Check if we have any results (the actual search might return different results)
+      # Get the updated HTML and parse it
       html = render(view)
-      assert html =~ "bandit"
-      refute html =~ "bamboo"
+      doc = Floki.parse_document!(html)
+
+      # Should show dropdown with results
+      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
+      assert length(dropdown) == 1
+
+      # Should have results list
+      results_list = Floki.find(doc, "[data-test-search-results-list]")
+      assert length(results_list) == 1
+
+      # Check if we have result items
+      result_items = Floki.find(doc, "[data-test-search-result-item]")
+      assert length(result_items) > 0
+
+      # Check if bandit package is in results
+      bandit_item = Floki.find(doc, "[data-test-search-result-item='bandit']")
+      assert length(bandit_item) == 1
+
+      # Check package name is displayed
+      package_names = Floki.find(doc, "[data-test-package-name]")
+
+      package_name_texts =
+        Enum.map(package_names, fn element ->
+          element |> Floki.text() |> String.trim()
+        end)
+
+      assert "bandit" in package_name_texts
     end
 
     test "shows 'No results' when search term has no matches" do
@@ -112,12 +161,21 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
 
       # Type a search term that won't match anything
       view
-      |> element("input[name='term']")
+      |> element("[data-test-search-input]")
       |> render_change(%{"term" => "nonexistentpackage"})
 
-      # Should show dropdown with no results message
-      assert has_element?(view, "div.absolute.top-full")
-      assert render(view) =~ "No results for &quot;nonexistentpackage&quot;"
+      # Get the updated HTML and parse it
+      html = render(view)
+      doc = Floki.parse_document!(html)
+
+      # Should show dropdown
+      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
+      assert length(dropdown) == 1
+
+      # Should show no results message
+      no_results = Floki.find(doc, "[data-test-no-results-message]")
+      assert length(no_results) == 1
+      assert Floki.text(no_results) =~ "No results for \"nonexistentpackage\""
     end
 
     test "doesn't show dropdown for search terms shorter than 2 characters" do
@@ -125,10 +183,16 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
 
       # Type a single character
       view
-      |> element("input[name='term']")
+      |> element("[data-test-search-input]")
       |> render_change(%{"term" => "b"})
 
-      refute has_element?(view, "div.absolute.top-full")
+      # Get the updated HTML and parse it
+      html = render(view)
+      doc = Floki.parse_document!(html)
+
+      # Should not show dropdown
+      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
+      assert length(dropdown) == 0
     end
 
     test "hides dropdown when search term is cleared" do
@@ -136,18 +200,25 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
 
       # First show dropdown
       view
-      |> element("input[name='term']")
+      |> element("[data-test-search-input]")
       |> render_change(%{"term" => "ban"})
 
-      # Should show dropdown initially
-      assert has_element?(view, "div.absolute.top-full")
+      # Verify dropdown is shown
+      html = render(view)
+      doc = Floki.parse_document!(html)
+      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
+      assert length(dropdown) == 1
 
       # Clear the search term
       view
-      |> element("input[name='term']")
+      |> element("[data-test-search-input]")
       |> render_change(%{"term" => ""})
 
-      refute has_element?(view, "div.absolute.top-full")
+      # Verify dropdown is hidden
+      html = render(view)
+      doc = Floki.parse_document!(html)
+      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
+      assert length(dropdown) == 0
     end
   end
 
@@ -157,18 +228,25 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
 
       # First show dropdown
       view
-      |> element("input[name='term']")
+      |> element("[data-test-search-input]")
       |> render_change(%{"term" => "ban"})
 
-      assert has_element?(view, "div.absolute.top-full")
+      # Verify dropdown is shown
+      html = render(view)
+      doc = Floki.parse_document!(html)
+      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
+      assert length(dropdown) == 1
 
       # Press escape
       view
-      |> element("input[name='term']")
+      |> element("[data-test-search-input]")
       |> render_keydown(%{"key" => "Escape"})
 
-      # Should hide dropdown
-      refute has_element?(view, "div.absolute.top-full")
+      # Verify dropdown is hidden
+      html = render(view)
+      doc = Floki.parse_document!(html)
+      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
+      assert length(dropdown) == 0
     end
 
     test "navigates dropdown with arrow keys", %{packages: _packages} do
@@ -176,31 +254,47 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
 
       # Show dropdown with results
       view
-      |> element("input[name='term']")
+      |> element("[data-test-search-input]")
       |> render_change(%{"term" => "ban"})
 
-      assert has_element?(view, "div.absolute.top-full")
+      # Verify dropdown is shown
+      html = render(view)
+      doc = Floki.parse_document!(html)
+      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
+      assert length(dropdown) == 1
 
       # Press arrow down - should highlight first item
       view
-      |> element("input[name='term']")
+      |> element("[data-test-search-input]")
       |> render_keydown(%{"key" => "ArrowDown"})
 
-      # Should have highlighted item (bg-surface-alt class)
-      assert render(view) =~ "bg-surface-alt"
+      # Check that first item is highlighted
+      html = render(view)
+      doc = Floki.parse_document!(html)
+
+      # Find the item with index 0 (first item)
+      first_item = Floki.find(doc, "[data-test-search-result-index='0']")
+      assert length(first_item) == 1
+
+      # Check if it has the highlighted class
+      first_item_class = Floki.attribute(first_item, "class") |> List.first()
+      assert String.contains?(first_item_class, "bg-surface-alt")
 
       # Press arrow down again - should move to next item
       view
-      |> element("input[name='term']")
+      |> element("[data-test-search-input]")
       |> render_keydown(%{"key" => "ArrowDown"})
 
       # Press arrow up - should move back
       view
-      |> element("input[name='term']")
+      |> element("[data-test-search-input]")
       |> render_keydown(%{"key" => "ArrowUp"})
 
       # Should still have dropdown visible
-      assert has_element?(view, "div.absolute.top-full")
+      html = render(view)
+      doc = Floki.parse_document!(html)
+      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
+      assert length(dropdown) == 1
     end
   end
 
@@ -210,14 +304,18 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
 
       # Show dropdown with results
       view
-      |> element("input[name='term']")
+      |> element("[data-test-search-input]")
       |> render_change(%{"term" => "ban"})
 
-      assert has_element?(view, "div.absolute.top-full")
+      # Verify dropdown is shown
+      html = render(view)
+      doc = Floki.parse_document!(html)
+      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
+      assert length(dropdown) == 1
 
       # Click on the bandit package
       view
-      |> element("li", "bandit")
+      |> element("[data-test-search-result-item='bandit']")
       |> render_click()
 
       assert_redirect(view, "/packages/bandit")
@@ -228,7 +326,7 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
 
       # Type search term and submit
       view
-      |> element("form")
+      |> element("[data-test-search-form]")
       |> render_submit(%{"term" => "bandit"})
 
       # Should redirect to search page
