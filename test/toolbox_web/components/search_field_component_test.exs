@@ -24,14 +24,15 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
 
   setup do
     # Create test data for search functionality
-    {:ok, package1} = Packages.create_package(%{name: "bandit"})
-    {:ok, package2} = Packages.create_package(%{name: "bamboo"})
-    {:ok, package3} = Packages.create_package(%{name: "tesla"})
+    {:ok, bandit_package} = Packages.create_package(%{name: "bandit"})
+    {:ok, bamboo_package} = Packages.create_package(%{name: "bamboo"})
+    {:ok, tesla_package} = Packages.create_package(%{name: "tesla"})
+    {:ok, urban_package} = Packages.create_package(%{name: "urban"})
 
     # Create hexpm snapshots with test data
     {:ok, _} =
       Packages.create_hexpm_snapshot(%{
-        package_id: package1.id,
+        package_id: bandit_package.id,
         data: %{
           "meta" => %{"description" => "A pure Elixir HTTP server"},
           "downloads" => %{"recent" => 1000},
@@ -41,7 +42,7 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
 
     {:ok, _} =
       Packages.create_hexpm_snapshot(%{
-        package_id: package2.id,
+        package_id: bamboo_package.id,
         data: %{
           "meta" => %{"description" => "Composable, testable & adapter based emails"},
           "downloads" => %{"recent" => 800},
@@ -51,7 +52,7 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
 
     {:ok, _} =
       Packages.create_hexpm_snapshot(%{
-        package_id: package3.id,
+        package_id: tesla_package.id,
         data: %{
           "meta" => %{"description" => "HTTP client library"},
           "downloads" => %{"recent" => 500},
@@ -59,7 +60,22 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
         }
       })
 
-    %{packages: [package1, package2, package3]}
+    {:ok, _} =
+      Packages.create_hexpm_snapshot(%{
+        package_id: urban_package.id,
+        data: %{
+          "meta" => %{"description" => "Urban development tools"},
+          "downloads" => %{"recent" => 300},
+          "latest_version" => "0.5.0"
+        }
+      })
+
+    %{
+      bandit_package: bandit_package,
+      bamboo_package: bamboo_package,
+      tesla_package: tesla_package,
+      urban_package: urban_package
+    }
   end
 
   describe "SearchFieldComponent rendering" do
@@ -117,7 +133,12 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
   end
 
   describe "SearchFieldComponent search functionality" do
-    test "shows dropdown with results when typing valid search term", %{packages: _packages} do
+    test "shows dropdown with results when typing valid search term", %{
+      bandit_package: _bandit_package,
+      bamboo_package: _bamboo_package,
+      tesla_package: _tesla_package,
+      urban_package: _urban_package
+    } do
       {:ok, view, _html} = live(build_conn(), "/")
 
       # Type a search term that should match our test data
@@ -133,9 +154,11 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
       dropdown = Floki.find(doc, "[data-test-search-dropdown]")
       assert length(dropdown) == 1
 
-      # Should have results list
-      results_list = Floki.find(doc, "[data-test-search-results-list]")
-      assert length(results_list) == 1
+      # Should have results list (either exact matches or other results)
+      results_lists =
+        Floki.find(doc, "[data-test-exact-matches-list], [data-test-other-results-list]")
+
+      assert length(results_lists) > 0
 
       # Check if we have result items
       result_items = Floki.find(doc, "[data-test-search-result-item]")
@@ -154,6 +177,206 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
         end)
 
       assert "bandit" in package_name_texts
+    end
+
+    test "shows exact match section when search term exactly matches a package", %{
+      bandit_package: _bandit_package,
+      bamboo_package: _bamboo_package,
+      tesla_package: _tesla_package,
+      urban_package: _urban_package
+    } do
+      {:ok, view, _html} = live(build_conn(), "/")
+
+      # Type search term that matches both bandit and bamboo (both contain "ban")
+      view
+      |> element("[data-test-search-input]")
+      |> render_change(%{"term" => "ban"})
+
+      # Get the updated HTML and parse it
+      html = render(view)
+      doc = Floki.parse_document!(html)
+
+      # Should show dropdown
+      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
+      assert length(dropdown) == 1
+
+      # Should NOT have exact matches section since "ban" doesn't exactly match any package
+      exact_matches_list =
+        Floki.find(doc, "[data-test-search-dropdown] [data-test-exact-matches-list]")
+
+      assert length(exact_matches_list) == 0
+
+      # Should have other results section
+      other_results_list = Floki.find(doc, "[data-test-other-results-list]")
+      assert length(other_results_list) == 1
+
+      # Should show results count header
+      results_count_header =
+        Floki.find(doc, "div")
+        |> Enum.find(fn element ->
+          text = Floki.text(element) |> String.trim()
+          String.contains?(text, "Results Found:")
+        end)
+
+      assert results_count_header != nil
+    end
+
+    test "shows exact match section with exact package name", %{
+      bandit_package: _bandit_package,
+      bamboo_package: _bamboo_package,
+      tesla_package: _tesla_package,
+      urban_package: _urban_package
+    } do
+      {:ok, view, _html} = live(build_conn(), "/")
+
+      # Type exact package name
+      view
+      |> element("[data-test-search-input]")
+      |> render_change(%{"term" => "bandit"})
+
+      # Get the updated HTML and parse it
+      html = render(view)
+      doc = Floki.parse_document!(html)
+
+      # Should show dropdown
+      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
+      assert length(dropdown) == 1
+
+      # Should have exact matches section
+      exact_matches_list = Floki.find(doc, "[data-test-exact-matches-list]")
+      assert length(exact_matches_list) == 1
+
+      # Should show "Exact Match:" header
+      exact_match_header =
+        Floki.find(doc, "div")
+        |> Enum.find(fn element ->
+          Floki.text(element) |> String.trim() == "Exact Match:"
+        end)
+
+      assert exact_match_header != nil
+
+      # Should have bandit in exact matches
+      exact_match_items =
+        Floki.find(exact_matches_list, "[data-test-search-result-item='bandit']")
+
+      assert length(exact_match_items) == 1
+
+      # Should NOT have other results section since only bandit matches "bandit"
+      other_results_list = Floki.find(doc, "[data-test-other-results-list]")
+      assert length(other_results_list) == 0
+    end
+
+    test "shows only other results section when no exact match exists", %{
+      bandit_package: _bandit_package,
+      bamboo_package: _bamboo_package,
+      tesla_package: _tesla_package,
+      urban_package: _urban_package
+    } do
+      {:ok, view, _html} = live(build_conn(), "/")
+
+      # Type partial match that doesn't exactly match any package
+      view
+      |> element("[data-test-search-input]")
+      |> render_change(%{"term" => "ban"})
+
+      # Get the updated HTML and parse it
+      html = render(view)
+      doc = Floki.parse_document!(html)
+
+      # Should show dropdown
+      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
+      assert length(dropdown) == 1
+
+      # Should NOT have exact matches section
+      exact_matches_list = Floki.find(doc, "[data-test-exact-matches-list]")
+      assert length(exact_matches_list) == 0
+
+      # Should have other results section
+      other_results_list = Floki.find(doc, "[data-test-other-results-list]")
+      assert length(other_results_list) == 1
+
+      # Should show results count header
+      results_count_header =
+        Floki.find(doc, "div")
+        |> Enum.find(fn element ->
+          text = Floki.text(element) |> String.trim()
+          String.contains?(text, "Results Found:")
+        end)
+
+      assert results_count_header != nil
+
+      # Should NOT show "Exact Match:" header
+      exact_match_header =
+        Floki.find(doc, "div")
+        |> Enum.find(fn element ->
+          Floki.text(element) |> String.trim() == "Exact Match:"
+        end)
+
+      assert exact_match_header == nil
+    end
+
+    test "exact match is case insensitive", %{
+      bandit_package: _bandit_package,
+      bamboo_package: _bamboo_package,
+      tesla_package: _tesla_package,
+      urban_package: _urban_package
+    } do
+      {:ok, view, _html} = live(build_conn(), "/")
+
+      # Type exact package name in different case
+      view
+      |> element("[data-test-search-input]")
+      |> render_change(%{"term" => "BANDIT"})
+
+      # Get the updated HTML and parse it
+      html = render(view)
+      doc = Floki.parse_document!(html)
+
+      # Should show dropdown
+      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
+      assert length(dropdown) == 1
+
+      # Should have exact matches section
+      exact_matches_list = Floki.find(doc, "[data-test-exact-matches-list]")
+      assert length(exact_matches_list) == 1
+
+      # Should have bandit in exact matches
+      exact_match_items =
+        Floki.find(exact_matches_list, "[data-test-search-result-item='bandit']")
+
+      assert length(exact_match_items) == 1
+    end
+
+    test "shows correct results count in other results section", %{
+      bandit_package: _bandit_package,
+      bamboo_package: _bamboo_package,
+      tesla_package: _tesla_package,
+      urban_package: _urban_package
+    } do
+      {:ok, view, _html} = live(build_conn(), "/")
+
+      # Type search term that matches multiple packages ("an" matches bandit and urban)
+      view
+      |> element("[data-test-search-input]")
+      |> render_change(%{"term" => "an"})
+
+      # Get the updated HTML and parse it
+      html = render(view)
+      doc = Floki.parse_document!(html)
+
+      # Find the results count header
+      results_count_header =
+        Floki.find(doc, "div")
+        |> Enum.find(fn element ->
+          text = Floki.text(element) |> String.trim()
+          String.contains?(text, "Results Found:")
+        end)
+
+      assert results_count_header != nil
+
+      # Should show count of matches (bandit and urban both contain "an")
+      header_text = Floki.text(results_count_header) |> String.trim()
+      assert String.contains?(header_text, "2 Results Found:")
     end
 
     test "shows 'No results' when search term has no matches" do
@@ -176,6 +399,13 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
       no_results = Floki.find(doc, "[data-test-no-results-message]")
       assert length(no_results) == 1
       assert Floki.text(no_results) =~ "No results for \"nonexistentpackage\""
+
+      # Should NOT have exact matches or other results sections
+      exact_matches_list = Floki.find(doc, "[data-test-exact-matches-list]")
+      assert length(exact_matches_list) == 0
+
+      other_results_list = Floki.find(doc, "[data-test-other-results-list]")
+      assert length(other_results_list) == 0
     end
 
     test "doesn't show dropdown for search terms shorter than 2 characters" do
@@ -223,7 +453,12 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
   end
 
   describe "SearchFieldComponent keyboard navigation" do
-    test "hides dropdown on escape key", %{packages: _packages} do
+    test "hides dropdown on escape key", %{
+      bandit_package: _bandit_package,
+      bamboo_package: _bamboo_package,
+      tesla_package: _tesla_package,
+      urban_package: _urban_package
+    } do
       {:ok, view, _html} = live(build_conn(), "/")
 
       # First show dropdown
@@ -249,13 +484,19 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
       assert length(dropdown) == 0
     end
 
-    test "navigates dropdown with arrow keys", %{packages: _packages} do
+    test "navigates dropdown with arrow keys in exact match section", %{
+      bandit_package: _bandit_package,
+      bamboo_package: _bamboo_package,
+      tesla_package: _tesla_package,
+      urban_package: _urban_package
+    } do
       {:ok, view, _html} = live(build_conn(), "/")
 
-      # Show dropdown with results
+      # Show dropdown with search that returns multiple results
+      # Use "an" which matches both bandit and urban
       view
       |> element("[data-test-search-input]")
-      |> render_change(%{"term" => "ban"})
+      |> render_change(%{"term" => "an"})
 
       # Verify dropdown is shown
       html = render(view)
@@ -285,7 +526,16 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
       |> element("[data-test-search-input]")
       |> render_keydown(%{"key" => "ArrowDown"})
 
-      # Press arrow up - should move back
+      # Check that second item is highlighted
+      html = render(view)
+      doc = Floki.parse_document!(html)
+      second_item = Floki.find(doc, "[data-test-search-result-index='1']")
+      assert length(second_item) == 1
+
+      second_item_class = Floki.attribute(second_item, "class") |> List.first()
+      assert String.contains?(second_item_class, "bg-surface-alt")
+
+      # Press arrow up - should move back to first item
       view
       |> element("[data-test-search-input]")
       |> render_keydown(%{"key" => "ArrowUp"})
@@ -296,10 +546,110 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
       dropdown = Floki.find(doc, "[data-test-search-dropdown]")
       assert length(dropdown) == 1
     end
+
+    test "navigates dropdown with arrow keys in other results only", %{
+      bandit_package: _bandit_package,
+      bamboo_package: _bamboo_package,
+      tesla_package: _tesla_package,
+      urban_package: _urban_package
+    } do
+      {:ok, view, _html} = live(build_conn(), "/")
+
+      # Show dropdown with partial match (no exact match)
+      view
+      |> element("[data-test-search-input]")
+      |> render_change(%{"term" => "ban"})
+
+      # Verify dropdown is shown
+      html = render(view)
+      doc = Floki.parse_document!(html)
+      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
+      assert length(dropdown) == 1
+
+      # Should NOT have exact matches section
+      exact_matches_list = Floki.find(doc, "[data-test-exact-matches-list]")
+      assert length(exact_matches_list) == 0
+
+      # Press arrow down - should highlight first item in other results
+      view
+      |> element("[data-test-search-input]")
+      |> render_keydown(%{"key" => "ArrowDown"})
+
+      # Check that first item is highlighted
+      html = render(view)
+      doc = Floki.parse_document!(html)
+
+      # Find the item with index 0 (first item in other results)
+      first_item = Floki.find(doc, "[data-test-search-result-index='0']")
+      assert length(first_item) == 1
+
+      # Check if it has the highlighted class
+      first_item_class = Floki.attribute(first_item, "class") |> List.first()
+      assert String.contains?(first_item_class, "bg-surface-alt")
+    end
+
+    test "enter key selects highlighted item from exact match section", %{
+      bandit_package: _bandit_package,
+      bamboo_package: _bamboo_package,
+      tesla_package: _tesla_package,
+      urban_package: _urban_package
+    } do
+      {:ok, view, _html} = live(build_conn(), "/")
+
+      # Show dropdown with exact match
+      view
+      |> element("[data-test-search-input]")
+      |> render_change(%{"term" => "bandit"})
+
+      # Press arrow down to select first item (exact match)
+      view
+      |> element("[data-test-search-input]")
+      |> render_keydown(%{"key" => "ArrowDown"})
+
+      # Press enter to select
+      view
+      |> element("[data-test-search-input]")
+      |> render_keydown(%{"key" => "Enter"})
+
+      # Should redirect to bandit package page
+      assert_redirect(view, "/packages/bandit")
+    end
+
+    test "enter key selects highlighted item from other results section", %{
+      bandit_package: _bandit_package,
+      bamboo_package: _bamboo_package,
+      tesla_package: _tesla_package,
+      urban_package: _urban_package
+    } do
+      {:ok, view, _html} = live(build_conn(), "/")
+
+      # Show dropdown with multiple matches
+      view
+      |> element("[data-test-search-input]")
+      |> render_change(%{"term" => "an"})
+
+      # Press arrow down to get to first item
+      view
+      |> element("[data-test-search-input]")
+      |> render_keydown(%{"key" => "ArrowDown"})
+
+      # Press enter to select
+      view
+      |> element("[data-test-search-input]")
+      |> render_keydown(%{"key" => "Enter"})
+
+      # Should redirect to the first package page (bandit has higher downloads)
+      assert_redirect(view, "/packages/bandit")
+    end
   end
 
   describe "SearchFieldComponent click interactions" do
-    test "clicking on dropdown item navigates to package page", %{packages: _packages} do
+    test "clicking on dropdown item navigates to package page", %{
+      bandit_package: _bandit_package,
+      bamboo_package: _bamboo_package,
+      tesla_package: _tesla_package,
+      urban_package: _urban_package
+    } do
       {:ok, view, _html} = live(build_conn(), "/")
 
       # Show dropdown with results

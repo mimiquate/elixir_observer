@@ -27,8 +27,8 @@ defmodule Toolbox.Packages do
     Repo.aggregate(Package, :count)
   end
 
-  def search(term, opts \\ %{}) do
-    limit = Map.get(opts, :limit, 50)
+  def search(term) do
+    limit = 50
     like_term = "%#{term}%"
 
     {packages, rest} =
@@ -46,6 +46,7 @@ defmodule Toolbox.Packages do
         limit: ^limit + 1
       )
       |> Repo.all()
+      |> prioritize_exact_match(term)
       |> Enum.split(limit)
 
     {packages, length(rest) > 0}
@@ -182,5 +183,15 @@ defmodule Toolbox.Packages do
 
         {:error, "Couldn't load recent activity data from GitHub"}
     end
+  end
+
+  # Private function to move exact matches to the top
+  defp prioritize_exact_match(packages, term) do
+    {exact_matches, other_matches} =
+      Enum.split_with(packages, fn package ->
+        String.downcase(package.name) == String.downcase(term)
+      end)
+
+    exact_matches ++ other_matches
   end
 end

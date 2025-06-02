@@ -64,32 +64,73 @@ defmodule ToolboxWeb.SearchFieldComponent do
 
       <%= if @show_dropdown do %>
         <div
-          class="absolute top-full left-0 right-0 z-50 mt-1 bg-surface border border-secondary-text rounded-md shadow-lg max-h-60 overflow-auto"
+          class="absolute top-full left-0 right-0 z-50 mt-1 bg-surface rounded-md shadow-lg max-h-60 overflow-auto"
           {test_attrs(search_dropdown: true)}
         >
           <%= if length(@search_results) > 0 do %>
-            <ul class="py-1" {test_attrs(search_results_list: true)}>
-              <li
-                :for={{package, index} <- Enum.with_index(@search_results)}
-                class={"px-3 py-2 cursor-pointer border-b border-surface-alt last:border-b-0 truncate #{if index == @selected_index, do: "bg-surface-alt", else: "hover:bg-surface-alt"}"}
-                phx-click="select_result"
-                phx-value-name={package.name}
-                phx-target={@myself}
-                {test_attrs(search_result_item: package.name, search_result_index: index)}
-              >
-                <div>
-                  <span class="text-[16px] text-primary-text" {test_attrs(package_name: true)}>
-                    {package.name}
+            <% {exact_matches, other_matches} = split_exact_matches(@search_results, @search_term) %>
+
+            <%= if length(exact_matches) > 0 do %>
+              <div class="px-3 pt-2 text-[14px] text-secondary-text">
+                Exact Match:
+              </div>
+              <ul {test_attrs(exact_matches_list: true)}>
+                <li
+                  :for={{package, index} <- Enum.with_index(exact_matches)}
+                  class={"px-3 py-2 cursor-pointer last:border-b-0 truncate #{if index == @selected_index, do: "bg-surface-alt", else: "hover:bg-surface-alt"}"}
+                  phx-click="select_result"
+                  phx-value-name={package.name}
+                  phx-target={@myself}
+                  {test_attrs(search_result_item: package.name, search_result_index: index)}
+                >
+                  <div>
+                    <span class="text-[16px] text-primary-text" {test_attrs(package_name: true)}>
+                      {package.name}
+                    </span>
+                    <span class="text-[14px] text-secondary-text" {test_attrs(package_version: true)}>
+                      {package.latest_hexpm_snapshot.data["latest_version"]}
+                    </span>
+                  </div>
+                  <span
+                    class="text-[14px] text-secondary-text"
+                    {test_attrs(package_description: true)}
+                  >
+                    {package.latest_hexpm_snapshot.data["meta"]["description"]}
                   </span>
-                  <span class="text-[14px] text-secondary-text" {test_attrs(package_version: true)}>
-                    {package.latest_hexpm_snapshot.data["latest_version"]}
+                </li>
+              </ul>
+            <% end %>
+
+            <%= if length(other_matches) > 0 do %>
+              <div class="px-3 pt-2 text-[14px] text-secondary-text">
+                {length(other_matches)} Results Found:
+              </div>
+              <ul class="py-1" {test_attrs(other_results_list: true)}>
+                <li
+                  :for={{package, index} <- Enum.with_index(other_matches, length(exact_matches))}
+                  class={"px-3 py-2 cursor-pointer truncate #{if index == @selected_index, do: "bg-surface-alt", else: "hover:bg-surface-alt"}"}
+                  phx-click="select_result"
+                  phx-value-name={package.name}
+                  phx-target={@myself}
+                  {test_attrs(search_result_item: package.name, search_result_index: index)}
+                >
+                  <div>
+                    <span class="text-[16px] text-primary-text" {test_attrs(package_name: true)}>
+                      {package.name}
+                    </span>
+                    <span class="text-[14px] text-secondary-text" {test_attrs(package_version: true)}>
+                      {package.latest_hexpm_snapshot.data["latest_version"]}
+                    </span>
+                  </div>
+                  <span
+                    class="text-[14px] text-secondary-text"
+                    {test_attrs(package_description: true)}
+                  >
+                    {package.latest_hexpm_snapshot.data["meta"]["description"]}
                   </span>
-                </div>
-                <span class="text-[14px] text-secondary-text" {test_attrs(package_description: true)}>
-                  {package.latest_hexpm_snapshot.data["meta"]["description"]}
-                </span>
-              </li>
-            </ul>
+                </li>
+              </ul>
+            <% end %>
           <% else %>
             <div class="p-3" {test_attrs(no_results_message: true)}>
               <p>No results for "{@search_term}"</p>
@@ -101,12 +142,19 @@ defmodule ToolboxWeb.SearchFieldComponent do
     """
   end
 
+  # Helper function to split exact matches from other matches
+  defp split_exact_matches(packages, search_term) do
+    Enum.split_with(packages, fn package ->
+      String.downcase(package.name) == String.downcase(search_term)
+    end)
+  end
+
   def handle_event("typeahead_search", %{"term" => term}, socket) do
     term = String.trim(term)
 
     search_results =
       if String.length(term) >= 2 do
-        {search_results, _} = Packages.search(term, %{limit: 5})
+        {search_results, _} = Packages.search(term)
         search_results
       else
         []
