@@ -24,10 +24,29 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
 
   setup do
     # Create test data for search functionality
-    {:ok, bandit_package} = Packages.create_package(%{name: "bandit"})
-    {:ok, bamboo_package} = Packages.create_package(%{name: "bamboo"})
-    {:ok, tesla_package} = Packages.create_package(%{name: "tesla"})
-    {:ok, urban_package} = Packages.create_package(%{name: "urban"})
+    {:ok, bandit_package} =
+      Packages.create_package(%{
+        name: "bandit",
+        description: "A pure Elixir HTTP server"
+      })
+
+    {:ok, bamboo_package} =
+      Packages.create_package(%{
+        name: "bamboo",
+        description: "Composable, testable & adapter based emails"
+      })
+
+    {:ok, tesla_package} =
+      Packages.create_package(%{
+        name: "tesla",
+        description: "HTTP client library"
+      })
+
+    {:ok, urban_package} =
+      Packages.create_package(%{
+        name: "urban",
+        description: "Urban development tools"
+      })
 
     # Create hexpm snapshots with test data
     {:ok, _} =
