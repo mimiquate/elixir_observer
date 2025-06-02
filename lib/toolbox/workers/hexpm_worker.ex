@@ -22,7 +22,7 @@ defmodule Toolbox.Workers.HexpmWorker do
 
     Toolbox.Packages.get_package_by_name(name)
     |> Toolbox.Packages.update_package_owners(%{
-      hexpm_owners_sync_at: DateTime.utc_now,
+      hexpm_owners_sync_at: DateTime.utc_now(),
       hexpm_owners: owners_data
     })
     |> case do
@@ -36,8 +36,11 @@ defmodule Toolbox.Workers.HexpmWorker do
             owners: p.hexpm_owners
           }
         )
+
         {:ok, p}
-      err -> err
+
+      err ->
+        err
     end
   end
 end
