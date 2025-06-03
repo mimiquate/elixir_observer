@@ -81,7 +81,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
                 <li
                   class="px-3 py-2 cursor-pointer last:border-b-0 truncate hover:bg-surface-alt"
                   phx-click="select_result"
-                  phx-value-name={@exact_match.name == 0}
+                  phx-value-name={@exact_match.name}
                   phx-target={@myself}
                   {test_attrs(search_result_item: @exact_match.name, search_result_index: 0)}
                 >
