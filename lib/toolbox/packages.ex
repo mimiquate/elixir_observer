@@ -42,13 +42,15 @@ defmodule Toolbox.Packages do
           latest_github_snapshot: ^latest_github_snaphost_query()
         ],
         order_by: [desc: json_extract_path(s.data, ["downloads", "recent"])],
-        # TODO: Remove limit once we implement search result pagination
+        # TODO: Rework limit once we implement search result page pagination
         limit: ^limit + 1
       )
       |> Repo.all()
       |> Enum.split(limit)
 
-    {packages, length(rest) > 0}
+    {exact_match, packages} = prioritize_exact_match(packages, term)
+
+    {exact_match, packages, length(rest) > 0}
   end
 
   def get_package_by_name(name) do
@@ -188,5 +190,15 @@ defmodule Toolbox.Packages do
 
         {:error, "Couldn't load recent activity data from GitHub"}
     end
+  end
+
+  # Private function to move exact matches to the top
+  defp prioritize_exact_match(packages, term) do
+    {exact_matches, other_matches} =
+      Enum.split_with(packages, fn package ->
+        String.downcase(package.name) == String.downcase(term)
+      end)
+
+    {Enum.at(exact_matches, 0), other_matches}
   end
 end
