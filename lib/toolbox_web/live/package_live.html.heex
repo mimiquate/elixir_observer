@@ -51,7 +51,7 @@
   </section>
 
   <p
-    :if={Enum.all?(@package.versions, fn {_, is_retired?} -> is_retired? end)}
+    :if={Enum.all?(@package.versions, fn v -> v.is_retired? end)}
     class="mt-4 rounded bg-red-300 dark:bg-red-900 p-4"
   >
     All versions are retired

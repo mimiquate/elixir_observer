@@ -32,7 +32,7 @@ defmodule ToolboxWeb.Components.PackageVersionSelector do
         class={"border border-stroke rounded dark:bg-surface-alt sm:w-62 text-[14px] sm:text-[16px] #{@class}"}
       >
         <option
-          :for={{version, is_retired?} <- @versions}
+          :for={%{version: version, is_retired?: is_retired?} <- @versions}
           value={version}
           selected={version == @current_version}
         >

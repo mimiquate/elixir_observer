@@ -84,10 +84,9 @@ defmodule ToolboxWeb.PackageLive do
   def handle_params(params, _uri, socket) do
     package =  socket.assigns.package
     version = params["version"] || package.latest_stable_version
+    versions = Enum.map(package.versions, &(&1.version))
 
-    list_versions = Enum.map(package.versions, fn({v, _retired}) -> v end)
-
-    if version not in list_versions do
+    if version not in versions do
       raise HexpmVersionNotFoundError, "#{version} not found for #{package.name}"
     end
 
@@ -148,7 +147,10 @@ defmodule ToolboxWeb.PackageLive do
     |> Enum.map(fn release ->
       version = release["version"]
 
-      {version, !!hexpm_data["retirements"][version]}
+      %{
+        version: version,
+        is_retired?: !!hexpm_data["retirements"][version]
+      }
     end)
   end
 
