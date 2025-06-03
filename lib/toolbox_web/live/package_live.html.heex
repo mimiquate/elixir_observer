@@ -145,18 +145,18 @@
   </section>
 
   <section class="sm:mt-8">
-      <div class="flex items-center justify-between mt-8 mb-3 sm:mb-8">
-        <h2 class="text-[20px] text-primary-text sm:text-[32px] font-semibold">
-          Version {@current_version}
-        </h2>
+    <div class="flex items-center justify-between mt-8 mb-3 sm:mb-8">
+      <h2 class="text-[20px] text-primary-text sm:text-[32px] font-semibold">
+        Version {@current_version}
+      </h2>
 
-        <.package_version_selector
-          versions={@package.versions}
-          current_version={@current_version}
-          latest_stable_version={@package.latest_stable_version}
-          class="sm:hidden"
-        />
-      </div>
+      <.package_version_selector
+        versions={@package.versions}
+        current_version={@current_version}
+        latest_stable_version={@package.latest_stable_version}
+        class="sm:hidden"
+      />
+    </div>
 
     <%= if @version do %>
       <div class="bg-surface rounded py-6 px-4">

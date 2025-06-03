@@ -82,18 +82,19 @@ defmodule ToolboxWeb.PackageLive do
   end
 
   def handle_params(params, _uri, socket) do
-    package =  socket.assigns.package
+    package = socket.assigns.package
     version = params["version"] || package.latest_stable_version
-    versions = Enum.map(package.versions, &(&1.version))
+    versions = Enum.map(package.versions, & &1.version)
 
     if version not in versions do
       raise HexpmVersionNotFoundError, "#{version} not found for #{package.name}"
     end
 
-    {:noreply, assign(socket, %{
-      current_version: version,
-      version: version(package, version)})
-    }
+    {:noreply,
+     assign(socket, %{
+       current_version: version,
+       version: version(package, version)
+     })}
   end
 
   def handle_event(
@@ -114,7 +115,10 @@ defmodule ToolboxWeb.PackageLive do
     {:noreply, assign(socket, package: p)}
   end
 
-  def handle_info(%{action: :refresh_latest_stable_version, latest_stable_version_data: data}, socket) do
+  def handle_info(
+        %{action: :refresh_latest_stable_version, latest_stable_version_data: data},
+        socket
+      ) do
     p = %{socket.assigns.package | latest_stable_version_data: data}
 
     {:noreply, assign(socket, package: p)}
@@ -135,7 +139,7 @@ defmodule ToolboxWeb.PackageLive do
     latest_stable_version_data = package.hexpm_latest_stable_version_data
 
     if !latest_stable_version_data or
-      latest_stable_version_data["version"] != latest_stable_version do
+         latest_stable_version_data["version"] != latest_stable_version do
       %{action: :get_latest_stable_version, name: package.name, version: latest_stable_version}
       |> Toolbox.Workers.HexpmWorker.new()
       |> Oban.insert()
