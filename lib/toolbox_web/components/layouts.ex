@@ -11,6 +11,7 @@ defmodule ToolboxWeb.Layouts do
   use ToolboxWeb, :html
 
   import ToolboxWeb.Components.Icons.InfoIcon
+  import ToolboxWeb.Components.Icons.GithubIcon
 
   embed_templates "layouts/*"
 
