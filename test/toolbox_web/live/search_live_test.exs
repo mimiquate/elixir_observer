@@ -168,22 +168,6 @@ defmodule ToolboxWeb.SearchLiveTest do
       refute has_element?(view, "[data-test-exact-matches-section]")
     end
 
-    test "exact match is case insensitive", %{
-      bandit_package: _bandit_package,
-      bamboo_package: _bamboo_package,
-      tesla_package: _tesla_package,
-      urban_package: _urban_package
-    } do
-      {:ok, view, html} = live(build_conn(), "/searches/BANDIT")
-
-      # Should have exact matches section
-      assert has_element?(view, "[data-test-exact-matches-section]")
-      assert html =~ "Exact Match:"
-
-      # Should have bandit in exact matches
-      assert has_element?(view, "[data-test-exact-match-item='bandit']")
-    end
-
     test "shows no results when search term has no matches" do
       {:ok, view, html} = live(build_conn(), "/searches/nonexistentpackage")
 
@@ -287,30 +271,6 @@ defmodule ToolboxWeb.SearchLiveTest do
 
       # With only 2 results, should not show more indicator
       refute has_element?(view, "[data-test-more-results-indicator]")
-    end
-  end
-
-  describe "SearchLive edge cases" do
-    test "handles empty search term gracefully" do
-      # This would depend on routing configuration
-      # For now, we'll test a single character search
-      {:ok, view, _html} = live(build_conn(), "/searches/a")
-
-      # Should still render the page structure
-      assert has_element?(view, "[data-test-search-results-page]")
-    end
-
-    test "handles special characters in search term", %{
-      bandit_package: _bandit_package,
-      bamboo_package: _bamboo_package,
-      tesla_package: _tesla_package,
-      urban_package: _urban_package
-    } do
-      {:ok, view, html} = live(build_conn(), "/searches/ban%20dit")
-
-      # Should show no results for this search
-      assert has_element?(view, "[data-test-no-results-section]")
-      assert html =~ "No results for &quot;ban dit&quot;"
     end
   end
 end

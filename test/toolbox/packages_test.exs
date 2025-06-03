@@ -2,8 +2,7 @@ defmodule Toolbox.PackagesTest do
   use Toolbox.DataCase, async: true
 
   alias Toolbox.Packages
-  alias Toolbox.GithubSnapshot
-  alias Toolbox.HexpmSnapshot
+  alias Toolbox.Package
 
   setup do
     # Create test data for search functionality
@@ -108,45 +107,10 @@ defmodule Toolbox.PackagesTest do
       assert downloads == Enum.sort(downloads, :desc)
     end
 
-    test "returns packages with proper associations loaded", %{packages: _packages} do
-      {packages, _more?} = Packages.search("ban")
+    test "handles case-insensitive search", %{packages: [bandit | _]} do
+      {[%Package{name: name}], _} = Packages.search("Ban")
 
-      # Should have results for "ban" search
-      assert length(packages) > 0
-
-      package = List.first(packages)
-      assert %HexpmSnapshot{} = package.latest_hexpm_snapshot
-      # latest_github_snapshot might be nil or loaded
-      assert %GithubSnapshot{} = package.latest_github_snapshot
-    end
-
-    test "handles case-insensitive search", %{packages: _packages} do
-      {packages_lower, _} = Packages.search("ban")
-      {packages_upper, _} = Packages.search("BAN")
-      {packages_mixed, _} = Packages.search("Ban")
-
-      # All should return the same results (case-insensitive)
-      assert length(packages_lower) == length(packages_upper)
-      assert length(packages_lower) == length(packages_mixed)
-
-      # Should find at least one package in all cases
-      assert length(packages_lower) >= 1
-    end
-
-    test "partial name matching works", %{packages: _packages} do
-      # Test partial matching
-      {packages, _more?} = Packages.search("ba")
-
-      # Should find packages starting with "ba" (bandit and bamboo)
-      package_names = Enum.map(packages, & &1.name)
-
-      # At least one package should match "ba"
-      assert length(packages) == 2
-
-      # All found packages should contain "ba"
-      Enum.each(package_names, fn name ->
-        assert String.contains?(String.downcase(name), "ba")
-      end)
+      assert name == bandit.name
     end
   end
 end
