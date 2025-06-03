@@ -43,4 +43,38 @@ defmodule Toolbox.Workers.HexpmWorker do
         err
     end
   end
+
+  def perform(%Oban.Job{args: %{"action" => "get_latest_stable_version", "name" => name, "version" => version}}) do
+    {
+      :ok,
+      {
+        {_, 200, _},
+        _headers,
+        version_data
+      }
+    } = Toolbox.Hexpm.get_package_version(name, version)
+
+    version_data = Phoenix.json_library().decode!(version_data)
+
+    Toolbox.Packages.get_package_by_name(name)
+    |> Toolbox.Packages.update_package_latest_stable_version(%{
+      hexpm_latest_stable_version_data: version_data
+    })
+    |> case do
+      {:ok, p} ->
+        Phoenix.PubSub.broadcast(
+          Toolbox.PubSub,
+          "package_live:#{name}",
+          %{
+            action: :refresh_latest_stable_version,
+            latest_stable_version_data: p.hexpm_latest_stable_version_data
+          }
+        )
+
+        {:ok, p}
+
+      err ->
+        err
+    end
+  end
 end
