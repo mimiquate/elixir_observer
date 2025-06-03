@@ -690,6 +690,33 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
       assert_redirect(view, "/packages/bandit")
     end
 
+    test "clicking on dropdown item navigates to package page (exact match)", %{
+      bandit_package: _bandit_package,
+      bamboo_package: _bamboo_package,
+      tesla_package: _tesla_package,
+      urban_package: _urban_package
+    } do
+      {:ok, view, _html} = live(build_conn(), "/")
+
+      # Show dropdown with results
+      view
+      |> element("[data-test-search-input]")
+      |> render_change(%{"term" => "bandit"})
+
+      # Verify dropdown is shown
+      html = render(view)
+      doc = Floki.parse_document!(html)
+      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
+      assert length(dropdown) == 1
+
+      # Click on the bandit package
+      view
+      |> element("[data-test-search-result-item='bandit']")
+      |> render_click()
+
+      assert_redirect(view, "/packages/bandit")
+    end
+
     test "submitting form navigates to search results page" do
       {:ok, view, _html} = live(build_conn(), "/")
 
