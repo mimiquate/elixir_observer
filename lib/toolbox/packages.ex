@@ -46,10 +46,11 @@ defmodule Toolbox.Packages do
         limit: ^limit + 1
       )
       |> Repo.all()
-      |> prioritize_exact_match(term)
       |> Enum.split(limit)
 
-    {packages, length(rest) > 0}
+    {exact_match, packages} = prioritize_exact_match(packages, term)
+
+    {exact_match, packages, length(rest) > 0}
   end
 
   def get_package_by_name(name) do
@@ -192,6 +193,6 @@ defmodule Toolbox.Packages do
         String.downcase(package.name) == String.downcase(term)
       end)
 
-    exact_matches ++ other_matches
+    {Enum.at(exact_matches, 0), other_matches}
   end
 end

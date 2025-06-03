@@ -71,7 +71,7 @@ defmodule Toolbox.PackagesTest do
 
   describe "search/1" do
     test "returns all packages for empty search term", %{packages: packages} do
-      {result_packages, more?} = Packages.search("")
+      {nil, result_packages, more?} = Packages.search("")
 
       # Empty string matches all packages due to ilike pattern matching
       assert length(result_packages) == length(packages)
@@ -79,13 +79,13 @@ defmodule Toolbox.PackagesTest do
     end
 
     test "returns empty results when no packages match" do
-      {packages, more?} = Packages.search("nonexistentpackage")
+      {nil, packages, more?} = Packages.search("nonexistentpackage")
       assert packages == []
       assert more? == false
     end
 
     test "returns matching packages ordered by download count", %{packages: _packages} do
-      {packages, more?} = Packages.search("ban")
+      {nil, packages, more?} = Packages.search("ban")
 
       # Should find packages that match "ban" (bandit, bamboo)
       # At least one package should match
@@ -108,7 +108,7 @@ defmodule Toolbox.PackagesTest do
     end
 
     test "handles case-insensitive search", %{packages: [bandit | _]} do
-      {[%Package{name: name}], _} = Packages.search("Ban")
+      {nil, [%Package{name: name}], _} = Packages.search("Ban")
 
       assert name == bandit.name
     end

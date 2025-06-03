@@ -13,8 +13,7 @@ defmodule ToolboxWeb.SearchLive do
       }
     )
 
-    {packages, more?} = Packages.search(term)
-    {exact_matches, other_matches} = split_exact_matches(packages, term)
+    {exact_match, other_results, more?} = Packages.search(term)
 
     {
       :ok,
@@ -22,18 +21,11 @@ defmodule ToolboxWeb.SearchLive do
         socket,
         term: term,
         page_title: "\"#{term}\"",
-        packages: packages,
-        exact_matches: exact_matches,
-        other_matches: other_matches,
+        exact_match: exact_match,
+        other_results: other_results,
+        results_count: length(if(exact_match, do: [exact_match], else: []) ++ other_results),
         more?: more?
       )
     }
-  end
-
-  # Helper function to split exact matches from other matches
-  defp split_exact_matches(packages, search_term) do
-    Enum.split_with(packages, fn package ->
-      String.downcase(package.name) == String.downcase(search_term)
-    end)
   end
 end

@@ -1,11 +1,11 @@
 <article
-  class={"pt-8 sm:pt-15 #{if(length(@packages) == 0, do: "h-full")}"}
+  class={"pt-8 sm:pt-15 #{if(@results_count == 0, do: "h-full")}"}
   {test_attrs(search_results_page: true)}
 >
-  <%= if length(@packages) > 0 do %>
+  <%= if @results_count > 0 do %>
     <div class="flex items-baseline justify-between" {test_attrs(search_results_header: true)}>
       <h1 class="text-[32px] text-primary-text font-bold" {test_attrs(search_results_title: true)}>
-        {length(@packages)}{if(@more?, do: "+")} results for "{@term}"
+        {@results_count}{if(@more?, do: "+")} results for "{@term}"
       </h1>
 
       <span
@@ -13,7 +13,7 @@
         class="text-sm text-secondary-text ml-2 mr-auto"
         {test_attrs(more_results_indicator: true)}
       >
-        Only showing first {length(@packages)}
+        Only showing first {@results_count}
       </span>
 
       <li class="hidden sm:flex justify-end px-3">
@@ -21,7 +21,7 @@
       </li>
     </div>
 
-    <%= if length(@exact_matches) > 0 do %>
+    <%= if @exact_match do %>
       <div class="mt-8" {test_attrs(exact_matches_section: true)}>
         <h2
           class="text-[20px] text-primary-text font-semibold mb-4"
@@ -31,38 +31,37 @@
         </h2>
         <ul {test_attrs(exact_matches_list: true)}>
           <li
-            :for={package <- @exact_matches}
             class="mt-5 py-3 px-4 flex flex-col md:flex-row md:justify-between bg-surface rounded-md border border-stroke"
-            {test_attrs(exact_match_item: package.name)}
+            {test_attrs(exact_match_item: @exact_match.name)}
           >
             <div>
               <.link
-                navigate={~p"/packages/#{package.name}"}
+                navigate={~p"/packages/#{@exact_match.name}"}
                 class="text-[16px] sm:text-[18px]"
-                {test_attrs(package_link: package.name)}
+                {test_attrs(package_link: @exact_match.name)}
               >
-                {package.name}
+                {@exact_match.name}
               </.link>
 
               <p
                 class="mt-2 text-[12px] sm:text-[14px] text-secondary-text"
                 {test_attrs(package_description: true)}
               >
-                {package.description}
+                {@exact_match.description}
               </p>
 
               <div class="flex items-center mt-3 sm:hidden">
-                <div :if={package.latest_github_snapshot} class="p-1 rounded-md">
+                <div :if={@exact_match.latest_github_snapshot} class="p-1 rounded-md">
                   <.star_icon class="w-3" />
                 </div>
                 <span
-                  :if={package.latest_github_snapshot}
+                  :if={@exact_match.latest_github_snapshot}
                   class="ml-1 text-primary-text text-[12px] sm:text-[16px]"
                   {test_attrs(package_stars_mobile: true)}
                 >
-                  {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
+                  {humanized_number(@exact_match.latest_github_snapshot.data["stargazers_count"])}
                 </span>
-                <span :if={package.latest_github_snapshot} class="mx-1 text-[12px] sm:hidden">
+                <span :if={@exact_match.latest_github_snapshot} class="mx-1 text-[12px] sm:hidden">
                   •
                 </span>
                 <div class="flex items-center justify-end sm:hidden">
@@ -73,7 +72,9 @@
                     class="text-[12px] text-primary-text ml-1"
                     {test_attrs(package_downloads_mobile: true)}
                   >
-                    {humanized_number(package.latest_hexpm_snapshot.data["downloads"]["recent"])}
+                    {humanized_number(
+                      @exact_match.latest_hexpm_snapshot.data["downloads"]["recent"]
+                    )}
                   </span>
                   <span class="text-[12px] text-secondary-text ml-1">last 90 days</span>
                 </div>
@@ -86,8 +87,10 @@
                   <.star_icon class="w-5" />
                 </div>
                 <span class="text-[18px] ml-2" {test_attrs(package_stars_desktop: true)}>
-                  <%= if package.latest_github_snapshot do %>
-                    {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
+                  <%= if @exact_match.latest_github_snapshot do %>
+                    {humanized_number(
+                      @exact_match.latest_github_snapshot.data["stargazers_count"]
+                    )}
                   <% else %>
                     -
                   <% end %>
@@ -98,7 +101,9 @@
                   <.download_icon class="w-5" />
                 </div>
                 <span class="text-[18px] ml-2" {test_attrs(package_downloads_desktop: true)}>
-                  {humanized_number(package.latest_hexpm_snapshot.data["downloads"]["recent"])}
+                  {humanized_number(
+                    @exact_match.latest_hexpm_snapshot.data["downloads"]["recent"]
+                  )}
                 </span>
               </div>
             </div>
@@ -107,17 +112,17 @@
       </div>
     <% end %>
 
-    <%= if length(@other_matches) > 0 do %>
+    <%= if length(@other_results) > 0 do %>
       <div class="mt-8" {test_attrs(other_results_section: true)}>
         <h2
           class="text-[20px] text-primary-text font-semibold mb-4"
           {test_attrs(other_results_title: true)}
         >
-          {length(@other_matches)} Other Results:
+          {length(@other_results)} Other Results:
         </h2>
         <ul {test_attrs(other_results_list: true)}>
           <li
-            :for={package <- @other_matches}
+            :for={package <- @other_results}
             class="mt-5 py-3 px-4 flex flex-col md:flex-row md:justify-between bg-surface rounded-md border border-stroke"
             {test_attrs(other_result_item: package.name)}
           >

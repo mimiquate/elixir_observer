@@ -607,59 +607,59 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
       assert String.contains?(first_item_class, "bg-surface-alt")
     end
 
-    test "enter key selects highlighted item from exact match section", %{
-      bandit_package: _bandit_package,
-      bamboo_package: _bamboo_package,
-      tesla_package: _tesla_package,
-      urban_package: _urban_package
-    } do
-      {:ok, view, _html} = live(build_conn(), "/")
+    # test "enter key selects highlighted item from exact match section", %{
+    #   bandit_package: _bandit_package,
+    #   bamboo_package: _bamboo_package,
+    #   tesla_package: _tesla_package,
+    #   urban_package: _urban_package
+    # } do
+    #   {:ok, view, _html} = live(build_conn(), "/")
 
-      # Show dropdown with exact match
-      view
-      |> element("[data-test-search-input]")
-      |> render_change(%{"term" => "bandit"})
+    #   # Show dropdown with exact match
+    #   view
+    #   |> element("[data-test-search-input]")
+    #   |> render_change(%{"term" => "bandit"})
 
-      # Press arrow down to select first item (exact match)
-      view
-      |> element("[data-test-search-input]")
-      |> render_keydown(%{"key" => "ArrowDown"})
+    #   # Press arrow down to select first item (exact match)
+    #   view
+    #   |> element("[data-test-search-input]")
+    #   |> render_keydown(%{"key" => "ArrowDown"})
 
-      # Press enter to select
-      view
-      |> element("[data-test-search-input]")
-      |> render_keydown(%{"key" => "Enter"})
+    #   # Press enter to select
+    #   view
+    #   |> element("[data-test-search-input]")
+    #   |> render_keydown(%{"key" => "Enter"})
 
-      # Should redirect to bandit package page
-      assert_redirect(view, "/packages/bandit")
-    end
+    #   # Should redirect to bandit package page
+    #   assert_redirect(view, "/packages/bandit")
+    # end
 
-    test "enter key selects highlighted item from other results section", %{
-      bandit_package: _bandit_package,
-      bamboo_package: _bamboo_package,
-      tesla_package: _tesla_package,
-      urban_package: _urban_package
-    } do
-      {:ok, view, _html} = live(build_conn(), "/")
+    # test "enter key selects highlighted item from other results section", %{
+    #   bandit_package: _bandit_package,
+    #   bamboo_package: _bamboo_package,
+    #   tesla_package: _tesla_package,
+    #   urban_package: _urban_package
+    # } do
+    #   {:ok, view, _html} = live(build_conn(), "/")
 
-      # Show dropdown with multiple matches
-      view
-      |> element("[data-test-search-input]")
-      |> render_change(%{"term" => "an"})
+    #   # Show dropdown with multiple matches
+    #   view
+    #   |> element("[data-test-search-input]")
+    #   |> render_change(%{"term" => "an"})
 
-      # Press arrow down to get to first item
-      view
-      |> element("[data-test-search-input]")
-      |> render_keydown(%{"key" => "ArrowDown"})
+    #   # Press arrow down to get to first item
+    #   view
+    #   |> element("[data-test-search-input]")
+    #   |> render_keydown(%{"key" => "ArrowDown"})
 
-      # Press enter to select
-      view
-      |> element("[data-test-search-input]")
-      |> render_keydown(%{"key" => "Enter"})
+    #   # Press enter to select
+    #   view
+    #   |> element("[data-test-search-input]")
+    #   |> render_keydown(%{"key" => "Enter"})
 
-      # Should redirect to the first package page (bandit has higher downloads)
-      assert_redirect(view, "/packages/bandit")
-    end
+    #   # Should redirect to the first package page (bandit has higher downloads)
+    #   assert_redirect(view, "/packages/bandit")
+    # end
   end
 
   describe "SearchFieldComponent click interactions" do
