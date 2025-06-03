@@ -13,8 +13,10 @@ defmodule Toolbox.Package do
     has_one :latest_github_snapshot, Toolbox.GithubSnapshot
 
     field :hexpm_owners_sync_at, :utc_datetime
-
     embeds_many :hexpm_owners, Toolbox.Package.HexpmOwner, on_replace: :delete
+
+    # Add embedded schema
+    field :hexpm_latest_stable_version_data, :map
 
     timestamps(type: :utc_datetime)
   end
@@ -31,5 +33,11 @@ defmodule Toolbox.Package do
     |> cast(attrs, [:hexpm_owners_sync_at])
     |> cast_embed(:hexpm_owners, required: true)
     |> validate_required([:hexpm_owners_sync_at])
+  end
+
+  def latest_stable_version_data_changeset(package, attrs) do
+    package
+    |> cast(attrs, [:hexpm_latest_stable_version_data])
+    |> validate_required([:hexpm_latest_stable_version_data])
   end
 end

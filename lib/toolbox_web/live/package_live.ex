@@ -1,6 +1,8 @@
 defmodule ToolboxWeb.PackageLive do
   use ToolboxWeb, :live_view
 
+  require Logger
+
   import ToolboxWeb.Components.StatsCard
   import ToolboxWeb.Components.PackageLink
   import ToolboxWeb.Components.PackageVersionSelector
@@ -36,6 +38,7 @@ defmodule ToolboxWeb.PackageLive do
     if connected?(socket) do
       Phoenix.PubSub.subscribe(Toolbox.PubSub, "package_live:#{name}")
       update_owners_if_oudated(package)
+      update_latest_stable_version_data_if_outdated(package)
     end
 
     hexpm_data = package.latest_hexpm_snapshot.data
@@ -63,6 +66,7 @@ defmodule ToolboxWeb.PackageLive do
           versions: versions,
           latest_version_at: hd(hexpm_data["releases"])["inserted_at"],
           latest_stable_version: hexpm_data["latest_stable_version"],
+          latest_stable_version_data: package.hexpm_latest_stable_version_data,
           html_url: hexpm_data["html_url"],
           changelog_url: changelog_url(hexpm_data),
           docs_html_url: hexpm_data["docs_html_url"],
@@ -78,10 +82,19 @@ defmodule ToolboxWeb.PackageLive do
   end
 
   def handle_params(params, _uri, socket) do
-    %{name: name, latest_stable_version: lsv} = socket.assigns.package
-    version = params["version"] || lsv
+    package = socket.assigns.package
+    version = params["version"] || package.latest_stable_version
+    versions = Enum.map(package.versions, & &1.version)
 
-    {:noreply, assign(socket, %{version: version(name, version)})}
+    if version not in versions do
+      raise HexpmVersionNotFoundError, "#{version} not found for #{package.name}"
+    end
+
+    {:noreply,
+     assign(socket, %{
+       current_version: version,
+       version: version(package, version)
+     })}
   end
 
   def handle_event(
@@ -102,6 +115,15 @@ defmodule ToolboxWeb.PackageLive do
     {:noreply, assign(socket, package: p)}
   end
 
+  def handle_info(
+        %{action: :refresh_latest_stable_version, latest_stable_version_data: data},
+        socket
+      ) do
+    p = %{socket.assigns.package | latest_stable_version_data: data}
+
+    {:noreply, assign(socket, package: p)}
+  end
+
   def update_owners_if_oudated(package) do
     sync_at = package.hexpm_owners_sync_at
 
@@ -112,30 +134,53 @@ defmodule ToolboxWeb.PackageLive do
     end
   end
 
+  def update_latest_stable_version_data_if_outdated(package) do
+    latest_stable_version = package.latest_hexpm_snapshot.data["latest_stable_version"]
+    latest_stable_version_data = package.hexpm_latest_stable_version_data
+
+    if !latest_stable_version_data or
+         latest_stable_version_data["version"] != latest_stable_version do
+      %{action: :get_latest_stable_version, name: package.name, version: latest_stable_version}
+      |> Toolbox.Workers.HexpmWorker.new()
+      |> Oban.insert()
+    end
+  end
+
   defp versions(hexpm_data) do
     hexpm_data["releases"]
     |> Enum.map(fn release ->
       version = release["version"]
 
-      {version, !!hexpm_data["retirements"][version]}
+      %{
+        version: version,
+        is_retired?: !!hexpm_data["retirements"][version]
+      }
     end)
   end
 
-  defp version(name, version) do
-    version_data =
-      case Toolbox.Hexpm.get_package_version(name, version) do
-        {:ok, {{_, 200, _}, _headers, version_data}} ->
-          version_data
+  defp version(%{latest_stable_version_data: %{version: version}} = lsvd, version) do
+    lsvd
+    |> build_version()
+  end
 
-        {:ok, {{_, status, _}, _headers, _version_data}} when status in [400, 404] ->
-          raise HexpmVersionNotFoundError, "#{version} not found for #{name}"
-      end
+  defp version(%{name: name}, version) do
+    case Toolbox.Hexpm.get_package_version(name, version) do
+      {:ok, {{_, 200, _}, _headers, version_data}} ->
+        version_data
+        |> to_string()
+        |> JSON.decode!()
 
-    data =
-      version_data
-      |> to_string()
-      |> JSON.decode!()
+      {:ok, {{_, status, _}, _headers, _version_data}} when status in [400, 404, 429] ->
+        Logger.warning("Unable to fetch hexpm version for #{name} version #{version}")
 
+        nil
+    end
+    |> build_version()
+  end
+
+  defp build_version(nil), do: nil
+
+  defp build_version(data) do
     descriptions =
       data["requirements"]
       |> Enum.map(fn {name, _data} -> name end)
@@ -150,7 +195,7 @@ defmodule ToolboxWeb.PackageLive do
       |> Enum.split_with(fn {_, %{"optional" => optional}} -> optional end)
 
     %{
-      version: version,
+      version: data["version"],
       retirement: data["retirement"],
       elixir_requirement: data["meta"]["elixir"],
       required: required,
