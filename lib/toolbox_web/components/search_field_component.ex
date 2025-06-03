@@ -11,8 +11,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
        exact_match: [],
        other_results: [],
        show_dropdown: false,
-       search_term: "",
-       selected_index: -1
+       search_term: ""
      )}
   end
 
@@ -80,9 +79,9 @@ defmodule ToolboxWeb.SearchFieldComponent do
               </div>
               <ul {test_attrs(exact_matches_list: true)}>
                 <li
-                  class={"px-3 py-2 cursor-pointer last:border-b-0 truncate #{if @selected_index == 0, do: "bg-surface-alt", else: "hover:bg-surface-alt"}"}
+                  class="px-3 py-2 cursor-pointer last:border-b-0 truncate hover:bg-surface-alt"
                   phx-click="select_result"
-                  phx-value-name={@exact_match.name}
+                  phx-value-name={@exact_match.name == 0}
                   phx-target={@myself}
                   {test_attrs(search_result_item: @exact_match.name, search_result_index: 0)}
                 >
@@ -114,7 +113,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
                     {package, index} <-
                       Enum.with_index(@other_results, if(@exact_match, do: 1, else: 0))
                   }
-                  class={"px-3 py-2 cursor-pointer truncate #{if index == @selected_index, do: "bg-surface-alt", else: "hover:bg-surface-alt"}"}
+                  class="px-3 py-2 cursor-pointer truncate hover:bg-surface-alt"
                   phx-click="select_result"
                   phx-value-name={package.name}
                   phx-target={@myself}
@@ -166,13 +165,12 @@ defmodule ToolboxWeb.SearchFieldComponent do
        exact_match: exact_match,
        other_results: other_results,
        show_dropdown: show_dropdown,
-       search_term: term,
-       selected_index: -1
+       search_term: term
      )}
   end
 
   def handle_event("handle_keydown", %{"key" => "Escape"}, socket) do
-    {:noreply, assign(socket, show_dropdown: false, selected_index: -1)}
+    {:noreply, assign(socket, show_dropdown: false)}
   end
 
   def handle_event("handle_keydown", _params, socket) do
@@ -195,18 +193,18 @@ defmodule ToolboxWeb.SearchFieldComponent do
   end
 
   def handle_event("hide_dropdown_immediately", _params, socket) do
-    {:noreply, assign(socket, show_dropdown: false, selected_index: -1)}
+    {:noreply, assign(socket, show_dropdown: false)}
   end
 
   def handle_event("show_dropdown_if_results", _params, socket) do
     show_dropdown = String.length(socket.assigns.search_term) >= 2
 
-    {:noreply, assign(socket, show_dropdown: show_dropdown, selected_index: -1)}
+    {:noreply, assign(socket, show_dropdown: show_dropdown)}
   end
 
   def handle_info({:hide_dropdown, component_id}, socket) do
     if socket.assigns.myself == component_id do
-      {:noreply, assign(socket, show_dropdown: false, selected_index: -1)}
+      {:noreply, assign(socket, show_dropdown: false)}
     else
       {:noreply, socket}
     end
