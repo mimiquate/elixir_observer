@@ -90,9 +90,15 @@ defmodule ToolboxWeb.PackageLive do
       raise HexpmVersionNotFoundError, "#{version} not found for #{package.name}"
     end
 
+    version_data = version(package, version)
+
+    requirements_description = requirements_description(version_data)
+
+
     {:noreply,
      assign(socket, %{
        current_version: version,
+       requirements_description: requirements_description,
        version: version(package, version)
      })}
   end
@@ -139,7 +145,7 @@ defmodule ToolboxWeb.PackageLive do
     latest_stable_version_data = package.hexpm_latest_stable_version_data
 
     if !latest_stable_version_data or
-         latest_stable_version_data["version"] != latest_stable_version do
+         latest_stable_version_data.version != latest_stable_version do
       %{action: :get_latest_stable_version, name: package.name, version: latest_stable_version}
       |> Toolbox.Workers.HexpmWorker.new()
       |> Oban.insert()
@@ -158,9 +164,12 @@ defmodule ToolboxWeb.PackageLive do
     end)
   end
 
+  defp version(%{latest_stable_version_data: nil}, _version) do
+    nil
+  end
+
   defp version(%{latest_stable_version_data: %{version: version}} = lsvd, version) do
     lsvd
-    |> build_version()
   end
 
   defp version(%{name: name}, version) do
@@ -169,41 +178,22 @@ defmodule ToolboxWeb.PackageLive do
         version_data
         |> to_string()
         |> JSON.decode!()
+        |> Toolbox.Package.HexpmVersion.build_version_from_api_response()
 
       {:ok, {{_, status, _}, _headers, _version_data}} when status in [400, 404, 429] ->
         Logger.warning("Unable to fetch hexpm version for #{name} version #{version}")
 
         nil
     end
-    |> build_version()
   end
 
-  defp build_version(nil), do: nil
+  defp requirements_description(nil), do: %{}
 
-  defp build_version(data) do
-    descriptions =
-      data["requirements"]
-      |> Enum.map(fn {name, _data} -> name end)
-      |> Toolbox.Packages.get_packages_by_name()
-      |> Enum.into(%{}, fn p -> {p.name, p.description} end)
-
-    {optional, required} =
-      data["requirements"]
-      |> Enum.map(fn {name, data} ->
-        {name, Map.put(data, "description", descriptions[name])}
-      end)
-      |> Enum.split_with(fn {_, %{"optional" => optional}} -> optional end)
-
-    %{
-      version: data["version"],
-      retirement: data["retirement"],
-      elixir_requirement: data["meta"]["elixir"],
-      required: required,
-      optional: optional,
-      published_at: data["inserted_at"],
-      published_by_username: data["publisher"]["username"],
-      published_by_email: data["publisher"]["email"]
-    }
+  defp requirements_description(version_data) do
+    version_data.required ++ version_data.optional
+    |> Enum.map(fn %{name: name} -> name end)
+    |> Toolbox.Packages.get_packages_by_name()
+    |> Enum.into(%{}, fn p -> {p.name, p.description} end)
   end
 
   defp changelog_url(hexpm_data) do

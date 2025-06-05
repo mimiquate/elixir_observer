@@ -15,8 +15,7 @@ defmodule Toolbox.Package do
     field :hexpm_owners_sync_at, :utc_datetime
     embeds_many :hexpm_owners, Toolbox.Package.HexpmOwner, on_replace: :delete
 
-    # Add embedded schema
-    field :hexpm_latest_stable_version_data, :map
+    embeds_one :hexpm_latest_stable_version_data, Toolbox.Package.HexpmVersion, on_replace: :delete
 
     timestamps(type: :utc_datetime)
   end
@@ -37,7 +36,7 @@ defmodule Toolbox.Package do
 
   def latest_stable_version_data_changeset(package, attrs) do
     package
-    |> cast(attrs, [:hexpm_latest_stable_version_data])
-    |> validate_required([:hexpm_latest_stable_version_data])
+    |> cast(attrs, [])
+    |> cast_embed(:hexpm_latest_stable_version_data, required: true)
   end
 end

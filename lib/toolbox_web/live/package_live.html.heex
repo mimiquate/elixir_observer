@@ -256,8 +256,7 @@
             <div :if={Enum.count(@version.required) > 0} class="mt-4">
               <div
                 :for={
-                  {name, %{"requirement" => requirement, "description" => description}} <-
-                    @version.required
+                  %{name: name, requirement: requirement} <- @version.required
                 }
                 class="pt-1 pb-1 sm:mt-3 px-3 border-b border-divider last:pb-0 last:border-0"
               >
@@ -268,7 +267,7 @@
                   {requirement}
                 </span>
                 <p class="text-[12px] sm:text-[14px] text-secondary-text">
-                  {description}
+                  {@requirements_description[name]}
                 </p>
               </div>
             </div>
@@ -306,10 +305,7 @@
 
               <div id="optional-deps-content" class="hidden opacity-0 max-h-0 transition-all">
                 <div
-                  :for={
-                    {name, %{"requirement" => requirement, "description" => description}} <-
-                      @version.optional
-                  }
+                  :for={%{name: name, requirement: requirement} <- @version.optional}
                   class="pt-1 pb-1 mt-1 border-b border-divider last:pb-0 last:border-0"
                 >
                   <.link navigate={~p"/packages/#{name}"} class="text-primary-text sm:text-[18px]">
@@ -319,7 +315,7 @@
                     {requirement}
                   </span>
                   <p class="text-[12px] sm:text-[14px] text-secondary-text">
-                    {description}
+                    {@requirements_description[name]}
                   </p>
                 </div>
               </div>
