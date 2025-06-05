@@ -29,6 +29,8 @@ config :toolbox, ToolboxWeb.Endpoint,
     tailwind: {Tailwind, :install_and_run, [:toolbox, ~w(--watch)]}
   ]
 
+config :tower, reporters: [Tower.EphemeralReporter]
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed

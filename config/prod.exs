@@ -10,5 +10,11 @@ config :toolbox, ToolboxWeb.Endpoint, cache_static_manifest: "priv/static/cache_
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :tower,
+  reporters: [TowerSlack, TowerRollbar, Tower.EphemeralReporter],
+  logger_metadata: [:tower]
+
+config :tower_slack, otp_app: :toolbox
+
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.
