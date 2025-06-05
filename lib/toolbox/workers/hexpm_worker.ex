@@ -60,7 +60,8 @@ defmodule Toolbox.Workers.HexpmWorker do
 
     Toolbox.Packages.get_package_by_name(name)
     |> Toolbox.Packages.update_package_latest_stable_version(%{
-      hexpm_latest_stable_version_data: Toolbox.Package.HexpmVersion.build_version_from_api_response(version_data)
+      hexpm_latest_stable_version_data:
+        Toolbox.Package.HexpmVersion.build_version_from_api_response(version_data)
     })
     |> case do
       {:ok, p} ->

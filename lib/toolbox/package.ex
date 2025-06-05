@@ -15,7 +15,8 @@ defmodule Toolbox.Package do
     field :hexpm_owners_sync_at, :utc_datetime
     embeds_many :hexpm_owners, Toolbox.Package.HexpmOwner, on_replace: :delete
 
-    embeds_one :hexpm_latest_stable_version_data, Toolbox.Package.HexpmVersion, on_replace: :delete
+    embeds_one :hexpm_latest_stable_version_data, Toolbox.Package.HexpmVersion,
+      on_replace: :delete
 
     timestamps(type: :utc_datetime)
   end

@@ -25,7 +25,13 @@ defmodule Toolbox.Package.HexpmVersion do
 
   def changeset(hexpm_version, attrs) do
     hexpm_version
-    |> cast(attrs, [:version, :elixir_requirement, :published_at, :published_by_username, :published_by_email])
+    |> cast(attrs, [
+      :version,
+      :elixir_requirement,
+      :published_at,
+      :published_by_username,
+      :published_by_email
+    ])
     |> validate_required([:version, :published_at, :published_by_username])
     |> cast_embed(:retirement, with: &retirement_changeset/2)
     |> cast_embed(:required_requirements, with: &requirement_changeset/2)
@@ -54,7 +60,7 @@ defmodule Toolbox.Package.HexpmVersion do
           requirement: data["requirement"]
         }
       end)
-      |> Enum.split_with(fn(r) -> not r.optional end)
+      |> Enum.split_with(fn r -> not r.optional end)
 
     %{
       version: data["version"],

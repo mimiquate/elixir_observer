@@ -1,11 +1,17 @@
 <article class="pt-3 sm:pt-10">
   <section class="flex flex-wrap sm:flex-nowrap min-w-40 justify-between pb-6 sm:pb-10">
     <div>
-      <h3 class="text-[42px] sm:text-[64px] text-primary-text font-semibold font-serif break-all" {test_attrs(package_name: true)}>
+      <h3
+        class="text-[42px] sm:text-[64px] text-primary-text font-semibold font-serif break-all"
+        {test_attrs(package_name: true)}
+      >
         {@package.name}
       </h3>
 
-      <p class="mt-3 max-w-2xl text-md font-mono text-secondary-text" {test_attrs(package_description: true)}>
+      <p
+        class="mt-3 max-w-2xl text-md font-mono text-secondary-text"
+        {test_attrs(package_description: true)}
+      >
         {@package.description}
       </p>
 
@@ -255,9 +261,7 @@
 
             <div :if={Enum.count(@version.required) > 0} class="mt-4">
               <div
-                :for={
-                  %{name: name, requirement: requirement} <- @version.required
-                }
+                :for={%{name: name, requirement: requirement} <- @version.required}
                 class="pt-1 pb-1 sm:mt-3 px-3 border-b border-divider last:pb-0 last:border-0"
               >
                 <.link navigate={~p"/packages/#{name}"} class="text-primary-text sm:text-[18px]">

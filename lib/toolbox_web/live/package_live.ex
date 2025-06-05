@@ -94,7 +94,6 @@ defmodule ToolboxWeb.PackageLive do
 
     requirements_description = requirements_description(version_data)
 
-
     {:noreply,
      assign(socket, %{
        current_version: version,
@@ -190,7 +189,7 @@ defmodule ToolboxWeb.PackageLive do
   defp requirements_description(nil), do: %{}
 
   defp requirements_description(version_data) do
-    version_data.required ++ version_data.optional
+    (version_data.required ++ version_data.optional)
     |> Enum.map(fn %{name: name} -> name end)
     |> Toolbox.Packages.get_packages_by_name()
     |> Enum.into(%{}, fn p -> {p.name, p.description} end)
