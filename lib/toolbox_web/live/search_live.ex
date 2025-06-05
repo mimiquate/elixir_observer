@@ -28,4 +28,9 @@ defmodule ToolboxWeb.SearchLive do
       )
     }
   end
+
+  def handle_info({:hide_dropdown, component_id}, socket) do
+    send_update(ToolboxWeb.SearchFieldComponent, id: component_id.cid, show_dropdown: false)
+    {:noreply, socket}
+  end
 end
