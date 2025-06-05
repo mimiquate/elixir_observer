@@ -61,14 +61,16 @@ defmodule Toolbox.MixProject do
       {:tailwind, "~> 0.3.0", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
-      {:tower_rollbar, "~> 0.6.3"},
-      {:tower_slack, "~> 0.6.0"},
       {:number, "~> 1.0"},
       {:nebulex, "~> 3.0.0-rc.1"},
       {:nebulex_local, "~> 3.0.0-rc.1"},
       {:decorator, "~> 1.4"},
       {:oban, "~> 2.19"},
       {:oban_web, "~> 2.11"},
+
+      # Dev and Prod
+      {:tower_rollbar, "~> 0.6.3", only: [:dev, :prod]},
+      {:tower_slack, "~> 0.6.0", only: [:dev, :prod]},
 
       # Dev
       {:dotenv_parser, "~> 2.0", only: :dev},
