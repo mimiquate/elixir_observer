@@ -1,5 +1,5 @@
 defmodule Toolbox.Workers.SCMWorker do
-  use Oban.Worker, queue: :scm
+  use Oban.Worker, queue: :scm, max_attempts: 3
 
   @impl Oban.Worker
   def perform(%Oban.Job{meta: %{"cron" => true}}) do
