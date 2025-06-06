@@ -27,13 +27,17 @@ defmodule Toolbox.Tasks.SCM do
               package_id: package.id,
               data: data
             })
+
           {:error, :not_found} ->
             # Delete the old snapshot if present
             github_snapshot = package.latest_github_snapshot
+
             if github_snapshot do
               Toolbox.Packages.delete_github_snapshot(github_snapshot)
             end
-          {:error, :parse_error} -> nil
+
+          {:error, :parse_error} ->
+            nil
         end
 
       gitlab_link = links["GitLab"] || links["Gitlab"] || links["gitlab"] ->

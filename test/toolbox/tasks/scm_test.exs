@@ -19,19 +19,24 @@ defmodule Toolbox.Tasks.SCMTest do
         }
       })
 
-      TestServer.add("/repos/owner/test_package", to: fn conn ->
-        Plug.Conn.send_resp(conn, 200, ~s({"id": 123}))
-      end)
+      TestServer.add("/repos/owner/test_package",
+        to: fn conn ->
+          Plug.Conn.send_resp(conn, 200, ~s({"id": 123}))
+        end
+      )
 
-      TestServer.add("/graphql", via: :post, to: fn conn ->
-        Plug.Conn.send_resp(conn, 200, ~s({"open_pr": 10}))
-      end)
+      TestServer.add("/graphql",
+        via: :post,
+        to: fn conn ->
+          Plug.Conn.send_resp(conn, 200, ~s({"open_pr": 10}))
+        end
+      )
 
       Application.put_env(:toolbox, :github_base_url, TestServer.url())
 
       SCM.run([package.name])
 
-      snapshot =  Packages.get_package_by_name(package.name).latest_github_snapshot
+      snapshot = Packages.get_package_by_name(package.name).latest_github_snapshot
 
       assert snapshot.data == %{"activity" => %{"open_pr" => 10}, "id" => 123}
     end
@@ -55,12 +60,13 @@ defmodule Toolbox.Tasks.SCMTest do
         data: %{}
       })
 
-      TestServer.add("/repos/owner/non_existent_repo", to: fn conn ->
-        Plug.Conn.send_resp(conn, 404, "")
-      end)
+      TestServer.add("/repos/owner/non_existent_repo",
+        to: fn conn ->
+          Plug.Conn.send_resp(conn, 404, "")
+        end
+      )
 
       Application.put_env(:toolbox, :github_base_url, TestServer.url())
-
 
       SCM.run([package.name])
 
