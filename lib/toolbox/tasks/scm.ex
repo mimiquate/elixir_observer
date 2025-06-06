@@ -21,11 +21,19 @@ defmodule Toolbox.Tasks.SCM do
 
     cond do
       github_link = links["GitHub"] || links["Github"] || links["github"] ->
-        with {:ok, data} <- Toolbox.Tasks.GitHub.run(github_link) do
-          Toolbox.Packages.upsert_github_snapshot(%{
-            package_id: package.id,
-            data: data
-          })
+        case Toolbox.Tasks.GitHub.run(github_link) do
+          {:ok, data} ->
+            Toolbox.Packages.upsert_github_snapshot(%{
+              package_id: package.id,
+              data: data
+            })
+          {:error, :not_found} ->
+            # Delete the old snapshot if present
+            github_snapshot = package.latest_github_snapshot
+            if github_snapshot do
+              Toolbox.Packages.delete_github_snapshot(github_snapshot)
+            end
+          {:error, :parse_error} -> nil
         end
 
       gitlab_link = links["GitLab"] || links["Gitlab"] || links["gitlab"] ->

@@ -124,6 +124,10 @@ defmodule Toolbox.Packages do
       on: h.id == r.id and r.row_number == 1
   end
 
+  def delete_github_snapshot(snapshot) do
+    Repo.delete(snapshot)
+  end
+
   defp latest_github_snaphost_query() do
     ranking_query =
       from g in GithubSnapshot,
