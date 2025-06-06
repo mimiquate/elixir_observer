@@ -29,7 +29,7 @@ defmodule Toolbox.Package do
   def owners_changeset(package, attrs) do
     package
     |> cast(attrs, [:hexpm_owners_sync_at])
-    |> cast_embed(:hexpm_owners, required: true)
+    |> cast_embed(:hexpm_owners)
     |> validate_required([:hexpm_owners_sync_at])
   end
 end
