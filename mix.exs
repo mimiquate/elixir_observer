@@ -79,7 +79,8 @@ defmodule Toolbox.MixProject do
 
       # Test
       {:floki, "~> 0.37.0", only: :test},
-      {:wallaby, "~> 0.30.9", runtime: false, only: :test}
+      {:wallaby, "~> 0.30.9", runtime: false, only: :test},
+      {:test_server, "~> 0.1.20", only: [:test]}
     ]
   end
 

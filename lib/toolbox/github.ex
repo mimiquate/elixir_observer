@@ -1,7 +1,4 @@
 defmodule Toolbox.Github do
-  @base_url "https://api.github.com"
-  @graphql_api_url ~c"https://api.github.com/graphql"
-
   defmodule GithubActivity do
     defstruct [
       :open_issue_count,
@@ -54,7 +51,7 @@ defmodule Toolbox.Github do
     :httpc.request(
       :post,
       {
-        @graphql_api_url,
+        ~c"#{base_url()}/graphql",
         [
           {~c"authorization", "bearer #{authorization_token()}"},
           {~c"user-agent", "elixir client"}
@@ -80,7 +77,7 @@ defmodule Toolbox.Github do
     :httpc.request(
       :get,
       {
-        ~c"#{@base_url}/#{path}",
+        ~c"#{base_url()}/#{path}",
         [
           {~c"authorization", "Bearer #{authorization_token()}"},
           {~c"user-agent", "elixir client"}
@@ -102,5 +99,9 @@ defmodule Toolbox.Github do
 
   defp authorization_token do
     Application.fetch_env!(:toolbox, :github_authorization_token)
+  end
+
+  def base_url() do
+    Application.fetch_env!(:toolbox, :github_base_url)
   end
 end
