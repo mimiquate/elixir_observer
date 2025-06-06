@@ -29,6 +29,8 @@ defmodule Toolbox.Package do
   def owners_changeset(package, attrs) do
     package
     |> cast(attrs, [:hexpm_owners_sync_at])
+    # We found cases in hexpm that owners are empty
+    # thats why is not required
     |> cast_embed(:hexpm_owners)
     |> validate_required([:hexpm_owners_sync_at])
   end
