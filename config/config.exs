@@ -52,12 +52,6 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :tower,
-  reporters: [TowerSlack, TowerRollbar],
-  logger_metadata: [:tower]
-
-config :tower_slack, otp_app: :toolbox
-
 config :toolbox, Toolbox.Cache,
   # Max memory size in bytes (e.g., 50MB)
   allocated_memory: 50_000_000
@@ -80,6 +74,8 @@ config :toolbox, Oban,
   ],
   notifier: Oban.Notifiers.PG,
   repo: Toolbox.Repo
+
+config :toolbox, github_base_url: "https://api.github.com"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

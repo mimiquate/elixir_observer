@@ -32,6 +32,8 @@ config :phoenix_live_view,
 
 config :toolbox, Oban, testing: :manual
 
+config :toolbox, github_authorization_token: "123"
+
 config :wallaby,
   otp_app: :toolbox,
   chromedriver: [

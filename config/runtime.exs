@@ -66,6 +66,14 @@ if config_env() == :prod do
     ],
     secret_key_base: secret_key_base
 
+  config :tower_slack,
+    webhook_url: System.get_env("TOWER_SLACK_WEBHOOK_URL"),
+    environment: System.get_env("DEPLOYMENT_ENV", to_string(config_env()))
+
+  config :tower_rollbar,
+    access_token: System.get_env("ROLLBAR_SERVER_ACCESS_TOKEN"),
+    environment: System.get_env("DEPLOYMENT_ENV", to_string(config_env()))
+
   # ## SSL Support
   #
   # To get SSL working, you will need to add the `https` key
@@ -102,14 +110,6 @@ end
 if config_env() in [:prod, :dev] do
   config :toolbox,
     github_authorization_token: System.fetch_env!("GITHUB_AUTHORIZATION_TOKEN")
-
-  config :tower_slack,
-    webhook_url: System.get_env("TOWER_SLACK_WEBHOOK_URL"),
-    environment: System.get_env("DEPLOYMENT_ENV", to_string(config_env()))
-
-  config :tower_rollbar,
-    access_token: System.get_env("ROLLBAR_SERVER_ACCESS_TOKEN"),
-    environment: System.get_env("DEPLOYMENT_ENV", to_string(config_env()))
 end
 
 config :toolbox,

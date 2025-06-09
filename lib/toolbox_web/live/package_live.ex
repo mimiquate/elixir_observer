@@ -121,12 +121,17 @@ defmodule ToolboxWeb.PackageLive do
   end
 
   def handle_info(
-        %{action: :refresh_latest_stable_version, latest_stable_version_data: data},
-        socket
-      ) do
+    %{action: :refresh_latest_stable_version, latest_stable_version_data: data},
+    socket
+  ) do
     p = %{socket.assigns.package | latest_stable_version_data: data}
 
     {:noreply, assign(socket, package: p)}
+  end
+
+  def handle_info({:hide_dropdown, component_id}, socket) do
+    send_update(ToolboxWeb.SearchFieldComponent, id: component_id.cid, show_dropdown: false)
+    {:noreply, socket}
   end
 
   def update_owners_if_oudated(package) do

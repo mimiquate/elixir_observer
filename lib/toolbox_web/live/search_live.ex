@@ -13,7 +13,7 @@ defmodule ToolboxWeb.SearchLive do
       }
     )
 
-    {packages, more?} = Packages.search(term)
+    {exact_match, other_results, more?} = Packages.search(term)
 
     {
       :ok,
@@ -21,9 +21,16 @@ defmodule ToolboxWeb.SearchLive do
         socket,
         term: term,
         page_title: "\"#{term}\"",
-        packages: packages,
+        exact_match: exact_match,
+        other_results: other_results,
+        results_count: length(if(exact_match, do: [exact_match], else: []) ++ other_results),
         more?: more?
       )
     }
+  end
+
+  def handle_info({:hide_dropdown, component_id}, socket) do
+    send_update(ToolboxWeb.SearchFieldComponent, id: component_id.cid, show_dropdown: false)
+    {:noreply, socket}
   end
 end
