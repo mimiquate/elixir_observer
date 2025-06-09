@@ -6,6 +6,7 @@ defmodule Toolbox.Package.HexpmVersionTest do
   describe "build_version_from_api_response/1" do
     test "" do
       inserted_at = "2025-03-26T01:11:00.000000Z"
+
       response = %{
         "version" => "1.0.0",
         "meta" => %{"elixir" => ">= 1.7.0"},
@@ -41,4 +42,4 @@ defmodule Toolbox.Package.HexpmVersionTest do
       assert optional.requirement == "~> 1.7"
     end
   end
-end 
+end

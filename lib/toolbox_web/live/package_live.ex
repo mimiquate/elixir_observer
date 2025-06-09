@@ -121,13 +121,14 @@ defmodule ToolboxWeb.PackageLive do
   end
 
   def handle_info(
-    %{action: :refresh_latest_stable_version, latest_stable_version_data: data},
-    socket
-  ) do
+        %{action: :refresh_latest_stable_version, latest_stable_version_data: data},
+        socket
+      ) do
     p = %{socket.assigns.package | latest_stable_version_data: data}
     requirements_description = requirements_description(data)
 
-    {:noreply, assign(socket, package: p, version: data, requirements_description: requirements_description)}
+    {:noreply,
+     assign(socket, package: p, version: data, requirements_description: requirements_description)}
   end
 
   def handle_info({:hide_dropdown, component_id}, socket) do

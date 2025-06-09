@@ -45,13 +45,13 @@ defmodule ToolboxWeb.PackageLiveTest do
 
     test "mounts successfully", %{conn: conn, package: package} do
       Packages.update_package_owners(package, %{
-        hexpm_owners_sync_at: DateTime.utc_now,
+        hexpm_owners_sync_at: DateTime.utc_now(),
         hexpm_owners: [%{email: "test@example.com", username: "owner"}]
       })
 
       Packages.update_package_latest_stable_version(package, %{
         hexpm_latest_stable_version_data: %{
-          published_at: DateTime.utc_now,
+          published_at: DateTime.utc_now(),
           published_by_username: "username",
           version: "1.7.0"
         }
