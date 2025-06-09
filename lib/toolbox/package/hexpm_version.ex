@@ -10,10 +10,7 @@ defmodule Toolbox.Package.HexpmVersion do
     embeds_many :required, Toolbox.Package.HexpmRequirement, on_replace: :delete
     embeds_many :optional, Toolbox.Package.HexpmRequirement, on_replace: :delete
 
-    embeds_one :retirement, Toolbox.Package.HexmRetirment, on_replace: :delete do
-      field :message, :string
-      field :reason, :string
-    end
+    embeds_one :retirement, Toolbox.Package.HexmRetirment, on_replace: :delete
 
     field :published_at, :utc_datetime
     field :published_by_username, :string
@@ -30,15 +27,9 @@ defmodule Toolbox.Package.HexpmVersion do
       :published_by_email
     ])
     |> validate_required([:version, :published_at, :published_by_username])
-    |> cast_embed(:retirement, with: &retirement_changeset/2)
+    |> cast_embed(:retirement)
     |> cast_embed(:required)
     |> cast_embed(:optional)
-  end
-
-  def retirement_changeset(retirement, attrs \\ %{}) do
-    retirement
-    |> cast(attrs, [:message, :reason])
-    |> validate_required([:message, :reason])
   end
 
   # Build a map from Hexpm release response
