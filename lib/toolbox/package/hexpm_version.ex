@@ -2,6 +2,7 @@ defmodule Toolbox.Package.HexpmVersion do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @primary_key false
   embedded_schema do
     field :version, :string
     field :elixir_requirement, :string
