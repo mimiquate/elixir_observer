@@ -50,6 +50,7 @@ defmodule Toolbox.Package.HexpmVersion do
     |> validate_required([:name, :requirement])
   end
 
+  # Build a map from Hexpm release response
   def build_version_from_api_response(data) do
     {required, optional} =
       data["requirements"]
