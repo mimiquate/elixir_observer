@@ -26,7 +26,7 @@ defmodule Toolbox.Package.HexpmVersion do
       :published_by_username,
       :published_by_email
     ])
-    |> validate_required([:version, :published_at, :published_by_username])
+    |> validate_required([:version, :published_at])
     |> cast_embed(:retirement)
     |> cast_embed(:required)
     |> cast_embed(:optional)
