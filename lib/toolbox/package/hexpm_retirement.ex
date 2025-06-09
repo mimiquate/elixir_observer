@@ -11,6 +11,6 @@ defmodule Toolbox.Package.HexpmRetirement do
   def changeset(retirement, attrs) do
     retirement
     |> cast(attrs, [:message, :reason])
-    |> validate_required([:message, :reason])
+    |> validate_required([:reason])
   end
 end
