@@ -1,4 +1,4 @@
-defmodule Toolbox.Package.HexmRetirment do
+defmodule Toolbox.Package.HexpmRetirement do
   use Ecto.Schema
   import Ecto.Changeset
 

@@ -10,7 +10,7 @@ defmodule Toolbox.Package.HexpmVersion do
     embeds_many :required, Toolbox.Package.HexpmRequirement, on_replace: :delete
     embeds_many :optional, Toolbox.Package.HexpmRequirement, on_replace: :delete
 
-    embeds_one :retirement, Toolbox.Package.HexmRetirment, on_replace: :delete
+    embeds_one :retirement, Toolbox.Package.HexpmRetirement, on_replace: :delete
 
     field :published_at, :utc_datetime
     field :published_by_username, :string
