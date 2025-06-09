@@ -44,6 +44,29 @@ defmodule ToolboxWeb.PackageLiveTest do
     end
 
     test "mounts successfully", %{conn: conn, package: package} do
+      Packages.update_package_owners(package, %{
+        hexpm_owners_sync_at: DateTime.utc_now,
+        hexpm_owners: [%{email: "test@example.com", username: "owner"}]
+      })
+
+      Packages.update_package_latest_stable_version(package, %{
+        hexpm_latest_stable_version_data: %{
+          published_at: DateTime.utc_now,
+          published_by_username: "username",
+          version: "1.7.0"
+        }
+      })
+
+      {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
+
+      assert page_title(view) =~ package.name
+      assert has_element?(view, "[data-test-package-name]", package.name)
+      assert has_element?(view, "[data-test-package-description]", package.description)
+
+      assert all_enqueued(worker: Toolbox.Workers.HexpmWorker) == []
+    end
+
+    test "mounts successfully when missing external data", %{conn: conn, package: package} do
       {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
 
       assert page_title(view) =~ package.name
