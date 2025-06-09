@@ -98,7 +98,7 @@ defmodule ToolboxWeb.PackageLive do
      assign(socket, %{
        current_version: version,
        requirements_description: requirements_description,
-       version: version(package, version)
+       version: version_data
      })}
   end
 
@@ -125,8 +125,9 @@ defmodule ToolboxWeb.PackageLive do
     socket
   ) do
     p = %{socket.assigns.package | latest_stable_version_data: data}
+    requirements_description = requirements_description(data)
 
-    {:noreply, assign(socket, package: p)}
+    {:noreply, assign(socket, package: p, version: data, requirements_description: requirements_description)}
   end
 
   def handle_info({:hide_dropdown, component_id}, socket) do
@@ -172,7 +173,7 @@ defmodule ToolboxWeb.PackageLive do
     nil
   end
 
-  defp version(%{latest_stable_version_data: %{version: version}} = lsvd, version) do
+  defp version(%{latest_stable_version_data: %{version: version} = lsvd}, version) do
     lsvd
   end
 

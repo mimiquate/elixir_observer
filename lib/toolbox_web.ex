@@ -98,9 +98,16 @@ defmodule ToolboxWeb do
         Toolbox.Number.to_human(number)
       end
 
-      def humanized_datetime(datetime) do
+      def humanized_datetime(datetime) when is_binary(datetime) do
         Calendar.strftime(
           NaiveDateTime.from_iso8601!(datetime),
+          "%b %Y"
+        )
+      end
+
+      def humanized_datetime(%DateTime{} = datetime) do
+        Calendar.strftime(
+          datetime,
           "%b %Y"
         )
       end

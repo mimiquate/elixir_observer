@@ -6,14 +6,10 @@ defmodule Toolbox.Package.HexpmVersion do
     field :version, :string
     field :elixir_requirement, :string
 
-    embeds_many :required, Toolbox.Profile.HexmRequirement, on_replace: :delete do
-      field :name, :string
-      field :requirement, :string
-    end
+    embeds_many :required, Toolbox.Package.HexpmRequirement, on_replace: :delete
+    embeds_many :optional, Toolbox.Package.HexpmRequirement, on_replace: :delete
 
-    embeds_many :optional, Toolbox.Profile.HexmRequirement, on_replace: :delete
-
-    embeds_one :retirement, Toolbox.Profile.HexmRetirment, on_replace: :delete do
+    embeds_one :retirement, Toolbox.Package.HexmRetirment, on_replace: :delete do
       field :message, :string
       field :reason, :string
     end
@@ -34,20 +30,14 @@ defmodule Toolbox.Package.HexpmVersion do
     ])
     |> validate_required([:version, :published_at, :published_by_username])
     |> cast_embed(:retirement, with: &retirement_changeset/2)
-    |> cast_embed(:required_requirements, with: &requirement_changeset/2)
-    |> cast_embed(:optional_requirements, with: &requirement_changeset/2)
+    |> cast_embed(:required)
+    |> cast_embed(:optional)
   end
 
   def retirement_changeset(retirement, attrs \\ %{}) do
     retirement
     |> cast(attrs, [:message, :reason])
     |> validate_required([:message, :reason])
-  end
-
-  def requirement_changeset(requirement, attrs \\ %{}) do
-    requirement
-    |> cast(attrs, [:name, :requirement])
-    |> validate_required([:name, :requirement])
   end
 
   # Build a map from Hexpm release response
