@@ -92,6 +92,12 @@ defmodule Toolbox.Packages do
     |> Repo.update()
   end
 
+  def update_package_latest_stable_version(package, attributes \\ %{}) do
+    package
+    |> Package.latest_stable_version_data_changeset(attributes)
+    |> Repo.update()
+  end
+
   def create_hexpm_snapshot(attributes \\ %{}) do
     %HexpmSnapshot{}
     |> HexpmSnapshot.changeset(attributes)
