@@ -45,7 +45,8 @@ defmodule Toolbox.Package.HexpmVersionTest do
 
   describe "changeset/2" do
     test "publisher can be blank" do
-      attrs = ~S(
+      attrs =
+        ~S(
         {
           "meta": {
             "elixir": "~\u003E 1.1",
@@ -76,8 +77,8 @@ defmodule Toolbox.Package.HexpmVersionTest do
           "html_url": "https://hex.pm/packages/esync/0.0.1"
         }
       )
-      |> Jason.decode!()
-      |> HexpmVersion.build_version_from_api_response()
+        |> Jason.decode!()
+        |> HexpmVersion.build_version_from_api_response()
 
       changeset = HexpmVersion.changeset(%HexpmVersion{}, attrs)
       assert changeset.valid?
