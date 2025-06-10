@@ -9,6 +9,13 @@ defmodule Toolbox.Github do
     ]
   end
 
+  def parse_link(link) do
+    Regex.named_captures(
+      ~r/^https?:\/\/(?:www\.)?github.com\/(?<owner>[^\/]*)\/(?<repo>[^\/\n]*)/,
+      link
+    )
+  end
+
   def get_repo(owner, repository_name) do
     get("repos/#{owner}/#{repository_name}")
   end

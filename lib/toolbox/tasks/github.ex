@@ -1,10 +1,13 @@
 defmodule Toolbox.Tasks.GitHub do
   require Logger
 
+  alias Toolbox.Github
+  alias Toolbox.Packages
+
   def run(package, github_link) do
     case do_run(github_link) do
       {:ok, data} ->
-        Toolbox.Packages.upsert_github_snapshot(%{
+        Packages.upsert_github_snapshot(%{
           package_id: package.id,
           data: data
         })
@@ -14,7 +17,7 @@ defmodule Toolbox.Tasks.GitHub do
         github_snapshot = package.latest_github_snapshot
 
         if github_snapshot do
-          Toolbox.Packages.delete_github_snapshot(github_snapshot)
+          Packages.delete_github_snapshot(github_snapshot)
         end
 
         nil
@@ -25,18 +28,14 @@ defmodule Toolbox.Tasks.GitHub do
   end
 
   defp do_run(github_link) do
-    Regex.named_captures(
-      ~r/^https?:\/\/(?:www\.)?github.com\/(?<owner>[^\/]*)\/(?<repo>[^\/\n]*)/,
-      github_link
-    )
-    |> case do
+    case Github.parse_link(github_link) do
       nil ->
         Logger.warning("COULDN'T PARSE github link #{github_link}")
 
         {:error, :parse_error}
 
       %{"owner" => owner, "repo" => repository_name} ->
-        Toolbox.Github.get_repo(owner, repository_name)
+        Github.get_repo(owner, repository_name)
         |> case do
           {
             :ok,
@@ -59,7 +58,7 @@ defmodule Toolbox.Tasks.GitHub do
             }
           } ->
             {:ok, {{_, 200, _}, _headers, data}} =
-              Toolbox.Github.get_activity_and_changelog(owner, repository_name)
+              Github.get_activity_and_changelog(owner, repository_name)
 
             data = Jason.decode!(data)
             repository_data = Jason.decode!(repository_data)
