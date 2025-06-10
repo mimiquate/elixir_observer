@@ -83,5 +83,56 @@ defmodule Toolbox.Package.HexpmVersionTest do
       changeset = HexpmVersion.changeset(%HexpmVersion{}, attrs)
       assert changeset.valid?
     end
+
+    test "retirement message can be blank" do
+      attrs =
+        ~S(
+        {
+          "meta": {
+            "elixir": null,
+            "app": "swen_jwt",
+            "build_tools": [
+              "gleam"
+            ]
+          },
+          "version": "0.0.2",
+          "checksum": "14d8d2b685d45fdd449e11c7aa4250fe12a34776bf2540f8f8a07c3fc7c7de41",
+          "url": "https://hex.pm/api/packages/swen_jwt/releases/0.0.2",
+          "has_docs": true,
+          "inserted_at": "2024-07-29T20:34:51.095846Z",
+          "updated_at": "2024-07-30T13:57:03.782788Z",
+          "retirement": {
+            "message": null,
+            "reason": "other"
+          },
+          "downloads": 65,
+          "publisher": {
+            "url": "https://hex.pm/api/users/wqtt",
+            "email": "wqtt@attum.co",
+            "username": "wqtt"
+          },
+          "requirements": {
+            "gleam_stdlib": {
+              "optional": false,
+              "app": "gleam_stdlib",
+              "requirement": "\u003E= 0.34.0 and \u003C 2.0.0"
+            }
+          },
+          "docs_html_url": "https://hexdocs.pm/swen_jwt/0.0.2/",
+          "package_url": "https://hex.pm/api/packages/swen_jwt",
+          "configs": {
+            "erlang.mk": "dep_swen_jwt = hex 0.0.2",
+            "mix.exs": "{:swen_jwt, \"~\u003E 0.0.2\"}",
+            "rebar.config": "{swen_jwt, \"0.0.2\"}"
+          },
+          "html_url": "https://hex.pm/packages/swen_jwt/0.0.2"
+        }
+      )
+        |> Jason.decode!()
+        |> HexpmVersion.build_version_from_api_response()
+
+      changeset = HexpmVersion.changeset(%HexpmVersion{}, attrs)
+      assert changeset.valid?
+    end
   end
 end
