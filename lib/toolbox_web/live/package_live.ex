@@ -68,7 +68,7 @@ defmodule ToolboxWeb.PackageLive do
           latest_stable_version: hexpm_data["latest_stable_version"],
           latest_stable_version_data: package.hexpm_latest_stable_version_data,
           html_url: hexpm_data["html_url"],
-          changelog_url: changelog_url(hexpm_data),
+          changelog_url: changelog_url(hexpm_data, github_data),
           docs_html_url: hexpm_data["docs_html_url"],
           github_repo_url: github_data["html_url"],
           github_fullname: github_data["full_name"],
@@ -212,9 +212,20 @@ defmodule ToolboxWeb.PackageLive do
     |> Enum.into(%{}, fn p -> {p.name, p.description} end)
   end
 
-  defp changelog_url(hexpm_data) do
+  defp changelog_url(hexpm_data, github_data) do
     links = hexpm_data["meta"]["links"]
 
-    links["Changelog"] || links["CHANGELOG"]
+    hex_changelog_url = links["Changelog"] || links["CHANGELOG"]
+
+    cond do
+      is_binary(hex_changelog_url) ->
+        hex_changelog_url
+
+      github_data["has_changelog"] ->
+        "#{github_data["html_url"]}/blob/-/CHANGELOG.md"
+
+      true ->
+        nil
+    end
   end
 end
