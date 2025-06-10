@@ -187,7 +187,9 @@ defmodule ToolboxWeb.SearchFieldComponent do
   end
 
   def handle_event("hide_dropdown", _params, socket) do
-    {:noreply, assign(socket, show_dropdown: false)}
+    # Use a shorter delay to allow click events on dropdown items to fire first
+    Process.send_after(self(), {:hide_dropdown, socket.assigns.myself}, 100)
+    {:noreply, socket}
   end
 
   def handle_event("show_dropdown_if_results", _params, socket) do
