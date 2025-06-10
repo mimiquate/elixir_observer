@@ -38,7 +38,11 @@ defmodule Toolbox.Tasks.SCMTest do
 
       snapshot = Packages.get_package_by_name(package.name).latest_github_snapshot
 
-      assert snapshot.data == %{"activity" => %{"open_pr" => 10}, "id" => 123}
+      assert snapshot.data == %{
+               "activity" => %{"open_pr" => 10},
+               "id" => 123,
+               "has_changelog" => false
+             }
     end
 
     test "delete old snapshot when not found GitHub", %{} do

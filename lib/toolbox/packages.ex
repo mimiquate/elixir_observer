@@ -159,7 +159,8 @@ defmodule Toolbox.Packages do
   def get_github_activity(%{"full_name" => full_name}) do
     [owner, repo] = full_name |> String.split("/")
 
-    with {:ok, {{_, 200, _}, _headers, data}} <- Toolbox.Github.get_activity(owner, repo),
+    with {:ok, {{_, 200, _}, _headers, data}} <-
+           Toolbox.Github.get_activity_and_changelog(owner, repo),
          %{
            "data" => %{
              "repository" => %{

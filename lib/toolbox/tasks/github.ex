@@ -35,16 +35,19 @@ defmodule Toolbox.Tasks.GitHub do
               repository_data
             }
           } ->
-            {:ok, {{_, 200, _}, _headers, activity_data}} =
-              Toolbox.Github.get_activity(owner, repository_name)
+            {:ok, {{_, 200, _}, _headers, data}} =
+              Toolbox.Github.get_activity_and_changelog(owner, repository_name)
 
-            activity_data = activity_data |> Jason.decode!()
+            data = Jason.decode!(data)
+            repository_data = Jason.decode!(repository_data)
+
+            changelog = get_in(data, ["data", "repository", "changelog"])
 
             {
               :ok,
               repository_data
-              |> Jason.decode!()
-              |> Map.put("activity", activity_data)
+              |> Map.put("has_changelog", !!changelog)
+              |> Map.put("activity", data)
             }
         end
     end

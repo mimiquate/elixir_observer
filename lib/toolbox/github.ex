@@ -13,7 +13,7 @@ defmodule Toolbox.Github do
     get("repos/#{owner}/#{repository_name}")
   end
 
-  def get_activity(owner, repository_name) do
+  def get_activity_and_changelog(owner, repository_name) do
     year_ago =
       DateTime.utc_now(:second)
       |> DateTime.shift(month: -12)
@@ -44,6 +44,10 @@ defmodule Toolbox.Github do
             }
             title
           }
+        }
+
+        changelog: object(expression: "HEAD:CHANGELOG.md") {
+          oid
         }
       }
     """
