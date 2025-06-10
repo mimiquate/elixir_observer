@@ -1,7 +1,30 @@
 defmodule Toolbox.Tasks.GitHub do
   require Logger
 
-  def run(github_link) do
+  def run(package, github_link) do
+    case do_run(github_link) do
+      {:ok, data} ->
+        Toolbox.Packages.upsert_github_snapshot(%{
+          package_id: package.id,
+          data: data
+        })
+
+      {:error, :not_found} ->
+            # Delete the old snapshot if present
+        github_snapshot = package.latest_github_snapshot
+
+        if github_snapshot do
+          Toolbox.Packages.delete_github_snapshot(github_snapshot)
+        end
+
+        nil
+
+      {:error, :parse_error} ->
+        nil
+    end
+  end
+
+  defp do_run(github_link) do
     Regex.named_captures(
       ~r/^https?:\/\/(?:www\.)?github.com\/(?<owner>[^\/]*)\/(?<repo>[^\/\n]*)/,
       github_link
