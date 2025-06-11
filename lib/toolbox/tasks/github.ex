@@ -20,10 +20,12 @@ defmodule Toolbox.Tasks.GitHub do
             repository_data =
               repository_data
               |> Map.put("has_changelog", !!changelog)
-              |> Map.put("activity", activity_data)
+
+            activity = Toolbox.GithubSnapshot.Activity.build_from_api_response(activity_data)
 
             Toolbox.Packages.upsert_github_snapshot(%{
               package_id: package.id,
+              activity: activity,
               data: repository_data
             })
 
