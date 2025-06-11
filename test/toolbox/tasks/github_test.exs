@@ -1,22 +1,18 @@
-defmodule Toolbox.Tasks.SCMTest do
+defmodule Toolbox.Tasks.GitHubTest do
   use Toolbox.DataCase, async: true
 
   alias Toolbox.Packages
+  alias Toolbox.Tasks.GitHub
   alias Toolbox.Tasks.SCM
 
-  describe "run/1" do
-    test "add GitHub info", %{} do
+  describe "run/2" do
+    test "creates github snapshot with successful response" do
       {:ok, package} = Packages.create_package(%{name: "test_package"})
+      github_link = "https://github.com/owner/test_package"
 
       Packages.create_hexpm_snapshot(%{
         package_id: package.id,
-        data: %{
-          "meta" => %{
-            "links" => %{
-              "GitHub" => "https://github.com/owner/test_package"
-            }
-          }
-        }
+        data: %{}
       })
 
       TestServer.add("/repos/owner/test_package",
@@ -34,7 +30,7 @@ defmodule Toolbox.Tasks.SCMTest do
 
       Application.put_env(:toolbox, :github_base_url, TestServer.url())
 
-      SCM.run([package.name])
+      GitHub.run(package, github_link)
 
       snapshot = Packages.get_package_by_name(package.name).latest_github_snapshot
 
@@ -47,16 +43,11 @@ defmodule Toolbox.Tasks.SCMTest do
 
     test "delete old snapshot when not found GitHub", %{} do
       {:ok, package} = Packages.create_package(%{name: "test_package"})
+      github_link = "https://github.com/owner/non_existent_repo"
 
       Packages.create_hexpm_snapshot(%{
         package_id: package.id,
-        data: %{
-          "meta" => %{
-            "links" => %{
-              "GitHub" => "https://github.com/owner/non_existent_repo"
-            }
-          }
-        }
+        data: %{}
       })
 
       Packages.upsert_github_snapshot(%{
@@ -72,7 +63,7 @@ defmodule Toolbox.Tasks.SCMTest do
 
       Application.put_env(:toolbox, :github_base_url, TestServer.url())
 
-      SCM.run([package.name])
+      GitHub.run(package, github_link)
 
       refute Packages.get_package_by_name(package.name).latest_github_snapshot
     end

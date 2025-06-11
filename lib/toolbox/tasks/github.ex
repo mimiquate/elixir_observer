@@ -5,73 +5,37 @@ defmodule Toolbox.Tasks.GitHub do
   alias Toolbox.Packages
 
   def run(package, github_link) do
-    case do_run(github_link) do
-      {:ok, data} ->
-        Packages.upsert_github_snapshot(%{
-          package_id: package.id,
-          data: data
-        })
-
-      {:error, :not_found} ->
-            # Delete the old snapshot if present
-        github_snapshot = package.latest_github_snapshot
-
-        if github_snapshot do
-          Packages.delete_github_snapshot(github_snapshot)
-        end
-
-        nil
-
-      {:error, :parse_error} ->
-        nil
-    end
-  end
-
-  defp do_run(github_link) do
     case Github.parse_link(github_link) do
-      nil ->
-        Logger.warning("COULDN'T PARSE github link #{github_link}")
-
-        {:error, :parse_error}
-
       %{"owner" => owner, "repo" => repository_name} ->
-        Github.get_repo(owner, repository_name)
-        |> case do
-          {
-            :ok,
-            {
-              {_, 404, _},
-              _headers,
-              _data
-            }
-          } ->
-            Logger.warning("GITHUB REPO for #{github_link} NOT FOUND")
-
-            {:error, :not_found}
-
-          {
-            :ok,
-            {
-              {_, 200, _},
-              _headers,
-              repository_data
-            }
-          } ->
-            {:ok, {{_, 200, _}, _headers, data}} =
+        case Github.get_repo(owner, repository_name) do
+          {:ok, {{_, 200, _}, _, repository_data}} ->
+            {:ok, {{_, 200, _}, _h, activity_data}} =
               Github.get_activity_and_changelog(owner, repository_name)
 
-            data = Jason.decode!(data)
             repository_data = Jason.decode!(repository_data)
+            activity_data = Jason.decode!(activity_data)
 
-            changelog = get_in(data, ["data", "repository", "changelog"])
+            changelog = get_in(activity_data, ["data", "repository", "changelog"])
 
-            {
-              :ok,
+            repository_data =
               repository_data
               |> Map.put("has_changelog", !!changelog)
-              |> Map.put("activity", data)
-            }
+              |> Map.put("activity", activity_data)
+
+            Toolbox.Packages.upsert_github_snapshot(%{
+              package_id: package.id,
+              data: repository_data
+            })
+
+          {:ok, {{_, 404, _}, _, _}} ->
+            Logger.warning("GITHUB REPO for #{github_link} NOT FOUND")
+            Packages.delete_github_snapshots(package)
+            nil
         end
+
+      nil ->
+        Logger.warning("COULDN'T PARSE github link #{github_link}")
+        nil
     end
   end
 end

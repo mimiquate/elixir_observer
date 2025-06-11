@@ -130,8 +130,10 @@ defmodule Toolbox.Packages do
       on: h.id == r.id and r.row_number == 1
   end
 
-  def delete_github_snapshot(snapshot) do
-    Repo.delete(snapshot)
+  def delete_github_snapshots(%Package{id: id}) do
+    GithubSnapshot
+    |> where([gs], gs.package_id == ^id)
+    |> Repo.delete_all()
   end
 
   defp latest_github_snaphost_query() do
