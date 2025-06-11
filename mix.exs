@@ -69,13 +69,13 @@ defmodule Toolbox.MixProject do
       {:oban_web, "~> 2.11"},
 
       # Dev and Prod
-      {:tower_rollbar, "~> 0.6.3", only: [:dev, :prod]},
-      {:tower_slack, "~> 0.6.0", only: [:dev, :prod]},
+      # {:tower_rollbar, "~> 0.6.3", only: [:dev, :prod]},
 
       # Dev
       {:dotenv_parser, "~> 2.0", only: :dev},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:live_debugger, "~> 0.2.0", only: :dev},
+      {:igniter, "~> 0.6", only: [:dev, :test]},
 
       # Test
       {:floki, "~> 0.37.0", only: :test},
