@@ -1,14 +1,4 @@
 defmodule Toolbox.Github do
-  defmodule GithubActivity do
-    defstruct [
-      :open_issue_count,
-      :closed_issue_count,
-      :open_pr_count,
-      :merged_pr_count,
-      :pull_requests
-    ]
-  end
-
   def parse_link(link) do
     Regex.named_captures(
       ~r/^https?:\/\/(?:www\.)?github.com\/(?<owner>[^\/]*)\/(?<repo>[^\/\n]*)/,

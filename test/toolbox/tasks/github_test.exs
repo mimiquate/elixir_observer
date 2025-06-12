@@ -3,7 +3,8 @@ defmodule Toolbox.Tasks.GitHubTest do
 
   alias Toolbox.Packages
   alias Toolbox.Tasks.GitHub
-  alias Toolbox.Tasks.SCM
+  alias Toolbox.GithubSnapshot.Activity
+  alias Toolbox.GithubSnapshot.PullRequest
 
   describe "run/2" do
     test "creates github snapshot with successful response" do
@@ -24,7 +25,32 @@ defmodule Toolbox.Tasks.GitHubTest do
       TestServer.add("/graphql",
         via: :post,
         to: fn conn ->
-          Plug.Conn.send_resp(conn, 200, ~s({"open_pr": 10}))
+          Plug.Conn.send_resp(conn, 200, ~s({
+            "data": {
+              "openIssueCount": {"issueCount": 1},
+              "closedIssueCount": {"issueCount": 45},
+              "openPRCount": {"issueCount": 0},
+              "mergedPRCount": {"issueCount": 75},
+              "repository": {
+                "pullRequests": {
+                  "nodes": [
+                    {
+                      "createdAt": "2025-05-23T16:57:23Z",
+                      "mergedAt": "2025-05-25T16:58:30Z",
+                      "permalink": "https://github.com/mtrudel/bandit/pull/495",
+                      "mergedBy": {
+                        "login": "mtrudel",
+                        "avatarUrl": "https://avatars.githubusercontent.com/"
+                      },
+                      "title": "Streamline keepalive logic"
+                    }
+                  ]
+                },
+                "changelog": null
+              }
+            }
+          }
+          ))
         end
       )
 
@@ -35,10 +61,25 @@ defmodule Toolbox.Tasks.GitHubTest do
       snapshot = Packages.get_package_by_name(package.name).latest_github_snapshot
 
       assert snapshot.data == %{
-               "activity" => %{"open_pr" => 10},
                "id" => 123,
                "has_changelog" => false
              }
+
+      assert snapshot.activity == %Activity{
+        closed_issue_count: 45,
+        merged_pr_count: 75,
+        open_issue_count: 1,
+        open_pr_count: 0,
+        pull_requests: [
+          %PullRequest{
+            permalink: "https://github.com/mtrudel/bandit/pull/495",
+            created_at: ~U[2025-05-23 16:57:23Z],
+            title: "Streamline keepalive logic",
+            merged_at: ~U[2025-05-25 16:58:30Z],
+            merged_by_login: "mtrudel",
+            merged_by_avatar_url: "https://avatars.githubusercontent.com/"}
+        ]
+      }
     end
 
     test "delete old snapshot when not found GitHub", %{} do

@@ -4,33 +4,30 @@ defmodule ToolboxWeb.Components.PackageActivityTest do
   import Phoenix.LiveViewTest
   import ToolboxWeb.Components.PackageActivity
 
-  alias Toolbox.Github.GithubActivity
+  alias Toolbox.GithubSnapshot.Activity
+  alias Toolbox.GithubSnapshot.PullRequest
 
   describe "package_activity/1" do
     test "renders activity section with GitHub activity data" do
-      activity = %GithubActivity{
+        activity = %Activity{
         open_issue_count: 5,
         closed_issue_count: 23,
         open_pr_count: 2,
         merged_pr_count: 15,
         pull_requests: [
-          %{
-            "title" => "Fix bug in authentication",
-            "permalink" => "https://github.com/owner/repo/pull/123",
-            "mergedBy" => %{
-              "login" => "developer1",
-              "avatarUrl" => "https://avatars.githubusercontent.com/u/123?v=4"
-            },
-            "mergedAt" => "2024-01-15T10:30:00Z"
+          %PullRequest{
+            title: "Fix bug in authentication",
+            permalink: "https://github.com/owner/repo/pull/123",
+            merged_by_login: "developer1",
+            merged_by_avatar_url: "https://avatars.githubusercontent.com/u/123?v=4",
+            merged_at: ~U[2024-01-15 10:30:00Z]
           },
-          %{
-            "title" => "Add new feature for user management",
-            "permalink" => "https://github.com/owner/repo/pull/124",
-            "mergedBy" => %{
-              "login" => "developer2",
-              "avatarUrl" => "https://avatars.githubusercontent.com/u/456?v=4"
-            },
-            "mergedAt" => "2024-01-10T14:20:00Z"
+          %PullRequest{
+            title: "Add new feature for user management",
+            permalink: "https://github.com/owner/repo/pull/124",
+            merged_by_login: "developer2",
+            merged_by_avatar_url: "https://avatars.githubusercontent.com/u/456?v=4",
+            merged_at: ~U[2024-01-10 14:20:00Z]
           }
         ]
       }
@@ -146,7 +143,7 @@ defmodule ToolboxWeb.Components.PackageActivityTest do
     end
 
     test "renders activity section with no pull requests" do
-      activity = %GithubActivity{
+      activity = %Activity{
         open_issue_count: 0,
         closed_issue_count: 5,
         open_pr_count: 0,
@@ -190,10 +187,10 @@ defmodule ToolboxWeb.Components.PackageActivityTest do
       assert Floki.text(closed_issue_count) =~ "5"
     end
 
-    test "renders error state when activity is not GithubActivity struct" do
+    test "renders empty state message when there is no Activity" do
       html =
         render_component(&package_activity/1,
-          activity: {:error, "Failed to load"},
+          activity: nil,
           github_fullname: "owner/repo"
         )
 
@@ -217,11 +214,7 @@ defmodule ToolboxWeb.Components.PackageActivityTest do
 
       error_title = Floki.find(doc, "[data-test-error-title]")
       assert length(error_title) == 1
-      assert Floki.text(error_title) =~ "Failed to load repo activity"
-
-      error_message = Floki.find(doc, "[data-test-error-message]")
-      assert length(error_message) == 1
-      assert Floki.text(error_message) =~ "Please refresh in a bit"
+      assert Floki.text(error_title) =~ "No Github Activity"
 
       # Should not show the "last year" badge
       last_year_badge = Floki.find(doc, "[data-test-last-year-badge]")
@@ -229,38 +222,32 @@ defmodule ToolboxWeb.Components.PackageActivityTest do
     end
 
     test "handles pull requests with dividers correctly" do
-      activity = %GithubActivity{
+      activity = %Activity{
         open_issue_count: 1,
         closed_issue_count: 2,
         open_pr_count: 3,
         merged_pr_count: 4,
         pull_requests: [
-          %{
-            "title" => "PR 1",
-            "permalink" => "https://github.com/owner/repo/pull/1",
-            "mergedBy" => %{
-              "login" => "dev1",
-              "avatarUrl" => "https://avatars.githubusercontent.com/u/1?v=4"
-            },
-            "mergedAt" => "2024-01-15T10:30:00Z"
+          %PullRequest{
+            title: "PR 1",
+            permalink: "https://github.com/owner/repo/pull/1",
+            merged_by_login: "dev1",
+            merged_by_avatar_url: "https://avatars.githubusercontent.com/u/1?v=4",
+            merged_at: ~U[2024-01-15 10:30:00Z]
           },
-          %{
-            "title" => "PR 2",
-            "permalink" => "https://github.com/owner/repo/pull/2",
-            "mergedBy" => %{
-              "login" => "dev2",
-              "avatarUrl" => "https://avatars.githubusercontent.com/u/2?v=4"
-            },
-            "mergedAt" => "2024-01-10T14:20:00Z"
+          %PullRequest{
+            title: "PR 2",
+            permalink: "https://github.com/owner/repo/pull/2",
+            merged_by_login: "dev2",
+            merged_by_avatar_url: "https://avatars.githubusercontent.com/u/2?v=4",
+            merged_at: ~U[2024-01-10 14:20:00Z]
           },
-          %{
-            "title" => "PR 3",
-            "permalink" => "https://github.com/owner/repo/pull/3",
-            "mergedBy" => %{
-              "login" => "dev3",
-              "avatarUrl" => "https://avatars.githubusercontent.com/u/3?v=4"
-            },
-            "mergedAt" => "2024-01-05T09:15:00Z"
+          %PullRequest{
+            title: "PR 3",
+            permalink: "https://github.com/owner/repo/pull/3",
+            merged_by_login: "dev3",
+            merged_by_avatar_url: "https://avatars.githubusercontent.com/u/3?v=4",
+            merged_at: ~U[2024-01-05 09:15:00Z]
           }
         ]
       }
