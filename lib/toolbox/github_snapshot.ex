@@ -13,9 +13,14 @@ defmodule Toolbox.GithubSnapshot do
 
   @doc false
   def changeset(github_snapshot, attrs) do
+    now = DateTime.utc_now() |> DateTime.truncate(:second)
+
     github_snapshot
     |> cast(attrs, [:data, :package_id])
     |> cast_embed(:activity)
+    # Always update the updated_at column regardless changes
+    # This is needed for packages that do not have any activity
+    |> force_change(:updated_at, now)
     |> validate_required([:data, :package_id])
   end
 end
