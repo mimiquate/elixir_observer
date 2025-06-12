@@ -9,7 +9,7 @@ defmodule ToolboxWeb.Components.PackageActivityTest do
 
   describe "package_activity/1" do
     test "renders activity section with GitHub activity data" do
-        activity = %Activity{
+      activity = %Activity{
         open_issue_count: 5,
         closed_issue_count: 23,
         open_pr_count: 2,

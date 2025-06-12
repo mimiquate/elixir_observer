@@ -66,20 +66,21 @@ defmodule Toolbox.Tasks.GitHubTest do
              }
 
       assert snapshot.activity == %Activity{
-        closed_issue_count: 45,
-        merged_pr_count: 75,
-        open_issue_count: 1,
-        open_pr_count: 0,
-        pull_requests: [
-          %PullRequest{
-            permalink: "https://github.com/mtrudel/bandit/pull/495",
-            created_at: ~U[2025-05-23 16:57:23Z],
-            title: "Streamline keepalive logic",
-            merged_at: ~U[2025-05-25 16:58:30Z],
-            merged_by_login: "mtrudel",
-            merged_by_avatar_url: "https://avatars.githubusercontent.com/"}
-        ]
-      }
+               closed_issue_count: 45,
+               merged_pr_count: 75,
+               open_issue_count: 1,
+               open_pr_count: 0,
+               pull_requests: [
+                 %PullRequest{
+                   permalink: "https://github.com/mtrudel/bandit/pull/495",
+                   created_at: ~U[2025-05-23 16:57:23Z],
+                   title: "Streamline keepalive logic",
+                   merged_at: ~U[2025-05-25 16:58:30Z],
+                   merged_by_login: "mtrudel",
+                   merged_by_avatar_url: "https://avatars.githubusercontent.com/"
+                 }
+               ]
+             }
     end
 
     test "delete old snapshot when not found GitHub", %{} do

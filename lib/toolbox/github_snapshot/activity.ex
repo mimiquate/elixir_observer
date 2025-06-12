@@ -13,6 +13,7 @@ defmodule Toolbox.GithubSnapshot.Activity do
 
   def changeset(activity, attrs) do
     fields = [:open_issue_count, :closed_issue_count, :open_pr_count, :merged_pr_count]
+
     activity
     |> cast(attrs, fields)
     |> cast_embed(:pull_requests)
@@ -24,23 +25,23 @@ defmodule Toolbox.GithubSnapshot.Activity do
 
     pull_requests =
       get_in(response, ["data", "repository", "pullRequests", "nodes"])
-        # Filtering in memory because the api does not provide a way for doing it
-        |> Enum.filter(fn p ->
-          {:ok, p_created_at, _} = DateTime.from_iso8601(p["createdAt"])
+      # Filtering in memory because the api does not provide a way for doing it
+      |> Enum.filter(fn p ->
+        {:ok, p_created_at, _} = DateTime.from_iso8601(p["createdAt"])
 
-          DateTime.diff(p_created_at, year_ago) > 0
-        end)
-        |> Enum.reverse()
-        |> Enum.map(fn p ->
-          %{
-            permalink: p["permalink"],
-            created_at: p["createdAt"],
-            title: p["title"],
-            merged_at: p["mergedAt"],
-            merged_by_login: p["mergedBy"]["login"],
-            merged_by_avatar_url: p["mergedBy"]["avatarUrl"]
-          }
-        end)
+        DateTime.diff(p_created_at, year_ago) > 0
+      end)
+      |> Enum.reverse()
+      |> Enum.map(fn p ->
+        %{
+          permalink: p["permalink"],
+          created_at: p["createdAt"],
+          title: p["title"],
+          merged_at: p["mergedAt"],
+          merged_by_login: p["mergedBy"]["login"],
+          merged_by_avatar_url: p["mergedBy"]["avatarUrl"]
+        }
+      end)
 
     %{
       open_issue_count: get_in(response, ["data", "openIssueCount", "issueCount"]),

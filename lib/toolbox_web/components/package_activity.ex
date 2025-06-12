@@ -23,7 +23,6 @@ defmodule ToolboxWeb.Components.PackageActivity do
           class="text-[20px] text-primary-text sm:text-[24px] font-medium mb-4 sm:mb-6"
           {test_attrs(activity_title: true)}
         >
-
           Activity
         </h3>
 
@@ -181,8 +180,7 @@ defmodule ToolboxWeb.Components.PackageActivity do
             class="p-3 sm:p-5 col-span-2 sm:col-span-3 sm:row-span-2 flex flex-col items-center"
             {test_attrs(error_state: true)}
           >
-
-            <img src={~p"/images/empty-state-figure.png"} {test_attrs(error_image: true)}/>
+            <img src={~p"/images/empty-state-figure.png"} {test_attrs(error_image: true)} />
             <h3 class="text-primary-text sm:text-[24px] mt-3" {test_attrs(error_title: true)}>
               No Github Activity
             </h3>

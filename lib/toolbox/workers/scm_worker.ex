@@ -29,7 +29,9 @@ defmodule Toolbox.Workers.SCMWorker do
         )
 
         {:ok, github_snapshot}
-      res -> res
+
+      res ->
+        res
     end
   end
 

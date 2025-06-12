@@ -35,19 +35,20 @@ defmodule ToolboxWeb.PackageLive do
 
     package = Toolbox.Packages.get_package_by_name!(name)
 
-    github = if s = package.latest_github_snapshot do
-      %{
-        data: s.data,
-        activity: s.activity,
-        sync_at: s.updated_at
-      }
-    else
-      %{
-        data: nil,
-        activity: nil,
-        sync_at: nil
-      }
-    end
+    github =
+      if s = package.latest_github_snapshot do
+        %{
+          data: s.data,
+          activity: s.activity,
+          sync_at: s.updated_at
+        }
+      else
+        %{
+          data: nil,
+          activity: nil,
+          sync_at: nil
+        }
+      end
 
     hexpm_data = package.latest_hexpm_snapshot.data
     versions = versions(hexpm_data)
@@ -144,7 +145,6 @@ defmodule ToolboxWeb.PackageLive do
 
     {:noreply, assign(socket, package: p)}
   end
-
 
   def handle_info({:hide_dropdown, component_id}, socket) do
     send_update(ToolboxWeb.SearchFieldComponent, id: component_id.cid, show_dropdown: false)
