@@ -35,22 +35,30 @@ defmodule ToolboxWeb.PackageLive do
 
     package = Toolbox.Packages.get_package_by_name!(name)
 
+    github =
+      if s = package.latest_github_snapshot do
+        %{
+          data: s.data,
+          activity: s.activity,
+          sync_at: s.updated_at
+        }
+      else
+        %{
+          data: nil,
+          activity: nil,
+          sync_at: nil
+        }
+      end
+
+    hexpm_data = package.latest_hexpm_snapshot.data
+    versions = versions(hexpm_data)
+
     if connected?(socket) do
       Phoenix.PubSub.subscribe(Toolbox.PubSub, "package_live:#{name}")
       update_owners_if_oudated(package)
       update_latest_stable_version_data_if_outdated(package)
+      update_activity_if_outdated(package, github.sync_at)
     end
-
-    hexpm_data = package.latest_hexpm_snapshot.data
-
-    github_data =
-      with %{} = s <- package.latest_github_snapshot do
-        s.data
-      end
-
-    activity = Toolbox.Packages.get_github_activity(github_data)
-
-    versions = versions(hexpm_data)
 
     {
       :ok,
@@ -68,14 +76,15 @@ defmodule ToolboxWeb.PackageLive do
           latest_stable_version: hexpm_data["latest_stable_version"],
           latest_stable_version_data: package.hexpm_latest_stable_version_data,
           html_url: hexpm_data["html_url"],
-          changelog_url: changelog_url(hexpm_data, github_data),
+          changelog_url: changelog_url(hexpm_data, github.data),
           docs_html_url: hexpm_data["docs_html_url"],
-          github_repo_url: github_data["html_url"],
-          github_fullname: github_data["full_name"],
-          stargazers_count: github_data["stargazers_count"],
-          topics: (github_data["topics"] || []) -- @ignored_topics,
           hexpm_created_at: hexpm_data["inserted_at"],
-          activity: activity
+          github_repo_url: github.data["html_url"],
+          github_fullname: github.data["full_name"],
+          stargazers_count: github.data["stargazers_count"],
+          topics: (github.data["topics"] || []) -- @ignored_topics,
+          activity: github.activity,
+          github_sync_at: github.sync_at
         }
       )
     }
@@ -131,6 +140,12 @@ defmodule ToolboxWeb.PackageLive do
      assign(socket, package: p, version: data, requirements_description: requirements_description)}
   end
 
+  def handle_info(%{action: :refresh_activity, activity: activity}, socket) do
+    p = %{socket.assigns.package | activity: activity}
+
+    {:noreply, assign(socket, package: p)}
+  end
+
   def handle_info({:hide_dropdown, component_id}, socket) do
     send_update(ToolboxWeb.SearchFieldComponent, id: component_id.cid, show_dropdown: false)
     {:noreply, socket}
@@ -154,6 +169,14 @@ defmodule ToolboxWeb.PackageLive do
          latest_stable_version_data.version != latest_stable_version do
       %{action: :get_latest_stable_version, name: package.name, version: latest_stable_version}
       |> Toolbox.Workers.HexpmWorker.new()
+      |> Oban.insert()
+    end
+  end
+
+  def update_activity_if_outdated(package, sync_at) do
+    if !sync_at or DateTime.before?(DateTime.add(sync_at, 1, :hour), DateTime.utc_now()) do
+      %{action: :get_activity, name: package.name}
+      |> Toolbox.Workers.SCMWorker.new()
       |> Oban.insert()
     end
   end

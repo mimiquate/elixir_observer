@@ -118,8 +118,13 @@ defmodule ToolboxWeb do
       @month @day * 30
       @year @month * 12
 
-      def relative_datetime(datetime) do
+      def relative_datetime(datetime) when is_binary(datetime) do
         {:ok, datetime, _} = DateTime.from_iso8601(datetime)
+
+        relative_datetime(datetime)
+      end
+
+      def relative_datetime(%DateTime{} = datetime) do
         diff = DateTime.diff(DateTime.utc_now(), datetime)
 
         if diff do
