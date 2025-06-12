@@ -182,7 +182,6 @@ defmodule ToolboxWeb.Components.PackageActivity do
             class="p-3 sm:p-5 col-span-2 sm:col-span-3 sm:row-span-2 flex flex-col items-center"
             {test_attrs(error_state: true)}
           >
-            <img src={~p"/images/error-illustration.png"} {test_attrs(error_image: true)} />
             <h3 class="text-primary-text sm:text-[24px] mt-3" {test_attrs(error_title: true)}>
               Failed to load repo activity.
             </h3>

@@ -16,7 +16,7 @@ defmodule Toolbox.GithubSnapshot.Activity do
     activity
     |> cast(attrs, fields)
     |> cast_embed(:pull_requests)
-    |> validate_required(attrs, fields)
+    |> validate_required(fields)
   end
 
   def build_from_api_response(response) do
