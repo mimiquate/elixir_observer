@@ -49,20 +49,15 @@ defmodule ToolboxWeb.PackageLive do
       }
     end
 
+    hexpm_data = package.latest_hexpm_snapshot.data
+    versions = versions(hexpm_data)
+
     if connected?(socket) do
       Phoenix.PubSub.subscribe(Toolbox.PubSub, "package_live:#{name}")
       update_owners_if_oudated(package)
       update_latest_stable_version_data_if_outdated(package)
       update_activity_if_outdated(package, github.sync_at)
     end
-
-    hexpm_data = package.latest_hexpm_snapshot.data
-
-
-    github_data = github.data
-    activity = github.activity
-
-    versions = versions(hexpm_data)
 
     {
       :ok,
@@ -80,14 +75,14 @@ defmodule ToolboxWeb.PackageLive do
           latest_stable_version: hexpm_data["latest_stable_version"],
           latest_stable_version_data: package.hexpm_latest_stable_version_data,
           html_url: hexpm_data["html_url"],
-          changelog_url: changelog_url(hexpm_data, github_data),
+          changelog_url: changelog_url(hexpm_data, github.data),
           docs_html_url: hexpm_data["docs_html_url"],
           hexpm_created_at: hexpm_data["inserted_at"],
-          github_repo_url: github_data["html_url"],
-          github_fullname: github_data["full_name"],
-          stargazers_count: github_data["stargazers_count"],
-          topics: (github_data["topics"] || []) -- @ignored_topics,
-          activity: activity,
+          github_repo_url: github.data["html_url"],
+          github_fullname: github.data["full_name"],
+          stargazers_count: github.data["stargazers_count"],
+          topics: (github.data["topics"] || []) -- @ignored_topics,
+          activity: github.activity,
           github_sync_at: github.sync_at
         }
       )
