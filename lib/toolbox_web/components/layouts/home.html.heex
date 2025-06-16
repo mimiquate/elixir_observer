@@ -4,10 +4,18 @@
       <.link navigate="/" class="text-2xl">
         <.logo />
       </.link>
+
+      <.link navigate={~p"/categories"} class="ml-auto mr-2 sm:mr-4">
+        <%!-- Fix icon --%>
+        <.info_icon class="w-6 sm:hidden" />
+        <span class="hidden sm:inline text-[16px] font-medium text-accent  dark:text-primary-text">
+          Categories
+        </span>
+      </.link>
       <.link
         href="https://github.com/mimiquate/elixir_observer"
         target="_blank"
-        class="ml-auto mr-2 sm:mr-4"
+        class="mr-2 sm:mr-4"
       >
         <.github_icon class="w-6 sm:hidden dark:fill-primary-text" />
         <span class="hidden sm:inline text-[16px] font-medium text-accent  dark:text-primary-text">
