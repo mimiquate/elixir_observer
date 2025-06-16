@@ -31,6 +31,16 @@ config :toolbox, ToolboxWeb.Endpoint,
 
 config :tower, reporters: [Tower.EphemeralReporter]
 
+# Uncomment to see trace locally
+# https://signoz.io/docs/install/docker/
+# config :opentelemetry, :processors,
+#     otel_batch_processor: %{
+#       exporter:
+#       {:opentelemetry_exporter,
+#       %{endpoints: ["http://localhost:4318"]}
+#       }
+#   }
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed

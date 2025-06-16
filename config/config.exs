@@ -75,6 +75,14 @@ config :toolbox, Oban,
   notifier: Oban.Notifiers.PG,
   repo: Toolbox.Repo
 
+config :opentelemetry,
+  resource: [
+    service: [
+      name: "app",
+      namespace: "Toolbox"
+    ]
+  ]
+
 config :toolbox, github_base_url: "https://api.github.com"
 
 # Import environment specific config. This must remain at the bottom

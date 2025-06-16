@@ -12,6 +12,7 @@ defmodule Toolbox.MixProject do
       deps: deps(),
       releases: [
         toolbox: [
+          applications: [opentelemetry: :temporary],
           include_executables_for: [:unix]
         ]
       ]
@@ -67,6 +68,16 @@ defmodule Toolbox.MixProject do
       {:decorator, "~> 1.4"},
       {:oban, "~> 2.19"},
       {:oban_web, "~> 2.11"},
+
+      # OpenTelemetry
+      {:opentelemetry, "~> 1.3"},
+      {:opentelemetry_api, "~> 1.2"},
+      {:opentelemetry_exporter, "~> 1.6"},
+      {:opentelemetry_bandit, "~> 0.2.0"},
+      {:opentelemetry_phoenix, "~> 2.0"},
+      {:opentelemetry_ecto, "~> 1.2"},
+      # XXX https://github.com/open-telemetry/opentelemetry-erlang-contrib/pull/436
+      {:opentelemetry_semantic_conventions, "~> 1.27", override: true},
 
       # Dev and Prod
       {:tower_rollbar, "~> 0.6.3", only: [:dev, :prod]},
