@@ -38,7 +38,5 @@ defmodule Toolbox.Tasks.SCM do
 
         IO.inspect(hexpm_snapshot.data)
     end
-
-    Process.sleep(:timer.seconds(1))
   end
 end
