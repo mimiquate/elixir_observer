@@ -69,8 +69,7 @@ config :toolbox, Oban,
   ],
   queues: [
     hexpm: [limit: 1],
-    # Use 1 second dispatch cooldown to prevent Github's rate limit
-    scm: [limit: 1, dispatch_cooldown: 1_000]
+    scm: [limit: 1]
   ],
   notifier: Oban.Notifiers.PG,
   repo: Toolbox.Repo
