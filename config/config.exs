@@ -63,8 +63,8 @@ config :toolbox, Oban,
     {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 14},
     {Oban.Plugins.Cron,
      crontab: [
-       {"0 5 * * MON", Toolbox.Workers.HexpmWorker},
-       {"0 6 * * MON", Toolbox.Workers.SCMWorker}
+       {"0 5 * * SUN", Toolbox.Workers.HexpmWorker},
+       {"0 6 * * SUN", Toolbox.Workers.SCMWorker}
      ]}
   ],
   queues: [
