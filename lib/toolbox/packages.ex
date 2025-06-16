@@ -1,5 +1,5 @@
 defmodule Toolbox.Packages do
-  alias Toolbox.{GithubSnapshot, HexpmSnapshot, Package, Repo}
+  alias Toolbox.{GithubSnapshot, HexpmSnapshot, Package, Repo, Category}
 
   require Logger
 
@@ -18,13 +18,41 @@ defmodule Toolbox.Packages do
     |> Repo.all()
   end
 
+  def list_categories do
+    Category.all()
+  end
+
   def list_packages_names do
     from(p in Package, select: p.name)
     |> Repo.all()
   end
 
+  def list_packages_from_category(nil) do
+    []
+  end
+
+  def list_packages_from_category(category) do
+    from(
+      p in Package,
+      where: p.category_id == ^category.id,
+      join: s in subquery(latest_hexpm_snaphost_query()),
+      on: s.package_id == p.id,
+      preload: [
+        latest_hexpm_snapshot: ^latest_hexpm_snaphost_query(),
+        latest_github_snapshot: ^latest_github_snaphost_query()
+      ],
+      order_by: [desc: json_extract_path(s.data, ["downloads", "recent"])]
+    )
+    |> Repo.all()
+  end
+
   def total_count do
     Repo.aggregate(Package, :count)
+  end
+
+  def count_by_category(category_id) do
+    from(p in Package, where: p.category_id == ^category_id)
+    |> Repo.aggregate(:count)
   end
 
   def search(term) do
@@ -80,6 +108,15 @@ defmodule Toolbox.Packages do
   def get_packages_by_name(names) do
     from(p in Package, where: p.name in ^names)
     |> Repo.all()
+  end
+
+  def get_category_by_permalink!(permalink) do
+    Category.all()
+    |> Enum.find(fn c -> c.permalink == permalink end)
+    |> case do
+      nil -> raise Ecto.NoResultsError, queryable: Category
+      c -> c
+    end
   end
 
   def create_package(attributes \\ %{}) do
@@ -147,5 +184,28 @@ defmodule Toolbox.Packages do
     from g in GithubSnapshot,
       join: r in subquery(ranking_query),
       on: g.id == r.id and r.row_number == 1
+  end
+
+  def get_three_packages_per_category do
+    categories = Category.all()
+
+    Enum.map(categories, fn category ->
+      packages =
+        from(
+          p in Package,
+          where: p.category_id == ^category.id,
+          join: s in subquery(latest_hexpm_snaphost_query()),
+          on: s.package_id == p.id,
+          preload: [
+            latest_hexpm_snapshot: ^latest_hexpm_snaphost_query(),
+            latest_github_snapshot: ^latest_github_snaphost_query()
+          ],
+          order_by: [desc: json_extract_path(s.data, ["downloads", "recent"])],
+          limit: 3
+        )
+        |> Repo.all()
+
+      {category, packages}
+    end)
   end
 end

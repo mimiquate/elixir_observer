@@ -405,4 +405,43 @@
       </div>
     <% end %>
   </section>
+
+  <%= if Enum.any?(@similar_packages) do %>
+    <section class="sm:mt-8">
+      <div class="flex items-center justify-between mt-8 mb-3 sm:mb-8">
+        <h2 class="text-[20px] text-primary-text sm:text-[32px] font-semibold">
+          Similar Packages
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <%= for package <- @similar_packages do %>
+          <div class="bg-surface rounded-md p-4 border border-stroke">
+            <div class="flex items-center justify-between mb-2">
+              <.link
+                class="text-[16px] sm:text-[18px] font-medium text-primary-text hover:text-primary"
+                href={~p"/packages/#{package.name}"}
+              >
+                {package.name}
+              </.link>
+              <span class="text-[14px] text-secondary-text"></span>
+            </div>
+
+            <p class="text-[14px] text-secondary-text line-clamp-2 mb-3">
+              {package.description}
+            </p>
+
+            <div class="flex items-center text-[14px] text-secondary-text">
+              <div class="flex items-center mr-4">
+                <.download_icon class="w-4 mr-1" /> -
+              </div>
+              <div class="flex items-center">
+                <.star_icon class="w-4 mr-1" /> -
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
 </article>

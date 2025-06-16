@@ -1,0 +1,113 @@
+<article
+  class={"pt-3 sm:pt-10 #{if(@packages == 0, do: "h-full")}"}
+  {test_attrs(search_results_page: true)}
+>
+  <div class="" {test_attrs(search_results_header: true)}>
+    <h1
+      class="text-[42px] sm:text-[64px] text-primary-text font-semibold font-serif break-all"
+      {test_attrs(search_results_title: true)}
+    >
+      {@category.name}
+    </h1>
+
+    <p class="text-[14px] sm:text-[18px] font-mono text-secondary-text">
+      {@category.description}
+    </p>
+  </div>
+
+
+  <div class="flex justify-between items-center">
+    <span class="text-xs mt-1 mr-1 py-1 px-3 sm:px-5 rounded-full border-[0.5px] sm:text-[16px] text-text-secondary-button text-secondary-text border-stroke bg-chip-bg inline-block">
+      {length(@packages)} packages found
+    </span>
+  </div>
+
+  <div class="mt-7 sm:mt-10" {test_attrs(results_section: true)}>
+    <ul {test_attrs(results_list: true)}>
+      <li
+        :for={package <- @packages}
+        class="mt-5 py-3 px-4 flex flex-col md:flex-row md:justify-between bg-surface rounded-md border border-stroke"
+        {test_attrs(result_item: package.name)}
+      >
+        <div>
+          <div class="flex items-center">
+            <.link
+              navigate={~p"/packages/#{package.name}"}
+              class="text-[16px] sm:text-[18px]"
+              {test_attrs(package_link: package.name)}
+            >
+              {package.name}
+            </.link>
+            <span
+              class="ml-4 text-[16px] sm:text-[18px] text-secondary-text"
+              {test_attrs(version: package.latest_hexpm_snapshot.data["latest_version"])}
+            >
+              {package.latest_hexpm_snapshot.data["latest_version"]}
+            </span>
+          </div>
+
+          <p
+            class="mt-2 text-[12px] sm:text-[14px] text-secondary-text"
+            {test_attrs(package_description: true)}
+          >
+            {package.description}
+          </p>
+
+          <div class="flex items-center mt-3 sm:hidden">
+            <div class="flex w-[50px]">
+              <div class="p-1 rounded-md">
+                <.star_icon class="w-3" />
+              </div>
+              <span
+                class="ml-1 text-primary-text text-[12px] sm:text-[16px]"
+                {test_attrs(package_stars_mobile: true)}
+              >
+                <%= if package.latest_github_snapshot do %>
+                  {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
+                <% else %>
+                  -
+                <% end %>
+              </span>
+            </div>
+
+            <div class="flex ml-4 items-center justify-end sm:hidden">
+              <div class="p-1 w-fit rounded-md">
+                <.download_icon class="w-3" />
+              </div>
+              <span
+                class="text-[12px] text-primary-text ml-1"
+                {test_attrs(package_downloads_mobile: true)}
+              >
+                {humanized_number(package.latest_hexpm_snapshot.data["downloads"]["recent"])}
+              </span>
+              <span class="text-[12px] text-secondary-text ml-1">last 90 days</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hidden sm:flex items-center">
+          <div class="flex items-center min-w-25 justify-start">
+            <div class="p-1 w-fit rounded-md">
+              <.star_icon class="w-5" />
+            </div>
+            <span class="text-[18px] ml-2" {test_attrs(package_stars_desktop: true)}>
+              <%= if package.latest_github_snapshot do %>
+                {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
+              <% else %>
+                -
+              <% end %>
+            </span>
+          </div>
+          <div class="flex items-center min-w-25 justify-start">
+            <div class="p-1 w-fit rounded-md ml-2">
+              <.download_icon class="w-5" />
+            </div>
+            <span class="text-[18px] ml-2" {test_attrs(package_downloads_desktop: true)}>
+              {humanized_number(package.latest_hexpm_snapshot.data["downloads"]["recent"])}
+            </span>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</article>
