@@ -63,14 +63,13 @@ config :toolbox, Oban,
     {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 14},
     {Oban.Plugins.Cron,
      crontab: [
-       {"0 5 * * MON", Toolbox.Workers.HexpmWorker},
-       {"0 6 * * MON", Toolbox.Workers.SCMWorker}
+       {"0 5 * * SUN", Toolbox.Workers.HexpmWorker},
+       {"0 6 * * SUN", Toolbox.Workers.SCMWorker}
      ]}
   ],
   queues: [
     hexpm: [limit: 1],
-    # Use 1 second dispatch cooldown to prevent Github's rate limit
-    scm: [limit: 1, dispatch_cooldown: 1_000]
+    scm: [limit: 1]
   ],
   notifier: Oban.Notifiers.PG,
   repo: Toolbox.Repo
