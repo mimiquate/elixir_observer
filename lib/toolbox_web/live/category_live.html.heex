@@ -1,0 +1,56 @@
+<article class="pt-8 sm:pt-15">
+  <div class="flex items-baseline justify-between">
+    <h1 class="text-[32px] text-primary-text font-bold">
+      {@category.name}
+    </h1>
+  </div>
+
+  <p class="mt-2 text-[14px] sm:text-[16px] text-secondary-text">
+    {@category.description}
+  </p>
+
+  <div class="mt-8">
+    <ul>
+      <li
+        :for={package <- @packages}
+        class="mt-5 py-3 px-4 flex flex-col md:flex-row md:justify-between bg-surface rounded-md border border-stroke"
+      >
+        <div>
+          <.link
+            navigate={~p"/packages/#{package.name}"}
+            class="text-[16px] sm:text-[18px]"
+          >
+            {package.name}
+          </.link>
+
+          <p class="mt-2 text-[12px] sm:text-[14px] text-secondary-text">
+            {package.description}
+          </p>
+        </div>
+
+        <div class="hidden sm:flex items-center">
+          <div class="flex items-center min-w-25 justify-start">
+            <div class="p-1 w-fit rounded-md">
+              <.star_icon class="w-3" />
+            </div>
+            <span class="text-[18px] ml-2">
+              <%= if package.latest_github_snapshot do %>
+                {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
+              <% else %>
+                -
+              <% end %>
+            </span>
+          </div>
+          <div class="flex items-center min-w-25 justify-start">
+            <div class="p-1 w-fit rounded-md ml-2">
+              <.download_icon class="w-3" />
+            </div>
+            <span class="text-[18px] ml-2">
+              {humanized_number(package.latest_hexpm_snapshot.data["downloads"]["recent"])}
+            </span>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</article>

@@ -1,5 +1,5 @@
 defmodule Toolbox.Packages do
-  alias Toolbox.{GithubSnapshot, HexpmSnapshot, Package, Repo}
+  alias Toolbox.{GithubSnapshot, HexpmSnapshot, Package, Repo, Category}
 
   require Logger
 
@@ -18,9 +18,39 @@ defmodule Toolbox.Packages do
     |> Repo.all()
   end
 
+  def list_categories do
+    :toolbox
+    |> :code.priv_dir()
+    |> Path.join("categories.csv")
+    |> File.stream!()
+    |> Stream.drop(1)
+    |> Stream.map(&String.trim/1)
+    |> Stream.map(&parse_category/1)
+    |> Enum.to_list()
+  end
+
   def list_packages_names do
     from(p in Package, select: p.name)
     |> Repo.all()
+  end
+
+  def list_packages_from_category(nil) do
+    []
+  end
+
+  def list_packages_from_category(category) do
+    from(
+        p in Package,
+        where: p.category_id == ^category.id,
+        join: s in subquery(latest_hexpm_snaphost_query()),
+        on: s.package_id == p.id,
+        preload: [
+          latest_hexpm_snapshot: ^latest_hexpm_snaphost_query(),
+          latest_github_snapshot: ^latest_github_snaphost_query()
+        ],
+        order_by: [desc: json_extract_path(s.data, ["downloads", "recent"])]
+      )
+      |> Repo.all()
   end
 
   def total_count do
@@ -78,6 +108,15 @@ defmodule Toolbox.Packages do
   def get_packages_by_name(names) do
     from(p in Package, where: p.name in ^names)
     |> Repo.all()
+  end
+
+  def get_category!(id) do
+    list_categories()
+    |> Enum.find(fn(c) -> c.id == id end)
+    |> case do
+      nil -> raise CategoryNotFound, message: id, plug_status: 404
+      c -> c
+    end
   end
 
   def create_package(attributes \\ %{}) do
@@ -156,4 +195,17 @@ defmodule Toolbox.Packages do
 
     {Enum.at(exact_matches, 0), other_matches}
   end
+
+  defp parse_category(line) do
+    [id, name, description] = String.split(line, "|")
+
+    %Category{}
+    |> Category.changeset(%{
+      id: id,
+      name: name,
+      description: description
+    })
+    |> Ecto.Changeset.apply_changes()
+  end
+
 end

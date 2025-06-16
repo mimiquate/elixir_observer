@@ -1,0 +1,743 @@
+PackageName|Category
+flow|Actors
+gen_stage|Actors
+horde|Actors
+swarm|Actors
+syn|Actors
+distance|Algorithms and Data structures
+matrix_reloaded|Algorithms and Data structures
+radix|Algorithms and Data structures
+seg_seg|Algorithms and Data structures
+trie|Algorithms and Data structures
+exla|Artificial Intelligence
+langchain|Artificial Intelligence
+nx|Artificial Intelligence
+openai|Artificial Intelligence
+polaris|Artificial Intelligence
+tokenizers|Artificial Intelligence
+xla|Artificial Intelligence
+ash_authentication|Authentication
+ash_authentication_phoenix|Authentication
+assent|Authentication
+boruta|Authentication
+comeonin|Authentication
+esaml|Authentication
+guardian|Authentication
+guardian_db|Authentication
+guardian_phoenix|Authentication
+oauth2|Authentication
+oauther|Authentication
+oidcc|Authentication
+openid_connect|Authentication
+pot|Authentication
+pow|Authentication
+samly|Authentication
+simple_token_authentication|Authentication
+ueberauth|Authentication
+ueberauth_auth0|Authentication
+ueberauth_github|Authentication
+ueberauth_google|Authentication
+ueberauth_microsoft|Authentication
+ueberauth_oidcc|Authentication
+ueberauth_okta|Authentication
+bodyguard|Authorization
+benchee|Benchmarking
+benchee_html|Benchmarking
+benchee_json|Benchmarking
+cc_precompiler|Build Tools
+dart_sass|Build Tools
+elixir_make|Build Tools
+esbuild|Build Tools
+grpcbox_plugin|Build Tools
+igniter|Build Tools
+pc|Build Tools
+provider_asn1|Build Tools
+rebar3_archive_plugin|Build Tools
+rebar3_eetcd_plugin|Build Tools
+rebar3_elixir|Build Tools
+rebar3_gpb_plugin|Build Tools
+rebar3_neotoma_plugin|Build Tools
+rebar3_path_deps|Build Tools
+tailwind|Build Tools
+cachex|Caching
+con_cache|Caching
+lru|Caching
+memcachex|Caching
+nebulex|Caching
+nebulex_redis_adapter|Caching
+redis_mutex|Caching
+aws|Cloud Infrastructure and Management
+aws_rds_castore|Cloud Infrastructure and Management
+aws_signature|Cloud Infrastructure and Management
+erlcloud|Cloud Infrastructure and Management
+ex_aws|Cloud Infrastructure and Management
+ex_aws_bedrock|Cloud Infrastructure and Management
+ex_aws_dynamo|Cloud Infrastructure and Management
+ex_aws_ec2|Cloud Infrastructure and Management
+ex_aws_kms|Cloud Infrastructure and Management
+ex_aws_lambda|Cloud Infrastructure and Management
+ex_aws_rds|Cloud Infrastructure and Management
+ex_aws_s3|Cloud Infrastructure and Management
+ex_aws_secretsmanager|Cloud Infrastructure and Management
+ex_aws_ses|Cloud Infrastructure and Management
+ex_aws_sns|Cloud Infrastructure and Management
+ex_aws_sqs|Cloud Infrastructure and Management
+ex_aws_sts|Cloud Infrastructure and Management
+gcs_signed_url|Cloud Infrastructure and Management
+google_api_big_query|Cloud Infrastructure and Management
+google_api_pub_sub|Cloud Infrastructure and Management
+google_api_secret_manager|Cloud Infrastructure and Management
+google_api_storage|Cloud Infrastructure and Management
+google_gax|Cloud Infrastructure and Management
+goth|Cloud Infrastructure and Management
+libcluster|Cloud Infrastructure and Management
+libcluster_ec2|Cloud Infrastructure and Management
+boundary|Code Analysis
+credo|Code Analysis
+credo_naming|Code Analysis
+dialyxir|Code Analysis
+elvis_core|Code Analysis
+erlfmt|Code Analysis
+katana_code|Code Analysis
+makeup|Code Analysis
+makeup_eex|Code Analysis
+makeup_elixir|Code Analysis
+makeup_erlang|Code Analysis
+makeup_html|Code Analysis
+markdown_formatter|Code Analysis
+rebar3_fmt|Code Analysis
+rebar3_format|Code Analysis
+rebar3_hank|Code Analysis
+rebar3_lint|Code Analysis
+rewrite|Code Analysis
+sourceror|Code Analysis
+styler|Code Analysis
+tailwind_formatter|Code Analysis
+artificery|Command Line Applications
+cli_options|Command Line Applications
+getopt|Command Line Applications
+owl|Command Line Applications
+progress_bar|Command Line Applications
+confex|Configuration
+configparser_ex|Configuration
+confix|Configuration
+cuttlefish|Configuration
+dotenv_parser|Configuration
+dotenvy|Configuration
+eini|Configuration
+skogsra|Configuration
+toml|Configuration
+argon2_elixir|Cryptography
+bcrypt_elixir|Cryptography
+castore|Cryptography
+chacha20|Cryptography
+cloak|Cryptography
+cloak_ecto|Cryptography
+crypto_rand|Cryptography
+curve25519|Cryptography
+ed25519|Cryptography
+equivalex|Cryptography
+ex_crypto|Cryptography
+ex_keccak|Cryptography
+gleam_crypto|Cryptography
+kcl|Cryptography
+nimble_totp|Cryptography
+nkeys|Cryptography
+pbkdf2_elixir|Cryptography
+poly1305|Cryptography
+salsa20|Cryptography
+secure_random|Cryptography
+ssl_verify_fun|Cryptography
+tls_certificate_check|Cryptography
+x509|Cryptography
+csv|CSV
+erl_csv|CSV
+nimble_csv|CSV
+calendar|Date and Time
+date_time_parser|Date and Time
+iso8601|Date and Time
+nimble_strftime|Date and Time
+rfc3339|Date and Time
+timex|Date and Time
+tz|Date and Time
+tzdata|Date and Time
+exprof|Debugging
+extrace|Debugging
+observer_cli|Debugging
+recon|Debugging
+redbug|Debugging
+rexbug|Debugging
+distillery|Deployment
+systemd|Deployment
+doctor|Documentation
+ex_doc|Documentation
+graphql_markdown|Documentation
+inch_ex|Documentation
+kino|Documentation
+open_api_spex|Documentation
+phoenix_swagger|Documentation
+rebar3_ex_doc|Documentation
+vega_lite|Documentation
+bamboo|Email
+bamboo_phoenix|Email
+bamboo_smtp|Email
+gen_smtp|Email
+mail|Email
+mjml|Email
+mjml_eex|Email
+phoenix_swoosh|Email
+premailex|Email
+swoosh|Email
+avrora|Encoding and Compression
+base16|Encoding and Compression
+base64url|Encoding and Compression
+brotli|Encoding and Compression
+cbor|Encoding and Compression
+erlavro|Encoding and Compression
+fast64|Encoding and Compression
+iconv|Encoding and Compression
+mime|Encoding and Compression
+mimerl|Encoding and Compression
+msgpax|Encoding and Compression
+multipart|Encoding and Compression
+splode|Errors and Exception Handling
+fun_with_flags|Feature Flags and Toggles
+fun_with_flags_ui|Feature Flags and Toggles
+launchdarkly_server_sdk|Feature Flags and Toggles
+arc|Files and Directories
+briefly|Files and Directories
+file_system|Files and Directories
+filepath|Files and Directories
+fs|Files and Directories
+fss|Files and Directories
+glob_ex|Files and Directories
+sftp_client|Files and Directories
+simplifile|Files and Directories
+waffle|Files and Directories
+waffle_ecto|Files and Directories
+waffle_gcs|Files and Directories
+cors_plug|Framework Components
+corsica|Framework Components
+plug|Framework Components
+plug_cowboy|Framework Components
+plug_crypto|Framework Components
+plug_signature|Framework Components
+pre_plug|Framework Components
+unplug|Framework Components
+ash|Frameworks
+countries|Geolocation
+geo|Geolocation
+geo_postgis|Geolocation
+geocalc|Geolocation
+geocoder|Geolocation
+geohash|Geolocation
+google_maps|Geolocation
+floki|HTML
+html_entities|HTML
+accept|HTTP
+gleam_http|HTTP
+finch|HTTP Client
+grpc_gun|HTTP Client
+gun|HTTP Client
+hackney|HTTP Client
+httpoison|HTTP Client
+ibrowse|HTTP Client
+kadabra|HTTP Client
+lhttpc|HTTP Client
+mint|HTTP Client
+opentelemetry_finch|HTTP Client
+opentelemetry_req|HTTP Client
+opentelemetry_tesla|HTTP Client
+req|HTTP Client
+shotgun|HTTP Client
+tesla|HTTP Client
+tesla_request_id|HTTP Client
+bandit|HTTP Server
+cowboy|HTTP Server
+mochiweb|HTTP Server
+opentelemetry_bandit|HTTP Server
+reverse_proxy_plug|HTTP Server
+thousand_island|HTTP Server
+trails|HTTP Server
+barlix|Images
+contex|Images
+eqrcode|Images
+ex_image_info|Images
+heroicons|Images
+image|Images
+mogrify|Images
+png|Images
+pngex|Images
+qr_code|Images
+vix|Images
+appsignal|Instrumenting / Monitoring
+appsignal_phoenix|Instrumenting / Monitoring
+appsignal_plug|Instrumenting / Monitoring
+bear|Instrumenting / Monitoring
+bugsnag|Instrumenting / Monitoring
+cowboy_telemetry|Instrumenting / Monitoring
+cpu_util|Instrumenting / Monitoring
+eministat|Instrumenting / Monitoring
+error_tracker|Instrumenting / Monitoring
+etop|Instrumenting / Monitoring
+goldrush|Instrumenting / Monitoring
+honeybadger|Instrumenting / Monitoring
+instruments|Instrumenting / Monitoring
+metrics|Instrumenting / Monitoring
+new_relic_agent|Instrumenting / Monitoring
+o11y|Instrumenting / Monitoring
+open_telemetry_decorator|Instrumenting / Monitoring
+opentelemetry|Instrumenting / Monitoring
+opentelemetry_api|Instrumenting / Monitoring
+opentelemetry_cowboy|Instrumenting / Monitoring
+opentelemetry_exporter|Instrumenting / Monitoring
+opentelemetry_function|Instrumenting / Monitoring
+opentelemetry_process_propagator|Instrumenting / Monitoring
+opentelemetry_semantic_conventions|Instrumenting / Monitoring
+opentelemetry_telemetry|Instrumenting / Monitoring
+otel_http|Instrumenting / Monitoring
+peep|Instrumenting / Monitoring
+plugsnag|Instrumenting / Monitoring
+prom_ex|Instrumenting / Monitoring
+prometheus|Instrumenting / Monitoring
+prometheus_ex|Instrumenting / Monitoring
+prometheus_httpd|Instrumenting / Monitoring
+prometheus_phoenix|Instrumenting / Monitoring
+prometheus_plugs|Instrumenting / Monitoring
+prometheus_process_collector|Instrumenting / Monitoring
+rollbax|Instrumenting / Monitoring
+sentry|Instrumenting / Monitoring
+seshat|Instrumenting / Monitoring
+spandex|Instrumenting / Monitoring
+spandex_datadog|Instrumenting / Monitoring
+spandex_phoenix|Instrumenting / Monitoring
+spandex_phoenix_fresha|Instrumenting / Monitoring
+statistex|Instrumenting / Monitoring
+statix|Instrumenting / Monitoring
+sysmon_handler|Instrumenting / Monitoring
+telemetry|Instrumenting / Monitoring
+telemetry_metrics|Instrumenting / Monitoring
+telemetry_metrics_prometheus|Instrumenting / Monitoring
+telemetry_metrics_prometheus_core|Instrumenting / Monitoring
+telemetry_metrics_statsd|Instrumenting / Monitoring
+telemetry_poller|Instrumenting / Monitoring
+telemetry_registry|Instrumenting / Monitoring
+vmstats|Instrumenting / Monitoring
+zen_monitor|Instrumenting / Monitoring
+exjsx|JSON
+gleam_json|JSON
+ja_serializer|JSON
+jason|JSON
+jaxon|JSON
+jiffy|JSON
+joken|JSON
+joken_jwks|JSON
+jose|JSON
+json|JSON
+jsone|JSON
+jsx|JSON
+poison|JSON
+thoas|JSON
+erlex|Languages
+erlport|Languages
+gleam_erlang|Languages
+gleam_javascript|Languages
+gleam_stdlib|Languages
+luerl|Languages
+nodejs|Languages
+combine|Lexical analysis
+google_protos|Lexical analysis
+gpb|Lexical analysis
+inaka_aleppo|Lexical analysis
+neotoma|Lexical analysis
+nimble_parsec|Lexical analysis
+protobuf|Lexical analysis
+protox|Lexical analysis
+spitfire|Lexical analysis
+hut|Logging
+ink|Logging
+lager|Logging
+logfmt|Logging
+logger_file_backend|Logging
+logger_json|Logging
+opentelemetry_logger_metadata|Logging
+pretty_log|Logging
+uinta|Logging
+earmark|Markdown
+earmark_parser|Markdown
+mdex|Markdown
+certifi|Miscellaneous
+digital_token|Miscellaneous
+erl_exercism|Miscellaneous
+idna|Miscellaneous
+rustler|Native Implemented Functions
+rustler_precompiled|Native Implemented Functions
+acceptor_pool|Networking
+cidr|Networking
+dns|Networking
+dns_cluster|Networking
+inet_cidr|Networking
+iptrie|Networking
+mint_web_socket|Networking
+net_address|Networking
+pfx|Networking
+ranch|Networking
+remote_ip|Networking
+socket|Networking
+websock|Networking
+websock_adapter|Networking
+websocket_client|Networking
+websockex|Networking
+elixlsx|Office
+xlsx_reader|Office
+xlsxir|Office
+ash_postgres|ORM and Datamapping
+ash_sql|ORM and Datamapping
+carbonite|ORM and Datamapping
+commanded_ecto_projections|ORM and Datamapping
+connection|ORM and Datamapping
+db_connection|ORM and Datamapping
+ecto|ORM and Datamapping
+ecto_commons|ORM and Datamapping
+ecto_dev_logger|ORM and Datamapping
+ecto_enum|ORM and Datamapping
+ecto_enum_migration|ORM and Datamapping
+ecto_erd|ORM and Datamapping
+ecto_morph|ORM and Datamapping
+ecto_network|ORM and Datamapping
+ecto_psql_extras|ORM and Datamapping
+ecto_sql|ORM and Datamapping
+ecto_sqlite3|ORM and Datamapping
+epgsql|ORM and Datamapping
+eredis|ORM and Datamapping
+eredis_cluster|ORM and Datamapping
+eventstore|ORM and Datamapping
+excellent_migrations|ORM and Datamapping
+exqlite|ORM and Datamapping
+flop|ORM and Datamapping
+flop_phoenix|ORM and Datamapping
+khepri|ORM and Datamapping
+khepri_mnesia_migration|ORM and Datamapping
+mongodb_driver|ORM and Datamapping
+myxql|ORM and Datamapping
+opentelemetry_ecto|ORM and Datamapping
+opentelemetry_redix|ORM and Datamapping
+paginator|ORM and Datamapping
+paper_trail|ORM and Datamapping
+parse_trans|ORM and Datamapping
+pgvector|ORM and Datamapping
+polymorphic_embed|ORM and Datamapping
+postgrex|ORM and Datamapping
+prometheus_ecto|ORM and Datamapping
+ra|ORM and Datamapping
+redix|ORM and Datamapping
+shards|ORM and Datamapping
+spandex_ecto|ORM and Datamapping
+tds|ORM and Datamapping
+typed_ecto_schema|ORM and Datamapping
+xandra|ORM and Datamapping
+exactor|OTP
+gen_registry|OTP
+gen_state_machine|OTP
+gleam_otp|OTP
+gproc|OTP
+parent|OTP
+supervisor3|OTP
+hex_core|Package Management
+rebar3_hex|Package Management
+chromic_pdf|PDF
+pdf_generator|PDF
+ash_phoenix|Phoenix
+ex_cldr_plugs|Phoenix
+kaffy|Phoenix
+live_debugger|Phoenix
+live_isolated_component|Phoenix
+live_select|Phoenix
+opentelemetry_liveview|Phoenix
+opentelemetry_phoenix|Phoenix
+petal_components|Phoenix
+phoenix|Phoenix
+phoenix_ecto|Phoenix
+phoenix_html|Phoenix
+phoenix_html_helpers|Phoenix
+phoenix_live_dashboard|Phoenix
+phoenix_live_reload|Phoenix
+phoenix_live_view|Phoenix
+phoenix_pubsub|Phoenix
+phoenix_pubsub_redis|Phoenix
+phoenix_storybook|Phoenix
+phoenix_template|Phoenix
+phoenix_view|Phoenix
+phx_new|Phoenix
+slipstream|Phoenix
+tidewave|Phoenix
+cowlib|Protocols
+grpcbox|Protocols
+hpack_erl|Protocols
+hpax|Protocols
+ts_chatterbox|Protocols
+amqp|Queue
+amqp_client|Queue
+broadway|Queue
+broadway_cloud_pub_sub|Queue
+broadway_dashboard|Queue
+broadway_kafka|Queue
+broadway_rabbitmq|Queue
+broadway_sqs|Queue
+brod|Queue
+exq|Queue
+gen_batch_server|Queue
+gnat|Queue
+kafka_ex|Queue
+kafka_protocol|Queue
+kayrock|Queue
+nimble_ownership|Queue
+nimble_pool|Queue
+oban|Queue
+oban_met|Queue
+oban_web|Queue
+opentelemetry_broadway|Queue
+opentelemetry_oban|Queue
+poolboy|Queue
+rabbit_common|Queue
+worker_pool|Queue
+absinthe|REST and API
+absinthe_error_payload|REST and API
+absinthe_federation|REST and API
+absinthe_graphql_ws|REST and API
+absinthe_phoenix|REST and API
+absinthe_plug|REST and API
+absinthe_relay|REST and API
+apollo_tracing|REST and API
+dataloader|REST and API
+grpc|REST and API
+grpc_fresha|REST and API
+neuron|REST and API
+opentelemetry_absinthe|REST and API
+crontab|Scheduling
+quantum|Scheduling
+elastix|Search
+snap|Search
+credentials_obfuscation|Security
+html_sanitize_ex|Security
+mix_audit|Security
+paraxial|Security
+plug_attack|Security
+sobelow|Security
+fsm|State Machines
+statistics|Statistics
+bbmustache|Templating
+solid|Templating
+assert_value|Testing
+assertions|Testing
+blacksmith|Testing
+bypass|Testing
+coveralls|Testing
+covertool|Testing
+ex_check|Testing
+ex_machina|Testing
+ex_parameterized|Testing
+ex_unit_notifier|Testing
+excoveralls|Testing
+exvcr|Testing
+faker|Testing
+gleeunit|Testing
+hammox|Testing
+junit_formatter|Testing
+machete|Testing
+meck|Testing
+mimic|Testing
+mix_test_interactive|Testing
+mix_test_watch|Testing
+mock|Testing
+mockery|Testing
+mox|Testing
+patch|Testing
+phoenix_test|Testing
+proper|Testing
+rebar3_proper|Testing
+stream_data|Testing
+wallaby|Testing
+web_driver_client|Testing
+abacus|Text and Numbers
+any_ascii|Text and Numbers
+complex|Text and Numbers
+conv_case|Text and Numbers
+custom_base|Text and Numbers
+decimal|Text and Numbers
+ex_money|Text and Numbers
+ex_money_sql|Text and Numbers
+gleam_regexp|Text and Numbers
+money|Text and Numbers
+number|Text and Numbers
+numbers|Text and Numbers
+ordinal|Text and Numbers
+proper_case|Text and Numbers
+ratio|Text and Numbers
+recase|Text and Numbers
+slugger|Text and Numbers
+slugify|Text and Numbers
+text_diff|Text and Numbers
+unicode|Text and Numbers
+braintree|Third Party APIs
+ex_twilio|Third Party APIs
+external_service|Third Party APIs
+knock|Third Party APIs
+pigeon|Third Party APIs
+segment|Third Party APIs
+stripity_stripe|Third Party APIs
+workos|Third Party APIs
+cldr_utils|Translations and Internationalizations
+ex_cldr|Translations and Internationalizations
+ex_cldr_calendars|Translations and Internationalizations
+ex_cldr_currencies|Translations and Internationalizations
+ex_cldr_dates_times|Translations and Internationalizations
+ex_cldr_languages|Translations and Internationalizations
+ex_cldr_lists|Translations and Internationalizations
+ex_cldr_numbers|Translations and Internationalizations
+ex_cldr_territories|Translations and Internationalizations
+ex_cldr_units|Translations and Internationalizations
+expo|Translations and Internationalizations
+gettext|Translations and Internationalizations
+accessible|Utilities
+aten|Utilities
+atomic_map|Utilities
+attrs|Utilities
+backoff|Utilities
+blankable|Utilities
+browser|Utilities
+bunt|Utilities
+cf|Utilities
+circular_buffer|Utilities
+coerce|Utilities
+commanded|Utilities
+commanded_eventstore_adapter|Utilities
+crc|Utilities
+crc32cer|Utilities
+ctx|Utilities
+decorator|Utilities
+deep_merge|Utilities
+delta_crdt|Utilities
+domainatrex|Utilities
+elixir_uuid|Utilities
+enough|Utilities
+enum_type|Utilities
+erlexec|Utilities
+erlware_commons|Utilities
+eternal|Utilities
+ets|Utilities
+ex_hash_ring|Utilities
+ex_maybe|Utilities
+ex_rated|Utilities
+ex2ms|Utilities
+exconstructor|Utilities
+exexec|Utilities
+explorer|Utilities
+exprintf|Utilities
+fuse|Utilities
+gleam_yielder|Utilities
+hammer|Utilities
+hammer_backend_redis|Utilities
+hammer_plug|Utilities
+hashids|Utilities
+highlander|Utilities
+horus|Utilities
+inflex|Utilities
+iterex|Utilities
+jumper|Utilities
+knigge|Utilities
+libgraph|Utilities
+libring|Utilities
+licensir|Utilities
+liveness|Utilities
+map_diff|Utilities
+memoize|Utilities
+merkle_map|Utilities
+moar|Utilities
+morphix|Utilities
+murmur|Utilities
+nanoid|Utilities
+nestru|Utilities
+nimble_options|Utilities
+octo_fetch|Utilities
+p1_utils|Utilities
+parallel_stream|Utilities
+picosat_elixir|Utilities
+porcelain|Utilities
+process_tree|Utilities
+providers|Utilities
+puid|Utilities
+quantile_estimator|Utilities
+quickrand|Utilities
+reactor|Utilities
+result|Utilities
+retry|Utilities
+sage|Utilities
+scrivener|Utilities
+scrivener_ecto|Utilities
+scrivener_list|Utilities
+semaphore|Utilities
+sext|Utilities
+shortuuid|Utilities
+singleton|Utilities
+sitemapper|Utilities
+sizeable|Utilities
+sleeplocks|Utilities
+snappyer|Utilities
+spark|Utilities
+stdout_formatter|Utilities
+stream_gzip|Utilities
+string_compat|Utilities
+table|Utilities
+table_rex|Utilities
+temp|Utilities
+towel|Utilities
+typed_struct|Utilities
+typedstruct|Utilities
+ua_inspector|Utilities
+ua_parser|Utilities
+uf2tool|Utilities
+unicode_util_compat|Utilities
+uniq|Utilities
+unsafe|Utilities
+unzip|Utilities
+uri_query|Utilities
+uuid|Utilities
+uuid_erl|Utilities
+uuidv7|Utilities
+varint|Utilities
+vector|Utilities
+verl|Utilities
+workspace|Utilities
+wormhole|Utilities
+yuri_template|Utilities
+zipper|Utilities
+zstream|Utilities
+brcpfcnpj|Validations
+email_checker|Validations
+ex_json_schema|Validations
+ex_phone_number|Validations
+ham|Validations
+jesse|Validations
+json_xema|Validations
+luhn|Validations
+norm|Validations
+optimal|Validations
+params|Validations
+peri|Validations
+phone|Validations
+tarams|Validations
+valdi|Validations
+vex|Validations
+xema|Validations
+git_cli|Version Control
+git_hooks|Version Control
+git_ops|Version Control
+elixir_xml_to_map|XML
+erlsom|XML
+saxy|XML
+sweet_xml|XML
+xml_builder|XML
+yamerl|YAML
+yaml_elixir|YAML
+ymlr|YAML

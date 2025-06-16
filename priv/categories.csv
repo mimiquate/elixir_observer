@@ -1,0 +1,90 @@
+Id|Category|Description
+1|Actors|Libraries implementing the Actor model for concurrent programming with isolated processes that communicate via message passing
+2|Algorithms and Data structures|Implementations of algorithms and data structures optimized for Elixir's functional programming paradigm
+4|Artificial Intelligence|Machine learning, neural networks, and AI-related libraries for Elixir including Nx and Axon
+5|Audio and Sounds|Libraries for audio processing, sound generation, and multimedia applications
+6|Authentication|Libraries for user authentication, session management, and identity verification
+7|Authorization|Access control and permission management libraries for securing applications
+8|Behaviours and Interfaces|OTP behaviours and interface definitions for creating reusable and standardized components
+9|Benchmarking|Performance testing and benchmarking tools for measuring Elixir application performance
+10|Bittorrent|Libraries for implementing BitTorrent protocol and peer-to-peer file sharing
+11|BSON|Libraries for Binary JSON encoding and decoding, commonly used with MongoDB
+12|Build Tools|Tools for building, compiling, and managing Elixir projects beyond the standard Mix tool
+13|Caching|In-memory and distributed caching solutions for improving application performance
+14|Chatting|Real-time messaging and chat application libraries leveraging Elixir's concurrency
+15|Cloud Infrastructure and Management|Tools for cloud deployment, infrastructure as code, and cloud service integrations
+16|Code Analysis|Static analysis tools, linters, and code quality assessment libraries
+17|Command Line Applications|Libraries for building CLI tools and command-line interfaces
+18|Configuration|Application configuration management and environment-specific settings handling
+19|Cryptography|Encryption, hashing, and cryptographic utilities for secure applications
+20|CSV|Comma-separated values parsing and generation libraries
+21|Date and Time|Date, time, and timezone handling libraries including calendar operations
+22|Debugging|Debugging tools, profilers, and development aids for troubleshooting Elixir applications
+23|Deployment|Application deployment tools, containerization, and production environment setup
+24|Documentation|Documentation generation tools and libraries for creating API docs and guides
+25|Domain-specific language|Tools for creating DSLs and domain-specific syntax within Elixir
+26|ECMAScript|JavaScript integration and ECMAScript compatibility libraries
+27|ElasticSearch|Integration libraries for Elasticsearch search and analytics engine
+28|Email|Email sending, receiving, and processing libraries including SMTP clients
+29|Embedded Systems|Libraries for IoT and embedded device development, including Nerves framework
+30|Encoding and Compression|Data encoding, decoding, and compression utilities for various formats
+31|Errors and Exception Handling|Error tracking, exception handling, and fault tolerance utilities
+32|Eventhandling|Event-driven programming libraries and event sourcing implementations
+34|Feature Flags and Toggles|Feature flag management for gradual rollouts and A/B testing
+35|Feeds|RSS, Atom, and other feed parsing and generation libraries
+36|Files and Directories|File system operations, directory traversal, and file manipulation utilities
+37|Formulars|Form handling and validation libraries for web applications
+38|Framework Components|Reusable components and plugins for web frameworks like Phoenix
+39|Frameworks|Web frameworks and application frameworks beyond Phoenix
+40|Games|Game development libraries and engines for creating games in Elixir
+41|Geolocation|Geographic data processing, mapping, and location-based services
+42|GUI|Graphical user interface libraries for desktop application development
+43|Hardware|Hardware interaction libraries for sensors, GPIO, and device control
+44|HTML|HTML parsing, generation, and manipulation libraries
+45|HTTP|HTTP protocol libraries and utilities for web communication
+46|HTTP Client|HTTP client libraries for making web requests and API calls
+47|HTTP Server|HTTP server implementations and web server utilities
+48|Images|Image processing, manipulation, and format conversion libraries
+49|Instrumenting / Monitoring|Application performance monitoring, metrics collection, and observability tools
+50|JSON|JSON encoding, decoding, and manipulation libraries
+51|Languages|Language processing tools and programming language implementations
+52|Lexical analysis|Tokenization, parsing, and lexical analysis tools for language processing
+53|Logging|Logging frameworks and structured logging utilities for application monitoring
+54|Macros|Metaprogramming utilities and macro libraries for code generation
+55|Markdown|Markdown parsing and HTML generation from Markdown content
+56|Miscellaneous|Utility libraries and tools that don't fit into other specific categories
+57|Native Implemented Functions|NIFs (Native Implemented Functions) for integrating C/C++ code with Elixir
+58|Natural Language Processing (NLP)|Text processing, sentiment analysis, and natural language understanding libraries
+59|Networking|Network programming libraries for sockets, protocols, and network communication
+60|Office|Office document processing including Excel, Word, and PowerPoint file handling
+61|ORM and Datamapping|Object-relational mapping and database abstraction layers, primarily Ecto
+62|OTP|Open Telecom Platform libraries and OTP behavior implementations
+63|Package Management|Dependency management and package distribution tools beyond Hex
+64|PDF|PDF document generation, parsing, and manipulation libraries
+65|Phoenix|The Phoenix web framework and related Phoenix ecosystem libraries
+66|Forms|Form builders, validators, and form handling utilities for web applications
+67|Protocols|Protocol definitions and implementations for polymorphic behavior
+68|Queue|Message queuing systems and background job processing libraries
+69|QUIC|QUIC protocol implementations for fast, secure transport
+70|Release Management|Application release building, versioning, and deployment automation
+71|REST and API|RESTful API development tools and API client libraries
+72|Scheduling|Job scheduling, cron-like functionality, and periodic task execution
+73|Search|Full-text search engines and search functionality implementations
+74|Security|Security tools, vulnerability scanners, and security-focused utilities
+75|Sigils|Custom sigil implementations for domain-specific syntax extensions
+76|SMS|SMS sending and receiving libraries for text messaging integration
+77|State Machines|Finite state machine implementations and workflow management
+78|Static Page Generation|Static site generators and JAMstack tools for Elixir
+79|Statistics|Statistical analysis and mathematical computation libraries
+80|Templating|Template engines and view rendering libraries beyond Phoenix templates
+81|Testing|Testing frameworks, mocking libraries, and test utilities beyond ExUnit
+82|Text and Numbers|Text processing, string manipulation, and numeric computation utilities
+83|Third Party APIs|Integration libraries for external APIs and web services
+84|Translations and Internationalizations|i18n libraries for multi-language support and localization
+85|Utilities|General-purpose utility libraries and helper functions
+86|Validations|Data validation libraries and input sanitization tools
+87|Version Control|Git integration and version control system utilities
+88|Video|Video processing, encoding, and multimedia handling libraries
+89|WebAssembly|WebAssembly integration and WASM-related tools for Elixir
+90|XML|XML parsing, generation, and manipulation libraries
+91|YAML|YAML parsing and generation libraries for configuration and data serialization

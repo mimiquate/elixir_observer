@@ -60,11 +60,16 @@ defmodule ToolboxWeb.PackageLive do
       update_activity_if_outdated(package, github.sync_at)
     end
 
+    category = Toolbox.Packages.get_category!(package.category_id)
+    similar_packages = Toolbox.Packages.list_packages_from_category(category)
+                       |> Enum.reject(fn(p) -> p.name == name end)
+
     {
       :ok,
       assign(
         socket,
         page_title: package.name,
+        similar_packages: similar_packages,
         package: %{
           name: package.name,
           description: package.description,

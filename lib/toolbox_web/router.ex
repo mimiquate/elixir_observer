@@ -30,6 +30,8 @@ defmodule ToolboxWeb.Router do
     live "/packages/:name", PackageLive
     live "/packages/:name/:version", PackageLive
     live "/searches/:term", SearchLive
+
+    live "/categories/:id", CategoryLive
   end
 
   scope "/admin", ToolboxWeb do

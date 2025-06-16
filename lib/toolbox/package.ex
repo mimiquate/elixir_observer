@@ -6,6 +6,8 @@ defmodule Toolbox.Package do
     field :name, :string
     field :description, :string
 
+    field :category_id, :id
+
     has_many :hexpm_snapshots, Toolbox.HexpmSnapshot
     has_many :github_snapshots, Toolbox.GithubSnapshot
 
