@@ -69,7 +69,11 @@ config :toolbox, Oban,
   ],
   queues: [
     hexpm: [limit: 1],
-    scm: [limit: 1]
+    # Use 750ms second dispatch cooldown to prevent Github's rate limit
+    # We are doing 2 request in each job
+    # 1 to the REST API, 1 to the GraphQL API
+    # Even if the request is instantaneous we will do at most (1/0.750)*3600 = 4800 < 5000
+    scm: [limit: 1, dispatch_cooldown: 750]
   ],
   notifier: Oban.Notifiers.PG,
   repo: Toolbox.Repo
