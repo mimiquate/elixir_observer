@@ -1,8 +1,6 @@
 defmodule ToolboxWeb.Components.PackageActivity do
   use ToolboxWeb, :html
 
-  alias Toolbox.Github.GithubActivity
-
   @doc """
   Renders the activity section for a package.
 
@@ -28,7 +26,7 @@ defmodule ToolboxWeb.Components.PackageActivity do
           Activity
         </h3>
 
-        <%= if match?(%GithubActivity{}, @activity) do %>
+        <%= if @activity do %>
           <div
             class="flex justify-center items-center gap 2 h-fit py-1 px-3 sm:px-5 rounded-2xl border border-accent dark:border-violet bg-white dark:bg-violet"
             {test_attrs(last_year_badge: true)}
@@ -41,7 +39,7 @@ defmodule ToolboxWeb.Components.PackageActivity do
       </div>
 
       <div class="grid gap-x-2 gap-y-4 grid-cols-2 sm:grid-cols-3 sm:grid-rows-2 sm:gap-8">
-        <%= if match?(%GithubActivity{}, @activity) do %>
+        <%= if @activity do %>
           <div
             class="order-3 p-3 sm:col-span-1 sm:row-span-1 bg-surface-alt sm:p-5 rounded-md border border-stroke"
             {test_attrs(pull_requests_section: true)}
@@ -99,26 +97,26 @@ defmodule ToolboxWeb.Components.PackageActivity do
             <%= if Enum.any?(@activity.pull_requests) do %>
               <ul class="sm:pt-4 sm:col-span-2" sm:row-span-2 {test_attrs(pr_list: true)}>
                 <%= for {pr, i} <- Enum.with_index(@activity.pull_requests) do %>
-                  <li class="py-2 last:pb-0" {test_attrs(pr_item: pr["permalink"])}>
-                    <.link href={pr["permalink"]} target="_blank" {test_attrs(pr_link: true)}>
+                  <li class="py-2 last:pb-0" {test_attrs(pr_item: pr.permalink)}>
+                    <.link href={pr.permalink} target="_blank" {test_attrs(pr_link: true)}>
                       <h4
                         class="text-[14px] text-primary-text sm:text-[16px] line-clamp-2 overflow-hidden"
                         {test_attrs(pr_title: true)}
                       >
-                        {pr["title"]}
+                        {pr.title}
                       </h4>
                     </.link>
                     <div class="flex mt-1">
                       <img
                         class="w-6 rounded-full"
-                        src={pr["mergedBy"]["avatarUrl"]}
+                        src={pr.merged_by_avatar_url}
                         {test_attrs(pr_avatar: true)}
                       />
                       <span class="text-[14px] ml-2" {test_attrs(pr_author: true)}>
-                        {pr["mergedBy"]["login"]}
+                        {pr.merged_by_login}
                       </span>
                       <% {merged_at_number, merged_at_relative_label} =
-                        relative_datetime(pr["mergedAt"]) %>
+                        relative_datetime(pr.merged_at) %>
                       <span
                         class="text-[14px] ml-1 sm:ml-2 text-secondary-text"
                         {test_attrs(pr_merged_time: true)}
@@ -182,13 +180,10 @@ defmodule ToolboxWeb.Components.PackageActivity do
             class="p-3 sm:p-5 col-span-2 sm:col-span-3 sm:row-span-2 flex flex-col items-center"
             {test_attrs(error_state: true)}
           >
-            <img src={~p"/images/error-illustration.png"} {test_attrs(error_image: true)} />
+            <img src={~p"/images/empty-state-figure.png"} {test_attrs(error_image: true)} />
             <h3 class="text-primary-text sm:text-[24px] mt-3" {test_attrs(error_title: true)}>
-              Failed to load repo activity.
+              No Github Activity
             </h3>
-            <p class="text-secondary-text sm:text-[16px]" {test_attrs(error_message: true)}>
-              Please refresh in a bit
-            </p>
           </div>
         <% end %>
       </div>

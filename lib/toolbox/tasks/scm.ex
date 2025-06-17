@@ -21,36 +21,14 @@ defmodule Toolbox.Tasks.SCM do
 
     cond do
       github_link = links["GitHub"] || links["Github"] || links["github"] ->
-        case Toolbox.Tasks.GitHub.run(github_link) do
-          {:ok, data} ->
-            Toolbox.Packages.upsert_github_snapshot(%{
-              package_id: package.id,
-              data: data
-            })
-
-          {:error, :not_found} ->
-            # Delete the old snapshot if present
-            github_snapshot = package.latest_github_snapshot
-
-            if github_snapshot do
-              Toolbox.Packages.delete_github_snapshot(github_snapshot)
-            end
-
-          {:error, :parse_error} ->
-            nil
-        end
+        Toolbox.Tasks.GitHub.run(package, github_link)
 
       gitlab_link = links["GitLab"] || links["Gitlab"] || links["gitlab"] ->
         Toolbox.Tasks.GitLab.run(gitlab_link)
 
+      # TODO: Improve this to also detect GitLab based on the URL
       repo_link = links["Repository"] ->
-        # TODO: Improve this to also detect GitLab based on the URL
-        with {:ok, data} <- Toolbox.Tasks.GitHub.run(repo_link) do
-          Toolbox.Packages.upsert_github_snapshot(%{
-            package_id: package.id,
-            data: data
-          })
-        end
+        Toolbox.Tasks.GitHub.run(package, repo_link)
 
       true ->
         Logger.warning(

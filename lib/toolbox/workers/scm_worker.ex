@@ -14,6 +14,24 @@ defmodule Toolbox.Workers.SCMWorker do
   end
 
   @impl Oban.Worker
+  def perform(%Oban.Job{args: %{"action" => "get_activity", "name" => name}}) do
+    package = Toolbox.Packages.get_package_by_name(name)
+
+    with {:ok, github_snapshot} = result <- Toolbox.Tasks.SCM.run(package) do
+      Phoenix.PubSub.broadcast(
+        Toolbox.PubSub,
+        "package_live:#{name}",
+        %{
+          action: :refresh_activity,
+          activity: github_snapshot.activity
+        }
+      )
+
+      result
+    end
+  end
+
+  @impl Oban.Worker
   def perform(%Oban.Job{args: %{"name" => name}}) do
     Toolbox.Tasks.SCM.run(name)
 
