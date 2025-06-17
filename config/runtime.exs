@@ -74,6 +74,13 @@ if config_env() == :prod do
     access_token: System.get_env("ROLLBAR_SERVER_ACCESS_TOKEN"),
     environment: System.get_env("DEPLOYMENT_ENV", to_string(config_env()))
 
+  config :opentelemetry_exporter,
+    otlp_protocol: :http_protobuf,
+    otlp_endpoint: "https://api.honeycomb.io:443",
+    otlp_headers: [
+      {"x-honeycomb-team", System.fetch_env!("HONEYCOMB_INGEST_API_KEY")}
+    ]
+
   # ## SSL Support
   #
   # To get SSL working, you will need to add the `https` key
