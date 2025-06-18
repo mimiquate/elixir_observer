@@ -26,6 +26,14 @@ defmodule Toolbox.OtelSampler do
     {:drop, [], []}
   end
 
+  @drop_statements [
+    "begin",
+    "commit",
+    ~s|SELECT f1."value", f0."value", "public".oban_count_estimate(f1."value", f0."value") FROM json_array_elements_text($1) AS f0 CROSS JOIN json_array_elements_text($2) AS f1|,
+    ~s|DELETE FROM "public"."oban_peers" AS o0 WHERE (o0."name" = $1) AND (o0."expires_at" < $2)|,
+    ~s|INSERT INTO "public"."oban_peers" AS o0 ("name","node","started_at","expires_at") VALUES ($1,$2,$3,$4) ON CONFLICT ("name") DO UPDATE SET "expires_at" = $5|
+  ]
+
   @impl :otel_sampler
   def should_sample(
         _ctx,
@@ -36,7 +44,7 @@ defmodule Toolbox.OtelSampler do
         %{"db.statement": s},
         _config_attributes
       )
-      when s in ["begin", "commit"] do
+      when s in @drop_statements do
     {:drop, [], []}
   end
 
