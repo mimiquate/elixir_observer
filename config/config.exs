@@ -79,6 +79,7 @@ config :toolbox, Oban,
   repo: Toolbox.Repo
 
 config :opentelemetry,
+  sampler: {Toolbox.OtelSampler, %{}},
   resource: [
     service: [
       name: "app",
