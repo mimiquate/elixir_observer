@@ -42,6 +42,20 @@ defmodule Toolbox.OtelSampler do
 
   @impl :otel_sampler
   def should_sample(
+        _ctx,
+        _trace_id,
+        _links,
+        _span_name,
+        _span_kind,
+        %{"url.path": p},
+        _config_attributes
+      )
+      when p in ["/live/longpoll", "/live/websocket"] do
+    {:drop, [], []}
+  end
+
+  @impl :otel_sampler
+  def should_sample(
         ctx,
         _trace_id,
         _links,
