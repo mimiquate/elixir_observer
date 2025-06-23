@@ -31,6 +31,7 @@ defmodule ToolboxWeb.Router do
     live "/packages/:name/:version", PackageLive
     live "/searches/:term", SearchLive
 
+    live "/categories", CategoryIndexLive
     live "/categories/:id", CategoryLive
   end
 
