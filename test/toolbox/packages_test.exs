@@ -112,5 +112,37 @@ defmodule Toolbox.PackagesTest do
 
       assert name == bandit.name
     end
+
+    test "properly handles packages with nil downloads in sorting" do
+      # Create a package with nil downloads
+      {:ok, nil_downloads_package} = Packages.create_package(%{name: "nil_downloads_pkg"})
+
+      {:ok, _} =
+        Packages.create_hexpm_snapshot(%{
+          package_id: nil_downloads_package.id,
+          data: %{
+            "meta" => %{"description" => "Package with nil downloads"},
+            "downloads" => %{}
+          }
+        })
+
+      # Create a package with high downloads
+      {:ok, high_downloads_package} = Packages.create_package(%{name: "high_downloads_pkg"})
+
+      {:ok, _} =
+        Packages.create_hexpm_snapshot(%{
+          package_id: high_downloads_package.id,
+          data: %{
+            "meta" => %{"description" => "Package with high downloads"},
+            "downloads" => %{"recent" => 2000}
+          }
+        })
+
+      # Search for packages containing "pkg"
+      {nil, packages, _} = Packages.search("pkg")
+
+      # Check actual ordering - nil downloads should come AFTER packages with downloads
+      assert [%{name: "high_downloads_pkg"}, %{name: "nil_downloads_pkg"}] = packages
+    end
   end
 end
