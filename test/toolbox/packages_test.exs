@@ -4,7 +4,6 @@ defmodule Toolbox.PackagesTest do
   alias Toolbox.Packages
   alias Toolbox.Package
 
-
   describe "search/1" do
     setup do
       # Create test data for search functionality
@@ -123,19 +122,21 @@ defmodule Toolbox.PackagesTest do
     end
 
     test "add default if missing downloads", %{package: package} do
-      {:ok, snapshot} = Packages.create_hexpm_snapshot(%{
-        package_id: package.id,
-        data: %{"downloads" => %{}}
-      })
+      {:ok, snapshot} =
+        Packages.create_hexpm_snapshot(%{
+          package_id: package.id,
+          data: %{"downloads" => %{}}
+        })
 
       assert snapshot.data["downloads"] == %{"recent" => 0}
     end
 
     test "does not modify downloads if present", %{package: package} do
-      {:ok, snapshot} = Packages.create_hexpm_snapshot(%{
-        package_id: package.id,
-        data: %{"downloads" => %{"all" => 10, "recent" => 5}}
-      })
+      {:ok, snapshot} =
+        Packages.create_hexpm_snapshot(%{
+          package_id: package.id,
+          data: %{"downloads" => %{"all" => 10, "recent" => 5}}
+        })
 
       assert snapshot.data["downloads"] == %{"all" => 10, "recent" => 5}
     end
