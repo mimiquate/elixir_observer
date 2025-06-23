@@ -4,72 +4,73 @@ defmodule Toolbox.PackagesTest do
   alias Toolbox.Packages
   alias Toolbox.Package
 
-  setup do
-    # Create test data for search functionality
-    {:ok, package1} = Packages.create_package(%{name: "bandit"})
-    {:ok, package2} = Packages.create_package(%{name: "bamboo"})
-    {:ok, package3} = Packages.create_package(%{name: "tesla"})
-
-    # Create hexpm snapshots with test data
-    {:ok, _} =
-      Packages.create_hexpm_snapshot(%{
-        package_id: package1.id,
-        data: %{
-          "meta" => %{"description" => "A pure Elixir HTTP server"},
-          "downloads" => %{"recent" => 1000}
-        }
-      })
-
-    {:ok, _} =
-      Packages.create_hexpm_snapshot(%{
-        package_id: package2.id,
-        data: %{
-          "meta" => %{"description" => "Composable, testable & adapter based emails"},
-          "downloads" => %{"recent" => 800}
-        }
-      })
-
-    {:ok, _} =
-      Packages.create_hexpm_snapshot(%{
-        package_id: package3.id,
-        data: %{
-          "meta" => %{"description" => "HTTP client library"},
-          "downloads" => %{"recent" => 500}
-        }
-      })
-
-    # Create github snapshots with test data
-    {:ok, _} =
-      Packages.upsert_github_snapshot(%{
-        package_id: package1.id,
-        data: %{
-          "stargazers_count" => 1500,
-          "full_name" => "mtrudel/bandit"
-        }
-      })
-
-    {:ok, _} =
-      Packages.upsert_github_snapshot(%{
-        package_id: package2.id,
-        data: %{
-          "stargazers_count" => 1200,
-          "full_name" => "thoughtbot/bamboo"
-        }
-      })
-
-    {:ok, _} =
-      Packages.upsert_github_snapshot(%{
-        package_id: package3.id,
-        data: %{
-          "stargazers_count" => 800,
-          "full_name" => "elixir-tesla/tesla"
-        }
-      })
-
-    %{packages: [package1, package2, package3]}
-  end
 
   describe "search/1" do
+    setup do
+      # Create test data for search functionality
+      {:ok, package1} = Packages.create_package(%{name: "bandit"})
+      {:ok, package2} = Packages.create_package(%{name: "bamboo"})
+      {:ok, package3} = Packages.create_package(%{name: "tesla"})
+
+      # Create hexpm snapshots with test data
+      {:ok, _} =
+        Packages.create_hexpm_snapshot(%{
+          package_id: package1.id,
+          data: %{
+            "meta" => %{"description" => "A pure Elixir HTTP server"},
+            "downloads" => %{"recent" => 1000}
+          }
+        })
+
+      {:ok, _} =
+        Packages.create_hexpm_snapshot(%{
+          package_id: package2.id,
+          data: %{
+            "meta" => %{"description" => "Composable, testable & adapter based emails"},
+            "downloads" => %{"recent" => 800}
+          }
+        })
+
+      {:ok, _} =
+        Packages.create_hexpm_snapshot(%{
+          package_id: package3.id,
+          data: %{
+            "meta" => %{"description" => "HTTP client library"},
+            "downloads" => %{"recent" => 500}
+          }
+        })
+
+      # Create github snapshots with test data
+      {:ok, _} =
+        Packages.upsert_github_snapshot(%{
+          package_id: package1.id,
+          data: %{
+            "stargazers_count" => 1500,
+            "full_name" => "mtrudel/bandit"
+          }
+        })
+
+      {:ok, _} =
+        Packages.upsert_github_snapshot(%{
+          package_id: package2.id,
+          data: %{
+            "stargazers_count" => 1200,
+            "full_name" => "thoughtbot/bamboo"
+          }
+        })
+
+      {:ok, _} =
+        Packages.upsert_github_snapshot(%{
+          package_id: package3.id,
+          data: %{
+            "stargazers_count" => 800,
+            "full_name" => "elixir-tesla/tesla"
+          }
+        })
+
+      %{packages: [package1, package2, package3]}
+    end
+
     test "returns all packages for empty search term", %{packages: packages} do
       {nil, result_packages, more?} = Packages.search("")
 
@@ -111,6 +112,32 @@ defmodule Toolbox.PackagesTest do
       {nil, [%Package{name: name}], _} = Packages.search("Ban")
 
       assert name == bandit.name
+    end
+  end
+
+  describe "create_hexpm_snapshot/1" do
+    setup do
+      {:ok, p} = Packages.create_package(%{name: "test"})
+
+      %{package: p}
+    end
+
+    test "add default if missing downloads", %{package: package} do
+      {:ok, snapshot} = Packages.create_hexpm_snapshot(%{
+        package_id: package.id,
+        data: %{"downloads" => %{}}
+      })
+
+      assert snapshot.data["downloads"] == %{"recent" => 0}
+    end
+
+    test "does not modify downloads if present", %{package: package} do
+      {:ok, snapshot} = Packages.create_hexpm_snapshot(%{
+        package_id: package.id,
+        data: %{"downloads" => %{"all" => 10, "recent" => 5}}
+      })
+
+      assert snapshot.data["downloads"] == %{"all" => 10, "recent" => 5}
     end
   end
 end
