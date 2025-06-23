@@ -94,9 +94,11 @@ defmodule ToolboxWeb do
       # Routes generation with the ~p sigil
       unquote(verified_routes())
 
-      def humanized_number(number) do
+      def humanized_number(number) when is_number(number) do
         Toolbox.Number.to_human(number)
       end
+
+      def humanized_number(_other), do: "-"
 
       def humanized_datetime(datetime) when is_binary(datetime) do
         Calendar.strftime(
