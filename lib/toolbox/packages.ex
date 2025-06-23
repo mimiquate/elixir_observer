@@ -41,7 +41,7 @@ defmodule Toolbox.Packages do
           latest_hexpm_snapshot: ^latest_hexpm_snaphost_query(),
           latest_github_snapshot: ^latest_github_snaphost_query()
         ],
-        order_by: [desc: json_extract_path(s.data, ["downloads", "recent"])],
+        order_by: [desc_nulls_last: json_extract_path(s.data, ["downloads", "recent"])],
         # TODO: Rework limit once we implement search result page pagination
         limit: ^limit + 1
       )
