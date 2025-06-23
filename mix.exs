@@ -41,7 +41,7 @@ defmodule Toolbox.MixProject do
       {:bandit, "~> 1.5"},
       {:dns_cluster, "~> 0.2.0"},
       {:ecto_sql, "~> 3.10"},
-      {:esbuild, "~> 0.9.0", runtime: Mix.env() == :dev},
+      {:esbuild, "~> 0.10.0", runtime: Mix.env() == :dev},
       {:gettext, "~> 0.20"},
       {
         :heroicons,
@@ -89,7 +89,7 @@ defmodule Toolbox.MixProject do
       {:live_debugger, "~> 0.2.0", only: :dev},
 
       # Test
-      {:floki, "~> 0.37.0", only: :test},
+      {:floki, "~> 0.38.0", only: :test},
       {:wallaby, "~> 0.30.9", runtime: false, only: :test},
       {:test_server, "~> 0.1.20", only: [:test]}
     ]
