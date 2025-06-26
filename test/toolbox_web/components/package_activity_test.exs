@@ -137,6 +137,11 @@ defmodule ToolboxWeb.Components.PackageActivityTest do
       assert length(see_all_link) == 1
       assert Floki.text(see_all_link) =~ "See all"
 
+      # Check "See all" link href
+      one_year_ago = Date.add(Date.utc_today(), -365) |> Date.to_iso8601()
+      expected_href = "https://github.com/owner/repo/pulls?q=is%3Apr+is%3Amerged+created%3A%3E#{one_year_ago}"
+      assert Floki.attribute(see_all_link, "href") == [expected_href]
+
       # Check dividers
       pr_dividers = Floki.find(doc, "[data-test-pr-divider]")
       assert length(pr_dividers) >= 1

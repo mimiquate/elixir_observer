@@ -85,7 +85,7 @@ defmodule ToolboxWeb.Components.PackageActivity do
               <.link
                 :if={@github_fullname}
                 class="cursor-pointer"
-                href={"https://github.com/" <> @github_fullname <> "/pulls"}
+                href={see_all_link_href(@github_fullname)}
                 target="_blank"
                 {test_attrs(see_all_link: true)}
               >
@@ -189,5 +189,11 @@ defmodule ToolboxWeb.Components.PackageActivity do
       </div>
     </div>
     """
+  end
+
+  defp see_all_link_href(github_fullname) do
+    one_year_ago = Date.add(Date.utc_today(), -365) |> Date.to_iso8601()
+
+    "https://github.com/#{github_fullname}/pulls?q=is%3Apr+is%3Amerged+created%3A%3E#{one_year_ago}"
   end
 end
