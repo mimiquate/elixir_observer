@@ -30,7 +30,10 @@ let liveSocket = new LiveSocket("/live", Socket, {
 
 // Show progress bar on live navigation and form submits
 topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
-window.addEventListener("phx:page-loading-start", _info => topbar.show(500))
+// Add a big 3s delay until we add Otel to understand where the latency is.
+// Remove the feeling that the site is not loading when it takes ~1s.
+// Being conservative because we do want to show a topbar if it takes > 3s.
+window.addEventListener("phx:page-loading-start", _info => topbar.show(3000))
 window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
 
 // connect if there are any LiveViews on the page
