@@ -24,7 +24,14 @@ defmodule Toolbox.Tasks.SCM do
         Toolbox.Tasks.GitHub.run(package, github_link)
 
       gitlab_link = links["GitLab"] || links["Gitlab"] || links["gitlab"] ->
-        Toolbox.Tasks.GitLab.run(gitlab_link)
+        with {:ok, data} <- Toolbox.Tasks.GitLab.run(gitlab_link) do
+          # XXX: rename github snapshot to SCM snapshot and use for both
+          # OR create a new table gitlab_snapshots
+          Toolbox.Packages.create_github_snapshot(%{
+            package_id: package.id,
+            data: Jason.decode!(data)
+          })
+        end
 
       # TODO: Improve this to also detect GitLab based on the URL
       repo_link = links["Repository"] ->
