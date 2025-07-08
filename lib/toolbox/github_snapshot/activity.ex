@@ -8,11 +8,20 @@ defmodule Toolbox.GithubSnapshot.Activity do
     field :closed_issue_count, :integer
     field :open_pr_count, :integer
     field :merged_pr_count, :integer
+    field :last_tag, :string
+    field :last_tag_behind_by, :integer
     embeds_many :pull_requests, Toolbox.GithubSnapshot.PullRequest
   end
 
   def changeset(activity, attrs) do
-    fields = [:open_issue_count, :closed_issue_count, :open_pr_count, :merged_pr_count]
+    fields = [
+      :open_issue_count,
+      :closed_issue_count,
+      :open_pr_count,
+      :merged_pr_count,
+      :last_tag,
+      :last_tag_behind_by
+    ]
 
     activity
     |> cast(attrs, fields)
@@ -43,11 +52,15 @@ defmodule Toolbox.GithubSnapshot.Activity do
         }
       end)
 
+    latest_tag = get_in(response, ["data", "repository", "latestTag", "nodes"]) |> List.first()
+
     %{
       open_issue_count: get_in(response, ["data", "openIssueCount", "issueCount"]),
       closed_issue_count: get_in(response, ["data", "closedIssueCount", "issueCount"]),
       open_pr_count: get_in(response, ["data", "openPRCount", "issueCount"]),
       merged_pr_count: get_in(response, ["data", "mergedPRCount", "issueCount"]),
+      last_tag: get_in(latest_tag, ["name"]),
+      last_tag_behind_by: get_in(latest_tag, ["compare", "aheadBy"]),
       pull_requests: pull_requests
     }
   end
