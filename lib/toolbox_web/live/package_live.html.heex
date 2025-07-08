@@ -80,7 +80,7 @@
 
       <.stats_card class="w-1/2" title="Unreleased Activity">
         <:icon>
-          <.changelog_icon class="w-6" />
+          <.changelog_icon class="w-6 dark:fill-secondary-text" />
         </:icon>
         <div class="flex items-center">
           <%= if @package.activity do %>
@@ -162,7 +162,7 @@
 
       <.stats_card class="w-1/2" title="Last Stable Version">
         <:icon>
-          <.calendar_icon class="w-6" />
+          <.path_icon class="w-6" />
         </:icon>
         <div class="flex items-center">
           <h3 class="text-[20px] sm:text-[32px] font-semibold text-primary-text">

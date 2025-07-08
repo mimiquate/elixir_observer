@@ -18,6 +18,7 @@ defmodule ToolboxWeb.PackageLive do
   import ToolboxWeb.Components.Icons.ChangelogIcon
   import ToolboxWeb.Components.Icons.DependenciesIcon
   import ToolboxWeb.Components.Icons.ElixirIcon
+  import ToolboxWeb.Components.Icons.PathIcon
 
   defmodule HexpmVersionNotFoundError do
     defexception [:message, plug_status: 404]
