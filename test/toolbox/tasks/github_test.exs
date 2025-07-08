@@ -46,6 +46,16 @@ defmodule Toolbox.Tasks.GitHubTest do
                     }
                   ]
                 },
+                "latestTag": {
+                  "nodes": [
+                    {
+                        "name": "1.7.0",
+                        "compare": {
+                            "aheadBy": 5
+                        }
+                    }
+                  ]
+                },
                 "changelog": null
               }
             }
@@ -70,6 +80,8 @@ defmodule Toolbox.Tasks.GitHubTest do
                merged_pr_count: 75,
                open_issue_count: 1,
                open_pr_count: 0,
+               last_tag: "1.7.0",
+               last_tag_behind_by: 5,
                pull_requests: [
                  %PullRequest{
                    permalink: "https://github.com/mtrudel/bandit/pull/495",
