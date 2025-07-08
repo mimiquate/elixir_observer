@@ -84,24 +84,24 @@
         </:icon>
         <div class="flex items-center">
           <%= if @package.activity do %>
-            <%= if @package.activity.last_tag_behind_by == 0 do %>
-              <h3 class="text-[20px] sm:text-[32px] font-semibold">
-                0
-              </h3>
-            <% else %>
-              <.link
-                class="flex text-accent"
-                href={"#{@package.github_repo_url}/compare/#{@package.activity.last_tag}...main"}
-                target="_blank"
-              >
+            <.link
+              class="flex text-accent"
+              href={"#{@package.github_repo_url}/compare/#{@package.activity.last_tag}...main"}
+              target="_blank"
+            >
+              <%= if @package.activity.last_tag_behind_by == 0 do %>
+                <span class="text-[12px] sm:text-[18px]">
+                  Up to date
+                </span>
+              <% else %>
                 <h3 class="text-[20px] sm:text-[32px] font-semibold">
                   {humanized_number(@package.activity.last_tag_behind_by)}
                 </h3>
                 <span class="text-[10px] sm:text-[14px] self-center ml-2">
                   commits
                 </span>
-              </.link>
-            <% end %>
+              <% end %>
+            </.link>
           <% else %>
             -
           <% end %>
