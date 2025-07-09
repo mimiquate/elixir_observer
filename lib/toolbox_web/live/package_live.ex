@@ -19,6 +19,7 @@ defmodule ToolboxWeb.PackageLive do
   import ToolboxWeb.Components.Icons.DependenciesIcon
   import ToolboxWeb.Components.Icons.ElixirIcon
   import ToolboxWeb.Components.Icons.PathIcon
+  import ToolboxWeb.Components.Icons.InspectIcon
 
   defmodule HexpmVersionNotFoundError do
     defexception [:message, plug_status: 404]
@@ -251,5 +252,9 @@ defmodule ToolboxWeb.PackageLive do
       true ->
         nil
     end
+  end
+
+  defp source_url(name, version) do
+    "https://preview.hex.pm/preview/#{name}/#{version}"
   end
 end
