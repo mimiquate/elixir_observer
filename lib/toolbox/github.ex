@@ -46,7 +46,7 @@ defmodule Toolbox.Github do
         latestTag: refs(refPrefix: "refs/tags/", first: 1, orderBy: {field: TAG_COMMIT_DATE, direction: DESC}) {
           nodes {
             name
-            compare(headRef: "main") {
+            compare(headRef: "HEAD") {
               aheadBy
             }
           }
