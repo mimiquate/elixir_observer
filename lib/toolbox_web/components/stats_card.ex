@@ -9,8 +9,8 @@ defmodule ToolboxWeb.Components.StatsCard do
 
   def stats_card(assigns) do
     ~H"""
-    <div class={"p-3 sm:px-4 sm:py-6 #{@class}"}>
-      <div class="flex items-center">
+    <div class={@class}>
+      <div class="flex items-center basis-[fit-content]">
         {render_slot(@icon)}
 
         <h4 class="text-[12px] sm:text-[18px] ml-2 text-primary-text">

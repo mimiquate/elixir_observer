@@ -64,8 +64,8 @@
   </p>
 
   <section class="grid grid-cols-1 md:grid-cols-8 gap-2 sm:gap-8 mt-3 sm:0">
-    <div class="md:col-span-3 flex border border-stroke rounded-md bg-surface">
-      <.stats_card class="w-1/2" title="Stars">
+    <div class="p-3 sm:px-8 sm:py-5 md:col-span-3 flex border border-stroke rounded-md bg-surface justify-between">
+      <.stats_card class="w-1/2 sm:w-auto" title="Stars">
         <:icon>
           <.star_icon class="w-6" />
         </:icon>
@@ -78,7 +78,7 @@
         </div>
       </.stats_card>
 
-      <.stats_card class="w-1/2" title="Unreleased Activity">
+      <.stats_card class="w-1/2 sm:w-auto" title="Unreleased Activity">
         <:icon>
           <.changelog_icon class="w-6 dark:fill-secondary-text" />
         </:icon>
@@ -109,8 +109,8 @@
       </.stats_card>
     </div>
 
-    <div class="md:col-span-5 border border-stroke rounded-md bg-surface flex flex-wrap sm:flex-nowrap">
-      <.stats_card class="w-1/2" title="First Release">
+    <div class="p-3 sm:px-8 sm:py-5 md:col-span-5 border border-stroke rounded-md bg-surface flex flex-wrap sm:flex-nowrap justify-between gap-y-4">
+      <.stats_card class="w-1/2 sm:w-auto" title="First Release">
         <:icon>
           <.calendar_icon class="w-6" />
         </:icon>
@@ -128,7 +128,7 @@
         </div>
       </.stats_card>
 
-      <.stats_card class="w-1/2" title="Last Release">
+      <.stats_card class="w-1/2 sm:w-auto" title="Last Release">
         <:icon>
           <.calendar_icon class="w-6" />
         </:icon>
@@ -146,7 +146,7 @@
         </div>
       </.stats_card>
 
-      <.stats_card class="w-1/2" title="Downloads">
+      <.stats_card class="w-1/2 sm:w-auto" title="Downloads">
         <:icon>
           <.download_icon class="w-6" />
         </:icon>
@@ -160,7 +160,7 @@
         </div>
       </.stats_card>
 
-      <.stats_card class="w-1/2" title="Last Stable Version">
+      <.stats_card class="w-1/2 sm:w-auto" title="Last Stable Version">
         <:icon>
           <.path_icon class="w-6" />
         </:icon>
