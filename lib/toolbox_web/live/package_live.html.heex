@@ -64,7 +64,7 @@
   </p>
 
   <section class="grid grid-cols-1 md:grid-cols-8 gap-2 sm:gap-8 mt-3 sm:0">
-    <div class="md:col-span-4 flex border border-stroke rounded-md bg-surface">
+    <div class="md:col-span-3 flex border border-stroke rounded-md bg-surface">
       <.stats_card class="w-1/2" title="Stars">
         <:icon>
           <.star_icon class="w-6" />
@@ -78,22 +78,38 @@
         </div>
       </.stats_card>
 
-      <.stats_card class="w-1/2" title="Recent Downloads">
+      <.stats_card class="w-1/2" title="Unreleased Activity">
         <:icon>
-          <.download_icon class="w-6" />
+          <.changelog_icon class="w-6 dark:fill-secondary-text" />
         </:icon>
         <div class="flex items-center">
-          <h3 class="text-[20px] sm:text-[32px] font-semibold text-primary-text">
-            {humanized_number(@package.recent_downloads)}
-          </h3>
-          <span class="text-[10px] sm:text-[14px] self-center ml-2 text-secondary-text">
-            last 90 days
-          </span>
+          <%= if @package.activity do %>
+            <.link
+              class="flex text-accent"
+              href={"#{@package.github_repo_url}/compare/#{@package.activity.last_tag}...main"}
+              target="_blank"
+            >
+              <%= if @package.activity.last_tag_behind_by == 0 do %>
+                <span class="text-[12px] sm:text-[18px]/[48px]">
+                  Up to date
+                </span>
+              <% else %>
+                <h3 class="text-[20px] sm:text-[32px] font-semibold">
+                  {humanized_number(@package.activity.last_tag_behind_by)}
+                </h3>
+                <span class="text-[10px] sm:text-[14px] self-center ml-2">
+                  commits
+                </span>
+              <% end %>
+            </.link>
+          <% else %>
+            -
+          <% end %>
         </div>
       </.stats_card>
     </div>
 
-    <div class="md:col-span-4 flex border border-stroke rounded-md bg-surface">
+    <div class="md:col-span-5 border border-stroke rounded-md bg-surface flex flex-wrap sm:flex-nowrap">
       <.stats_card class="w-1/2" title="First Release">
         <:icon>
           <.calendar_icon class="w-6" />
@@ -127,6 +143,31 @@
           <span class="self-center ml-2 text-[10px] sm:text-[14px] text-secondary-text">
             {last_release_label}
           </span>
+        </div>
+      </.stats_card>
+
+      <.stats_card class="w-1/2" title="Downloads">
+        <:icon>
+          <.download_icon class="w-6" />
+        </:icon>
+        <div class="flex items-center">
+          <h3 class="text-[20px] sm:text-[32px] font-semibold text-primary-text">
+            {humanized_number(@package.recent_downloads)}
+          </h3>
+          <span class="text-[10px] sm:text-[14px] self-center ml-2 text-secondary-text">
+            last 90 days
+          </span>
+        </div>
+      </.stats_card>
+
+      <.stats_card class="w-1/2" title="Last Stable Version">
+        <:icon>
+          <.path_icon class="w-6" />
+        </:icon>
+        <div class="flex items-center">
+          <h3 class="text-[20px] sm:text-[32px] font-semibold text-primary-text">
+            {@package.latest_stable_version}
+          </h3>
         </div>
       </.stats_card>
     </div>

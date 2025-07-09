@@ -18,6 +18,7 @@ defmodule ToolboxWeb.PackageLive do
   import ToolboxWeb.Components.Icons.ChangelogIcon
   import ToolboxWeb.Components.Icons.DependenciesIcon
   import ToolboxWeb.Components.Icons.ElixirIcon
+  import ToolboxWeb.Components.Icons.PathIcon
   import ToolboxWeb.Components.Icons.InspectIcon
 
   defmodule HexpmVersionNotFoundError do
