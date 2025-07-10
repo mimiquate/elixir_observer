@@ -23,10 +23,12 @@ defmodule Toolbox.GithubSnapshot.Activity do
       :last_tag_behind_by
     ]
 
+    required_fields = fields -- [:last_tag, :last_tag_behind_by]
+
     activity
     |> cast(attrs, fields)
     |> cast_embed(:pull_requests)
-    |> validate_required(fields)
+    |> validate_required(required_fields)
   end
 
   def build_from_api_response(response) do
