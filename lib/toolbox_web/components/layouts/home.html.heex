@@ -1,4 +1,4 @@
-<main class="min-h-screen justify-around sm:justify-between bg-background px-5">
+<main class="min-h-screen justify-around sm:justify-between bg-background px-5 overflow-hidden">
   <div class="min-h-screen container mx-auto flex flex-col justify-between">
     <nav class="flex justify-between items-center py-3">
       <.link navigate="/" class="text-2xl">
@@ -23,12 +23,18 @@
     </nav>
     {@inner_content}
 
-    <footer class="flex justify-around pb-10 sm:pb-15 mx-auto text-secondary-text text-[14px]">
+    <footer class="flex items-center justify-around pb-8 sm:pb-14 sm:mx-auto text-secondary-text text-[14px]">
       <.link href="https://mimiquate.com?utm_source=elixir-observer" target="_blank">
-        <img src={~p"/images/mimiquate-logo.svg"} />
+        <img class="sm:hidden" width="131px" height="36px" src={~p"/images/mimiquate-logo.svg"} />
+        <img
+          class="hidden sm:block"
+          width="190px"
+          height="52px"
+          src={~p"/images/mimiquate-logo.svg"}
+        />
       </.link>
-      <div class="w-[2px] h-[46px] bg-accent dark:bg-white mx-28" />
-      <.logo class="flex items-center" />
+      <div class="w-[2px] h-[46px] bg-accent dark:bg-white mx-28 hidden sm:block" />
+      <.logo class="flex items-center w-[126px] h-[36px] sm:w-auto sm:h-auto" />
     </footer>
   </div>
 </main>
