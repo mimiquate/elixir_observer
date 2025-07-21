@@ -1,20 +1,20 @@
-<main class="min-h-screen justify-around sm:justify-between bg-black bg-[url('/images/light-home-bg.svg')] dark:bg-[url('/images/home-bg.svg')] bg-center bg-no-repeat bg-cover px-5">
+<main class="min-h-screen justify-around sm:justify-between bg-background px-5">
   <div class="min-h-screen container mx-auto flex flex-col justify-between">
     <nav class="flex justify-between items-center py-3">
       <.link navigate="/" class="text-2xl">
-        <.logo />
+        <.logo class="flex items-center" />
       </.link>
       <.link
         href="https://github.com/mimiquate/elixir_observer"
         target="_blank"
-        class="ml-auto mr-2 sm:mr-4"
+        class="ml-auto mr-2 sm:mr-8 sm:py-2 sm:px-5"
       >
         <.github_icon class="w-6 sm:hidden dark:fill-primary-text" />
         <span class="hidden sm:inline text-[16px] font-medium text-accent  dark:text-primary-text">
           Source
         </span>
       </.link>
-      <.link navigate={~p"/about"}>
+      <.link navigate={~p"/about"} class="sm:py-2 sm:px-5">
         <.info_icon class="w-6 sm:hidden" />
         <span class="hidden sm:inline text-[16px] font-medium text-accent  dark:text-primary-text">
           About
@@ -23,10 +23,12 @@
     </nav>
     {@inner_content}
 
-    <footer class="flex justify-around pb-10 sm:pb-15 mx-auto sm:mx-0 text-secondary-text text-[14px] sm:block">
-      <span>
-        Built by <.link href="https://mimiquate.com" target="_blank" class="underline">Mimiquate</.link>.
-      </span>
+    <footer class="flex justify-around pb-10 sm:pb-15 mx-auto text-secondary-text text-[14px]">
+      <.link href="https://mimiquate.com?utm_source=elixir-observer" target="_blank">
+        <img src={~p"/images/mimiquate-logo.svg"} />
+      </.link>
+      <div class="w-[2px] h-[46px] bg-accent dark:bg-white mx-28" />
+      <.logo class="flex items-center" />
     </footer>
   </div>
 </main>
