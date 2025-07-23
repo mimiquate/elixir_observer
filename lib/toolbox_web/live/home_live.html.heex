@@ -1,21 +1,25 @@
-<div class="w-full flex items-center">
-  <div class="flex flex-col w-full sm:block mt-auto mb-auto">
-    <h1 class="font-code text-[48px] sm:text-[72px] text-primary-text">observer</h1>
-    <p class="mt-4 sm:text-[14px] text-primary-text sm:text-[20px] font-mono sm:max-w-115">
+<div class="w-full flex flex-col sm:flex-row grow h-full items-stretch relative">
+  <div class="flex flex-col sm:w-1/2 sm:block mt-10">
+    <h1 class="font-serif font-semibold text-[48px] sm:text-[64px]/[77px] text-primary-text">
+      observer
+    </h1>
+    <p class="mt-4 sm:text-[14px] text-secondary-text sm:text-[20px] font-mono sm:max-w-115">
       Find, compare, and explore Elixir packages for your next project.
     </p>
 
-    <div class="mt-8 max-w-125">
+    <div class="mt-8 w-full">
       <.live_component
         module={ToolboxWeb.SearchFieldComponent}
         id="search-field"
         autofocus="true"
       />
     </div>
-
-    <div class="flex justify-end mt-auto">
-      <div class="mt-10 object-contain w-[211px] h-[181px] sm:w-[443px] sm:h-[343px] bg-[url('/images/light-home-logo.png')] dark:bg-[url('/images/home-logo.png')] bg-center bg-no-repeat bg-cover">
-      </div>
-    </div>
   </div>
+
+  <div class="flex justify-end mt-auto sm:w-1/2 sm:mb-18 translate-x-[37%] sm:translate-none">
+    <img src={~p"/images/home-logo.webp"} width="432px" height="432px" />
+  </div>
+
+  <div class="absolute bottom-0 top-none right-[-100px] sm:right-5 sm:top-30 rounded-full opacity-20 w-[315px] h-[315px] bg-gradient-to-r from-text-secondary-button to-text-secondary-button blur-[100px]" />
+  <div class="hidden sm:block absolute left-5 top-[60%] rounded-full opacity-20 w-[270px] h-[270px] bg-gradient-to-r from-text-secondary-button to-text-secondary-button blur-[100px]" />
 </div>
