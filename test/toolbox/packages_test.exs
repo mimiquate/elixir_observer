@@ -71,7 +71,7 @@ defmodule Toolbox.PackagesTest do
     end
 
     test "returns all packages for empty search term", %{packages: packages} do
-      {nil, result_packages, more?} = Packages.search("")
+      {result_packages, more?} = Packages.search("")
 
       # Empty string matches all packages due to ilike pattern matching
       assert length(result_packages) == length(packages)
@@ -79,13 +79,13 @@ defmodule Toolbox.PackagesTest do
     end
 
     test "returns empty results when no packages match" do
-      {nil, packages, more?} = Packages.search("nonexistentpackage")
+      {packages, more?} = Packages.search("nonexistentpackage")
       assert packages == []
       assert more? == false
     end
 
     test "returns matching packages ordered by download count", %{packages: _packages} do
-      {nil, packages, more?} = Packages.search("ban")
+      {packages, more?} = Packages.search("ban")
 
       # Should find packages that match "ban" (bandit, bamboo)
       # At least one package should match
@@ -108,7 +108,7 @@ defmodule Toolbox.PackagesTest do
     end
 
     test "handles case-insensitive search", %{packages: [bandit | _]} do
-      {nil, [%Package{name: name}], _} = Packages.search("Ban")
+      {[%Package{name: name}], _} = Packages.search("Ban")
 
       assert name == bandit.name
     end
@@ -139,7 +139,7 @@ defmodule Toolbox.PackagesTest do
         })
 
       # Search for packages containing "pkg"
-      {nil, packages, _} = Packages.search("pkg")
+      {packages, _} = Packages.search("pkg")
 
       # Check actual ordering - nil downloads should come AFTER packages with downloads
       assert [%{name: "high_downloads_pkg"}, %{name: "nil_downloads_pkg"}] = packages

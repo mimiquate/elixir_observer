@@ -30,6 +30,7 @@ defmodule Toolbox.Packages do
   def search(term) do
     limit = 50
     like_term = "%#{term}%"
+    downcase_term = String.downcase(term)
 
     {packages, rest} =
       from(
@@ -41,16 +42,17 @@ defmodule Toolbox.Packages do
           latest_hexpm_snapshot: ^latest_hexpm_snaphost_query(),
           latest_github_snapshot: ^latest_github_snaphost_query()
         ],
-        order_by: [desc_nulls_last: json_extract_path(s.data, ["downloads", "recent"])],
+        order_by: [
+          asc: fragment("CASE WHEN LOWER(?) = ? THEN 0 ELSE 1 END", p.name, ^downcase_term),
+          desc_nulls_last: json_extract_path(s.data, ["downloads", "recent"])
+        ],
         # TODO: Rework limit once we implement search result page pagination
         limit: ^limit + 1
       )
       |> Repo.all()
       |> Enum.split(limit)
 
-    {exact_match, packages} = prioritize_exact_match(packages, term)
-
-    {exact_match, packages, length(rest) > 0}
+    {packages, length(rest) > 0}
   end
 
   def get_package_by_name(name) do
@@ -145,15 +147,5 @@ defmodule Toolbox.Packages do
     from g in GithubSnapshot,
       join: r in subquery(ranking_query),
       on: g.id == r.id and r.row_number == 1
-  end
-
-  # Private function to move exact matches to the top
-  defp prioritize_exact_match(packages, term) do
-    {exact_matches, other_matches} =
-      Enum.split_with(packages, fn package ->
-        String.downcase(package.name) == String.downcase(term)
-      end)
-
-    {Enum.at(exact_matches, 0), other_matches}
   end
 end

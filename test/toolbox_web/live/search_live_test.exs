@@ -96,33 +96,10 @@ defmodule ToolboxWeb.SearchLiveTest do
 
       # Check that the search results title shows the correct term
       assert has_element?(view, "[data-test-search-results-title]")
-      assert html =~ "results for &quot;ban&quot;"
+      assert html =~ "Results for &quot;ban&quot;"
     end
 
-    test "shows exact match section when search term exactly matches a package", %{
-      bandit_package: _bandit_package,
-      bamboo_package: _bamboo_package,
-      tesla_package: _tesla_package,
-      urban_package: _urban_package
-    } do
-      {:ok, view, html} = live(build_conn(), "/searches/bandit")
-
-      # Should have exact matches section
-      assert has_element?(view, "[data-test-exact-matches-section]")
-      assert has_element?(view, "[data-test-exact-matches-title]")
-      assert has_element?(view, "[data-test-exact-matches-list]")
-
-      # Should show "Exact Match:" header
-      assert html =~ "Exact Match:"
-
-      # Should have bandit in exact matches
-      assert has_element?(view, "[data-test-exact-match-item='bandit']")
-
-      # Should NOT have other results section since only bandit matches "bandit"
-      refute has_element?(view, "[data-test-other-results-section]")
-    end
-
-    test "shows only other results section when no exact match exists", %{
+    test "shows results", %{
       bandit_package: _bandit_package,
       bamboo_package: _bamboo_package,
       tesla_package: _tesla_package,
@@ -131,41 +108,13 @@ defmodule ToolboxWeb.SearchLiveTest do
       {:ok, view, html} = live(build_conn(), "/searches/ban")
 
       # Should NOT have exact matches section since "ban" doesn't exactly match any package
-      refute has_element?(view, "[data-test-exact-matches-section]")
-
-      # Should have other results section
-      assert has_element?(view, "[data-test-other-results-section]")
-      assert has_element?(view, "[data-test-other-results-title]")
-      assert has_element?(view, "[data-test-other-results-list]")
-
-      # Should show results count in title
-      assert html =~ "Other Results:"
-
-      # Should have bandit in other results
-      assert has_element?(view, "[data-test-other-result-item='bandit']")
-    end
-
-    test "shows both exact match and other results sections when applicable", %{
-      bandit_package: _bandit_package,
-      bamboo_package: _bamboo_package,
-      tesla_package: _tesla_package,
-      urban_package: _urban_package
-    } do
-      {:ok, view, html} = live(build_conn(), "/searches/an")
-
-      # Should have other results section (bandit and urban both contain "an")
-      assert has_element?(view, "[data-test-other-results-section]")
-      assert has_element?(view, "[data-test-other-results-title]")
+      refute has_element?(view, "[data-test-exact-match=*]")
 
       # Should show correct count
-      assert html =~ "2 Other Results:"
+      assert html =~ "2 packages found"
 
-      # Should have both packages in other results
-      assert has_element?(view, "[data-test-other-result-item='bandit']")
-      assert has_element?(view, "[data-test-other-result-item='urban']")
-
-      # Should NOT have exact matches section since "an" doesn't exactly match any package
-      refute has_element?(view, "[data-test-exact-matches-section]")
+      # Should have bandit in other results
+      assert has_element?(view, "[data-test-result-item='bandit']")
     end
 
     test "shows no results when search term has no matches" do
@@ -181,13 +130,12 @@ defmodule ToolboxWeb.SearchLiveTest do
       assert html =~ "Please try other search terms"
 
       # Should NOT have exact matches or other results sections
-      refute has_element?(view, "[data-test-exact-matches-section]")
-      refute has_element?(view, "[data-test-other-results-section]")
+      refute has_element?(view, "[data-test-results-section]")
     end
   end
 
   describe "SearchLive package display" do
-    test "displays package information correctly in exact match section", %{
+    test "displays package information correctly", %{
       bandit_package: _bandit_package,
       bamboo_package: _bamboo_package,
       tesla_package: _tesla_package,
@@ -203,30 +151,27 @@ defmodule ToolboxWeb.SearchLiveTest do
       assert has_element?(view, "[data-test-package-description]")
       assert html =~ "A pure Elixir HTTP server"
 
+      # Should have latest version
+      assert has_element?(view, "[data-test-result-item='bandit'] [data-test-version='1.0.0']")
+
+      # Show exact match chip
+      assert has_element?(view, "[data-test-exact-match='bandit']")
+
       # Should display download stats (humanized format)
       assert has_element?(view, "[data-test-package-downloads-desktop]")
       assert html =~ "1.0k"
     end
 
-    test "displays package information correctly in other results section", %{
+    test "do not display exact match chip", %{
       bandit_package: _bandit_package,
       bamboo_package: _bamboo_package,
       tesla_package: _tesla_package,
       urban_package: _urban_package
     } do
-      {:ok, view, html} = live(build_conn(), "/searches/ban")
+      {:ok, view, _html} = live(build_conn(), "/searches/ban")
 
-      # Should display package name as link
-      assert has_element?(view, "[data-test-package-link='bandit']")
-      assert html =~ "bandit"
-
-      # Should display package description
-      assert has_element?(view, "[data-test-package-description]")
-      assert html =~ "A pure Elixir HTTP server"
-
-      # Should display download stats (humanized format)
-      assert has_element?(view, "[data-test-package-downloads-desktop]")
-      assert html =~ "1.0k"
+      # There is no exact match
+      refute has_element?(view, "[data-test-exact-match=*]")
     end
 
     test "package links navigate to correct package pages", %{
@@ -256,7 +201,7 @@ defmodule ToolboxWeb.SearchLiveTest do
       {:ok, _view, html} = live(build_conn(), "/searches/an")
 
       # Should show correct total count in title
-      assert html =~ "2 results for &quot;an&quot;"
+      assert html =~ "2 packages found"
     end
 
     test "shows more results indicator when applicable", %{

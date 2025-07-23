@@ -23,7 +23,7 @@
   --color-divider-source: #C0C0C0;
   --color-background-source: #F6F8F9;
   --color-chip-bg-source: white;
-
+  --color-chip-bg-exact-match-source: #3F2754;
   --color-text-secondary-button-source: #8956B7;
 
   @variant dark {
@@ -35,6 +35,7 @@
     --color-divider-source: #2F2F2F;
     --color-background-source: #161616;
     --color-chip-bg-source: #252525;
+    --color-chip-bg-exact-match-source: #3F2754;
     --color-text-secondary-button-source: #A2A2A2;
   }
 }
@@ -62,6 +63,7 @@
   --color-divider: var(--color-divider-source);
   --color-background: var(--color-background-source);
   --color-chip-bg: var(--color-chip-bg-source);
+  --color-chip-bg-exact-match: var(--color-chip-bg-exact-match-source);
   --color-text-secondary-button: var(--color-text-secondary-button-source);
 
   --color-violet: #6B3F8F;
