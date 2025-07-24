@@ -9,19 +9,29 @@
       </h3>
 
       <p
-        class="mt-3 max-w-2xl text-md font-mono text-secondary-text"
+        class="mt-3 text-[18px] font-mono text-secondary-text"
         {test_attrs(package_description: true)}
       >
         {@package.description}
       </p>
 
-      <div class="mt-2">
-        <span
-          :for={topic <- @package.topics}
-          class="text-xs mt-1 mr-1 py-1 px-2 rounded-full border-[0.5px] text-text-secondary-button dark:text-primary-text border-stroke bg-chip-bg inline-block"
+      <div class="mt-2 flex gap-2">
+        <.user_link
+          :for={owner <- Enum.slice(@package.owners, 0, 4)}
+          class="flex justify-center items-center py-[2px] pl-[4px] pr-3 rounded-2xl border border-stroke bg-chip-bg"
+          username={owner.username}
         >
-          {topic}
-        </span>
+          <img width="16px" height="16px" class="rounded-full" src={gravatar_url(owner.email)} />
+          <span class="ml-2 text-[14px] text-accent">{owner.username}</span>
+        </.user_link>
+        <%= if length(@package.owners) > 4 do %>
+          <div class="flex justify-center items-center py-[2px] pl-[4px] pr-3 rounded-2xl border border-stroke bg-chip-bg">
+            <.profile_icon class="w-4" />
+            <span class="ml-1 text-[14px] text-accent">
+              + {length(@package.owners) - 4} owners
+            </span>
+          </div>
+        <% end %>
       </div>
     </div>
 
@@ -179,22 +189,6 @@
     </div>
 
     <.package_activity activity={@package.activity} github_fullname={@package.github_fullname} />
-
-    <div class="md:col-span-2 bg-surface rounded-md px-5 py-3 sm:p-8 border border-stroke">
-      <h3 class="text-[14px] text-primary-text sm:text-[24px] font-medium mb-3 sm:mb-5">
-        Owners
-      </h3>
-
-      <ul class="flex sm:flex-col flex-wrap">
-        <li :for={owner <- @package.owners} class="flex items-center mb-3 w-1/2">
-          <img width="32px" height="32px" class="rounded-full" src={gravatar_url(owner.email)} />
-
-          <span class="text-[14px] text-primary-text text-[16px] ml-2">
-            <.user_link username={owner.username} />
-          </span>
-        </li>
-      </ul>
-    </div>
   </section>
 
   <section class="sm:mt-8">

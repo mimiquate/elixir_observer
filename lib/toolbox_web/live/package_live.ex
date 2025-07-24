@@ -20,6 +20,7 @@ defmodule ToolboxWeb.PackageLive do
   import ToolboxWeb.Components.Icons.ElixirIcon
   import ToolboxWeb.Components.Icons.PathIcon
   import ToolboxWeb.Components.Icons.InspectIcon
+  import ToolboxWeb.Components.Icons.ProfileIcon
 
   defmodule HexpmVersionNotFoundError do
     defexception [:message, plug_status: 404]
