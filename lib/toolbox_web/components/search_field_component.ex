@@ -93,7 +93,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
                   </span>
                   <span
                     :if={package.name == String.downcase(@search_term)}
-                    class="text-xs ml-4 mr-1 py-[2px] px-2 rounded-full border-[0.5px] text-text-secondary-button border-stroke text-white bg-chip-bg-exact-match inline-block"
+                    class="text-xs ml-4 mr-1 py-[2px] px-2 rounded-full text-text-secondary-button text-white bg-chip-bg-exact-match inline-block"
                     {test_attrs(exact_match: package.name)}
                   >
                     Exact match
