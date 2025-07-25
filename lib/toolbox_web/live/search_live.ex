@@ -13,7 +13,7 @@ defmodule ToolboxWeb.SearchLive do
       }
     )
 
-    {exact_match, other_results, more?} = Packages.search(term)
+    {results, more?} = Packages.search(term)
 
     {
       :ok,
@@ -21,9 +21,8 @@ defmodule ToolboxWeb.SearchLive do
         socket,
         term: term,
         page_title: "\"#{term}\"",
-        exact_match: exact_match,
-        other_results: other_results,
-        results_count: length(if(exact_match, do: [exact_match], else: []) ++ other_results),
+        results: results,
+        results_count: length(results),
         more?: more?
       )
     }
