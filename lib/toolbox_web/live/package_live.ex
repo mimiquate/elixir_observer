@@ -20,7 +20,8 @@ defmodule ToolboxWeb.PackageLive do
   import ToolboxWeb.Components.Icons.ElixirIcon
   import ToolboxWeb.Components.Icons.PathIcon
   import ToolboxWeb.Components.Icons.InspectIcon
-  import ToolboxWeb.Components.Icons.ProfileIcon
+
+  alias ToolboxWeb.Components.PackageOwners
 
   defmodule HexpmVersionNotFoundError do
     defexception [:message, plug_status: 404]
@@ -68,7 +69,6 @@ defmodule ToolboxWeb.PackageLive do
       assign(
         socket,
         page_title: package.name,
-        show_owners_popover: false,
         package: %{
           name: package.name,
           description: package.description,
@@ -125,14 +125,6 @@ defmodule ToolboxWeb.PackageLive do
     else
       {:noreply, push_patch(socket, to: ~p"/packages/#{name}/#{version}")}
     end
-  end
-
-  def handle_event("toggle_owners_popover", _params, socket) do
-    {:noreply, assign(socket, show_owners_popover: !socket.assigns.show_owners_popover)}
-  end
-
-  def handle_event("hide_owners_popover", _params, socket) do
-    {:noreply, assign(socket, show_owners_popover: false)}
   end
 
   def handle_info(%{action: :refresh_owners, owners: owners, owners_sync_at: sync_at}, socket) do

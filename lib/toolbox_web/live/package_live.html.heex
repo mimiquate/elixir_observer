@@ -15,59 +15,7 @@
         {@package.description}
       </p>
 
-      <div class="mt-3 flex flex-wrap gap-2 relative">
-        <.user_link
-          :for={owner <- Enum.slice(@package.owners, 0, 4)}
-          class="flex justify-center items-center h-fit py-[2px] pl-[4px] pr-3 rounded-[1.5rem] border border-stroke bg-chip-bg"
-          username={owner.username}
-        >
-          <img width="32px" height="32px" class="hidden sm:block rounded-full" src={gravatar_url(owner.email)} />
-          <img width="16px" height="16px" class="sm:hidden rounded-full" src={gravatar_url(owner.email)} />
-          <span class="ml-2 text-[12px] sm:text-[14px] text-accent">{owner.username}</span>
-        </.user_link>
-        <%= if length(@package.owners) > 4 do %>
-          <div class="relative">
-            <div
-              class="flex justify-center items-center h-fit py-[2px] pl-[4px] pr-3 rounded-[1.5rem] border border-stroke bg-chip-bg cursor-pointer hover:bg-surface-alt transition-colors"
-              phx-click="toggle_owners_popover"
-              phx-click-away="hide_owners_popover"
-            >
-              <.profile_icon class="w-4 sm:w-8" />
-              <span class="ml-1 text-[12px] sm:text-[14px] text-accent">
-                + {length(@package.owners) - 4} owners
-              </span>
-            </div>
-
-            <%= if @show_owners_popover do %>
-              <div class="absolute top-full right-0 sm:left-0 z-50 mt-4">
-                <!-- Popover with integrated nozzle -->
-                <div class="relative bg-surface rounded-lg border border-stroke min-w-max">
-                  <!-- Much larger solid nozzle/arrow pointing up to the trigger chip -->
-                  <div class="absolute -top-2 right-6 sm:left-6 w-0 h-0 border-l-8 border-r-8 border-b-8 border-l-transparent border-r-transparent border-b-stroke"></div>
-                  <div class="absolute -top-[6.5px] right-6 sm:left-6 w-0 h-0 border-l-8 border-r-8 border-b-8 border-l-transparent border-r-transparent border-b-surface"></div>
-
-                  <!-- Popover content -->
-                  <div class="p-3">
-                    <div class="flex flex-wrap gap-2 max-w-[200px] sm:max-w-sm">
-                      <.user_link
-                        :for={owner <- Enum.drop(@package.owners, 4)}
-                        class="flex justify-center items-center h-fit py-[2px] pl-[4px] pr-3 rounded-[1.5rem] border border-stroke bg-chip-bg"
-                        username={owner.username}
-                      >
-                        <img width="32px" height="32px" class="hidden sm:block rounded-full" src={gravatar_url(owner.email)} />
-                        <img width="16px" height="16px" class="sm:hidden rounded-full" src={gravatar_url(owner.email)} />
-                        <span class="ml-2 text-[12px] sm:text-[14px] text-accent">
-                          {owner.username}
-                        </span>
-                      </.user_link>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
+      <.live_component module={PackageOwners} id="package-owners" owners={@package.owners} />
     </div>
 
     <div class="w-1/1 sm:min-w-xs bg-surface px-3 py-3 sm:self-baseline sm:w-auto sm:px-4 sm:w-auto rounded-md mt-6 sm:mt-0">
