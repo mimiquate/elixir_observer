@@ -18,7 +18,7 @@ defmodule ToolboxWeb.Components.PackageOwners do
 
   def render(assigns) do
     ~H"""
-    <div class={"mt-3 flex flex-wrap gap-2 relative #{@class}"}>
+    <div class={"mt-3 flex flex-wrap gap-2 relative #{@class}"} {test_attrs(package_owners_section: true)}>
       <.owner_chip :for={owner <- Enum.slice(@owners, 0, 4)} owner={owner} />
 
       <%= if length(@owners) > 4 do %>
@@ -28,6 +28,7 @@ defmodule ToolboxWeb.Components.PackageOwners do
             phx-click="toggle_owners_popover"
             phx-click-away="hide_owners_popover"
             phx-target={@myself}
+            {test_attrs(owners_show_more_button: true)}
           >
             <.profile_icon class="w-4 sm:w-8" />
             <span class="ml-1 text-[12px] sm:text-[14px] text-accent">
@@ -36,7 +37,7 @@ defmodule ToolboxWeb.Components.PackageOwners do
           </div>
 
           <%= if @show_owners_popover do %>
-            <div class="absolute top-full right-0 sm:left-0 z-50 mt-4">
+            <div class="absolute top-full right-0 sm:left-0 z-50 mt-4" {test_attrs(owners_popover: true)}>
               <!-- Popover with integrated nozzle -->
               <div class="relative bg-surface rounded-lg border border-stroke min-w-max">
                 <!-- Much larger solid nozzle/arrow pointing up to the trigger chip -->
@@ -47,7 +48,7 @@ defmodule ToolboxWeb.Components.PackageOwners do
 
                 <!-- Popover content -->
                 <div class="p-3">
-                  <div class="flex flex-wrap gap-2 max-w-[200px] sm:max-w-sm">
+                  <div class="flex flex-wrap gap-2 max-w-[200px] sm:max-w-sm" {test_attrs(owners_popover_content: true)}>
                     <.owner_chip :for={owner <- Enum.drop(@owners, 4)} owner={owner} />
                   </div>
                 </div>
@@ -66,6 +67,7 @@ defmodule ToolboxWeb.Components.PackageOwners do
     <.user_link
       class="flex justify-center items-center h-fit py-[2px] pl-[4px] pr-3 rounded-[1.5rem] border border-stroke bg-chip-bg"
       username={@owner.username}
+      {test_attrs(owner_chip: @owner.username)}
     >
       <img
         width="32px"
