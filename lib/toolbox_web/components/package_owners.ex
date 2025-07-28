@@ -44,8 +44,8 @@ defmodule ToolboxWeb.Components.PackageOwners do
                 </div>
                 <div class="absolute -top-[6.5px] right-6 sm:left-6 w-0 h-0 border-l-8 border-r-8 border-b-8 border-l-transparent border-r-transparent border-b-surface">
                 </div>
-                
-    <!-- Popover content -->
+
+                <!-- Popover content -->
                 <div class="p-3">
                   <div class="flex flex-wrap gap-2 max-w-[200px] sm:max-w-sm">
                     <.owner_chip :for={owner <- Enum.drop(@owners, 4)} owner={owner} />
