@@ -12,6 +12,7 @@ defmodule ToolboxWeb.Layouts do
 
   import ToolboxWeb.Components.Icons.InfoIcon
   import ToolboxWeb.Components.Icons.GithubIcon
+  alias ToolboxWeb.Components.MobileMenu
 
   embed_templates "layouts/*"
 
