@@ -1,6 +1,6 @@
 <article class="pt-3 sm:pt-10">
   <section class="flex flex-wrap sm:flex-nowrap min-w-40 justify-between pb-6 sm:pb-10">
-    <div>
+    <div class="w-full">
       <h3
         class="text-[42px] sm:text-[64px] text-primary-text font-semibold font-serif break-all"
         {test_attrs(package_name: true)}
@@ -15,45 +15,50 @@
         {@package.description}
       </p>
 
-      <div class="mt-2 flex gap-2 relative">
+      <div class="mt-3 flex flex-wrap gap-2 relative">
         <.user_link
           :for={owner <- Enum.slice(@package.owners, 0, 4)}
-          class="flex justify-center items-center py-[2px] pl-[4px] pr-3 rounded-2xl border border-stroke bg-chip-bg"
+          class="flex justify-center items-center h-fit py-[2px] pl-[4px] pr-3 rounded-2xl border border-stroke bg-chip-bg"
           username={owner.username}
         >
           <img width="16px" height="16px" class="rounded-full" src={gravatar_url(owner.email)} />
-          <span class="ml-2 text-[14px] text-accent">{owner.username}</span>
+          <span class="ml-2 text-[12px] sm:text-[14px] text-accent">{owner.username}</span>
         </.user_link>
         <%= if length(@package.owners) > 4 do %>
-          <div class="relative">
-            <div
-              class="flex justify-center items-center py-[2px] pl-[4px] pr-3 rounded-2xl border border-stroke bg-chip-bg cursor-pointer hover:bg-surface-alt transition-colors"
-              phx-click="toggle_owners_popover"
-              phx-click-away="hide_owners_popover"
-            >
-              <.profile_icon class="w-4" />
-              <span class="ml-1 text-[14px] text-accent">
-                + {length(@package.owners) - 4} owners
-              </span>
-            </div>
+          <div
+            class="flex justify-center items-center h-fit py-[2px] pl-[4px] pr-3 rounded-2xl border border-stroke bg-chip-bg cursor-pointer hover:bg-surface-alt transition-colors"
+            phx-click="toggle_owners_popover"
+            phx-click-away="hide_owners_popover"
+          >
+            <.profile_icon class="w-4" />
+            <span class="ml-1 text-[12px] sm:text-[14px] text-accent">
+              + {length(@package.owners) - 4} owners
+            </span>
+          </div>
 
-            <%= if @show_owners_popover do %>
-              <div class="absolute top-full left-0 z-50 mt-1 bg-surface rounded-md shadow-lg border border-stroke min-w-max">
-                <div class="p-3">
-                  <div class="flex flex-wrap gap-2 max-w-xs">
-                    <.user_link
-                      :for={owner <- Enum.drop(@package.owners, 4)}
-                      class="flex justify-center items-center py-[2px] pl-[4px] pr-3 rounded-2xl border border-stroke bg-chip-bg"
-                      username={owner.username}
-                    >
-                      <img width="16px" height="16px" class="rounded-full" src={gravatar_url(owner.email)} />
-                      <span class="ml-2 text-[14px] text-accent">{owner.username}</span>
-                    </.user_link>
-                  </div>
+          <%= if @show_owners_popover do %>
+            <div class="absolute top-full left-0 z-50 mt-1 bg-surface rounded-md shadow-lg border border-stroke min-w-max">
+              <div class="p-3">
+                <div class="flex flex-wrap gap-2 max-w-xs">
+                  <.user_link
+                    :for={owner <- Enum.drop(@package.owners, 4)}
+                    class="flex justify-center items-center h-fit py-[2px] pl-[4px] pr-3 rounded-2xl border border-stroke bg-chip-bg"
+                    username={owner.username}
+                  >
+                    <img
+                      width="16px"
+                      height="16px"
+                      class="rounded-full"
+                      src={gravatar_url(owner.email)}
+                    />
+                    <span class="ml-2 text-[12px] sm:text-[14px] text-accent">
+                      {owner.username}
+                    </span>
+                  </.user_link>
                 </div>
               </div>
-            <% end %>
-          </div>
+            </div>
+          <% end %>
         <% end %>
       </div>
     </div>
