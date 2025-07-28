@@ -8,7 +8,12 @@ defmodule ToolboxWeb.HelperComponents do
 
   def user_link(assigns) do
     ~H"""
-    <.link href={"https://hex.pm/users/#{@username}"} target="_blank" class={"text-accent #{@class}"} {@rest}>
+    <.link
+      href={"https://hex.pm/users/#{@username}"}
+      target="_blank"
+      class={"text-accent #{@class}"}
+      {@rest}
+    >
       {if @inner_block, do: render_slot(@inner_block), else: @username}
     </.link>
     """

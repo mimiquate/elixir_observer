@@ -190,13 +190,16 @@ defmodule ToolboxWeb.PackageLiveTest do
       # Popover should now be visible with additional owners
       assert has_element?(view, "[data-test-owners-popover]")
       assert has_element?(view, "[data-test-owners-popover-content]")
-      
+
       # Additional owners should be visible in popover
       assert has_element?(view, "[data-test-owners-popover] [data-test-owner-chip='wojtekmach']")
       assert has_element?(view, "[data-test-owners-popover] [data-test-owner-chip='devonestes']")
     end
 
-    test "hides owners popover when clicking show more button again", %{conn: conn, package: package} do
+    test "hides owners popover when clicking show more button again", %{
+      conn: conn,
+      package: package
+    } do
       owners = [
         %{email: "jose.valim@example.com", username: "josevalim"},
         %{email: "chris.mccord@example.com", username: "chrismccord"},
