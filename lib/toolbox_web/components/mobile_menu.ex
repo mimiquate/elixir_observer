@@ -20,7 +20,7 @@ defmodule ToolboxWeb.Components.MobileMenu do
       >
         <.animated_hamburger_icon class="w-[46px] h-[46px]" is_open={@show} />
       </button>
-      
+
     <!-- Mobile Menu Overlay -->
       <div
         class={[
