@@ -21,11 +21,11 @@ defmodule ToolboxWeb.PackageLive do
   import ToolboxWeb.Components.Icons.PathIcon
   import ToolboxWeb.Components.Icons.InspectIcon
 
+  alias ToolboxWeb.Components.PackageOwners
+
   defmodule HexpmVersionNotFoundError do
     defexception [:message, plug_status: 404]
   end
-
-  @ignored_topics ["elixir"]
 
   def mount(%{"name" => name}, _session, socket) do
     Logger.metadata(
@@ -84,7 +84,6 @@ defmodule ToolboxWeb.PackageLive do
           github_repo_url: github.data["html_url"],
           github_fullname: github.data["full_name"],
           stargazers_count: github.data["stargazers_count"],
-          topics: (github.data["topics"] || []) -- @ignored_topics,
           activity: github.activity,
           github_sync_at: github.sync_at
         }

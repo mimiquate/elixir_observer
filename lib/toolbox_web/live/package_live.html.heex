@@ -1,6 +1,6 @@
 <article class="pt-3 sm:pt-10">
-  <section class="flex flex-wrap sm:flex-nowrap min-w-40 justify-between pb-6 sm:pb-10">
-    <div>
+  <section class="flex flex-wrap sm:flex-nowrap min-w-40 justify-between pb-3 sm:pb-10">
+    <div class="w-full">
       <h3
         class="text-[42px] sm:text-[64px] text-primary-text font-semibold font-serif break-all"
         {test_attrs(package_name: true)}
@@ -8,24 +8,14 @@
         {@package.name}
       </h3>
 
-      <p
-        class="mt-3 max-w-2xl text-md font-mono text-secondary-text"
-        {test_attrs(package_description: true)}
-      >
+      <p class="text-[18px] font-mono text-secondary-text" {test_attrs(package_description: true)}>
         {@package.description}
       </p>
 
-      <div class="mt-2">
-        <span
-          :for={topic <- @package.topics}
-          class="text-xs mt-1 mr-1 py-1 px-2 rounded-full border-[0.5px] text-text-secondary-button dark:text-primary-text border-stroke bg-chip-bg inline-block"
-        >
-          {topic}
-        </span>
-      </div>
+      <.live_component module={PackageOwners} id="package-owners" owners={@package.owners} />
     </div>
 
-    <div class="w-1/1 sm:min-w-xs bg-surface px-3 py-3 sm:self-baseline sm:w-auto sm:px-4 sm:w-auto rounded-md mt-6 sm:mt-0">
+    <div class="w-1/1 sm:min-w-xs bg-surface px-3 py-3 sm:self-baseline sm:w-auto sm:px-4 sm:w-auto rounded-md mt-7 sm:mt-0">
       <h3 class="text-[14px] mb-4 sm:hidden">Package Resources</h3>
 
       <div class="flex flex-col">
@@ -63,7 +53,7 @@
     All versions are retired
   </p>
 
-  <section class="grid grid-cols-1 md:grid-cols-8 gap-2 sm:gap-8 mt-3 sm:0">
+  <section class="grid grid-cols-1 md:grid-cols-8 gap-2 sm:gap-8">
     <div class="p-3 sm:px-8 sm:py-5 md:col-span-3 flex border border-stroke rounded-md bg-surface justify-between">
       <.stats_card class="w-1/2 sm:w-auto" title="Stars">
         <:icon>
@@ -179,22 +169,6 @@
     </div>
 
     <.package_activity activity={@package.activity} github_fullname={@package.github_fullname} />
-
-    <div class="md:col-span-2 bg-surface rounded-md px-5 py-3 sm:p-8 border border-stroke">
-      <h3 class="text-[14px] text-primary-text sm:text-[24px] font-medium mb-3 sm:mb-5">
-        Owners
-      </h3>
-
-      <ul class="flex sm:flex-col flex-wrap">
-        <li :for={owner <- @package.owners} class="flex items-center mb-3 w-1/2">
-          <img width="32px" height="32px" class="rounded-full" src={gravatar_url(owner.email)} />
-
-          <span class="text-[14px] text-primary-text text-[16px] ml-2">
-            <.user_link username={owner.username} />
-          </span>
-        </li>
-      </ul>
-    </div>
   </section>
 
   <section class="sm:mt-8">

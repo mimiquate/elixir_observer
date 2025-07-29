@@ -15,7 +15,7 @@ defmodule ToolboxWeb.Components.PackageActivity do
   def package_activity(assigns) do
     ~H"""
     <div
-      class={"md:col-span-6 bg-surface rounded-md py-6 px-4 border border-stroke #{@class}"}
+      class={"md:col-span-8 bg-surface rounded-md py-6 px-4 border border-stroke #{@class}"}
       {test_attrs(activity_section: true)}
     >
       <div class="flex justify-between w-full">

@@ -3,11 +3,18 @@ defmodule ToolboxWeb.HelperComponents do
 
   attr :username, :string, required: true
   attr :class, :string, default: nil
+  attr :rest, :global
+  slot :inner_block
 
   def user_link(assigns) do
     ~H"""
-    <.link href={"https://hex.pm/users/#{@username}"} target="_blank" class={@class}>
-      {@username}
+    <.link
+      href={"https://hex.pm/users/#{@username}"}
+      target="_blank"
+      class={"text-accent #{@class}"}
+      {@rest}
+    >
+      {if @inner_block, do: render_slot(@inner_block), else: @username}
     </.link>
     """
   end
