@@ -5,7 +5,10 @@
         <.logo class="w-[153px]" />
       </.link>
 
-      <ToolboxWeb.Components.MobileMenu.hamburger_menu class="ml-auto" />
+      <ToolboxWeb.Components.MobileMenu.mobile_navigation 
+        show={assigns[:show_mobile_menu] || false} 
+        class="ml-auto" 
+      />
 
       <.link
         href="https://github.com/mimiquate/elixir_observer"
@@ -22,8 +25,6 @@
         </span>
       </.link>
     </nav>
-
-    <ToolboxWeb.Components.MobileMenu.mobile_menu show={assigns[:show_mobile_menu] || false} />
 
     {@inner_content}
 

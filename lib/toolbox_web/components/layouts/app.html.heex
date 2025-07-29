@@ -6,7 +6,10 @@
           <.logo class="w-[153px]" />
         </.link>
 
-        <ToolboxWeb.Components.MobileMenu.hamburger_menu class="ml-auto" />
+        <ToolboxWeb.Components.MobileMenu.mobile_navigation 
+          show={assigns[:show_mobile_menu] || false} 
+          class="ml-auto" 
+        />
       </div>
 
       <div class="pt-3 sm:absolute sm:left-[50%] sm:top-[50%] sm:-translate-[50%] sm:w-1/2 sm:pt-0">
@@ -32,8 +35,6 @@
         </span>
       </.link>
     </nav>
-
-    <ToolboxWeb.Components.MobileMenu.mobile_menu show={assigns[:show_mobile_menu] || false} />
 
     <.flash_group flash={@flash} />
     {@inner_content}
