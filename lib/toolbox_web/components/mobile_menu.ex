@@ -18,8 +18,6 @@ defmodule ToolboxWeb.Components.MobileMenu do
       >
         <.animated_hamburger_icon class="w-[46px] h-[46px]" is_open={@show} />
       </button>
-
-    <!-- Mobile Menu Overlay -->
       <div
         class={[
           "fixed inset-0 z-50 transition-all duration-300 ease-in-out",
