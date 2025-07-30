@@ -25,7 +25,7 @@ defmodule ToolboxWeb.Components.MobileMenu do
         ]}
         id="mobile-menu-overlay"
       >
-        <div class="absolute w-full bg-background shadow-md dark:shadow-gray-800 transition-all duration-300 ease-out">
+        <div class="absolute w-full bg-background shadow-[0_4px_4px_0_rgba(0,0,0,0.10)] dark:shadow-[0_4px_4px_0_rgba(162,162,162,0.25)] transition-all duration-300 ease-out">
           <div class="flex flex-col h-full px-5">
             <div class="flex justify-between items-center py-3 transition-all duration-300 ease-out delay-100">
               <.link navigate="/">
