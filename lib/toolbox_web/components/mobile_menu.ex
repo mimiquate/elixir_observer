@@ -1,8 +1,6 @@
 defmodule ToolboxWeb.Components.MobileMenu do
   use ToolboxWeb, :html
 
-  import ToolboxWeb.Components.Icons.InfoIcon
-  import ToolboxWeb.Components.Icons.GithubIcon
   import ToolboxWeb.Components.Icons.AnimatedHamburgerIcon
 
   attr :show, :boolean, default: false
