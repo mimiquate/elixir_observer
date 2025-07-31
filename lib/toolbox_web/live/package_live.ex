@@ -67,7 +67,6 @@ defmodule ToolboxWeb.PackageLive do
       assign(
         socket,
         page_title: package.name,
-        show_mobile_menu: false,
         package: %{
           name: package.name,
           description: package.description,
@@ -113,9 +112,6 @@ defmodule ToolboxWeb.PackageLive do
      })}
   end
 
-  def handle_event("toggle_mobile_menu", _params, socket) do
-    {:noreply, assign(socket, :show_mobile_menu, !socket.assigns.show_mobile_menu)}
-  end
 
   def handle_event(
         "version-change",

@@ -6,8 +6,9 @@
           <.logo class="w-[153px]" />
         </.link>
 
-        <ToolboxWeb.Components.MobileMenu.mobile_navigation
-          show={assigns[:show_mobile_menu] || false}
+        <.live_component
+          module={ToolboxWeb.Components.MobileMenu}
+          id="mobile-menu"
           class="ml-auto"
         />
       </div>

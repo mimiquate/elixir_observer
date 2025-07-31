@@ -1,12 +1,15 @@
 defmodule ToolboxWeb.Components.MobileMenu do
-  use ToolboxWeb, :html
+  use ToolboxWeb, :live_component
 
   import ToolboxWeb.Components.Icons.AnimatedHamburgerIcon
 
-  attr :show, :boolean, default: false
   attr :class, :string, default: nil
 
-  def mobile_navigation(assigns) do
+  def mount(socket) do
+    {:ok, assign(socket, show: false)}
+  end
+
+  def render(assigns) do
     ~H"""
     <div class="block sm:hidden h-[46px]">
       <!-- Hamburger Button -->
@@ -14,6 +17,7 @@ defmodule ToolboxWeb.Components.MobileMenu do
         type="button"
         class={["relative z-[60]", @class]}
         phx-click="toggle_mobile_menu"
+        phx-target={@myself}
         aria-label={(@show && "Close menu") || "Open menu"}
       >
         <.animated_hamburger_icon class="w-[46px] h-[46px]" is_open={@show} />
@@ -45,6 +49,7 @@ defmodule ToolboxWeb.Components.MobileMenu do
                     (@show && "translate-y-0 opacity-100") || "translate-y-4 opacity-0"
                   ]}
                   phx-click="toggle_mobile_menu"
+                  phx-target={@myself}
                 >
                   About
                 </.link>
@@ -57,6 +62,7 @@ defmodule ToolboxWeb.Components.MobileMenu do
                     (@show && "translate-y-0 opacity-100") || "translate-y-4 opacity-0"
                   ]}
                   phx-click="toggle_mobile_menu"
+                  phx-target={@myself}
                 >
                   Source
                 </.link>
@@ -67,5 +73,9 @@ defmodule ToolboxWeb.Components.MobileMenu do
       </div>
     </div>
     """
+  end
+
+  def handle_event("toggle_mobile_menu", _params, socket) do
+    {:noreply, assign(socket, :show, !socket.assigns.show)}
   end
 end

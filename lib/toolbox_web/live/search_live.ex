@@ -24,14 +24,10 @@ defmodule ToolboxWeb.SearchLive do
         results: results,
         results_count: length(results),
         more?: more?,
-        show_mobile_menu: false
       )
     }
   end
 
-  def handle_event("toggle_mobile_menu", _params, socket) do
-    {:noreply, assign(socket, :show_mobile_menu, !socket.assigns.show_mobile_menu)}
-  end
 
   def handle_info({:hide_dropdown, component_id}, socket) do
     send_update(ToolboxWeb.SearchFieldComponent, id: component_id.cid, show_dropdown: false)
