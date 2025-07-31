@@ -2,10 +2,10 @@
   class={"pt-3 sm:pt-10 #{if(@packages == 0, do: "h-full")}"}
   {test_attrs(search_results_page: true)}
 >
-  <div class="" {test_attrs(search_results_header: true)}>
+  <div class="" {test_attrs(category_page_header: true)}>
     <h1
       class="text-[42px] sm:text-[64px] text-primary-text font-semibold font-serif break-all"
-      {test_attrs(search_results_title: true)}
+      {test_attrs(category_page_title: true)}
     >
       {@category.name}
     </h1>
@@ -17,15 +17,15 @@
 
   <div class="flex justify-between items-center">
     <span class="text-xs mt-1 mr-1 py-1 px-3 sm:px-5 rounded-full border-[0.5px] sm:text-[16px] text-text-secondary-button text-secondary-text border-stroke bg-chip-bg inline-block">
-      {length(@packages)} packages found
+      {length(@packages)} packages
     </span>
   </div>
 
-  <div class="mt-7 sm:mt-10" {test_attrs(results_section: true)}>
+  <div class="mt-7 sm:mt-10" {test_attrs(category_packages: true)}>
     <ul {test_attrs(results_list: true)}>
       <li
         :for={package <- @packages}
-        class="mt-5 py-3 px-4 flex flex-col md:flex-row md:justify-between bg-surface rounded-md border border-stroke"
+        class="mt-5 py-3 px-5 flex flex-col md:flex-row sm:justify-between bg-surface rounded-md border border-stroke"
         {test_attrs(result_item: package.name)}
       >
         <div>
