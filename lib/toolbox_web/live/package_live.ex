@@ -112,7 +112,6 @@ defmodule ToolboxWeb.PackageLive do
      })}
   end
 
-
   def handle_event(
         "version-change",
         %{"version" => version},

@@ -23,11 +23,10 @@ defmodule ToolboxWeb.SearchLive do
         page_title: "\"#{term}\"",
         results: results,
         results_count: length(results),
-        more?: more?,
+        more?: more?
       )
     }
   end
-
 
   def handle_info({:hide_dropdown, component_id}, socket) do
     send_update(ToolboxWeb.SearchFieldComponent, id: component_id.cid, show_dropdown: false)
