@@ -6,16 +6,11 @@
           <.logo class="w-[153px]" />
         </.link>
 
-        <.link
-          href="https://github.com/mimiquate/elixir_observer"
-          target="_blank"
-          class="block sm:hidden ml-auto mr-2 sm:mr-4"
-        >
-          <.github_icon class="w-6 sm:hidden dark:fill-primary-text" />
-        </.link>
-        <.link navigate={~p"/about"} class="block sm:hidden">
-          <.info_icon class="w-6" />
-        </.link>
+        <.live_component
+          module={ToolboxWeb.Components.MobileMenu}
+          id="mobile-menu"
+          class="ml-auto"
+        />
       </div>
 
       <div class="pt-3 sm:absolute sm:left-[50%] sm:top-[50%] sm:-translate-[50%] sm:w-1/2 sm:pt-0">
