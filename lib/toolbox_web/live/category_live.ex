@@ -4,7 +4,6 @@ defmodule ToolboxWeb.CategoryLive do
 
   import ToolboxWeb.Components.Icons.StarIcon
   import ToolboxWeb.Components.Icons.DownloadIcon
-  import ToolboxWeb.Components.Icons.ChevronIcon
 
   def mount(%{"permalink" => permalink}, _session, socket) do
     category = Packages.get_category_by_permalink!(permalink)

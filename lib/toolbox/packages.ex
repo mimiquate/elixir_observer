@@ -27,6 +27,13 @@ defmodule Toolbox.Packages do
     |> Repo.all()
   end
 
+  def list_packages_names_with_no_category do
+    category_ids = Category.all() |> Enum.map(&(&1.id))
+
+    from(p in Package, where: p.category_id not in ^category_ids, select: p.name)
+    |> Repo.all()
+  end
+
   def list_packages_from_category(nil) do
     []
   end
@@ -137,6 +144,12 @@ defmodule Toolbox.Packages do
   def update_package_owners(package, attributes \\ %{}) do
     package
     |> Package.owners_changeset(attributes)
+    |> Repo.update()
+  end
+
+  def update_package_category(package, attributes \\ %{}) do
+    package
+    |> Package.category_changeset(attributes)
     |> Repo.update()
   end
 

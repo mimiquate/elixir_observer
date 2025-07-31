@@ -32,6 +32,12 @@ defmodule Toolbox.Package do
     |> validate_required([:name])
   end
 
+  def category_changeset(package, attrs) do
+    package
+    |> cast(attrs, [:category_id])
+    |> validate_required([:category_id])
+  end
+
   def owners_changeset(package, attrs) do
     package
     |> cast(attrs, [:hexpm_owners_sync_at])
