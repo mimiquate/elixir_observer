@@ -67,11 +67,24 @@
               </div>
 
               <p
-                class="mt-2 text-[12px] sm:text-[14px] text-secondary-text"
+                class="text-[12px] sm:text-[16px] text-secondary-text"
                 {test_attrs(package_description: true)}
               >
                 {package.description}
               </p>
+
+              <div
+                :if={package.category}
+                class="hidden sm:flex items-center text-[12px] sm:text-[16px] text-accent dark:text-primary-text">
+                <.bookmark_icon />
+
+                  <.link
+                    navigate={~p"/categories/#{package.category.permalink}"}
+                    class="text-[24px] sm:text-[18px] ml-2 text-accent hover:underline"
+                  >
+                    {package.category.name}
+                  </.link>
+              </div>
 
               <div class="flex items-center mt-3 sm:hidden">
                 <span

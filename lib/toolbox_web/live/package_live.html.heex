@@ -13,6 +13,19 @@
       </p>
 
       <.live_component module={PackageOwners} id="package-owners" owners={@package.owners} />
+
+      <div
+        :if={@package.category}
+        class="flex items-center text-[12px] sm:text-[16px] pt-4 text-accent dark:text-primary-text">
+        <.bookmark_icon />
+
+          <.link
+            navigate={~p"/categories/#{@package.category.permalink}"}
+            class="text-[24px] sm:text-[18px] ml-2 text-accent hover:underline"
+          >
+            {@package.category.name}
+          </.link>
+      </div>
     </div>
 
     <div class="w-1/1 sm:min-w-xs bg-surface px-3 py-3 sm:self-baseline sm:w-auto sm:px-4 sm:w-auto rounded-md mt-7 sm:mt-0">
@@ -412,6 +425,15 @@
         <h2 class="text-[20px] text-primary-text sm:text-[32px] font-semibold">
           Similar Packages
         </h2>
+
+          <.link
+            navigate={~p"/categories/#{@package.category.permalink}"}
+            class="text-[24px] sm:text-[18px] text-primary-text font-medium hover:underline"
+            >
+            <.button class="cursor-pointer" size={:xsmall}>
+              See More
+            </.button>
+          </.link>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

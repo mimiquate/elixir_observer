@@ -20,6 +20,7 @@ defmodule ToolboxWeb.PackageLive do
   import ToolboxWeb.Components.Icons.ElixirIcon
   import ToolboxWeb.Components.Icons.PathIcon
   import ToolboxWeb.Components.Icons.InspectIcon
+  import ToolboxWeb.Components.Icons.BookmarkIcon
 
   alias ToolboxWeb.Components.PackageOwners
 
@@ -74,6 +75,7 @@ defmodule ToolboxWeb.PackageLive do
         similar_packages: similar_packages,
         package: %{
           name: package.name,
+          category: package.category,
           description: package.description,
           owners_sync_at: package.hexpm_owners_sync_at,
           owners: package.hexpm_owners,
