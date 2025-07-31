@@ -9,10 +9,11 @@ defmodule ToolboxWeb.CategoryIndexLive do
 
   def mount(_params, _session, socket) do
     categories = Category.all()
+    counts = Packages.categories_counts()
 
     categories_with_count =
       Enum.map(categories, fn category ->
-        package_count = Packages.count_by_category(category.id)
+        package_count = Map.get(counts, category.id, 0)
         Map.put(category, :package_count, package_count)
       end)
 
