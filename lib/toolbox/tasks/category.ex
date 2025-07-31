@@ -6,9 +6,9 @@ defmodule Toolbox.Tasks.Category do
       You are an Elixir/Hex package classification expert. Your task is to classify the given Elixir package into exactly ONE of the predefined categories below.
 
       **Categories:** - ID | NAME | DESCRIPTION
-      #{for category <-  Toolbox.Category.all, into: "" do
-        "- #{category.id} | #{category.name} | #{category.description} \n"
-      end}
+      #{for category <- Toolbox.Category.all(), into: "" do
+      "- #{category.id} | #{category.name} | #{category.description} \n"
+    end}
 
       **Instructions:**
       1. Analyze the package's primary purpose and functionality in the Elixir/OTP ecosystem
@@ -61,36 +61,37 @@ defmodule Toolbox.Tasks.Category do
           properties: %{
             id: %{type: "INTEGER"},
             category: %{type: "STRING"},
-            reasioning: %{type: "STRING"},
+            reasioning: %{type: "STRING"}
           },
-          propertyOrdering: ["id" ,"category", "reasioning"]
+          propertyOrdering: ["id", "category", "reasioning"]
         }
       }
     }
 
-   {:ok, {{_, 200, _}, _h, response}} = :httpc.request(
-      :post,
-      {
-        ~c"#{base_url()}/v1beta/models/gemini-2.5-flash:generateContent",
+    {:ok, {{_, 200, _}, _h, response}} =
+      :httpc.request(
+        :post,
+        {
+          ~c"#{base_url()}/v1beta/models/gemini-2.5-flash:generateContent",
+          [
+            {~c"x-goog-api-key", "#{api_key()}"},
+            {~c"user-agent", "elixir client"}
+          ],
+          ~c"application/json",
+          JSON.encode!(body)
+        },
         [
-          {~c"x-goog-api-key", "#{api_key()}"},
-          {~c"user-agent", "elixir client"}
-        ],
-        ~c"application/json",
-        JSON.encode!(body)
-      },
-      [
-        ssl: [
-          verify: :verify_peer,
-          cacerts: :public_key.cacerts_get(),
-          # Support wildcard certificates
-          customize_hostname_check: [
-            match_fun: :public_key.pkix_verify_hostname_match_fun(:https)
+          ssl: [
+            verify: :verify_peer,
+            cacerts: :public_key.cacerts_get(),
+            # Support wildcard certificates
+            customize_hostname_check: [
+              match_fun: :public_key.pkix_verify_hostname_match_fun(:https)
+            ]
           ]
-        ]
-      ],
-      []
-    )
+        ],
+        []
+      )
 
     response = response |> to_string() |> JSON.decode!()
 

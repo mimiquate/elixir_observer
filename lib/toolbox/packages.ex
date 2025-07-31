@@ -28,12 +28,11 @@ defmodule Toolbox.Packages do
   end
 
   def list_packages_names_with_no_category do
-    category_ids = Category.all() |> Enum.map(&(&1.id))
+    category_ids = Category.all() |> Enum.map(& &1.id)
 
     from(p in Package, where: p.category_id not in ^category_ids, select: p.name)
     |> Repo.all()
   end
-
 
   def list_packages_from_category(category, limit \\ nil)
 
@@ -42,23 +41,25 @@ defmodule Toolbox.Packages do
   end
 
   def list_packages_from_category(category, limit) do
-    query = from(
-      p in Package,
-      where: p.category_id == ^category.id,
-      join: s in subquery(latest_hexpm_snaphost_query()),
-      on: s.package_id == p.id,
-      preload: [
-        latest_hexpm_snapshot: ^latest_hexpm_snaphost_query(),
-        latest_github_snapshot: ^latest_github_snaphost_query()
-      ],
-      order_by: [desc: json_extract_path(s.data, ["downloads", "recent"])]
-    )
+    query =
+      from(
+        p in Package,
+        where: p.category_id == ^category.id,
+        join: s in subquery(latest_hexpm_snaphost_query()),
+        on: s.package_id == p.id,
+        preload: [
+          latest_hexpm_snapshot: ^latest_hexpm_snaphost_query(),
+          latest_github_snapshot: ^latest_github_snaphost_query()
+        ],
+        order_by: [desc: json_extract_path(s.data, ["downloads", "recent"])]
+      )
 
-    query = if limit do
-      query |> Ecto.Query.limit(^limit)
-    else
-      query
-    end
+    query =
+      if limit do
+        query |> Ecto.Query.limit(^limit)
+      else
+        query
+      end
 
     Repo.all(query)
   end
