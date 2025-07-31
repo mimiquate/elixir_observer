@@ -38,11 +38,11 @@
           phx-click="toggle_category"
           phx-value-category_id={category.id}
         >
-          <.chevron_icon class={"w-6 dark:fill-primary-text dark:stroke-primary-text transform transition-transform duration-300 #{if MapSet.member?(@expanded_categories, category.id), do: "-rotate-90", else: "rotate-90"}"} />
+          <.chevron_icon class={"w-6 dark:fill-primary-text dark:stroke-primary-text transform transition-transform duration-300 #{if Map.has_key?(@category_packages, category.id), do: "-rotate-90", else: "rotate-90"}"} />
         </div>
       </div>
 
-      <div :if={MapSet.member?(@expanded_categories, category.id)} class="flex-row sm:px-5">
+      <div :if={Map.has_key?(@category_packages, category.id)} class="flex-row sm:px-5">
         <h1 class="hidden sm:block sm:text-[18px] mb-1">See top packages</h1>
         <ul>
           <li

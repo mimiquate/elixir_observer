@@ -23,7 +23,6 @@ defmodule ToolboxWeb.CategoryIndexLive do
         socket,
         page_title: "Categories",
         categories: categories_with_count,
-        expanded_categories: MapSet.new(),
         category_packages: %{}
       )
     }
@@ -31,26 +30,22 @@ defmodule ToolboxWeb.CategoryIndexLive do
 
   def handle_event("toggle_category", %{"category_id" => category_id}, socket) do
     category_id = String.to_integer(category_id)
-    expanded_categories = socket.assigns.expanded_categories
+    category_packages = socket.assigns.category_packages
 
-    {new_expanded_categories, category_packages} =
-      if MapSet.member?(expanded_categories, category_id) do
-        # Collapse category
-        {MapSet.delete(expanded_categories, category_id), socket.assigns.category_packages}
+    new_category_packages =
+      if Map.has_key?(category_packages, category_id) do
+        # Collapse category - remove packages
+        Map.delete(category_packages, category_id)
       else
         # Expand category - fetch packages
         category = Enum.find(socket.assigns.categories, &(&1.id == category_id))
-        packages = Packages.list_packages_from_category(category) |> Enum.take(3)
-        new_packages = Map.put(socket.assigns.category_packages, category_id, packages)
-        {MapSet.put(expanded_categories, category_id), new_packages}
+        packages = Packages.list_packages_from_category(category, 3)
+        Map.put(category_packages, category_id, packages)
       end
 
     {
       :noreply,
-      assign(socket,
-        expanded_categories: new_expanded_categories,
-        category_packages: category_packages
-      )
+      assign(socket, category_packages: new_category_packages)
     }
   end
 end
