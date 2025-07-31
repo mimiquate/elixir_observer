@@ -47,9 +47,9 @@
         <ul>
           <li
             :for={package <- Map.get(@category_packages, category.id, [])}
-            class="flex flex-wrap items-center justify-between pt-2 pb-2 px-3 border-b border-divider first:pt-5 last:pb-2 sm:flex-row sm:first:pt-4 sm:last:pb-4 last:border-0"
+            class="flex flex-col sm:items-center justify-between pt-2 pb-2 px-3 border-b border-divider first:pt-5 last:pb-2 sm:flex-row sm:first:pt-4 sm:last:pb-4 last:border-0"
           >
-            <div>
+            <div class="w-full sm:w-fit">
               <.link
                 navigate={~p"/packages/#{package.name}"}
                 class="text-[14px] sm:text-[16px]"
@@ -73,7 +73,7 @@
             </div>
 
             <div class="flex">
-              <div class="flex items-center min-w-25 justify-start">
+              <div class="flex items-center min-w-15 sm:min-w-25 justify-start">
                 <.star_icon class="w-4" />
                 <span
                   class="text-[10px] sm:text-[14px] text-primary-text ml-2"
@@ -86,7 +86,7 @@
                   <% end %>
                 </span>
               </div>
-              <div class="flex items-center min-w-25 justify-start">
+              <div class="flex items-center min-w-15 sm:min-w-25 justify-start">
                 <.download_icon class="w-4" />
                 <span
                   class="text-[10px] sm:text-[14px] text-primary-text ml-2"
