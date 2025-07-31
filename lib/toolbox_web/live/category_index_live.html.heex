@@ -3,71 +3,69 @@
     <h1 class="text-[42px] sm:text-[64px] text-primary-text font-semibold font-serif">
       Categories
     </h1>
-    <p class="text-secondary-text text-[14px] sm:text-[16px] mt-2">
+    <p class="text-secondary-text font-mono text-[14px] sm:text-[18px]">
       Explore packages grouped by topic or functionality to find what fits your needs.
     </p>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10 items-start">
     <div
       :for={category <- @categories}
-      class="bg-surface rounded-md border border-stroke px-4 py-5 sm:p-8 hover:shadow-sm transition-shadow"
+      class="bg-surface rounded-md border border-stroke px-3 py-5 sm:p-8 hover:shadow-sm transition-shadow"
     >
       <div class="flex items-center justify-between">
         <div class="flex items-center shrink">
-          <.bookmark_icon class={"w-6 mr-2"}/>
+          <.bookmark_icon class="w-5 sm:w-6 mr-2" />
 
           <.link
             navigate={~p"/categories/#{category.permalink}"}
-            class="text-[24px] sm:text-[18px] text-primary-text font-medium hover:underline"
+            class="text-[16px] text-primary-text font-medium hover:underline sm:text-[24px] "
           >
             {category.name}
           </.link>
         </div>
 
-        <span class="text-xs flex-none mt-1 mr-1 px-2 sm:py-1 sm:px-5 rounded-full border-[0.5px] sm:text-[16px] text-text-secondary-button text-secondary-text border-stroke bg-chip-bg inline">
+        <span class="text-xs flex-none mt-1 mr-1 px-2 py-[2px] sm:px-5 rounded-full border-[0.5px] sm:text-[16px] text-accent border-accent bg-chip-bg inline">
           {category.package_count} packages
         </span>
       </div>
       <div class="flex items-center justify-between mt-4">
-        <p class="text-[12px] sm:text-[14px] text-secondary-text mb-3 leading-relaxed">
+        <p class="text-[14px] text-secondary-text mb-4 leading-relaxed">
           {category.description}
         </p>
-            <div
-              class="flex justify-between cursor-pointer"
-              phx-click="toggle_category"
-              phx-value-category_id={category.id}
-            >
-            <.chevron_icon
-              class={"w-6 transform transition-transform duration-300 #{if MapSet.member?(@expanded_categories, category.id), do: "-rotate-90", else: "rotate-90"}"}
-            />
-          </div>
+        <div
+          class="cursor-pointer"
+          phx-click="toggle_category"
+          phx-value-category_id={category.id}
+        >
+          <.chevron_icon class={"w-6 dark:fill-primary-text dark:stroke-primary-text transform transition-transform duration-300 #{if MapSet.member?(@expanded_categories, category.id), do: "-rotate-90", else: "rotate-90"}"} />
+        </div>
       </div>
 
-      <div :if={MapSet.member?(@expanded_categories, category.id)} class="flex-row px-5 mt-4">
-        <h1 class="sm:text-[18px]"> See top packages </h1>
-        <div>
-          <div
+      <div :if={MapSet.member?(@expanded_categories, category.id)} class="flex-row sm:px-5">
+        <h1 class="hidden sm:block sm:text-[18px] mb-1">See top packages</h1>
+        <ul>
+          <li
             :for={package <- Map.get(@category_packages, category.id, [])}
-            class="flex items-center justify-between pt-2 pb-2 px-3 border-b border-divider first:pt-4 last:pb-4 last:border-0"
+            class="flex flex-wrap items-center justify-between pt-2 pb-2 px-3 border-b border-divider first:pt-5 last:pb-2 sm:flex-row sm:first:pt-4 sm:last:pb-4 last:border-0"
           >
             <div>
               <.link
                 navigate={~p"/packages/#{package.name}"}
-                class="text-[14px] sm:text-[18px]"
+                class="text-[14px] sm:text-[16px]"
                 {test_attrs(package_link: package.name)}
               >
                 {package.name}
               </.link>
               <span
-                class="ml-4 text-[14px] sm:text-[18px] text-secondary-text"
+                class="ml-1 text-[14px] sm:text-[16px] text-secondary-text"
                 {test_attrs(version: package.latest_hexpm_snapshot.data["latest_version"])}
               >
                 {package.latest_hexpm_snapshot.data["latest_version"]}
               </span>
 
               <p
-                class="mt-2 text-[12px] sm:text-[14px] text-secondary-text"
+                class="mt-1 text-[12px] text-secondary-text sm:text-[14px]"
                 {test_attrs(package_description: true)}
               >
                 {package.description}
@@ -76,10 +74,11 @@
 
             <div class="flex">
               <div class="flex items-center min-w-25 justify-start">
-                <div class="p-1 w-fit rounded-md">
-                  <.star_icon class="w-5" />
-                </div>
-                <span class="text-[18px] ml-2" {test_attrs(package_stars_desktop: true)}>
+                <.star_icon class="w-4" />
+                <span
+                  class="text-[10px] sm:text-[14px] text-primary-text ml-2"
+                  {test_attrs(package_stars_desktop: true)}
+                >
                   <%= if package.latest_github_snapshot do %>
                     {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
                   <% else %>
@@ -88,21 +87,22 @@
                 </span>
               </div>
               <div class="flex items-center min-w-25 justify-start">
-                <div class="p-1 w-fit rounded-md ml-2">
-                  <.download_icon class="w-5" />
-                </div>
-                <span class="text-[18px] ml-2" {test_attrs(package_downloads_desktop: true)}>
+                <.download_icon class="w-4" />
+                <span
+                  class="text-[10px] sm:text-[14px] text-primary-text ml-2"
+                  {test_attrs(package_downloads_desktop: true)}
+                >
                   {humanized_number(package.latest_hexpm_snapshot.data["downloads"]["recent"])}
                 </span>
               </div>
             </div>
-          </div>
-        </div>
+          </li>
+        </ul>
         <div class="flex justify-end">
           <.link
             navigate={~p"/categories/#{category.permalink}"}
-            class="text-[24px] sm:text-[18px] text-primary-text font-medium hover:underline"
-            >
+            class="text-[24px] sm:text-[12px] text-primary-text font-medium hover:underline"
+          >
             <.button class="cursor-pointer" size={:xsmall}>
               See More
             </.button>
