@@ -28,9 +28,9 @@ defmodule Toolbox.Packages do
   end
 
   def list_packages_names_with_no_category do
-    category_ids = Category.all() |> Enum.map(& &1.id)
+    categories = Category.all()
 
-    from(p in Package, where: p.category_id not in ^category_ids, select: p.name)
+    from(p in Package, where: p.category not in ^categories, select: p.name)
     |> Repo.all()
   end
 
@@ -44,7 +44,7 @@ defmodule Toolbox.Packages do
     query =
       from(
         p in Package,
-        where: p.category_id == ^category.id,
+        where: p.category == ^category,
         join: s in subquery(latest_hexpm_snaphost_query()),
         on: s.package_id == p.id,
         preload: [
@@ -70,9 +70,9 @@ defmodule Toolbox.Packages do
 
   def categories_counts do
     from(p in Package,
-      where: not is_nil(p.category_id),
-      group_by: p.category_id,
-      select: {p.category_id, count(p.id)}
+      where: not is_nil(p.category),
+      group_by: p.category,
+      select: {p.category, count(p.id)}
     )
     |> Repo.all()
     |> Map.new()

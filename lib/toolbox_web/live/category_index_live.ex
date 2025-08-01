@@ -13,7 +13,7 @@ defmodule ToolboxWeb.CategoryIndexLive do
 
     categories_with_count =
       Enum.map(categories, fn category ->
-        package_count = Map.get(counts, category.id, 0)
+        package_count = Map.get(counts, category, 0)
         Map.put(category, :package_count, package_count)
       end)
 

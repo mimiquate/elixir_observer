@@ -6,8 +6,6 @@ defmodule Toolbox.Package do
     field :name, :string
     field :description, :string
 
-    # XXX Needed for doing queries on this field
-    field :category_id, :integer
     field :category, Toolbox.Category, source: :category_id
 
     has_many :hexpm_snapshots, Toolbox.HexpmSnapshot
