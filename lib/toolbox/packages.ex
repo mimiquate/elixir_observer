@@ -35,7 +35,7 @@ defmodule Toolbox.Packages do
     {packages, rest} =
       from(
         p in Package,
-        where: ilike(p.name, ^like_term),
+        where: ilike(p.name, ^like_term) or ilike(p.description, ^like_term),
         join: s in subquery(latest_hexpm_snaphost_query()),
         on: s.package_id == p.id,
         preload: [
