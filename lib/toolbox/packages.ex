@@ -30,7 +30,13 @@ defmodule Toolbox.Packages do
   def list_packages_names_with_no_category do
     categories = Category.all()
 
-    from(p in Package, where: p.category not in ^categories, select: p.name)
+    from(p in Package,
+      where: is_nil(p.category) or p.category not in ^categories,
+      join: s in subquery(latest_hexpm_snaphost_query()),
+      on: s.package_id == p.id,
+      select: p.name,
+      order_by: [desc: json_extract_path(s.data, ["downloads", "recent"])]
+    )
     |> Repo.all()
   end
 

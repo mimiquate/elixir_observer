@@ -1,14 +1,14 @@
 defmodule Toolbox.Tasks.Category do
   require Logger
 
-  def run(package) do
+  def run(packages) when is_list(packages) do
     prompt = """
       You are an Elixir/Hex package classification expert. Your task is to classify the given Elixir package into exactly ONE of the predefined categories below.
 
       **Categories:** - ID | NAME | DESCRIPTION
       #{for category <- Toolbox.Category.all(), into: "" do
-      "- #{category.id} | #{category.name} | #{category.description} \n"
-    end}
+        "- #{category.id} | #{category.name} | #{category.description} \n"
+      end}
 
       **Instructions:**
       1. Analyze the package's primary purpose and functionality in the Elixir/OTP ecosystem
@@ -34,14 +34,21 @@ defmodule Toolbox.Tasks.Category do
 
 
       **Output**
+      "package_name": guardian
       "id": 1,
       "category": "Authentication/Authorization",
       "reasionig": "Guardian's primary purpose is handling JWT-based authentication and authorization in Elixir applications."
 
-      Now classify this package:
-      Package Name: #{package.name}
-      Description: #{package.description}
-      Documentation: https://hexdocs.pm/#{package.name}
+      Now classify these packages:
+
+      #{for package <- packages, into: "" do
+        """
+          Package Name: #{package.name}
+          Description: #{package.description}
+          Documentation: https://hexdocs.pm/#{package.name}
+
+        """
+      end}
     """
 
     body = %{
@@ -57,13 +64,23 @@ defmodule Toolbox.Tasks.Category do
       generationConfig: %{
         responseMimeType: "application/json",
         responseSchema: %{
-          type: "OBJECT",
-          properties: %{
-            id: %{type: "INTEGER"},
-            category: %{type: "STRING"},
-            reasioning: %{type: "STRING"}
-          },
-          propertyOrdering: ["id", "category", "reasioning"]
+          type: "ARRAY",
+          items: %{
+            type: "OBJECT",
+            properties: %{
+              name: %{type: "STRING"},
+              category: %{
+                type: "OBJECT",
+                properties: %{
+                  id: %{type: "INTEGER"},
+                  name: %{type: "STRING"},
+                  reasioning: %{type: "STRING"}
+                },
+                propertyOrdering: ["id", "name", "reasioning"]
+              },
+            },
+            propertyOrdering: ["name", "category"]
+          }
         }
       }
     }
@@ -93,13 +110,24 @@ defmodule Toolbox.Tasks.Category do
         []
       )
 
+
+
     response = response |> to_string() |> JSON.decode!()
 
     %{"candidates" => [%{"content" => %{"parts" => [%{"text" => text}]}}]} = response
-
     json = JSON.decode!(text)
 
-    Toolbox.Packages.update_package_category(package, %{category_id: json["id"]})
+    result = Enum.into(json, %{}, fn %{"name" => name, "category" => category} ->
+      {name, category}
+    end)
+
+    for package <- packages do
+      Toolbox.Packages.update_package_category(package, %{category_id: result[package.name]["id"]})
+    end
+  end
+
+  def run(packages) do
+    run([packages])
   end
 
   def base_url() do

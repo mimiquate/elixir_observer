@@ -6,7 +6,8 @@ defmodule Toolbox.Workers.CategoryWorker do
     names = Toolbox.Packages.list_packages_names_with_no_category()
 
     names
-    |> Enum.map(&Toolbox.Workers.CategoryWorker.new(%{name: &1}))
+    |> Enum.chunk_every(300)
+    |> Enum.map(&Toolbox.Workers.CategoryWorker.new(%{names: &1}))
     |> Enum.chunk_every(500)
     |> Enum.map(&Oban.insert_all/1)
 
@@ -14,8 +15,10 @@ defmodule Toolbox.Workers.CategoryWorker do
   end
 
   @impl Oban.Worker
-  def perform(%Oban.Job{args: %{"name" => name}}) do
-    Toolbox.Tasks.Category.run(name)
+  def perform(%Oban.Job{args: %{"names" => names}}) do
+    names
+    |> Toolbox.Packages.get_packages_by_name()
+    |> Toolbox.Tasks.Category.run()
 
     :ok
   end
