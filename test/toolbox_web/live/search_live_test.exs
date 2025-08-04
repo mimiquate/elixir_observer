@@ -218,4 +218,104 @@ defmodule ToolboxWeb.SearchLiveTest do
       refute has_element?(view, "[data-test-more-results-indicator]")
     end
   end
+
+  describe "SearchLive description search" do
+    test "finds packages by description using ILIKE search", %{
+      bandit_package: _bandit_package,
+      bamboo_package: _bamboo_package,
+      tesla_package: _tesla_package,
+      urban_package: _urban_package
+    } do
+      # Search for "HTTP" which appears in bandit and tesla descriptions
+      {:ok, view, html} = live(build_conn(), "/searches/HTTP")
+
+      # Should find 2 packages with "HTTP" in description
+      assert html =~ "2 packages found"
+      assert has_element?(view, "[data-test-result-item='bandit']")
+      assert has_element?(view, "[data-test-result-item='tesla']")
+      refute has_element?(view, "[data-test-result-item='bamboo']")
+      refute has_element?(view, "[data-test-result-item='urban']")
+    end
+
+    test "finds packages by description using case-insensitive search", %{
+      bandit_package: _bandit_package,
+      bamboo_package: _bamboo_package,
+      tesla_package: _tesla_package,
+      urban_package: _urban_package
+    } do
+      # Search for "elixir" (lowercase) which appears in bandit description
+      {:ok, view, html} = live(build_conn(), "/searches/elixir")
+
+      # Should find bandit package with "Elixir" in description
+      assert html =~ "1 packages found"
+      assert has_element?(view, "[data-test-result-item='bandit']")
+      refute has_element?(view, "[data-test-result-item='bamboo']")
+      refute has_element?(view, "[data-test-result-item='tesla']")
+      refute has_element?(view, "[data-test-result-item='urban']")
+    end
+
+    test "finds packages by partial description terms", %{
+      bandit_package: _bandit_package,
+      bamboo_package: _bamboo_package,
+      tesla_package: _tesla_package,
+      urban_package: _urban_package
+    } do
+      # Search for "email" which appears in bamboo description
+      {:ok, view, html} = live(build_conn(), "/searches/email")
+
+      # Should find bamboo package with "emails" in description
+      assert html =~ "1 packages found"
+      assert has_element?(view, "[data-test-result-item='bamboo']")
+      refute has_element?(view, "[data-test-result-item='bandit']")
+      refute has_element?(view, "[data-test-result-item='tesla']")
+      refute has_element?(view, "[data-test-result-item='urban']")
+    end
+
+    test "finds packages by description using trigram index", %{
+      bandit_package: _bandit_package,
+      bamboo_package: _bamboo_package,
+      tesla_package: _tesla_package,
+      urban_package: _urban_package
+    } do
+      # Search for "development" which appears in urban description
+      {:ok, view, html} = live(build_conn(), "/searches/development")
+
+      # Should find urban package with "development" in description
+      assert html =~ "1 packages found"
+      assert has_element?(view, "[data-test-result-item='urban']")
+      refute has_element?(view, "[data-test-result-item='bandit']")
+      refute has_element?(view, "[data-test-result-item='bamboo']")
+      refute has_element?(view, "[data-test-result-item='tesla']")
+    end
+
+    test "combines name and description search results", %{
+      bandit_package: _bandit_package,
+      bamboo_package: _bamboo_package,
+      tesla_package: _tesla_package,
+      urban_package: _urban_package
+    } do
+      # Search for "tesla" which matches both name and description
+      {:ok, view, html} = live(build_conn(), "/searches/tesla")
+
+      # Should find tesla package (matches name exactly)
+      assert html =~ "1 packages found"
+      assert has_element?(view, "[data-test-result-item='tesla']")
+      assert has_element?(view, "[data-test-exact-match='tesla']")
+    end
+
+    test "prioritizes exact name matches over description matches", %{
+      bandit_package: _bandit_package,
+      bamboo_package: _bamboo_package,
+      tesla_package: _tesla_package,
+      urban_package: _urban_package
+    } do
+      # Search for "bandit" which should match name exactly
+      {:ok, view, html} = live(build_conn(), "/searches/bandit")
+
+      # Should find bandit package with exact match priority
+      assert html =~ "1 packages found"
+      assert has_element?(view, "[data-test-result-item='bandit']")
+      assert has_element?(view, "[data-test-exact-match='bandit']")
+    end
+  end
 end
