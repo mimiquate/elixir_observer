@@ -43,10 +43,12 @@ defmodule Toolbox.Packages do
   def list_packages_from_category(category, limit \\ nil)
 
   def list_packages_from_category(nil, _) do
-    []
+    {[], false}
   end
 
   def list_packages_from_category(category, limit) do
+    global_limit = 50
+
     query =
       from(
         p in Package,
@@ -60,14 +62,20 @@ defmodule Toolbox.Packages do
         order_by: [desc: json_extract_path(s.data, ["downloads", "recent"])]
       )
 
+
     query =
       if limit do
         query |> Ecto.Query.limit(^limit)
       else
-        query
+        query |> Ecto.Query.limit(^global_limit + 1)
       end
 
-    Repo.all(query)
+    {packages, rest} =
+      query
+      |> Repo.all()
+      |> Enum.split(global_limit)
+
+    {packages, length(rest) > 0}
   end
 
   def total_count do

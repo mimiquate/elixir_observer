@@ -7,7 +7,7 @@ defmodule ToolboxWeb.CategoryLive do
 
   def mount(%{"permalink" => permalink}, _session, socket) do
     category = Packages.get_category_by_permalink!(permalink)
-    packages = Packages.list_packages_from_category(category)
+    {packages, more?} = Packages.list_packages_from_category(category)
 
     {
       :ok,
@@ -15,7 +15,8 @@ defmodule ToolboxWeb.CategoryLive do
         socket,
         page_title: "#{category.name}",
         category: category,
-        packages: packages
+        packages: packages,
+        more?: more?
       )
     }
   end
