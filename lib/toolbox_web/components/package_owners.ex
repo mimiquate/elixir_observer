@@ -19,13 +19,13 @@ defmodule ToolboxWeb.Components.PackageOwners do
   def render(assigns) do
     ~H"""
     <div
-      class={"mt-3 sm:mt-4 flex flex-wrap gap-2 relative #{@class}"}
+      class={"mt-3 sm:mt-4 flex flex-wrap gap-2  #{@class}"}
       {test_attrs(package_owners_section: true)}
     >
       <.owner_chip :for={owner <- Enum.slice(@owners, 0, 4)} owner={owner} />
 
       <%= if length(@owners) > 4 do %>
-        <div class="relative">
+        <div>
           <div
             class="flex justify-center items-center h-fit py-[2px] pl-[4px] pr-3 rounded-[1.5rem] border border-stroke bg-chip-bg cursor-pointer hover:bg-surface-alt transition-colors"
             phx-click="toggle_owners_popover"
