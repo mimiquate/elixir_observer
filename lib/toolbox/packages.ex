@@ -78,6 +78,11 @@ defmodule Toolbox.Packages do
     |> Map.new()
   end
 
+  def category_count(category) do
+    from(p in Package, where: p.category == ^category)
+    |> Repo.aggregate(:count)
+  end
+
   def search(term) do
     limit = 50
     like_term = "%#{term}%"
