@@ -62,7 +62,6 @@ defmodule Toolbox.Packages do
         order_by: [desc: json_extract_path(s.data, ["downloads", "recent"])]
       )
 
-
     query =
       if limit do
         query |> Ecto.Query.limit(^limit)

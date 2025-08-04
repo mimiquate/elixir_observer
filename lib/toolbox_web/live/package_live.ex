@@ -63,11 +63,12 @@ defmodule ToolboxWeb.PackageLive do
       update_activity_if_outdated(package, github.sync_at)
     end
 
-      {related_packages, _} = Toolbox.Packages.list_packages_from_category(package.category, 5)
+    {related_packages, _} = Toolbox.Packages.list_packages_from_category(package.category, 5)
 
-      related_packages = related_packages
-                         |> Enum.reject(fn p -> p.name == name end)
-                         |> Enum.slice(0, 4)
+    related_packages =
+      related_packages
+      |> Enum.reject(fn p -> p.name == name end)
+      |> Enum.slice(0, 4)
 
     related_packages_count =
       if package.category do

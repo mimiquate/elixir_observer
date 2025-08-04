@@ -7,8 +7,8 @@ defmodule Toolbox.Tasks.Category do
 
       **Categories:** - ID | NAME | DESCRIPTION
       #{for category <- Toolbox.Category.all(), into: "" do
-        "- #{category.id} | #{category.name} | #{category.description} \n"
-      end}
+      "- #{category.id} | #{category.name} | #{category.description} \n"
+    end}
 
       **Instructions:**
       1. Analyze the package's primary purpose and functionality in the Elixir/OTP ecosystem
@@ -42,13 +42,13 @@ defmodule Toolbox.Tasks.Category do
       Now classify these packages:
 
       #{for package <- packages, into: "" do
-        """
-          Package Name: #{package.name}
-          Description: #{package.description}
-          Documentation: https://hexdocs.pm/#{package.name}
+      """
+        Package Name: #{package.name}
+        Description: #{package.description}
+        Documentation: https://hexdocs.pm/#{package.name}
 
-        """
-      end}
+      """
+    end}
     """
 
     body = %{
@@ -77,7 +77,7 @@ defmodule Toolbox.Tasks.Category do
                   reasioning: %{type: "STRING"}
                 },
                 propertyOrdering: ["id", "name", "reasioning"]
-              },
+              }
             },
             propertyOrdering: ["name", "category"]
           }
@@ -110,16 +110,15 @@ defmodule Toolbox.Tasks.Category do
         []
       )
 
-
-
     response = response |> to_string() |> JSON.decode!()
 
     %{"candidates" => [%{"content" => %{"parts" => [%{"text" => text}]}}]} = response
     json = JSON.decode!(text)
 
-    result = Enum.into(json, %{}, fn %{"name" => name, "category" => category} ->
-      {name, category}
-    end)
+    result =
+      Enum.into(json, %{}, fn %{"name" => name, "category" => category} ->
+        {name, category}
+      end)
 
     for package <- packages do
       Toolbox.Packages.update_package_category(package, %{category_id: result[package.name]["id"]})
