@@ -6,7 +6,10 @@ defmodule ToolboxWeb.Admin.PackageLive do
 
     {
       :ok,
-      assign(socket, package: package)
+      assign(socket,
+        package: package,
+        page_title: "#{name} - Admin"
+      )
     }
   end
 end
