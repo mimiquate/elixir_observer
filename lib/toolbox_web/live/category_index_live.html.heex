@@ -13,19 +13,19 @@
       :for={category <- @categories}
       class="bg-surface rounded-md border border-stroke px-3 py-5 sm:p-8 hover:shadow-sm transition-shadow"
     >
-      <div class="flex items-center justify-between">
-        <div class="flex items-center shrink">
-          <.bookmark_icon class="w-5 sm:w-6 mr-2" />
+      <div class="flex sm:items-center justify-between">
+        <div class="flex sm:items-center">
+          <.bookmark_icon class="min-w-[14px] min-h-[17px] w-[14px] h-[17px] mr-3" />
 
           <.link
             navigate={~p"/categories/#{category.permalink}"}
-            class="text-[16px] text-primary-text font-medium hover:underline sm:text-[24px] "
+            class="text-[16px] leading-none text-primary-text font-medium hover:underline sm:text-[24px] "
           >
             {category.name}
           </.link>
         </div>
 
-        <span class="text-xs flex-none mt-1 mr-1 px-2 py-[2px] sm:px-5 rounded-full border-[0.5px] sm:text-[16px] text-accent border-accent bg-chip-bg inline dark:text-text-secondary-button dark:border-stroke">
+        <span class="text-[10px] flex-none mr-1 px-2 py-[2px] sm:px-5 rounded-full border-[0.5px] sm:text-[16px] text-accent border-accent bg-chip-bg inline h-fit dark:text-text-secondary-button dark:border-stroke">
           {if category.package_count > 50, do: "50+", else: category.package_count} packages
         </span>
       </div>

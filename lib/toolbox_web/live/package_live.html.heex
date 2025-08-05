@@ -17,11 +17,11 @@
       <.link
         :if={@package.category}
         navigate={~p"/categories/#{@package.category.permalink}"}
-        class="flex items-center pt-2 sm:pt-4 cursor-pointer"
+        class="flex items-center mt-2 sm:mt-4 cursor-pointer"
       >
-        <.bookmark_icon class="w-6" />
+        <.bookmark_icon class="w-[14px] h-[17px]" />
 
-        <span class="text-[16px] sm:text-[18px] ml-2 text-accent hover:underline">
+        <span class="text-[16px] sm:text-[18px] ml-3 text-accent hover:underline">
           {@package.category.name}
         </span>
       </.link>
