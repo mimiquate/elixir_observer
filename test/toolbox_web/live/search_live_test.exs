@@ -218,4 +218,40 @@ defmodule ToolboxWeb.SearchLiveTest do
       refute has_element?(view, "[data-test-more-results-indicator]")
     end
   end
+
+  describe "SearchLive description search" do
+    test "finds packages by description search", %{
+      bandit_package: _bandit_package,
+      bamboo_package: _bamboo_package,
+      tesla_package: _tesla_package,
+      urban_package: _urban_package
+    } do
+      # Search for "HTTP" which appears in bandit and tesla descriptions
+      {:ok, view, html} = live(build_conn(), "/searches/HTTP")
+
+      # Should find 2 packages with "HTTP" in description
+      assert html =~ "2 packages found"
+      assert has_element?(view, "[data-test-result-item='bandit']")
+      assert has_element?(view, "[data-test-result-item='tesla']")
+      refute has_element?(view, "[data-test-result-item='bamboo']")
+      refute has_element?(view, "[data-test-result-item='urban']")
+    end
+
+    test "finds packages by description search with case-insensitive", %{
+      bandit_package: _bandit_package,
+      bamboo_package: _bamboo_package,
+      tesla_package: _tesla_package,
+      urban_package: _urban_package
+    } do
+      # Search for "http" which appears in bandit and tesla descriptions
+      {:ok, view, html} = live(build_conn(), "/searches/http")
+
+      # Should find 2 packages with "HTTP" in description
+      assert html =~ "2 packages found"
+      assert has_element?(view, "[data-test-result-item='bandit']")
+      assert has_element?(view, "[data-test-result-item='tesla']")
+      refute has_element?(view, "[data-test-result-item='bamboo']")
+      refute has_element?(view, "[data-test-result-item='urban']")
+    end
+  end
 end
