@@ -24,7 +24,7 @@ defmodule Toolbox.Tasks.Category do
       Documentation Link: [link to documentation if available]
 
       **Output::**
-      id, category and reasioning of the selected category
+      id, category and reasoning of the selected category
 
       **Example:**
       **Input**
@@ -37,7 +37,7 @@ defmodule Toolbox.Tasks.Category do
       "package_name": guardian
       "id": 1,
       "category": "Authentication/Authorization",
-      "reasionig": "Guardian's primary purpose is handling JWT-based authentication and authorization in Elixir applications."
+      "reasoning": "Guardian's primary purpose is handling JWT-based authentication and authorization in Elixir applications."
 
       Now classify these packages:
 
@@ -76,7 +76,7 @@ defmodule Toolbox.Tasks.Category do
                   name: %{type: "STRING"},
                   reasioning: %{type: "STRING"}
                 },
-                propertyOrdering: ["id", "name", "reasioning"]
+                propertyOrdering: ["id", "name", "reasoning"]
               }
             },
             propertyOrdering: ["name", "category"]

@@ -201,7 +201,7 @@ defmodule Toolbox.Category do
       },
       %__MODULE__{
         id: 27,
-        name: "ElasticSearch",
+        name: "Elasticsearch",
         description: "Integration libraries for Elasticsearch search and analytics engine",
         permalink: "elasticsearch"
       },
@@ -232,7 +232,7 @@ defmodule Toolbox.Category do
       },
       %__MODULE__{
         id: 32,
-        name: "Eventhandling",
+        name: "Event Handling",
         description: "Event-driven programming libraries and event sourcing implementations",
         permalink: "eventhandling"
       },
@@ -348,7 +348,7 @@ defmodule Toolbox.Category do
       },
       %__MODULE__{
         id: 52,
-        name: "Lexical analysis",
+        name: "Lexical Analysis",
         description: "Tokenization, parsing, and lexical analysis tools for language processing",
         permalink: "lexical-analysis"
       },

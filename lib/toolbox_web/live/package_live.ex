@@ -67,7 +67,7 @@ defmodule ToolboxWeb.PackageLive do
 
     related_packages =
       related_packages
-      |> Enum.reject(fn p -> p.name == name end)
+      |> Enum.reject(&(&1.name == name))
       |> Enum.slice(0, 4)
 
     related_packages_count =
