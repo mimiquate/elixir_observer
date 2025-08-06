@@ -11,6 +11,7 @@
   <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10 items-start">
     <div
       :for={category <- @categories}
+      {test_attrs(category_item: category.name)}
       class="bg-surface rounded-md border border-stroke px-3 py-5 sm:p-8 hover:shadow-sm transition-shadow"
     >
       <div class="flex sm:items-center justify-between">
@@ -25,7 +26,10 @@
           </.link>
         </div>
 
-        <span class="text-[10px] flex-none mr-1 px-2 py-[2px] sm:px-5 rounded-full border-[0.5px] sm:text-[16px] text-accent border-accent bg-chip-bg inline h-fit dark:text-text-secondary-button dark:border-stroke">
+        <span
+          class="text-[10px] flex-none mr-1 px-2 py-[2px] sm:px-5 rounded-full border-[0.5px] sm:text-[16px] text-accent border-accent bg-chip-bg inline h-fit dark:text-text-secondary-button dark:border-stroke"
+          {test_attrs(category_count: category.package_count)}
+        >
           {if category.package_count > 50, do: "50+", else: category.package_count} packages
         </span>
       </div>
@@ -35,6 +39,7 @@
         </p>
         <div
           class="cursor-pointer"
+          {test_attrs(toggle_category: category.name)}
           phx-click="toggle_category"
           phx-value-category_id={category.id}
         >

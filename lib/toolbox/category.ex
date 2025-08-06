@@ -25,7 +25,11 @@ defmodule Toolbox.Category do
   def dump(id) when is_integer(id), do: {:ok, id}
   def dump(_), do: :error
 
-  defp find_by_id(id) do
+  def find_by_name(name) do
+    Enum.find(all(), &(&1.name == name))
+  end
+
+  def find_by_id(id) do
     Enum.find(all(), &(&1.id == id))
   end
 

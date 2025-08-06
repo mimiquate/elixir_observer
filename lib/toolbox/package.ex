@@ -26,7 +26,7 @@ defmodule Toolbox.Package do
   @doc false
   def changeset(package, attrs) do
     package
-    |> cast(attrs, [:name, :description])
+    |> cast(attrs, [:name, :description, :category])
     |> validate_required([:name])
   end
 
