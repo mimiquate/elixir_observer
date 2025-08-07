@@ -30,7 +30,7 @@
           class="text-[10px] flex-none mr-1 px-2 py-[2px] sm:px-5 rounded-full border-[0.5px] sm:text-[16px] text-accent border-accent bg-chip-bg inline h-fit dark:text-text-secondary-button dark:border-stroke"
           {test_attrs(category_count: category.package_count)}
         >
-          {if category.package_count > 50, do: "50+", else: category.package_count} packages
+          {category.package_count} packages
         </span>
       </div>
       <div class="flex items-center justify-between mt-4">

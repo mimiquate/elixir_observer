@@ -1,10 +1,12 @@
 defmodule ToolboxWeb.CategoryIndexLiveTest do
-  use ToolboxWeb.ConnCase, async: true
+  use ToolboxWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
   alias Toolbox.{Category, Packages}
 
   setup do
+    Toolbox.Cache.delete_all()
+
     {:ok, bandit_package} =
       Packages.create_package(%{
         name: "bandit",

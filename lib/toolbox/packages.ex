@@ -43,15 +43,14 @@ defmodule Toolbox.Packages do
   def list_packages_from_category(category, limit \\ nil)
 
   def list_packages_from_category(nil, _) do
-    {[], false}
+    []
   end
 
   def list_packages_from_category(category, limit) do
-    global_limit = 50
-
     query =
       from(
-        p in subquery(top_3000_packages_query()),
+        p in Package,
+        where: p.id in ^top_3000_packages_ids(),
         where: p.category == ^category,
         join: s in subquery(latest_hexpm_snaphost_query()),
         on: s.package_id == p.id,
@@ -66,15 +65,11 @@ defmodule Toolbox.Packages do
       if limit do
         query |> Ecto.Query.limit(^limit)
       else
-        query |> Ecto.Query.limit(^global_limit + 1)
+        query
       end
 
-    {packages, rest} =
-      query
-      |> Repo.all()
-      |> Enum.split(global_limit)
-
-    {packages, length(rest) > 0}
+    query
+    |> Repo.all()
   end
 
   def total_count do
@@ -83,7 +78,8 @@ defmodule Toolbox.Packages do
 
   # Categories count based on the top 3000 packages
   def categories_counts do
-    from(p in subquery(top_3000_packages_query()),
+    from(p in Package,
+      where: p.id in ^top_3000_packages_ids(),
       group_by: p.category,
       select: {p.category, count(p.id)}
     )
@@ -92,20 +88,24 @@ defmodule Toolbox.Packages do
   end
 
   def category_count(category) do
-    from(p in subquery(top_3000_packages_query()),
+    from(p in Package,
+      where: p.id in ^top_3000_packages_ids(),
       where: p.category == ^category
     )
     |> Repo.aggregate(:count)
   end
 
-  def top_3000_packages_query() do
+  ### XXX Remove this when adding recent downloads to package
+  @decorate cacheable(key: :top_3000_packages_ids, opts: [ttl: :timer.hours(24)])
+  def top_3000_packages_ids() do
     from(p in Package,
       join: s in subquery(latest_hexpm_snaphost_query()),
       on: s.package_id == p.id,
-      where: not is_nil(p.category),
       order_by: [desc_nulls_last: json_extract_path(s.data, ["downloads", "recent"])],
-      limit: 3000
+      limit: 3000,
+      select: p.id
     )
+    |> Repo.all()
   end
 
   def search(term) do
