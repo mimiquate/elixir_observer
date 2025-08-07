@@ -92,13 +92,6 @@ defmodule Toolbox.Category do
         permalink: "benchmarking"
       },
       %__MODULE__{
-        id: 10,
-        name: "Bittorrent",
-        description:
-          "Libraries for implementing BitTorrent protocol and peer-to-peer file sharing",
-        permalink: "bittorrent"
-      },
-      %__MODULE__{
         id: 11,
         name: "BSON",
         description:
@@ -278,12 +271,6 @@ defmodule Toolbox.Category do
         permalink: "frameworks"
       },
       %__MODULE__{
-        id: 40,
-        name: "Games",
-        description: "Game development libraries and engines for creating games in Elixir",
-        permalink: "games"
-      },
-      %__MODULE__{
         id: 41,
         name: "Geolocation",
         description: "Geographic data processing, mapping, and location-based services",
@@ -456,12 +443,6 @@ defmodule Toolbox.Category do
         name: "Queue",
         description: "Message queuing systems and background job processing libraries",
         permalink: "queue"
-      },
-      %__MODULE__{
-        id: 69,
-        name: "QUIC",
-        description: "QUIC protocol implementations for fast, secure transport",
-        permalink: "quic"
       },
       %__MODULE__{
         id: 70,
