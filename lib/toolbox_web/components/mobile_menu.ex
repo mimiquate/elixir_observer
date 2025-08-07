@@ -43,6 +43,17 @@ defmodule ToolboxWeb.Components.MobileMenu do
             ]}>
               <nav class="text-center space-y-8">
                 <.link
+                  navigate={~p"/categories"}
+                  class={[
+                    "block text-[20px] font-medium text-accent dark:text-primary-text transition-all duration-300 ease-out delay-200",
+                    (@show && "translate-y-0 opacity-100") || "translate-y-4 opacity-0"
+                  ]}
+                  phx-click="toggle_mobile_menu"
+                  phx-target={@myself}
+                >
+                  Categories
+                </.link>
+                <.link
                   navigate={~p"/about"}
                   class={[
                     "block text-[20px] font-medium text-accent dark:text-primary-text transition-all duration-300 ease-out delay-200",

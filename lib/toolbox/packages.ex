@@ -1,5 +1,5 @@
 defmodule Toolbox.Packages do
-  alias Toolbox.{GithubSnapshot, HexpmSnapshot, Package, Repo}
+  alias Toolbox.{GithubSnapshot, HexpmSnapshot, Package, Repo, Category}
 
   require Logger
 
@@ -18,13 +18,92 @@ defmodule Toolbox.Packages do
     |> Repo.all()
   end
 
+  def list_categories do
+    Category.all()
+  end
+
   def list_packages_names do
     from(p in Package, select: p.name)
     |> Repo.all()
   end
 
+  def list_packages_names_with_no_category do
+    categories = Category.all()
+
+    from(p in Package,
+      where: is_nil(p.category) or p.category not in ^categories,
+      join: s in subquery(latest_hexpm_snaphost_query()),
+      on: s.package_id == p.id,
+      select: p.name,
+      order_by: [desc: json_extract_path(s.data, ["downloads", "recent"])]
+    )
+    |> Repo.all()
+  end
+
+  def list_packages_from_category(category, limit \\ nil)
+
+  def list_packages_from_category(nil, _) do
+    {[], false}
+  end
+
+  def list_packages_from_category(category, limit) do
+    global_limit = 50
+
+    query =
+      from(
+        p in Package,
+        where: p.category == ^category,
+        join: s in subquery(latest_hexpm_snaphost_query()),
+        on: s.package_id == p.id,
+        preload: [
+          latest_hexpm_snapshot: ^latest_hexpm_snaphost_query(),
+          latest_github_snapshot: ^latest_github_snaphost_query()
+        ],
+        order_by: [desc: json_extract_path(s.data, ["downloads", "recent"])]
+      )
+
+    query =
+      if limit do
+        query |> Ecto.Query.limit(^limit)
+      else
+        query |> Ecto.Query.limit(^global_limit + 1)
+      end
+
+    {packages, rest} =
+      query
+      |> Repo.all()
+      |> Enum.split(global_limit)
+
+    {packages, length(rest) > 0}
+  end
+
   def total_count do
     Repo.aggregate(Package, :count)
+  end
+
+  # Categories count based on the top 3000 packages
+  def categories_counts do
+    q =
+      from(p in Package,
+        join: s in subquery(latest_hexpm_snaphost_query()),
+        on: s.package_id == p.id,
+        where: not is_nil(p.category),
+        order_by: [desc_nulls_last: json_extract_path(s.data, ["downloads", "recent"])],
+        limit: 3000,
+        select: [:id, :category]
+      )
+
+    from(p in subquery(q),
+      group_by: p.category,
+      select: {p.category, count(p.id)}
+    )
+    |> Repo.all()
+    |> Map.new()
+  end
+
+  def category_count(category) do
+    from(p in Package, where: p.category == ^category)
+    |> Repo.aggregate(:count)
   end
 
   def search(term) do
@@ -82,6 +161,24 @@ defmodule Toolbox.Packages do
     |> Repo.all()
   end
 
+  def get_category_by_id!(id) do
+    Category.all()
+    |> Enum.find(fn c -> c.id == id end)
+    |> case do
+      nil -> raise Ecto.NoResultsError, queryable: Category
+      c -> c
+    end
+  end
+
+  def get_category_by_permalink!(permalink) do
+    Category.all()
+    |> Enum.find(fn c -> c.permalink == permalink end)
+    |> case do
+      nil -> raise Ecto.NoResultsError, queryable: Category
+      c -> c
+    end
+  end
+
   def create_package(attributes \\ %{}) do
     %Package{}
     |> Package.changeset(attributes)
@@ -91,6 +188,12 @@ defmodule Toolbox.Packages do
   def update_package_owners(package, attributes \\ %{}) do
     package
     |> Package.owners_changeset(attributes)
+    |> Repo.update()
+  end
+
+  def update_package_category(package, attributes \\ %{}) do
+    package
+    |> Package.category_changeset(attributes)
     |> Repo.update()
   end
 

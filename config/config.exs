@@ -64,11 +64,13 @@ config :toolbox, Oban,
     {Oban.Plugins.Cron,
      crontab: [
        {"0 5 * * SUN", Toolbox.Workers.HexpmWorker},
-       {"0 6 * * SUN", Toolbox.Workers.SCMWorker}
+       {"0 6 * * SUN", Toolbox.Workers.SCMWorker},
+       {"0 7 * * SUN", Toolbox.Workers.CategoryWorker}
      ]}
   ],
   queues: [
     hexpm: [limit: 1],
+    category: [limit: 1],
     # Use 750ms second dispatch cooldown to prevent Github's rate limit
     # We are doing 2 request in each job
     # 1 to the REST API, 1 to the GraphQL API
@@ -87,7 +89,9 @@ config :opentelemetry,
     ]
   ]
 
-config :toolbox, github_base_url: "https://api.github.com"
+config :toolbox,
+  github_base_url: "https://api.github.com",
+  gemini_base_url: "https://generativelanguage.googleapis.com"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

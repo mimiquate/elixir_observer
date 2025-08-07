@@ -1,0 +1,119 @@
+<article class="pt-3 sm:pt-10">
+  <div class="mb-7 sm:mb-8">
+    <h1 class="text-[42px] sm:text-[64px] text-primary-text font-semibold font-serif">
+      Categories
+    </h1>
+    <p class="text-secondary-text font-mono text-[14px] sm:text-[18px]">
+      Explore packages grouped by topic or functionality to find what fits your needs. The number of packages listed in each category is based on the 3.000 most downloaded packages from the last 90 days.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10 items-start">
+    <div
+      :for={category <- @categories}
+      {test_attrs(category_item: category.name)}
+      class="bg-surface rounded-md border border-stroke px-3 py-5 sm:p-8 hover:shadow-sm transition-shadow"
+    >
+      <div class="flex sm:items-center justify-between">
+        <div class="flex sm:items-center">
+          <.bookmark_icon class="min-w-[14px] min-h-[17px] w-[14px] h-[17px] mr-3" />
+
+          <.link
+            navigate={~p"/categories/#{category.permalink}"}
+            class="text-[16px] leading-none text-primary-text font-medium hover:underline sm:text-[24px] "
+          >
+            {category.name}
+          </.link>
+        </div>
+
+        <span
+          class="text-[10px] flex-none mr-1 px-2 py-[2px] sm:px-5 rounded-full border-[0.5px] sm:text-[16px] text-accent border-accent bg-chip-bg inline h-fit dark:text-text-secondary-button dark:border-stroke"
+          {test_attrs(category_count: category.package_count)}
+        >
+          {if category.package_count > 50, do: "50+", else: category.package_count} packages
+        </span>
+      </div>
+      <div class="flex items-center justify-between mt-4">
+        <p class="text-[14px] text-secondary-text mb-4 leading-relaxed">
+          {category.description}
+        </p>
+        <div
+          class="cursor-pointer"
+          {test_attrs(toggle_category: category.name)}
+          phx-click="toggle_category"
+          phx-value-category_id={category.id}
+        >
+          <.chevron_icon class={"w-6 dark:fill-primary-text dark:stroke-primary-text transform transition-transform duration-300 #{if Map.has_key?(@category_packages, category.id), do: "-rotate-90", else: "rotate-90"}"} />
+        </div>
+      </div>
+
+      <div :if={Map.has_key?(@category_packages, category.id)} class="flex-row sm:px-5">
+        <h1 class="hidden sm:block sm:text-[18px] mb-1">See top packages</h1>
+        <ul>
+          <li
+            :for={package <- Map.get(@category_packages, category.id, [])}
+            class="flex flex-col sm:items-center justify-between pt-2 pb-2 px-3 border-b border-divider first:pt-5 last:pb-2 sm:flex-row sm:first:pt-4 sm:last:pb-4 last:border-0"
+          >
+            <div class="w-full sm:w-fit">
+              <.link
+                navigate={~p"/packages/#{package.name}"}
+                class="text-[14px] sm:text-[16px]"
+                {test_attrs(package_link: package.name)}
+              >
+                {package.name}
+              </.link>
+              <span
+                class="ml-1 text-[14px] sm:text-[16px] text-secondary-text"
+                {test_attrs(version: package.latest_hexpm_snapshot.data["latest_version"])}
+              >
+                {package.latest_hexpm_snapshot.data["latest_version"]}
+              </span>
+
+              <p
+                class="mt-1 text-[12px] text-secondary-text sm:text-[14px]"
+                {test_attrs(package_description: true)}
+              >
+                {package.description}
+              </p>
+            </div>
+
+            <div class="flex">
+              <div class="flex items-center min-w-15 sm:min-w-25 justify-start">
+                <.star_icon class="w-4" />
+                <span
+                  class="text-[10px] sm:text-[14px] text-primary-text ml-2"
+                  {test_attrs(package_stars_desktop: true)}
+                >
+                  <%= if package.latest_github_snapshot do %>
+                    {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
+                  <% else %>
+                    -
+                  <% end %>
+                </span>
+              </div>
+              <div class="flex items-center min-w-15 sm:min-w-25 justify-start">
+                <.download_icon class="w-4" />
+                <span
+                  class="text-[10px] sm:text-[14px] text-primary-text ml-2"
+                  {test_attrs(package_downloads_desktop: true)}
+                >
+                  {humanized_number(package.latest_hexpm_snapshot.data["downloads"]["recent"])}
+                </span>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <div class="flex justify-end">
+          <.link
+            navigate={~p"/categories/#{category.permalink}"}
+            class="text-[24px] sm:text-[12px] text-primary-text font-medium hover:underline"
+          >
+            <.button class="cursor-pointer" size={:xsmall}>
+              See More
+            </.button>
+          </.link>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>

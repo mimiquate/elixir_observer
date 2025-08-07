@@ -30,7 +30,9 @@
         </span>
 
         <li class="hidden sm:flex justify-end px-3">
-          <span class="text-[18px] text-secondary-text">Downloads in the last 90 days</span>
+          <span class="text-[18px] text-secondary-text">
+            Ordered by downloads in the last 90 days
+          </span>
         </li>
       </div>
 
@@ -67,13 +69,25 @@
               </div>
 
               <p
-                class="mt-2 text-[12px] sm:text-[14px] text-secondary-text"
+                class="text-[12px] sm:text-[16px] text-secondary-text"
                 {test_attrs(package_description: true)}
               >
                 {package.description}
               </p>
 
-              <div class="flex items-center mt-3 sm:hidden">
+              <.link
+                :if={package.category}
+                navigate={~p"/categories/#{package.category.permalink}"}
+                class="flex items-center mt-2 sm:mt-1 cursor-pointer"
+              >
+                <.bookmark_icon class="w-[14px] h-[17px]" />
+
+                <span class="text-[14px] sm:text-[16px] ml-2 sm:ml-3 sm:ml-2 text-accent hover:underline">
+                  {package.category.name}
+                </span>
+              </.link>
+
+              <div class="flex items-center mt-2 sm:hidden">
                 <span
                   :if={package.name == @term}
                   class="text-[12px] py-[2px] mr-4 px-3 rounded-full border-[0.5px] border-stroke bg-chip-bg-exact-match text-white"
@@ -81,10 +95,8 @@
                 >
                   Exact match
                 </span>
-                <div class="flex w-[50px]">
-                  <div :if={package.latest_github_snapshot} class="p-1 rounded-md">
-                    <.star_icon class="w-3" />
-                  </div>
+                <div class="flex items-center w-[50px]">
+                  <.star_icon :if={package.latest_github_snapshot} class="w-4" />
                   <span
                     :if={package.latest_github_snapshot}
                     class="ml-1 text-primary-text text-[12px] sm:text-[16px]"
@@ -94,10 +106,8 @@
                   </span>
                 </div>
 
-                <div class="flex ml-4 items-center justify-end sm:hidden">
-                  <div class="p-1 w-fit rounded-md">
-                    <.download_icon class="w-3" />
-                  </div>
+                <div class="flex items-center ml-4 items-center justify-end sm:hidden">
+                  <.download_icon class="w-4" />
                   <span
                     class="text-[12px] text-primary-text ml-1"
                     {test_attrs(package_downloads_mobile: true)}

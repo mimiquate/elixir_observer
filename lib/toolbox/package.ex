@@ -6,6 +6,8 @@ defmodule Toolbox.Package do
     field :name, :string
     field :description, :string
 
+    field :category, Toolbox.Category, source: :category_id
+
     has_many :hexpm_snapshots, Toolbox.HexpmSnapshot
     has_many :github_snapshots, Toolbox.GithubSnapshot
 
@@ -24,8 +26,14 @@ defmodule Toolbox.Package do
   @doc false
   def changeset(package, attrs) do
     package
-    |> cast(attrs, [:name, :description])
+    |> cast(attrs, [:name, :description, :category])
     |> validate_required([:name])
+  end
+
+  def category_changeset(package, attrs) do
+    package
+    |> cast(attrs, [:category_id])
+    |> validate_required([:category_id])
   end
 
   def owners_changeset(package, attrs) do

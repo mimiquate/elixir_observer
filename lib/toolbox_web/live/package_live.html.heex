@@ -13,6 +13,18 @@
       </p>
 
       <.live_component module={PackageOwners} id="package-owners" owners={@package.owners} />
+
+      <.link
+        :if={@package.category}
+        navigate={~p"/categories/#{@package.category.permalink}"}
+        class="flex items-center mt-2 sm:mt-4 cursor-pointer"
+      >
+        <.bookmark_icon class="w-[14px] h-[17px]" />
+
+        <span class="text-[16px] sm:text-[18px] ml-3 text-accent hover:underline">
+          {@package.category.name}
+        </span>
+      </.link>
     </div>
 
     <div class="w-1/1 sm:min-w-xs bg-surface px-3 py-3 sm:self-baseline sm:w-auto sm:px-4 sm:w-auto rounded-md mt-7 sm:mt-0">
@@ -405,4 +417,51 @@
       </div>
     <% end %>
   </section>
+
+  <%= if Enum.any?(@related_packages) do %>
+    <section class="sm:mt-8">
+      <div class="flex flex-wrap items-center mt-8 mb-3 sm:mb-8">
+        <div class="flex items-center justify-between w-full">
+          <h2 class="text-[20px] text-primary-text sm:text-[32px] font-semibold">
+            Related Packages
+          </h2>
+
+          <.link
+            navigate={~p"/categories/#{@package.category.permalink}"}
+            class="text-[24px] sm:text-[18px] text-primary-text font-medium hover:underline"
+          >
+            <.button class="cursor-pointer" size={:xsmall}>
+              See More
+            </.button>
+          </.link>
+        </div>
+
+        <span class="text-[12px] flex-none mt-2 px-2 py-[2px] sm:px-5 rounded-full border-[0.5px] sm:text-[16px] text-accent border-accent bg-chip-bg inline dark:text-text-secondary-button dark:border-stroke">
+          {@related_packages_count} packages
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <%= for package <- @related_packages do %>
+          <.link
+            class="bg-surface rounded-md p-3 border border-stroke"
+            href={~p"/packages/#{package.name}"}
+          >
+            <div class="flex items-center mb-2">
+              <h3 class="text-[14px] sm:text-[18px] font-medium text-primary-text hover:text-primary">
+                {package.name}
+              </h3>
+              <span class="text-[14px] text-secondary-text ml-2 sm:text-[16px]">
+                {package.latest_hexpm_snapshot.data["latest_version"]}
+              </span>
+            </div>
+
+            <p class="text-[14px] text-secondary-text line-clamp-2 mb-3">
+              {package.description}
+            </p>
+          </.link>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
 </article>

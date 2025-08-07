@@ -20,6 +20,7 @@ defmodule ToolboxWeb.PackageLive do
   import ToolboxWeb.Components.Icons.ElixirIcon
   import ToolboxWeb.Components.Icons.PathIcon
   import ToolboxWeb.Components.Icons.InspectIcon
+  import ToolboxWeb.Components.Icons.BookmarkIcon
 
   alias ToolboxWeb.Components.PackageOwners
 
@@ -62,13 +63,30 @@ defmodule ToolboxWeb.PackageLive do
       update_activity_if_outdated(package, github.sync_at)
     end
 
+    {related_packages, _} = Toolbox.Packages.list_packages_from_category(package.category, 5)
+
+    related_packages =
+      related_packages
+      |> Enum.reject(&(&1.name == name))
+      |> Enum.slice(0, 4)
+
+    related_packages_count =
+      if package.category do
+        Toolbox.Packages.category_count(package.category)
+      else
+        0
+      end
+
     {
       :ok,
       assign(
         socket,
         page_title: package.name,
+        related_packages: related_packages,
+        related_packages_count: related_packages_count,
         package: %{
           name: package.name,
+          category: package.category,
           description: package.description,
           owners_sync_at: package.hexpm_owners_sync_at,
           owners: package.hexpm_owners,
