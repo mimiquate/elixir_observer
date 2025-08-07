@@ -39,7 +39,7 @@ defmodule ToolboxWeb.CategoryIndexLive do
       else
         # Expand category - fetch packages
         category = Enum.find(socket.assigns.categories, &(&1.id == category_id))
-        {packages, _} = Packages.list_packages_from_category(category, 3)
+        packages = Packages.list_packages_from_category(category, 3)
         Map.put(category_packages, category_id, packages)
       end
 
