@@ -51,7 +51,7 @@ defmodule Toolbox.Packages do
 
     query =
       from(
-        p in Package,
+        p in subquery(top_3000_packages_query()),
         where: p.category == ^category,
         join: s in subquery(latest_hexpm_snaphost_query()),
         on: s.package_id == p.id,
@@ -83,17 +83,7 @@ defmodule Toolbox.Packages do
 
   # Categories count based on the top 3000 packages
   def categories_counts do
-    q =
-      from(p in Package,
-        join: s in subquery(latest_hexpm_snaphost_query()),
-        on: s.package_id == p.id,
-        where: not is_nil(p.category),
-        order_by: [desc_nulls_last: json_extract_path(s.data, ["downloads", "recent"])],
-        limit: 3000,
-        select: [:id, :category]
-      )
-
-    from(p in subquery(q),
+    from(p in subquery(top_3000_packages_query()),
       group_by: p.category,
       select: {p.category, count(p.id)}
     )
@@ -102,8 +92,20 @@ defmodule Toolbox.Packages do
   end
 
   def category_count(category) do
-    from(p in Package, where: p.category == ^category)
+    from(p in subquery(top_3000_packages_query()),
+      where: p.category == ^category
+    )
     |> Repo.aggregate(:count)
+  end
+
+  def top_3000_packages_query() do
+    from(p in Package,
+      join: s in subquery(latest_hexpm_snaphost_query()),
+      on: s.package_id == p.id,
+      where: not is_nil(p.category),
+      order_by: [desc_nulls_last: json_extract_path(s.data, ["downloads", "recent"])],
+      limit: 3000
+    )
   end
 
   def search(term) do
