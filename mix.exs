@@ -68,6 +68,7 @@ defmodule Toolbox.MixProject do
       {:decorator, "~> 1.4"},
       {:oban, "~> 2.19"},
       {:oban_web, "~> 2.11"},
+      {:logger_json, "~> 7.0"},
 
       # OpenTelemetry
       {:opentelemetry, "~> 1.3"},
