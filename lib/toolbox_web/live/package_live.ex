@@ -7,6 +7,7 @@ defmodule ToolboxWeb.PackageLive do
   import ToolboxWeb.Components.PackageLink
   import ToolboxWeb.Components.PackageVersionSelector
   import ToolboxWeb.Components.PackageActivity, only: [package_activity: 1]
+  import ToolboxWeb.Components.PackageResource, only: [package_resource: 1]
 
   import ToolboxWeb.Components.Icons.StarIcon
   import ToolboxWeb.Components.Icons.DownloadIcon
