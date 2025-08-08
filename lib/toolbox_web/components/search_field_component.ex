@@ -53,7 +53,6 @@ defmodule ToolboxWeb.SearchFieldComponent do
           phx-keydown="handle_keydown"
           phx-target={@myself}
           phx-debounce="300"
-          phx-blur="hide_dropdown"
           phx-focus="show_dropdown_if_results"
           {test_attrs(search_input: true)}
         />
@@ -154,22 +153,12 @@ defmodule ToolboxWeb.SearchFieldComponent do
   end
 
   def handle_event("hide_dropdown", _params, socket) do
-    # Use a shorter delay to allow click events on dropdown items to fire first
-    Process.send_after(self(), {:hide_dropdown, socket.assigns.myself}, 100)
-    {:noreply, socket}
+    {:noreply, assign(socket, show_dropdown: false)}
   end
 
   def handle_event("show_dropdown_if_results", _params, socket) do
     show_dropdown = String.length(socket.assigns.search_term) >= 2
 
     {:noreply, assign(socket, show_dropdown: show_dropdown)}
-  end
-
-  def handle_info({:hide_dropdown, component_id}, socket) do
-    if socket.assigns.myself == component_id do
-      {:noreply, assign(socket, show_dropdown: false)}
-    else
-      {:noreply, socket}
-    end
   end
 end
