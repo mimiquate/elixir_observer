@@ -16,6 +16,13 @@
     <meta property="og:site_name" content="Elixir Observer" />
     <meta property="og:title" content={og_title(assigns)} />
     <meta property="og:description" content={og_description(assigns)} />
+    <meta property="og:image" content={~p"/images/og-text-logo.png"} />
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Elixir Observer"/>
+    <meta property="twitter:description" content={og_description(assigns)} />
+    <meta property="twitter:image" content={absolute_url(~p"/images/og-text-logo.png")} />
 
     <meta name="robots" content={robots(assigns)} />
 
