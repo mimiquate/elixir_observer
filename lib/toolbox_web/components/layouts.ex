@@ -41,8 +41,4 @@ defmodule ToolboxWeb.Layouts do
   def robots(_assigns) do
     "none"
   end
-
-  def absolute_url(path) do
-    ToolboxWeb.Endpoint.url() <> path
-  end
 end
