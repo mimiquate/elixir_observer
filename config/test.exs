@@ -21,7 +21,7 @@ config :toolbox, ToolboxWeb.Endpoint,
   server: true
 
 # Print only warnings and errors during test
-config :logger, level: :warning
+config :logger, :default_handler, level: :warning
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
