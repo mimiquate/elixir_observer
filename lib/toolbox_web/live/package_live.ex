@@ -163,11 +163,6 @@ defmodule ToolboxWeb.PackageLive do
     {:noreply, assign(socket, package: p)}
   end
 
-  def handle_info({:hide_dropdown, component_id}, socket) do
-    send_update(ToolboxWeb.SearchFieldComponent, id: component_id.cid, show_dropdown: false)
-    {:noreply, socket}
-  end
-
   def update_owners_if_oudated(package) do
     sync_at = package.hexpm_owners_sync_at
 
