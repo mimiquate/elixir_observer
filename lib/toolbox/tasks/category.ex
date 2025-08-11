@@ -74,7 +74,7 @@ defmodule Toolbox.Tasks.Category do
                 properties: %{
                   id: %{type: "INTEGER"},
                   name: %{type: "STRING"},
-                  reasioning: %{type: "STRING"}
+                  reasoning: %{type: "STRING"}
                 },
                 propertyOrdering: ["id", "name", "reasoning"]
               }
@@ -121,7 +121,8 @@ defmodule Toolbox.Tasks.Category do
       end)
 
     for package <- packages do
-      Toolbox.Packages.update_package_category(package, %{category_id: result[package.name]["id"]})
+      category = Toolbox.Packages.get_category_by_id!(result[package.name]["id"])
+      Toolbox.Packages.update_package_category(package, %{category: category})
     end
   end
 
