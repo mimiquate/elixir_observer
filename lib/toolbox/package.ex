@@ -32,8 +32,8 @@ defmodule Toolbox.Package do
 
   def category_changeset(package, attrs) do
     package
-    |> cast(attrs, [:category_id])
-    |> validate_required([:category_id])
+    |> cast(attrs, [:category])
+    |> validate_required([:category])
   end
 
   def owners_changeset(package, attrs) do
