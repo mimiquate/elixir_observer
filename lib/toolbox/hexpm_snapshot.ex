@@ -2,6 +2,20 @@ defmodule Toolbox.HexpmSnapshot do
   use Ecto.Schema
   import Ecto.Changeset
 
+  # Support for Materialized Views
+  defmodule Latest do
+    use Ecto.Schema
+
+    schema "latest_hexpm_snapshots" do
+      field :data, :map
+      field :recent_downloads, :integer
+
+      belongs_to :package, Toolbox.Package
+
+      timestamps(type: :utc_datetime)
+    end
+  end
+
   schema "hexpm_snapshots" do
     field :data, :map
 
