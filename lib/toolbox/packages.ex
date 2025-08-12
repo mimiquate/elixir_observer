@@ -35,7 +35,7 @@ defmodule Toolbox.Packages do
       join: s in subquery(latest_hexpm_snaphost_query()),
       on: s.package_id == p.id,
       select: p.name,
-      order_by: [desc: json_extract_path(s.data, ["downloads", "recent"])]
+      order_by: [desc_nulls_last: s.recent_downloads]
     )
     |> Repo.all()
   end
@@ -58,7 +58,7 @@ defmodule Toolbox.Packages do
           latest_hexpm_snapshot: ^latest_hexpm_snaphost_query(),
           latest_github_snapshot: ^latest_github_snaphost_query()
         ],
-        order_by: [desc: json_extract_path(s.data, ["downloads", "recent"])]
+        order_by: [desc_nulls_last: s.recent_downloads]
       )
 
     query =
@@ -101,7 +101,7 @@ defmodule Toolbox.Packages do
     from(p in Package,
       join: s in subquery(latest_hexpm_snaphost_query()),
       on: s.package_id == p.id,
-      order_by: [desc_nulls_last: json_extract_path(s.data, ["downloads", "recent"])],
+      order_by: [desc_nulls_last: s.recent_downloads],
       limit: 3000,
       select: p.id
     )
@@ -125,7 +125,7 @@ defmodule Toolbox.Packages do
         ],
         order_by: [
           asc: fragment("CASE WHEN LOWER(?) = ? THEN 0 ELSE 1 END", p.name, ^downcase_term),
-          desc_nulls_last: json_extract_path(s.data, ["downloads", "recent"])
+          desc_nulls_last: s.recent_downloads
         ],
         # TODO: Rework limit once we implement search result page pagination
         limit: ^limit + 1
@@ -226,15 +226,15 @@ defmodule Toolbox.Packages do
     |> Repo.insert_or_update()
   end
 
-  defp latest_hexpm_snaphost_query() do
-    ranking_query =
-      from h in HexpmSnapshot,
-        select: %{id: h.id, row_number: over(row_number(), :packages_partition)},
-        windows: [packages_partition: [partition_by: :package_id, order_by: [desc: :id]]]
+  def refresh_latest_hexpm_snapshots() do
+    Ecto.Adapters.SQL.query!(
+      Repo,
+      "REFRESH MATERIALIZED VIEW CONCURRENTLY latest_hexpm_snapshots;"
+    )
+  end
 
-    from h in HexpmSnapshot,
-      join: r in subquery(ranking_query),
-      on: h.id == r.id and r.row_number == 1
+  defp latest_hexpm_snaphost_query() do
+    from(h in HexpmSnapshot.Latest)
   end
 
   def delete_github_snapshots(%Package{id: id}) do
