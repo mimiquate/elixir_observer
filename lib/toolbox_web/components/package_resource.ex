@@ -10,8 +10,8 @@ defmodule ToolboxWeb.Components.PackageResource do
 
   def package_resource(%{href: href} = assigns) when is_binary(href) do
     ~H"""
-    <div class={"flex items-center px-3 py-2 sm:px-5 sm:py-3 rounded border border-stroke bg-surface dark:bg-surface-alt #{@class}"}>
-      <.link href={@href} target="_blank" class="flex items-center cursor-pointer">
+    <.link href={@href} target="_blank" class={"flex items-center px-3 py-2 sm:px-5 sm:py-3 rounded border border-stroke bg-surface dark:bg-surface-alt #{@class}"}>
+      <div class="flex items-center cursor-pointer">
         <div class="flex-shrink-0">
           {render_slot(@icon)}
         </div>
@@ -20,12 +20,12 @@ defmodule ToolboxWeb.Components.PackageResource do
             {render_slot(@text)}
           </span>
         </div>
-      </.link>
+      </div>
       <div class="flex-1"></div>
-      <.link href={@href} target="_blank" class="flex-shrink-0 cursor-pointer">
+      <div class="flex-shrink-0 cursor-pointer">
         <.chevron_icon class="w-5" />
-      </.link>
-    </div>
+      </div>
+    </.link>
     """
   end
 
