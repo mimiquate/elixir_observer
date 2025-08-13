@@ -4,7 +4,7 @@ defmodule ToolboxWeb.Components.PackageResource do
   import ToolboxWeb.Components.Icons.ChevronIcon
 
   attr :href, :string, required: true
-  attr :class, :string, default: nil
+  attr :class, :string, default: ""
   slot :icon
   slot :text
 
