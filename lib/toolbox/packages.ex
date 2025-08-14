@@ -244,13 +244,6 @@ defmodule Toolbox.Packages do
   end
 
   defp latest_github_snaphost_query() do
-    ranking_query =
-      from g in GithubSnapshot,
-        select: %{id: g.id, row_number: over(row_number(), :packages_partition)},
-        windows: [packages_partition: [partition_by: :package_id, order_by: [desc: :id]]]
-
-    from g in GithubSnapshot,
-      join: r in subquery(ranking_query),
-      on: g.id == r.id and r.row_number == 1
+    from(g in GithubSnapshot)
   end
 end
