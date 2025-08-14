@@ -1,5 +1,6 @@
 https://elixir-observer.com/
 https://elixir-observer.com/about
+https://elixir-observer.com/categories
 https://elixir-observer.com/packages/jason
 https://elixir-observer.com/packages/certifi
 https://elixir-observer.com/packages/idna

@@ -28,14 +28,8 @@ defmodule ToolboxWeb.Layouts do
     "Find, compare, and explore Elixir packages for your next project."
   end
 
-  def robots(%{conn: %{request_path: p}}) do
-    r = ~r{^/(about|packages/[\w\-]+)?$}
-
-    if Regex.match?(r, p) do
-      "all"
-    else
-      "none"
-    end
+  def robots(%{conn: %{private: %{seo: true}}}) do
+    "all"
   end
 
   def robots(_assigns) do

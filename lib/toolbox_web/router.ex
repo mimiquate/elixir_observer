@@ -24,15 +24,15 @@ defmodule ToolboxWeb.Router do
   scope "/", ToolboxWeb do
     pipe_through [:browser]
 
-    live "/", HomeLive
-    live "/about", AboutLive
+    live "/", HomeLive, private: %{seo: true}
+    live "/about", AboutLive, private: %{seo: true}
 
-    live "/packages/:name", PackageLive
+    live "/packages/:name", PackageLive, private: %{seo: true}
     live "/packages/:name/:version", PackageLive
     live "/searches/:term", SearchLive
 
-    live "/categories", CategoryIndexLive
-    live "/categories/:permalink", CategoryLive
+    live "/categories", CategoryIndexLive, private: %{seo: true}
+    live "/categories/:permalink", CategoryLive, private: %{seo: true}
   end
 
   scope "/admin", ToolboxWeb do
