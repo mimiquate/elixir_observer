@@ -10,7 +10,11 @@ defmodule ToolboxWeb.Components.PackageResource do
 
   def package_resource(%{href: href} = assigns) when is_binary(href) do
     ~H"""
-    <.link href={@href} target="_blank" class={"flex items-center px-3 py-2 sm:px-5 sm:py-3 rounded border border-stroke bg-surface dark:bg-surface-alt #{@class}"}>
+    <.link
+      href={@href}
+      target="_blank"
+      class={"flex items-center px-3 py-2 sm:px-5 sm:py-3 rounded border border-stroke bg-surface dark:bg-surface-alt #{@class}"}
+    >
       <div class="flex items-center cursor-pointer">
         <div class="flex-shrink-0">
           {render_slot(@icon)}
