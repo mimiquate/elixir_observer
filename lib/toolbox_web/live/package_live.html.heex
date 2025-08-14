@@ -252,23 +252,18 @@
             <% end %>
           </div>
 
-          <div class="h-fit order-2 flex items-center dark:bg-surface sm:dark:bg-surface-alt px-3 py-2 sm:px-5 sm:py-3 rounded border border-stroke">
-            <.doc_icon class="w-5 dark:stroke-secondary-text" />
-            <%= if @package.docs_html_url do %>
-              <.link
-                class="block ml-2 text-primary-text text-[16px] sm:text-[18px]"
-                href={@package.docs_html_url <> @version.version}
-                target="_blank"
-              >
-                Documentation for {@version.version}
-              </.link>
-              <.chevron_icon class="w-5 ml-auto" />
-            <% else %>
-              <span class="block ml-2 text-primary-text text-[16px] sm:text-[18px]">
-                No documentation for {@version.version}
-              </span>
-            <% end %>
-          </div>
+          <.package_resource
+            href={@package.docs_html_url && @package.docs_html_url <> @version.version}
+          >
+            <:icon>
+              <.doc_icon class="w-5 dark:stroke-secondary-text" />
+            </:icon>
+            <:text>
+              {if @package.docs_html_url,
+                do: "Documentation for #{@version.version}",
+                else: "No documentation for #{@version.version}"}
+            </:text>
+          </.package_resource>
 
           <div class="h-fit dark:bg-surface sm:dark:bg-surface-alt px-3 py-2 sm:px-5 sm:py-3 rounded md:grow border border-stroke sm:col-start-1 sm:row-start-2 sm:row-span-2">
             <div class="flex items-center">
@@ -360,35 +355,28 @@
           </div>
 
           <div class="order-2 sm:mt-0">
-            <div class="h-fit flex items-center bg-surface dark:bg-surface-alt px-3 py-2 sm:px-5 sm:py-3 rounded border border-stroke">
-              <.changelog_icon class="w-5 dark:fill-secondary-text" />
-              <%= if @package.changelog_url do %>
-                <.link
-                  class="block ml-2 text-primary-text text-[16px] sm:text-[18px]"
-                  href={@package.changelog_url}
-                  target="_blank"
-                >
-                  Changelog for {@version.version}
-                </.link>
-                <.chevron_icon class="w-5 ml-auto" />
-              <% else %>
-                <span class="block text-primary-text ml-2 text-[16px] sm:text-[18px]">
-                  No changelog for {@version.version}
-                </span>
-              <% end %>
-            </div>
+            <.package_resource href={@package.changelog_url} class="h-fit">
+              <:icon>
+                <.changelog_icon class="w-5 dark:fill-secondary-text" />
+              </:icon>
+              <:text>
+                {if @package.changelog_url,
+                  do: "Changelog for #{@version.version}",
+                  else: "No changelog for #{@version.version}"}
+              </:text>
+            </.package_resource>
 
-            <div class="h-fit flex items-center bg-surface dark:bg-surface-alt px-3 py-2 sm:px-5 sm:py-3 rounded border border-stroke mt-4">
-              <.inspect_icon class="w-5" />
-              <.link
-                class="block ml-2 text-primary-text text-[16px] sm:text-[18px]"
-                href={source_url(@package.name, @version.version)}
-                target="_blank"
-              >
+            <.package_resource
+              href={source_url(@package.name, @version.version)}
+              class="h-fit mt-4"
+            >
+              <:icon>
+                <.inspect_icon class="w-5" />
+              </:icon>
+              <:text>
                 Inspect source for {@version.version}
-              </.link>
-              <.chevron_icon class="w-5 ml-auto" />
-            </div>
+              </:text>
+            </.package_resource>
           </div>
         </div>
       </div>
