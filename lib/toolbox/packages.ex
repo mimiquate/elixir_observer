@@ -120,25 +120,29 @@ defmodule Toolbox.Packages do
 
   def search(full_term) do
     attrs = ~r/(?<type>\w+):(?<value>\w+)/
-    kv = Regex.scan(attrs, full_term)
-         |> Enum.map(fn [_full, key, value] -> %{key => value} end)
-         |> Enum.reduce(%{}, &Map.merge/2)
 
-    term = String.replace(full_term, attrs, "")
-           |> String.trim()
-           |> String.replace(~r/\s+/, " ")
+    filters =
+      Regex.scan(attrs, full_term)
+      |> Enum.map(fn [_full, key, value] -> %{key => value} end)
+      |> Enum.reduce(%{}, &Map.merge/2)
 
-    {packages, rest} = if String.length(term) < 3 do
-      {[], false}
-    else
-      if kv["type"] == "semantic" do
-        embedding_search(term)
+    term =
+      String.replace(full_term, attrs, "")
+      |> String.trim()
+      |> String.replace(~r/\s+/, " ")
+
+    {packages, rest} =
+      if String.length(term) < 3 do
+        {[], false}
       else
-        keyword_search(term)
+        if filters["type"] == "semantic" do
+          embedding_search(term)
+        else
+          keyword_search(term)
+        end
       end
-    end
 
-    {full_term, kv, term, packages, rest}
+    {full_term, filters, term, packages, rest}
   end
 
   def embedding_search(term) do

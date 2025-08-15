@@ -1,4 +1,4 @@
-defmodule ToolboxWeb.SearchFieldComponent do
+ defmodule ToolboxWeb.SearchFieldComponent do
   use ToolboxWeb, :live_component
   alias Toolbox.Packages
 
@@ -11,7 +11,9 @@ defmodule ToolboxWeb.SearchFieldComponent do
     {:ok,
      assign(socket,
        results: [],
-       show_dropdown: false
+       show_dropdown: false,
+       search_term: "",
+       focused: false
      )}
   end
 
@@ -41,23 +43,32 @@ defmodule ToolboxWeb.SearchFieldComponent do
         class={"flex h-[40px] pr-3 py-2 justify-between items-center rounded-[6px] sm:border border-surface-alt focus-within:border-secondary-text bg-surface #{@class}"}
         {test_attrs(search_form: true)}
       >
-        <input
-          type="search"
-          name="term"
-          value={@search_term}
-          placeholder="Find packages"
-          class="grow border-0 focus:ring-0 bg-transparent placeholder:text-secondary-text"
-          required
-          autofocus={@autofocus}
-          autocomplete="off"
-          autocapitalize="off"
-          phx-change="typeahead_search"
-          phx-keydown="handle_keydown"
-          phx-target={@myself}
-          phx-debounce="300"
-          phx-focus="show_dropdown_if_results"
-          {test_attrs(search_input: true)}
-        />
+        <div class="relative grow" phx-hook="SearchHighlight" id="search-highlight-container">
+          <input
+            type="search"
+            name="term"
+            value={@search_term}
+            placeholder="Find packages"
+            class="w-full border-0 focus:ring-0 bg-transparent text-transparent placeholder:text-secondary-text caret-primary-text"
+            required
+            autofocus={@autofocus}
+            autocomplete="off"
+            autocapitalize="off"
+            phx-change="typeahead_search"
+            phx-keydown="handle_keydown"
+            phx-target={@myself}
+            phx-debounce="300"
+            phx-focus="handle_focus"
+            phx-blur="handle_blur"
+            {test_attrs(search_input: true)}
+            id="search-input"
+          />
+          <div
+            id="search-highlight"
+            class="pl-3 absolute inset-0 pointer-events-none flex items-center z-10"
+          >
+          </div>
+        </div>
         <button
           type="submit"
           class="flex items-center justify-center"
@@ -66,6 +77,21 @@ defmodule ToolboxWeb.SearchFieldComponent do
           <.icon name="hero-magnifying-glass" class="h-5 w-5 text-secondary-text" />
         </button>
       </.form>
+
+      <%= if @focused and !@show_dropdown and String.length(@search_term) < 2 do %>
+        <div
+          class="absolute top-full left-0 right-0 z-50 mt-1 bg-surface rounded-md shadow-lg border border-surface-alt"
+          {test_attrs(semantic_search_help: true)}
+        >
+          <div class="p-4">
+            <h3 class="text-sm font-semibold text-primary-text mb-2">Search Tips</h3>
+            <div class="text-sm text-secondary-text space-y-1">
+              <p>• Type <span class="font-mono bg-surface-alt px-1 rounded">type:semantic</span> for AI-powered semantic search</p>
+              <p>• Search by package name, description, or functionality</p>
+            </div>
+          </div>
+        </div>
+      <% end %>
 
       <%= if @show_dropdown do %>
         <div
@@ -119,17 +145,16 @@ defmodule ToolboxWeb.SearchFieldComponent do
   def handle_event("typeahead_search", %{"term" => term}, socket) do
     term = String.trim(term)
 
-    {results, _} =
+    {_full_term, _kv, clean_term, results, _} =
       if String.length(term) >= 2 do
-        {_, _, _, results, more} = Packages.search(term)
-
-        {results, more}
+        Packages.search(term)
       else
-        {[], nil}
+        {term, nil, term, [], false}
       end
 
-    # Only show dropdown if we have a valid search term (>= 2 characters)
-    show_dropdown = String.length(term) >= 2
+    # Only show dropdown if we have a valid search term after removing filter patterns
+    # The backend requires at least 3 characters in the clean term for actual search
+    show_dropdown = String.length(clean_term) >= 3
 
     {:noreply,
      assign(socket,
@@ -160,8 +185,34 @@ defmodule ToolboxWeb.SearchFieldComponent do
     {:noreply, assign(socket, show_dropdown: false)}
   end
 
+  def handle_event("handle_focus", _params, socket) do
+    # Use the same logic as typeahead_search to determine if we should show dropdown
+    {_full_term, _kv, clean_term, _results, _} =
+      if String.length(socket.assigns.search_term) >= 2 do
+        Packages.search(socket.assigns.search_term)
+      else
+        {socket.assigns.search_term, nil, socket.assigns.search_term, [], false}
+      end
+
+    show_dropdown = String.length(clean_term) >= 3
+
+    {:noreply, assign(socket, focused: true, show_dropdown: show_dropdown)}
+  end
+
+  def handle_event("handle_blur", _params, socket) do
+    {:noreply, assign(socket, focused: false)}
+  end
+
   def handle_event("show_dropdown_if_results", _params, socket) do
-    show_dropdown = String.length(socket.assigns.search_term) >= 2
+    # Use the same logic as typeahead_search to determine if we should show dropdown
+    {_full_term, _kv, clean_term, _results, _} =
+      if String.length(socket.assigns.search_term) >= 2 do
+        Packages.search(socket.assigns.search_term)
+      else
+        {socket.assigns.search_term, nil, socket.assigns.search_term, [], false}
+      end
+
+    show_dropdown = String.length(clean_term) >= 3
 
     {:noreply, assign(socket, show_dropdown: show_dropdown)}
   end
