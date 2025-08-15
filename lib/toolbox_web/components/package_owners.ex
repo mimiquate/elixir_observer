@@ -25,7 +25,7 @@ defmodule ToolboxWeb.Components.PackageOwners do
       <.owner_chip :for={owner <- Enum.slice(@owners, 0, 4)} owner={owner} />
 
       <%= if length(@owners) > 4 do %>
-        <div>
+        <div class="relative">
           <div
             class="flex justify-center items-center h-fit py-[2px] pl-[4px] pr-3 rounded-[1.5rem] border border-stroke bg-chip-bg cursor-pointer hover:bg-surface-alt transition-colors"
             phx-click="toggle_owners_popover"
