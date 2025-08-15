@@ -14,7 +14,7 @@ defmodule ToolboxWeb.SearchLive do
       }
     )
 
-    {results, more?} = Packages.search(term)
+    {results, more?} = Packages.embedding_search(term)
 
     {
       :ok,

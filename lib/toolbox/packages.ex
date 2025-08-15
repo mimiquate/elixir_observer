@@ -4,6 +4,7 @@ defmodule Toolbox.Packages do
   require Logger
 
   import Ecto.Query
+  import Pgvector.Ecto.Query
 
   use Nebulex.Caching, cache: Toolbox.Cache
 
@@ -115,6 +116,33 @@ defmodule Toolbox.Packages do
       select: p.id
     )
     |> Repo.all()
+  end
+
+  def embedding_search(term) do
+    limit = 50
+    downcase_term = String.downcase(term)
+    vector = Pgvector.new(Toolbox.Embedding.calculate_query(term))
+
+    {packages, rest} =
+      from(p in Package,
+        join: s in PackageEmbedding,
+        on: s.package_id == p.id,
+        preload: [
+          latest_hexpm_snapshot: ^latest_hexpm_snaphost_query(),
+          latest_github_snapshot: ^latest_github_snaphost_query()
+        ],
+        order_by: [
+          asc: fragment("CASE WHEN LOWER(?) = ? THEN 0 ELSE 1 END", p.name, ^downcase_term),
+          asc: l2_distance(s.embedding, ^vector)
+        ],
+        # TODO: Rework limit once we implement search result page pagination
+        limit: ^limit + 1
+      )
+      |> Repo.all()
+      |> Enum.split(limit)
+      |> IO.inspect()
+
+    {packages, length(rest) > 0}
   end
 
   def search(term) do

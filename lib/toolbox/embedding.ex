@@ -13,6 +13,48 @@ defmodule Toolbox.Embedding do
     |> Stream.run
   end
 
+  def calculate_query(term) do
+    body = %{
+      content: %{
+        parts: [
+          %{
+            text: term
+          }
+        ]
+      },
+      taskType: "RETRIEVAL_QUERY",
+      outputDimensionality: 768
+    }
+
+    {:ok, {{_, 200, _}, _h, response}} =
+      :httpc.request(
+        :post,
+        {
+          ~c"#{base_url()}/v1beta/models/gemini-embedding-001:embedContent",
+          [
+            {~c"x-goog-api-key", "#{api_key()}"},
+            {~c"user-agent", "elixir client"}
+          ],
+          ~c"application/json",
+          JSON.encode!(body)
+        },
+        [
+          ssl: [
+            verify: :verify_peer,
+            cacerts: :public_key.cacerts_get(),
+            # Support wildcard certificates
+            customize_hostname_check: [
+              match_fun: :public_key.pkix_verify_hostname_match_fun(:https)
+            ]
+          ]
+        ],
+        []
+      )
+
+    response = response |> to_string() |> JSON.decode!()
+    embedding = response["embedding"]["values"]
+  end
+
   def calculate(packages) do
     requests = for package <- packages do
       p = """
