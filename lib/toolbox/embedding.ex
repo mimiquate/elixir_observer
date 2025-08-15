@@ -22,7 +22,7 @@ defmodule Toolbox.Embedding do
           }
         ]
       },
-      taskType: "RETRIEVAL_QUERY",
+      taskType: "RETRIEVAL_DOCUMENT",
       outputDimensionality: 768
     }
 

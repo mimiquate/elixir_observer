@@ -125,22 +125,31 @@ defmodule Toolbox.Packages do
 
     {packages, rest} =
       from(p in Package,
-        join: s in PackageEmbedding,
+        join: e in PackageEmbedding,
+        on: e.package_id == p.id,
+        join: s in subquery(latest_hexpm_snaphost_query()),
         on: s.package_id == p.id,
+        where: l2_distance(e.embedding, ^vector) < 0.5,
         preload: [
           latest_hexpm_snapshot: ^latest_hexpm_snaphost_query(),
           latest_github_snapshot: ^latest_github_snaphost_query()
         ],
         order_by: [
           asc: fragment("CASE WHEN LOWER(?) = ? THEN 0 ELSE 1 END", p.name, ^downcase_term),
-          asc: l2_distance(s.embedding, ^vector)
+          asc: l2_distance(e.embedding, ^vector)
+          # desc_nulls_last: s.recent_downloads
         ],
         # TODO: Rework limit once we implement search result page pagination
-        limit: ^limit + 1
+        limit: ^limit + 1,
+        select: {p, distance: l2_distance(e.embedding, ^vector)}
       )
+
       |> Repo.all()
+      |> Enum.map(fn{p, d} ->
+        [{:distance, e}] = d
+        %{p | distance: e}
+      end)
       |> Enum.split(limit)
-      |> IO.inspect()
 
     {packages, length(rest) > 0}
   end

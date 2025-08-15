@@ -5,6 +5,7 @@ defmodule Toolbox.Package do
   schema "packages" do
     field :name, :string
     field :description, :string
+    field :distance, :float, virtual: true
 
     field :category, Toolbox.Category, source: :category_id
 
