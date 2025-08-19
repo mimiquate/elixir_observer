@@ -71,7 +71,8 @@ defmodule Toolbox.PackagesTest do
     end
 
     test "returns all packages for empty search term", %{packages: packages} do
-      {result_packages, more?} = "" |> Toolbox.PackageSearch.parse() |> Toolbox.PackageSearch.execute()
+      {result_packages, more?} =
+        "" |> Toolbox.PackageSearch.parse() |> Toolbox.PackageSearch.execute()
 
       # Empty string matches all packages due to ilike pattern matching in keyword_search
       # When using execute/1 directly, it bypasses the executable? check
@@ -80,14 +81,16 @@ defmodule Toolbox.PackagesTest do
     end
 
     test "returns empty results when no packages match" do
-      {packages, more?} = "nonexistentpackage" |> Toolbox.PackageSearch.parse() |> Toolbox.PackageSearch.execute()
+      {packages, more?} =
+        "nonexistentpackage" |> Toolbox.PackageSearch.parse() |> Toolbox.PackageSearch.execute()
 
       assert packages == []
       assert more? == false
     end
 
     test "returns matching packages ordered by download count", %{packages: _packages} do
-      {packages, more?} = "ban" |> Toolbox.PackageSearch.parse() |> Toolbox.PackageSearch.execute()
+      {packages, more?} =
+        "ban" |> Toolbox.PackageSearch.parse() |> Toolbox.PackageSearch.execute()
 
       # Should find packages that match "ban" (bandit, bamboo)
       # At least one package should match
@@ -110,7 +113,8 @@ defmodule Toolbox.PackagesTest do
     end
 
     test "handles case-insensitive search", %{packages: [bandit | _]} do
-      {[%Package{name: name}], _more?} = "Ban" |> Toolbox.PackageSearch.parse() |> Toolbox.PackageSearch.execute()
+      {[%Package{name: name}], _more?} =
+        "Ban" |> Toolbox.PackageSearch.parse() |> Toolbox.PackageSearch.execute()
 
       assert name == bandit.name
     end
@@ -141,7 +145,8 @@ defmodule Toolbox.PackagesTest do
         })
 
       # Search for packages containing "pkg"
-      {packages, _more?} = "pkg" |> Toolbox.PackageSearch.parse() |> Toolbox.PackageSearch.execute()
+      {packages, _more?} =
+        "pkg" |> Toolbox.PackageSearch.parse() |> Toolbox.PackageSearch.execute()
 
       # Check actual ordering - nil downloads should come AFTER packages with downloads
       assert [%{name: "high_downloads_pkg"}, %{name: "nil_downloads_pkg"}] = packages

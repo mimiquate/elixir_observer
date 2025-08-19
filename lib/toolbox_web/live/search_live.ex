@@ -13,7 +13,8 @@ defmodule ToolboxWeb.SearchLive do
       }
     )
 
-    %{original_term: full_term, clean_term: clean_term} = parsed_search = Toolbox.PackageSearch.parse(term)
+    %{original_term: full_term, clean_term: clean_term} =
+      parsed_search = Toolbox.PackageSearch.parse(term)
 
     {results, more?} =
       if Toolbox.PackageSearch.executable?(parsed_search) do

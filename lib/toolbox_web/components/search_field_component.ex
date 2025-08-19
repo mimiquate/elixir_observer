@@ -190,7 +190,8 @@ defmodule ToolboxWeb.SearchFieldComponent do
 
   def handle_event("handle_focus", _params, socket) do
     # Use the same logic as typeahead_search to determine if we should show dropdown
-    %{clean_term: clean_term} = parsed_search = Toolbox.PackageSearch.parse(socket.assigns.search_term)
+    %{clean_term: clean_term} =
+      parsed_search = Toolbox.PackageSearch.parse(socket.assigns.search_term)
 
     {_results, _has_more?} =
       if Toolbox.PackageSearch.executable?(parsed_search) do
@@ -210,7 +211,8 @@ defmodule ToolboxWeb.SearchFieldComponent do
 
   def handle_event("show_dropdown_if_results", _params, socket) do
     # Use the same logic as typeahead_search to determine if we should show dropdown
-    %{clean_term: clean_term} = parsed_search = Toolbox.PackageSearch.parse(socket.assigns.search_term)
+    %{clean_term: clean_term} =
+      parsed_search = Toolbox.PackageSearch.parse(socket.assigns.search_term)
 
     {_results, _has_more?} =
       if Toolbox.PackageSearch.executable?(parsed_search) do
