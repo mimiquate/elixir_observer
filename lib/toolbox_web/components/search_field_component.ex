@@ -1,6 +1,5 @@
 defmodule ToolboxWeb.SearchFieldComponent do
   use ToolboxWeb, :live_component
-  alias Toolbox.Packages
 
   attr :class, :string, default: ""
   attr :autofocus, :boolean, default: false
@@ -147,11 +146,13 @@ defmodule ToolboxWeb.SearchFieldComponent do
   def handle_event("typeahead_search", %{"term" => term}, socket) do
     term = String.trim(term)
 
-    {_full_term, _kv, clean_term, results, _} =
-      if String.length(term) >= 2 do
-        Packages.search(term)
+    %{clean_term: clean_term} = parsed_search = Toolbox.PackageSearch.parse(term)
+
+    {results, _has_more?} =
+      if Toolbox.PackageSearch.executable?(parsed_search) do
+        Toolbox.PackageSearch.execute(parsed_search)
       else
-        {term, nil, term, [], false}
+        {[], false}
       end
 
     # Only show dropdown if we have a valid search term after removing filter patterns
@@ -189,11 +190,13 @@ defmodule ToolboxWeb.SearchFieldComponent do
 
   def handle_event("handle_focus", _params, socket) do
     # Use the same logic as typeahead_search to determine if we should show dropdown
-    {_full_term, _kv, clean_term, _results, _} =
-      if String.length(socket.assigns.search_term) >= 2 do
-        Packages.search(socket.assigns.search_term)
+    %{clean_term: clean_term} = parsed_search = Toolbox.PackageSearch.parse(socket.assigns.search_term)
+
+    {_results, _has_more?} =
+      if Toolbox.PackageSearch.executable?(parsed_search) do
+        Toolbox.PackageSearch.execute(parsed_search)
       else
-        {socket.assigns.search_term, nil, socket.assigns.search_term, [], false}
+        {[], false}
       end
 
     show_dropdown = String.length(clean_term) >= 3
@@ -207,11 +210,13 @@ defmodule ToolboxWeb.SearchFieldComponent do
 
   def handle_event("show_dropdown_if_results", _params, socket) do
     # Use the same logic as typeahead_search to determine if we should show dropdown
-    {_full_term, _kv, clean_term, _results, _} =
-      if String.length(socket.assigns.search_term) >= 2 do
-        Packages.search(socket.assigns.search_term)
+    %{clean_term: clean_term} = parsed_search = Toolbox.PackageSearch.parse(socket.assigns.search_term)
+
+    {_results, _has_more?} =
+      if Toolbox.PackageSearch.executable?(parsed_search) do
+        Toolbox.PackageSearch.execute(parsed_search)
       else
-        {socket.assigns.search_term, nil, socket.assigns.search_term, [], false}
+        {[], false}
       end
 
     show_dropdown = String.length(clean_term) >= 3
