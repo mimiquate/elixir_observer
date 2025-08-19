@@ -1,5 +1,5 @@
 defmodule Toolbox.Repo.Migrations.CreateVectorExtension do
-use Ecto.Migration
+  use Ecto.Migration
 
   def up do
     execute "CREATE EXTENSION IF NOT EXISTS vector"

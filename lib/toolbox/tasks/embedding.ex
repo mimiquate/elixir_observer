@@ -51,70 +51,70 @@ defmodule Toolbox.Tasks.Embedding do
   def run() do
     Toolbox.Packages.list_packages_names_with_no_embedding()
     |> Stream.chunk_every(3000)
-    |> Stream.map(fn(names) ->
+    |> Stream.map(fn names ->
       names
       |> Toolbox.Packages.get_packages_by_name()
       |> Stream.chunk_every(100)
-      |> Stream.map(fn(packages) -> calculate(packages) end)
+      |> Stream.map(fn packages -> calculate(packages) end)
       |> Stream.run()
     end)
-    |> Stream.each(fn(_) -> Process.sleep(60000) end)
-    |> Stream.run
+    |> Stream.each(fn _ -> Process.sleep(60000) end)
+    |> Stream.run()
   end
 
-
   def calculate(packages) do
-    requests = for package <- packages do
-      p = """
-        #{package.name}
+    requests =
+      for package <- packages do
+        p = """
+          #{package.name}
 
-        #{package.description}
+          #{package.description}
 
-        #{package.category.name}
-      """
+          #{package.category.name}
+        """
 
-      %{
-        model: "models/gemini-embedding-001",
-        content: %{
-          parts: [
-            %{
-              text: p
-            }
-          ]
+        %{
+          model: "models/gemini-embedding-001",
+          content: %{
+            parts: [
+              %{
+                text: p
+              }
+            ]
+          },
+          taskType: "RETRIEVAL_DOCUMENT",
+          outputDimensionality: 768
+        }
+      end
+
+    body = %{
+      requests: requests
+    }
+
+    {:ok, {{_, 200, _}, _h, response}} =
+      :httpc.request(
+        :post,
+        {
+          ~c"#{base_url()}/v1beta/models/gemini-embedding-001:batchEmbedContents",
+          [
+            {~c"x-goog-api-key", "#{api_key()}"},
+            {~c"user-agent", "elixir client"}
+          ],
+          ~c"application/json",
+          JSON.encode!(body)
         },
-        taskType: "RETRIEVAL_DOCUMENT",
-        outputDimensionality: 768
-      }
-    end
-
-  body = %{
-    requests: requests
-  }
-
-  {:ok, {{_, 200, _}, _h, response}} =
-    :httpc.request(
-      :post,
-      {
-        ~c"#{base_url()}/v1beta/models/gemini-embedding-001:batchEmbedContents",
         [
-          {~c"x-goog-api-key", "#{api_key()}"},
-          {~c"user-agent", "elixir client"}
-        ],
-        ~c"application/json",
-        JSON.encode!(body)
-      },
-      [
-        ssl: [
-          verify: :verify_peer,
-          cacerts: :public_key.cacerts_get(),
-          # Support wildcard certificates
-          customize_hostname_check: [
-            match_fun: :public_key.pkix_verify_hostname_match_fun(:https)
+          ssl: [
+            verify: :verify_peer,
+            cacerts: :public_key.cacerts_get(),
+            # Support wildcard certificates
+            customize_hostname_check: [
+              match_fun: :public_key.pkix_verify_hostname_match_fun(:https)
+            ]
           ]
-        ]
-      ],
-      []
-    )
+        ],
+        []
+      )
 
     response = response |> to_string() |> JSON.decode!()
     embeddings = response["embeddings"]
@@ -122,6 +122,7 @@ defmodule Toolbox.Tasks.Embedding do
     Enum.zip(packages, embeddings)
     |> Enum.each(fn {package, e} ->
       embedding = e["values"]
+
       Toolbox.Packages.upsert_package_embeddings(%{
         package_id: package.id,
         embedding: embedding

@@ -1,11 +1,10 @@
- defmodule ToolboxWeb.SearchFieldComponent do
+defmodule ToolboxWeb.SearchFieldComponent do
   use ToolboxWeb, :live_component
   alias Toolbox.Packages
 
   attr :class, :string, default: ""
   attr :autofocus, :boolean, default: false
   attr :search_term, :string, default: ""
-
 
   def mount(socket) do
     {:ok,
@@ -86,7 +85,10 @@
           <div class="p-4">
             <h3 class="text-sm font-semibold text-primary-text mb-2">Search Tips</h3>
             <div class="text-sm text-secondary-text space-y-1">
-              <p>• Type <span class="font-mono bg-surface-alt px-1 rounded">type:semantic</span> for AI-powered semantic search</p>
+              <p>
+                • Type <span class="font-mono bg-surface-alt px-1 rounded">type:semantic</span>
+                for AI-powered semantic search
+              </p>
               <p>• Search by package name, description, or functionality</p>
             </div>
           </div>

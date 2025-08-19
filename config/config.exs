@@ -11,7 +11,6 @@ config :toolbox,
   ecto_repos: [Toolbox.Repo],
   generators: [timestamp_type: :utc_datetime]
 
-
 config :toolbox, Toolbox.Repo, types: Toolbox.PostgrexTypes
 
 # Configures the endpoint

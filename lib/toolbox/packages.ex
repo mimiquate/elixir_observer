@@ -30,7 +30,8 @@ defmodule Toolbox.Packages do
 
   def list_packages_names_with_no_embedding do
     from(p in Package,
-      left_join: e in PackageEmbedding, on: p.id == e.package_id,
+      left_join: e in PackageEmbedding,
+      on: p.id == e.package_id,
       where: is_nil(e.package_id),
       select: p.name
     )
@@ -163,7 +164,7 @@ defmodule Toolbox.Packages do
         ],
         order_by: [
           asc: fragment("CASE WHEN LOWER(?) = ? THEN 0 ELSE 1 END", p.name, ^downcase_term),
-           desc_nulls_last: s.recent_downloads
+          desc_nulls_last: s.recent_downloads
         ],
         # TODO: Rework limit once we implement search result page pagination
         limit: ^limit + 1
