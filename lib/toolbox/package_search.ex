@@ -10,10 +10,11 @@ defmodule Toolbox.PackageSearch do
   """
 
   alias Toolbox.{Package, Repo, PackageEmbedding, HexpmSnapshot}
+
   import Ecto.Query
   import Pgvector.Ecto.Query
 
-  @type search_result :: {String.t(), map(), String.t(), list(Package.t()), boolean()}
+  use Nebulex.Caching, cache: Toolbox.Cache
 
   @filter_regex ~r/(?<type>\w+):(?<value>\w+)/
   @min_search_length 3
@@ -173,9 +174,11 @@ defmodule Toolbox.PackageSearch do
     {packages, length(rest) > 0}
   end
 
-  # Delegate to Packages module for embedding calculation (keep cache behavior)
-  defp embedding_from_term(term) do
-    Toolbox.Packages.embedding_from_term(term)
+  @decorate cacheable(key: {:embedding, term}, opts: [ttl: :timer.hours(240)])
+  def embedding_from_term(term) do
+    term
+    |> Toolbox.Tasks.Embedding.calculate_query()
+    |> Pgvector.new()
   end
 
   defp latest_hexpm_snaphost_query do

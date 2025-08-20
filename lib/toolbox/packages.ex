@@ -118,13 +118,6 @@ defmodule Toolbox.Packages do
     |> Repo.all()
   end
 
-  @decorate cacheable(key: {:embedding, term}, opts: [ttl: :timer.hours(240)])
-  def embedding_from_term(term) do
-    term
-    |> Toolbox.Tasks.Embedding.calculate_query()
-    |> Pgvector.new()
-  end
-
   def get_package_by_name(name) do
     from(p in Package,
       where: p.name == ^name,
