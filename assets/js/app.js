@@ -22,10 +22,71 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 
+let Hooks = {}
+
+Hooks.SearchHighlight = {
+  mounted() {
+    this.input = this.el.querySelector('#search-input')
+    this.highlight = this.el.querySelector('#search-highlight')
+
+    this.updateHighlight()
+
+    // Update on every input change for real-time highlighting
+    this.input.addEventListener('input', () => {
+      this.updateHighlight()
+    })
+
+    // Also update on keyup to catch all changes
+    this.input.addEventListener('keyup', () => {
+      this.updateHighlight()
+    })
+  },
+
+  updated() {
+    this.updateHighlight()
+  },
+
+  updateHighlight() {
+    const text = this.input.value || ''
+    const regex = /^(.*)(\w+):(\S+)(.*)$/
+    const match = text.match(regex)
+
+    // Get computed text color from input for normal text
+    const inputStyles = window.getComputedStyle(this.input)
+    const textColor = inputStyles.color
+
+    if (match) {
+      const [, prefix, key, value, suffix] = match
+      // Show all text, but highlight only the value part
+      this.highlight.innerHTML = `
+        <span class="text-primary-text">
+          ${this.escapeHtml(prefix)}${this.escapeHtml(key)}:
+        </span>
+        <span class="bg-accent/10 text-accent">
+          ${this.escapeHtml(value)}
+        </span>
+        <span class="text-primary-text ml-1">
+          ${this.escapeHtml(suffix)}
+        </span>
+      `
+    } else {
+      // Show all text normally when no highlighting needed
+      this.highlight.innerHTML = `<span class="text-primary-text">${this.escapeHtml(text)}</span>`
+    }
+  },
+
+  escapeHtml(text) {
+    const div = document.createElement('div')
+    div.textContent = text
+    return div.innerHTML
+  }
+}
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
-  params: {_csrf_token: csrfToken}
+  params: {_csrf_token: csrfToken},
+  hooks: Hooks
 })
 
 // Show progress bar on live navigation and form submits

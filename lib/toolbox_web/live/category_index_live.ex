@@ -22,6 +22,7 @@ defmodule ToolboxWeb.CategoryIndexLive do
       assign(
         socket,
         page_title: "Categories",
+        search_term: "",
         categories: categories_with_count,
         category_packages: %{}
       )

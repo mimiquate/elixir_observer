@@ -14,6 +14,7 @@ defmodule ToolboxWeb.CategoryLive do
       assign(
         socket,
         page_title: "#{category.name}",
+        search_term: "",
         category: category,
         packages: packages
       )

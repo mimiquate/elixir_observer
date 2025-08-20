@@ -198,7 +198,7 @@ defmodule ToolboxWeb.SearchLiveTest do
       tesla_package: _tesla_package,
       urban_package: _urban_package
     } do
-      {:ok, _view, html} = live(build_conn(), "/searches/an")
+      {:ok, _view, html} = live(build_conn(), "/searches/ban")
 
       # Should show correct total count in title
       assert html =~ "2 packages found"

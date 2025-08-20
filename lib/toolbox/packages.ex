@@ -1,5 +1,5 @@
 defmodule Toolbox.Packages do
-  alias Toolbox.{GithubSnapshot, HexpmSnapshot, Package, Repo, Category}
+  alias Toolbox.{GithubSnapshot, HexpmSnapshot, Package, Repo, Category, PackageEmbedding}
 
   require Logger
 
@@ -24,6 +24,16 @@ defmodule Toolbox.Packages do
 
   def list_packages_names do
     from(p in Package, select: p.name)
+    |> Repo.all()
+  end
+
+  def list_packages_names_with_no_embedding do
+    from(p in Package,
+      left_join: e in PackageEmbedding,
+      on: p.id == e.package_id,
+      where: is_nil(e.package_id),
+      select: p.name
+    )
     |> Repo.all()
   end
 
@@ -106,34 +116,6 @@ defmodule Toolbox.Packages do
       select: p.id
     )
     |> Repo.all()
-  end
-
-  def search(term) do
-    limit = 50
-    like_term = "%#{term}%"
-    downcase_term = String.downcase(term)
-
-    {packages, rest} =
-      from(
-        p in Package,
-        where: ilike(p.name, ^like_term) or ilike(p.description, ^like_term),
-        join: s in subquery(latest_hexpm_snaphost_query()),
-        on: s.package_id == p.id,
-        preload: [
-          latest_hexpm_snapshot: ^latest_hexpm_snaphost_query(),
-          latest_github_snapshot: ^latest_github_snaphost_query()
-        ],
-        order_by: [
-          asc: fragment("CASE WHEN LOWER(?) = ? THEN 0 ELSE 1 END", p.name, ^downcase_term),
-          desc_nulls_last: s.recent_downloads
-        ],
-        # TODO: Rework limit once we implement search result page pagination
-        limit: ^limit + 1
-      )
-      |> Repo.all()
-      |> Enum.split(limit)
-
-    {packages, length(rest) > 0}
   end
 
   def get_package_by_name(name) do
@@ -223,6 +205,19 @@ defmodule Toolbox.Packages do
       s -> s
     end
     |> GithubSnapshot.changeset(attributes)
+    |> Repo.insert_or_update()
+  end
+
+  def upsert_package_embeddings(attributes \\ %{}) do
+    from(s in PackageEmbedding,
+      where: s.package_id == ^attributes.package_id
+    )
+    |> Repo.one()
+    |> case do
+      nil -> %PackageEmbedding{}
+      s -> s
+    end
+    |> PackageEmbedding.changeset(attributes)
     |> Repo.insert_or_update()
   end
 

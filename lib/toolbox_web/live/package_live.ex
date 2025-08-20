@@ -81,6 +81,7 @@ defmodule ToolboxWeb.PackageLive do
       assign(
         socket,
         page_title: package.name,
+        search_term: "",
         related_packages: related_packages,
         related_packages_count: related_packages_count,
         package: %{
