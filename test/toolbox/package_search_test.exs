@@ -153,4 +153,3 @@ defmodule Toolbox.PackageSearchTest do
     end
   end
 end
-

@@ -167,7 +167,6 @@ defmodule Toolbox.PackageSearch do
     |> Pgvector.new()
   end
 
-
   defp latest_hexpm_snaphost_query do
     from(h in HexpmSnapshot.Latest)
   end
