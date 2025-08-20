@@ -118,7 +118,59 @@ defmodule Toolbox.Packages do
     |> Repo.all()
   end
 
-  def search(term) do
+  def search(full_term) do
+    attrs = ~r/(?<type>\w+):(?<value>\w+)/
+    kv = Regex.scan(attrs, full_term)
+         |> Enum.map(fn [_full, key, value] -> %{key => value} end)
+         |> Enum.reduce(%{}, &Map.merge/2)
+
+    term = String.replace(full_term, attrs, "")
+           |> String.trim()
+           |> String.replace(~r/\s+/, " ")
+
+    {packages, rest} = if String.length(term) < 3 do
+      {[], false}
+    else
+      if kv["type"] == "semantic" do
+        embedding_search(term)
+      else
+        keyword_search(term)
+      end
+    end
+
+    {full_term, kv, term, packages, rest}
+  end
+
+  def embedding_search(term) do
+    limit = 50
+    downcase_term = String.downcase(term)
+    vector = embedding_from_term(term)
+
+    {packages, rest} =
+      from(p in Package,
+        join: e in PackageEmbedding,
+        on: e.package_id == p.id,
+        join: s in subquery(latest_hexpm_snaphost_query()),
+        on: s.package_id == p.id,
+        where: l2_distance(e.embedding, ^vector) < 0.4,
+        preload: [
+          latest_hexpm_snapshot: ^latest_hexpm_snaphost_query(),
+          latest_github_snapshot: ^latest_github_snaphost_query()
+        ],
+        order_by: [
+          asc: fragment("CASE WHEN LOWER(?) = ? THEN 0 ELSE 1 END", p.name, ^downcase_term),
+           desc_nulls_last: s.recent_downloads
+        ],
+        # TODO: Rework limit once we implement search result page pagination
+        limit: ^limit + 1
+      )
+      |> Repo.all()
+      |> Enum.split(limit)
+
+    {packages, length(rest) > 0}
+  end
+
+  def keyword_search(term) do
     limit = 50
     like_term = "%#{term}%"
     downcase_term = String.downcase(term)
@@ -144,6 +196,13 @@ defmodule Toolbox.Packages do
       |> Enum.split(limit)
 
     {packages, length(rest) > 0}
+  end
+
+  @decorate cacheable(key: {:embedding, term}, opts: [ttl: :timer.hours(240)])
+  def embedding_from_term(term) do
+    term
+    |> Toolbox.Tasks.Embedding.calculate_query()
+    |> Pgvector.new()
   end
 
   def get_package_by_name(name) do

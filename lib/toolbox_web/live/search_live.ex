@@ -14,12 +14,13 @@ defmodule ToolboxWeb.SearchLive do
       }
     )
 
-    {results, more?} = Packages.search(term)
+    {full_term, _kv, term, results, more?} = Packages.search(term)
 
     {
       :ok,
       assign(
         socket,
+        search_term: full_term,
         term: term,
         page_title: "\"#{term}\"",
         results: results,

@@ -4,13 +4,14 @@ defmodule ToolboxWeb.SearchFieldComponent do
 
   attr :class, :string, default: ""
   attr :autofocus, :boolean, default: false
+  attr :search_term, :string, default: ""
+
 
   def mount(socket) do
     {:ok,
      assign(socket,
        results: [],
-       show_dropdown: false,
-       search_term: ""
+       show_dropdown: false
      )}
   end
 
@@ -20,6 +21,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
       assigns
       |> Map.put_new(:class, "")
       |> Map.put_new(:autofocus, false)
+      |> Map.put_new(:search_term, "")
 
     {:ok, assign(socket, assigns)}
   end
@@ -119,7 +121,9 @@ defmodule ToolboxWeb.SearchFieldComponent do
 
     {results, _} =
       if String.length(term) >= 2 do
-        Packages.search(term)
+        {_, _, _, results, more} = Packages.search(term)
+
+        {results, more}
       else
         {[], nil}
       end
