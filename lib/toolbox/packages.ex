@@ -28,6 +28,15 @@ defmodule Toolbox.Packages do
     |> Repo.all()
   end
 
+  def list_packages_names_with_no_embedding do
+    from(p in Package,
+      left_join: e in PackageEmbedding, on: p.id == e.package_id,
+      where: is_nil(e.package_id),
+      select: p.name
+    )
+    |> Repo.all()
+  end
+
   def list_packages_names_with_no_category do
     categories = Category.all()
 
