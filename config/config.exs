@@ -56,8 +56,8 @@ config :logger, :default_formatter,
 config :phoenix, :json_library, Jason
 
 config :toolbox, Toolbox.Cache,
-  # Max memory size in bytes (e.g., 50MB)
-  allocated_memory: 50_000_000
+  # Max memory size in bytes (e.g., 100MB)
+  allocated_memory: 100_000_000
 
 config :toolbox, Oban,
   engine: Oban.Engines.Basic,
