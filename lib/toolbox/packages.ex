@@ -1,9 +1,10 @@
 defmodule Toolbox.Packages do
-  alias Toolbox.{GithubSnapshot, HexpmSnapshot, Package, Repo, Category}
+  alias Toolbox.{GithubSnapshot, HexpmSnapshot, Package, Repo, Category, PackageEmbedding}
 
   require Logger
 
   import Ecto.Query
+  import Pgvector.Ecto.Query
 
   use Nebulex.Caching, cache: Toolbox.Cache
 
@@ -223,6 +224,19 @@ defmodule Toolbox.Packages do
       s -> s
     end
     |> GithubSnapshot.changeset(attributes)
+    |> Repo.insert_or_update()
+  end
+
+  def upsert_package_embeddings(attributes \\ %{}) do
+    from(s in PackageEmbedding,
+      where: s.package_id == ^attributes.package_id
+    )
+    |> Repo.one()
+    |> case do
+      nil -> %PackageEmbedding{}
+      s -> s
+    end
+    |> PackageEmbedding.changeset(attributes)
     |> Repo.insert_or_update()
   end
 
