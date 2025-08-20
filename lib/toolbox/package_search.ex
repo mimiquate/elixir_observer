@@ -21,12 +21,6 @@ defmodule Toolbox.PackageSearch do
 
   defstruct [:original_term, :filters, :clean_term]
 
-  @type t :: %__MODULE__{
-          original_term: String.t(),
-          filters: %{String.t() => String.t()},
-          clean_term: String.t()
-        }
-
   @doc """
   Parses a search term into a PackageSearch struct.
 
@@ -39,7 +33,6 @@ defmodule Toolbox.PackageSearch do
         clean_term: "phoenix"
       }
   """
-  @spec parse(String.t()) :: t()
   def parse(term) do
     filters = parse_filters(term)
     clean_term = clean_search_term(term)
@@ -71,7 +64,6 @@ defmodule Toolbox.PackageSearch do
       iex> PackageSearch.executable?(search)
       false
   """
-  @spec executable?(t()) :: boolean()
   def executable?(%__MODULE__{clean_term: clean_term}) do
     String.length(clean_term) >= @min_search_length
   end
@@ -87,7 +79,6 @@ defmodule Toolbox.PackageSearch do
       iex> {packages, has_more?} = PackageSearch.execute(search)
       {[...], false}
   """
-  @spec execute(t()) :: {list(Package.t()), boolean()}
   def execute(%__MODULE__{} = parsed_search) do
     if semantic?(parsed_search) do
       embedding_search(parsed_search.clean_term)
@@ -98,26 +89,22 @@ defmodule Toolbox.PackageSearch do
 
   # Private functions
 
-  @spec parse_filters(String.t()) :: %{String.t() => String.t()}
   defp parse_filters(full_term) do
     Regex.scan(@filter_regex, full_term)
     |> Enum.map(fn [_full, key, value] -> %{key => value} end)
     |> Enum.reduce(%{}, &Map.merge/2)
   end
 
-  @spec clean_search_term(String.t()) :: String.t()
   defp clean_search_term(full_term) do
     String.replace(full_term, @filter_regex, "")
     |> String.trim()
     |> String.replace(~r/\s+/, " ")
   end
 
-  @spec semantic?(t()) :: boolean()
   defp semantic?(%__MODULE__{filters: filters}) do
     filters["type"] == "semantic"
   end
 
-  @spec embedding_search(String.t()) :: {list(Package.t()), boolean()}
   defp embedding_search(term) do
     limit = 50
     downcase_term = String.downcase(term)
@@ -146,7 +133,6 @@ defmodule Toolbox.PackageSearch do
     {packages, length(rest) > 0}
   end
 
-  @spec keyword_search(String.t()) :: {list(Package.t()), boolean()}
   defp keyword_search(term) do
     limit = 50
     like_term = "%#{term}%"
@@ -180,6 +166,7 @@ defmodule Toolbox.PackageSearch do
     |> Toolbox.Tasks.Embedding.calculate_query()
     |> Pgvector.new()
   end
+
 
   defp latest_hexpm_snaphost_query do
     from(h in HexpmSnapshot.Latest)
