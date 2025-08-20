@@ -144,27 +144,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
   end
 
   def handle_event("typeahead_search", %{"term" => term}, socket) do
-    term = String.trim(term)
-
-    %{clean_term: clean_term} = parsed_search = Toolbox.PackageSearch.parse(term)
-
-    {results, _has_more?} =
-      if Toolbox.PackageSearch.executable?(parsed_search) do
-        Toolbox.PackageSearch.execute(parsed_search)
-      else
-        {[], false}
-      end
-
-    # Only show dropdown if we have a valid search term after removing filter patterns
-    # The backend requires at least 3 characters in the clean term for actual search
-    show_dropdown = String.length(clean_term) >= 3
-
-    {:noreply,
-     assign(socket,
-       results: results,
-       show_dropdown: show_dropdown,
-       search_term: term
-     )}
+    do_search(socket, term)
   end
 
   def handle_event("handle_keydown", %{"key" => "Escape"}, socket) do
@@ -189,20 +169,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
   end
 
   def handle_event("handle_focus", _params, socket) do
-    # Use the same logic as typeahead_search to determine if we should show dropdown
-    %{clean_term: clean_term} =
-      parsed_search = Toolbox.PackageSearch.parse(socket.assigns.search_term)
-
-    {_results, _has_more?} =
-      if Toolbox.PackageSearch.executable?(parsed_search) do
-        Toolbox.PackageSearch.execute(parsed_search)
-      else
-        {[], false}
-      end
-
-    show_dropdown = String.length(clean_term) >= 3
-
-    {:noreply, assign(socket, focused: true, show_dropdown: show_dropdown)}
+    do_search(socket, socket.assigns.search_term)
   end
 
   def handle_event("handle_blur", _params, socket) do
@@ -224,5 +191,29 @@ defmodule ToolboxWeb.SearchFieldComponent do
     show_dropdown = String.length(clean_term) >= 3
 
     {:noreply, assign(socket, show_dropdown: show_dropdown)}
+  end
+
+  defp do_search(socket, term) do
+    term = String.trim(term)
+
+    %{clean_term: clean_term} = parsed_search = Toolbox.PackageSearch.parse(term)
+
+    {results, _has_more?} =
+      if Toolbox.PackageSearch.executable?(parsed_search) do
+        Toolbox.PackageSearch.execute(parsed_search)
+      else
+        {[], false}
+      end
+
+    # Only show dropdown if we have a valid search term after removing filter patterns
+    # The backend requires at least 3 characters in the clean term for actual search
+    show_dropdown = String.length(clean_term) >= 3
+
+    {:noreply,
+     assign(socket,
+       results: results,
+       show_dropdown: show_dropdown,
+       search_term: term
+     )}
   end
 end
