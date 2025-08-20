@@ -48,27 +48,40 @@ Hooks.SearchHighlight = {
 
   updateHighlight() {
     const text = this.input.value || ''
-    const regex = /^(.*)(\w+):(\S+)(.*)$/
-    const match = text.match(regex)
+    const tagRegex = /(\w+):(\S+)/g
+    const matches = [...text.matchAll(tagRegex)]
 
-    // Get computed text color from input for normal text
-    const inputStyles = window.getComputedStyle(this.input)
-    const textColor = inputStyles.color
+    if (matches.length > 0) {
+      let highlightedText = ''
+      let lastIndex = 0
 
-    if (match) {
-      const [, prefix, key, value, suffix] = match
-      // Show all text, but highlight only the value part
-      this.highlight.innerHTML = `
-        <span class="text-primary-text">
-          ${this.escapeHtml(prefix)}${this.escapeHtml(key)}:
-        </span>
-        <span class="bg-accent/10 text-accent">
-          ${this.escapeHtml(value)}
-        </span>
-        <span class="text-primary-text ml-1">
-          ${this.escapeHtml(suffix)}
-        </span>
-      `
+      matches.forEach((match, index) => {
+        const [fullMatch, key, value] = match
+        const matchStart = match.index
+        const matchEnd = matchStart + fullMatch.length
+        const noFilterText = this.escapeHtml(text.slice(lastIndex, matchStart));
+
+        // Add text before this match
+        if (noFilterText.trim()) {
+          highlightedText += `<span class="text-primary-text ${index > 0 ? "ml-1" : ""}">${noFilterText}</span>`
+        }
+        // Add the key part (not highlighted)
+        highlightedText += `<span class="text-primary-text ${matchStart > 0 ? "ml-1" : ""}">${this.escapeHtml(key)}:</span>`
+        // Add the value part (highlighted)
+        highlightedText += `<span class="bg-accent/10 text-accent">${this.escapeHtml(value)}</span>`
+
+
+        console.log(highlightedText, "af highlightedText")
+
+        lastIndex = matchEnd
+      })
+
+      // Add remaining text after the last match
+      if (lastIndex < text.length) {
+        highlightedText += `<span class="text-primary-text ml-1">${this.escapeHtml(text.slice(lastIndex))}</span>`
+      }
+
+      this.highlight.innerHTML = highlightedText
     } else {
       // Show all text normally when no highlighting needed
       this.highlight.innerHTML = `<span class="text-primary-text">${this.escapeHtml(text)}</span>`

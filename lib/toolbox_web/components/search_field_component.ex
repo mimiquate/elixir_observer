@@ -169,7 +169,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
   end
 
   def handle_event("handle_focus", _params, socket) do
-    do_search(socket, socket.assigns.search_term)
+    do_search(socket, socket.assigns.search_term, %{focused: true})
   end
 
   def handle_event("handle_blur", _params, socket) do
@@ -193,7 +193,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
     {:noreply, assign(socket, show_dropdown: show_dropdown)}
   end
 
-  defp do_search(socket, term) do
+  defp do_search(socket, term, options \\ %{}) do
     term = String.trim(term)
 
     %{clean_term: clean_term} = parsed_search = Toolbox.PackageSearch.parse(term)
@@ -213,7 +213,8 @@ defmodule ToolboxWeb.SearchFieldComponent do
      assign(socket,
        results: results,
        show_dropdown: show_dropdown,
-       search_term: term
+       search_term: term,
+       focused: Map.get(options, :focused, false)
      )}
   end
 end
