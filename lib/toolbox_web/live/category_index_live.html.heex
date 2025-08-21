@@ -20,7 +20,7 @@
 
           <.link
             navigate={~p"/categories/#{category.permalink}"}
-            class="text-[16px] leading-none text-primary-text font-medium hover:underline sm:text-[24px] "
+            class="text-[16px] leading-none text-primary-text font-medium hover:text-accent sm:text-[24px]"
           >
             {category.name}
           </.link>
@@ -57,7 +57,7 @@
             <div class="w-full sm:w-fit">
               <.link
                 navigate={~p"/packages/#{package.name}"}
-                class="text-[14px] sm:text-[16px]"
+                class="text-[14px] sm:text-[16px] hover:underline"
                 {test_attrs(package_link: package.name)}
               >
                 {package.name}
