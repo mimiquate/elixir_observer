@@ -293,7 +293,10 @@
                 :for={%{name: name, requirement: requirement} <- @version.required}
                 class="pt-1 pb-1 sm:mt-3 px-3 border-b border-divider last:pb-0 last:border-0"
               >
-                <.link navigate={~p"/packages/#{name}"} class="text-primary-text sm:text-[18px]">
+                <.link
+                  navigate={~p"/packages/#{name}"}
+                  class="text-primary-text sm:text-[18px] hover:underline"
+                >
                   {name}
                 </.link>
                 <span class="text-[14px] mt-1 sm:text-[16px] text-secondary-text">
@@ -433,7 +436,7 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <%= for package <- @related_packages do %>
           <.link
-            class="bg-surface rounded-md p-3 border border-stroke"
+            class="bg-surface rounded-md p-3 border border-stroke hover:underline"
             href={~p"/packages/#{package.name}"}
           >
             <div class="flex items-center mb-2">
