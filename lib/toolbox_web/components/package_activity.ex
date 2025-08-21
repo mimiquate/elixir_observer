@@ -100,7 +100,7 @@ defmodule ToolboxWeb.Components.PackageActivity do
                   <li class="py-2 last:pb-0" {test_attrs(pr_item: pr.permalink)}>
                     <.link href={pr.permalink} target="_blank" {test_attrs(pr_link: true)}>
                       <h4
-                        class="text-[14px] text-primary-text sm:text-[16px] line-clamp-2 overflow-hidden"
+                        class="text-[14px] text-primary-text sm:text-[16px] line-clamp-2 overflow-hidden hover:underline"
                         {test_attrs(pr_title: true)}
                       >
                         {pr.title}
@@ -112,9 +112,14 @@ defmodule ToolboxWeb.Components.PackageActivity do
                         src={pr.merged_by_avatar_url}
                         {test_attrs(pr_avatar: true)}
                       />
-                      <span class="text-[14px] ml-2" {test_attrs(pr_author: true)}>
+                      <.link
+                        href={"https://github.com/#{pr.merged_by_login}"}
+                        target="_blank"
+                        class="text-[14px] ml-2 hover:underline"
+                        {test_attrs(pr_author: true)}
+                      >
                         {pr.merged_by_login}
-                      </span>
+                      </.link>
                       <% {merged_at_number, merged_at_relative_label} =
                         relative_datetime(pr.merged_at) %>
                       <span
