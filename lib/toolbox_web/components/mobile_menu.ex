@@ -45,7 +45,7 @@ defmodule ToolboxWeb.Components.MobileMenu do
                 <.link
                   navigate={~p"/categories"}
                   class={[
-                    "block text-[20px] font-medium text-accent dark:text-primary-text transition-all duration-300 ease-out delay-200",
+                    "block text-[20px] font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline transition-all duration-300 ease-out delay-200",
                     (@show && "translate-y-0 opacity-100") || "translate-y-4 opacity-0"
                   ]}
                   phx-click="toggle_mobile_menu"
@@ -56,7 +56,7 @@ defmodule ToolboxWeb.Components.MobileMenu do
                 <.link
                   navigate={~p"/about"}
                   class={[
-                    "block text-[20px] font-medium text-accent dark:text-primary-text transition-all duration-300 ease-out delay-200",
+                    "block text-[20px] font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline transition-all duration-300 ease-out delay-200",
                     (@show && "translate-y-0 opacity-100") || "translate-y-4 opacity-0"
                   ]}
                   phx-click="toggle_mobile_menu"
@@ -69,7 +69,7 @@ defmodule ToolboxWeb.Components.MobileMenu do
                   href="https://github.com/mimiquate/elixir_observer"
                   target="_blank"
                   class={[
-                    "block text-[20px] font-medium text-accent dark:text-primary-text transition-all duration-300 ease-out delay-300",
+                    "block text-[20px] font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline transition-all duration-300 ease-out delay-200",
                     (@show && "translate-y-0 opacity-100") || "translate-y-4 opacity-0"
                   ]}
                   phx-click="toggle_mobile_menu"

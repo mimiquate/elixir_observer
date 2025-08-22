@@ -11,7 +11,11 @@ defmodule ToolboxWeb.Components.PackageLink do
 
   def package_link(%{href: href} = assigns) when is_binary(href) do
     ~H"""
-    <.link class="flex items-center text-[14px] text-primary-text py-2" href={@href} target="_blank">
+    <.link
+      class="flex items-center text-[14px] text-primary-text py-2 hover:underline"
+      href={@href}
+      target="_blank"
+    >
       {render_slot(@icon)}
       <span class="sm:mt-0 mr-2">{@text}</span>
       <.chevron_icon class="w-5 ml-auto" />
