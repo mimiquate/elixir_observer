@@ -59,7 +59,7 @@ defmodule ToolboxWeb.PackageLive do
 
     if connected?(socket) do
       Phoenix.PubSub.subscribe(Toolbox.PubSub, "package_live:#{name}")
-      update_owners_if_oudated(package)
+      update_owners_if_outdated(package)
       update_latest_stable_version_data_if_outdated(package)
       update_activity_if_outdated(package, github.sync_at)
     end
@@ -165,7 +165,7 @@ defmodule ToolboxWeb.PackageLive do
     {:noreply, assign(socket, package: p)}
   end
 
-  def update_owners_if_oudated(package) do
+  def update_owners_if_outdated(package) do
     sync_at = package.hexpm_owners_sync_at
 
     if !sync_at or DateTime.before?(DateTime.add(sync_at, 7, :day), DateTime.utc_now()) do
