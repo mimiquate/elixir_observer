@@ -5,6 +5,8 @@ defmodule Toolbox.Workers.HexpmWorker do
   def perform(%Oban.Job{meta: %{"cron" => true}}) do
     Toolbox.Tasks.Hexpm.run()
 
+    Toolbox.Packages.refresh_latest_hexpm_snapshots()
+
     :ok
   end
 

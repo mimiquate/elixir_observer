@@ -224,7 +224,16 @@ defmodule Toolbox.Packages do
   def refresh_latest_hexpm_snapshots() do
     Ecto.Adapters.SQL.query!(
       Repo,
-      "REFRESH MATERIALIZED VIEW CONCURRENTLY latest_hexpm_snapshots;"
+      "REFRESH MATERIALIZED VIEW CONCURRENTLY latest_hexpm_snapshots;",
+      [],
+      timeout: 60_000
+    )
+  end
+
+  def skip_refresh_latest_hexpm_snapshots() do
+    Ecto.Adapters.SQL.query!(
+      Repo,
+      "SET LOCAL toolbox.skip_refresh_latest_hexpm_snapshots = 'on'"
     )
   end
 
