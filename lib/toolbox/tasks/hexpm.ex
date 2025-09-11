@@ -23,7 +23,12 @@ defmodule Toolbox.Tasks.Hexpm do
     |> Stream.each(fn packages_data ->
       packages_data
       |> Jason.decode!()
-      |> Enum.each(&create_hexpm_snapshot/1)
+      |> Enum.each(fn p ->
+        Toolbox.Repo.transact(fn ->
+          Toolbox.Packages.skip_refresh_latest_hexpm_snapshots()
+          create_hexpm_snapshot(p)
+        end)
+      end)
     end)
     |> Stream.run()
   end
