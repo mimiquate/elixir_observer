@@ -31,6 +31,8 @@ defmodule Toolbox.Tasks.Hexpm do
       end)
     end)
     |> Stream.run()
+
+    Toolbox.Packages.refresh_latest_hexpm_snapshots()
   end
 
   def run(names) when is_list(names) do
