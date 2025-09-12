@@ -4,7 +4,7 @@ defmodule Toolbox.Hexpm do
   use Nebulex.Caching, cache: Toolbox.Cache
 
   def get_page(page) do
-    get("packages?sort=downloads&page=#{page}")
+    get("packages?sort=inserted_at&page=#{page}")
   end
 
   def get_package(name) do
