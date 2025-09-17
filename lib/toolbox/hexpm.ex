@@ -28,6 +28,12 @@ defmodule Toolbox.Hexpm do
     )
   end
 
+  @decorate cacheable(key: {:hexpm_daily, name, version}, opts: [ttl: :timer.hours(24)])
+  def get_daily_downloads(name, version) do
+    a = Date.utc_today() |> Date.add(-90)
+    get("packages/#{name}/releases/#{version}?downloads=day&downloads_after=#{a}")
+  end
+
   @decorate cacheable(key: {:hexpm_version, name, version}, opts: [ttl: :timer.hours(24)])
   def get_package_version(name, version) do
     get("packages/#{name}/releases/#{version}")

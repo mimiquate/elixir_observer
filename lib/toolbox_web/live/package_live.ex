@@ -76,10 +76,9 @@ defmodule ToolboxWeb.PackageLive do
         0
       end
 
-    {
-      :ok,
-      assign(
-        socket,
+    {:ok,
+      socket
+      |> assign(
         page_title: package.name,
         search_term: "",
         related_packages: related_packages,
@@ -106,6 +105,9 @@ defmodule ToolboxWeb.PackageLive do
           github_sync_at: github.sync_at
         }
       )
+      |> assign_async(:all_versions_downloads, fn ->
+        {:ok, %{all_versions_downloads: get_all_versions_downloads(name, hexpm_data["releases"])}}
+      end)
     }
   end
 
@@ -268,5 +270,30 @@ defmodule ToolboxWeb.PackageLive do
 
   defp source_url(name, version) do
     "https://preview.hex.pm/preview/#{name}/#{version}"
+  end
+
+  defp get_all_versions_downloads(package_name, releases) do
+    Enum.map(releases, fn release ->
+      version = release["version"]
+      
+      download_sum = case Toolbox.Hexpm.get_daily_downloads(package_name, version) do
+        {:ok, {{_, 200, _}, _headers, response_body}} ->
+          response_body
+          |> to_string()
+          |> JSON.decode!()
+          |> Map.get("downloads", [])
+          |> Enum.map(fn[_,x] -> x end)
+          |> Enum.sum()
+
+        _ ->
+          0
+      end
+
+      %{
+        version: version,
+        download_sum: download_sum,
+        inserted_at: release["inserted_at"]
+      }
+    end)
   end
 end

@@ -410,6 +410,82 @@
     <% end %>
   </section>
 
+  <section class="sm:mt-8">
+    <div class="flex items-center justify-between mt-8 mb-3 sm:mb-8">
+      <h2 class="text-[20px] text-primary-text sm:text-[32px] font-semibold">
+        All Versions Downloads (Last 90 Days)
+      </h2>
+    </div>
+
+    <div class="bg-surface rounded-md border border-stroke overflow-hidden">
+      <.async_result :let={all_versions_downloads} assign={@all_versions_downloads}>
+        <:loading>
+          <div class="flex items-center justify-center py-12">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-accent"></div>
+            <span class="ml-3 text-secondary-text">Loading download data...</span>
+          </div>
+        </:loading>
+        <:failed :let={_failure}>
+          <div class="flex items-center justify-center py-12">
+            <span class="text-red-500">Failed to load download data</span>
+          </div>
+        </:failed>
+        <table class="w-full">
+          <thead class="bg-surface-alt border-b border-stroke">
+            <tr>
+              <th class="px-4 py-3 text-left text-[14px] font-medium text-secondary-text">Version</th>
+              <th class="px-4 py-3 text-left text-[14px] font-medium text-secondary-text">Downloads (90 days)</th>
+              <th class="px-4 py-3 text-left text-[14px] font-medium text-secondary-text">Released</th>
+            </tr>
+          </thead>
+          <tbody>
+            <%= for {version_data, index} <- Enum.with_index(all_versions_downloads) do %>
+              <tr class={["hover:bg-surface-alt", if(rem(index, 2) == 0, do: "bg-surface", else: "bg-surface-alt")]}>
+                <td class="px-4 py-3">
+                  <.link
+                    navigate={~p"/packages/#{@package.name}/#{version_data.version}"}
+                    class="text-accent hover:underline font-mono text-[14px] sm:text-[16px]"
+                  >
+                    {version_data.version}
+                  </.link>
+                </td>
+                <td class="px-4 py-3">
+                  <span class="text-primary-text text-[14px] sm:text-[16px] font-medium">
+                    {humanized_number(version_data.download_sum)}
+                  </span>
+                </td>
+                <td class="px-4 py-3">
+                  <span class="text-secondary-text text-[14px] sm:text-[16px]">
+                    {humanized_datetime(version_data.inserted_at)}
+                  </span>
+                </td>
+              </tr>
+            <% end %>
+            <% all_versions_sum = Enum.sum(Enum.map(all_versions_downloads, & &1.download_sum)) %>
+            <% other_downloads = @package.recent_downloads - all_versions_sum %>
+            <tr class="border-t-2 border-stroke bg-surface-alt">
+              <td class="px-4 py-3">
+                <span class="text-secondary-text text-[14px] sm:text-[16px] font-medium italic">
+                  Other versions
+                </span>
+              </td>
+              <td class="px-4 py-3">
+                <span class="text-primary-text text-[14px] sm:text-[16px] font-medium">
+                  {humanized_number(other_downloads)}
+                </span>
+              </td>
+              <td class="px-4 py-3">
+                <span class="text-secondary-text text-[14px] sm:text-[16px]">
+                  -
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </.async_result>
+    </div>
+  </section>
+
   <%= if Enum.any?(@related_packages) do %>
     <section class="sm:mt-8">
       <div class="flex flex-wrap items-center mt-8 mb-3 sm:mb-8">
