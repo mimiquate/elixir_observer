@@ -8,6 +8,7 @@ defmodule ToolboxWeb.PackageLive do
   import ToolboxWeb.Components.PackageVersionSelector
   import ToolboxWeb.Components.PackageActivity, only: [package_activity: 1]
   import ToolboxWeb.Components.PackageResource, only: [package_resource: 1]
+  import ToolboxWeb.Components.VersionDistribution, only: [version_distribution: 1]
 
   import ToolboxWeb.Components.Icons.StarIcon
   import ToolboxWeb.Components.Icons.DownloadIcon
@@ -290,10 +291,13 @@ defmodule ToolboxWeb.PackageLive do
           0
       end
 
+      {:ok, dt, _} = DateTime.from_iso8601(release["inserted_at"])
+
+
       %{
         version: version,
         download_sum: download_sum,
-        inserted_at: release["inserted_at"]
+        inserted_at: dt
       }
     end)
   end
