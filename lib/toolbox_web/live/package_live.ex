@@ -291,13 +291,9 @@ defmodule ToolboxWeb.PackageLive do
           0
       end
 
-      {:ok, dt, _} = DateTime.from_iso8601(release["inserted_at"])
-
-
       %{
         version: version,
         download_sum: download_sum,
-        inserted_at: dt
       }
     end)
   end
