@@ -27,7 +27,7 @@ jobs:
           --health-retries 5
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: erlef/setup-beam@v1
       id: beam
       with:
@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-22.04
     concurrency: deploy-group
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: flyctl deploy --remote-only
         env:
