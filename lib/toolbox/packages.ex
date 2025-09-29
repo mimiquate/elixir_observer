@@ -226,7 +226,7 @@ defmodule Toolbox.Packages do
       Repo,
       "REFRESH MATERIALIZED VIEW CONCURRENTLY latest_hexpm_snapshots;",
       [],
-      timeout: 60_000
+      timeout: 600_000
     )
   end
 
