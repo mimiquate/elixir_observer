@@ -53,7 +53,7 @@ defmodule Toolbox.MixProject do
         depth: 1
       },
       {:jason, "~> 1.2"},
-      {:phoenix, "~> 1.7.14"},
+      {:phoenix, "~> 1.8.1"},
       {:phoenix_ecto, "~> 4.5"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_dashboard, "~> 0.8.3"},
