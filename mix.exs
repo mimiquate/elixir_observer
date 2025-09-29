@@ -42,7 +42,7 @@ defmodule Toolbox.MixProject do
       {:dns_cluster, "~> 0.2.0"},
       {:ecto_sql, "~> 3.10"},
       {:esbuild, "~> 0.10.0", runtime: Mix.env() == :dev},
-      {:gettext, "~> 0.20"},
+      {:gettext, "~> 1.0"},
       {
         :heroicons,
         github: "tailwindlabs/heroicons",
