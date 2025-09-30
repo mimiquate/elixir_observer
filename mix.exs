@@ -93,7 +93,9 @@ defmodule Toolbox.MixProject do
       # Test
       {:floki, "~> 0.38.0", only: :test},
       {:wallaby, "~> 0.30.9", runtime: false, only: :test},
-      {:test_server, "~> 0.1.20", only: [:test]}
+      {:test_server, "~> 0.1.20", only: :test},
+      # Needed by Phoenix.LiveViewTest
+      {:lazy_html, "~> 0.1.0", only: :test}
     ]
   end
 
