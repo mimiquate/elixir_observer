@@ -108,7 +108,7 @@ defmodule ToolboxWeb.SearchLiveTest do
       {:ok, view, html} = live(build_conn(), "/searches/ban")
 
       # Should NOT have exact matches section since "ban" doesn't exactly match any package
-      refute has_element?(view, "[data-test-exact-match=*]")
+      refute has_element?(view, "[data-test-exact-match]")
 
       # Should show correct count
       assert html =~ "2 packages found"
@@ -171,7 +171,7 @@ defmodule ToolboxWeb.SearchLiveTest do
       {:ok, view, _html} = live(build_conn(), "/searches/ban")
 
       # There is no exact match
-      refute has_element?(view, "[data-test-exact-match=*]")
+      refute has_element?(view, "[data-test-exact-match]")
     end
 
     test "package links navigate to correct package pages", %{
