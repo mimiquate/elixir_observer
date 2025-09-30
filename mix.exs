@@ -75,7 +75,7 @@ defmodule Toolbox.MixProject do
       {:opentelemetry, "~> 1.3"},
       {:opentelemetry_api, "~> 1.2"},
       {:opentelemetry_exporter, "~> 1.6"},
-      {:opentelemetry_bandit, "~> 0.2.0"},
+      {:opentelemetry_bandit, "~> 0.3.0"},
       {:opentelemetry_phoenix, "~> 2.0"},
       {:opentelemetry_ecto, "~> 1.2"},
       # XXX https://github.com/open-telemetry/opentelemetry-erlang-contrib/pull/436
