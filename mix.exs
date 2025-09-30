@@ -82,7 +82,7 @@ defmodule Toolbox.MixProject do
       {:opentelemetry_semantic_conventions, "~> 1.27", override: true},
 
       # Dev and Prod
-      {:tower_rollbar, "~> 0.6.3", only: [:dev, :prod]},
+      {:tower_rollbar, "~> 0.6.4", only: [:dev, :prod]},
       {:tower_slack, "~> 0.6.0", only: [:dev, :prod]},
 
       # Dev
