@@ -100,54 +100,54 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
   describe "SearchFieldComponent rendering" do
     test "renders search field with placeholder" do
       html = render_component(SearchFieldComponent, %{id: "test-search"})
-      doc = Floki.parse_document!(html)
+      doc = LazyHTML.from_document(html)
 
       # Check search container exists
-      search_container = Floki.find(doc, "[data-test-search-container]")
-      assert length(search_container) == 1
+      search_container = LazyHTML.query(doc, "[data-test-search-container]")
+      assert node_count(search_container) == 1
 
       # Check search form exists
-      search_form = Floki.find(doc, "[data-test-search-form]")
-      assert length(search_form) == 1
+      search_form = LazyHTML.query(doc, "[data-test-search-form]")
+      assert node_count(search_form) == 1
 
       # Check search input with placeholder
-      search_input = Floki.find(doc, "[data-test-search-input]")
-      assert length(search_input) == 1
-      assert Floki.attribute(search_input, "placeholder") == ["Find packages"]
-      assert Floki.attribute(search_input, "name") == ["term"]
+      search_input = LazyHTML.query(doc, "[data-test-search-input]")
+      assert node_count(search_input) == 1
+      assert LazyHTML.attribute(search_input, "placeholder") == ["Find packages"]
+      assert LazyHTML.attribute(search_input, "name") == ["term"]
 
       # Check search button exists
-      search_button = Floki.find(doc, "[data-test-search-button]")
-      assert length(search_button) == 1
+      search_button = LazyHTML.query(doc, "[data-test-search-button]")
+      assert node_count(search_button) == 1
     end
 
     test "component handles autofocus attribute" do
       html = render_component(SearchFieldComponent, %{id: "test-search", autofocus: true})
-      doc = Floki.parse_document!(html)
+      doc = LazyHTML.from_document(html)
 
-      search_input = Floki.find(doc, "[data-test-search-input]")
-      assert length(search_input) == 1
-      assert Floki.attribute(search_input, "autofocus") == ["autofocus"]
+      search_input = LazyHTML.query(doc, "[data-test-search-input]")
+      assert node_count(search_input) == 1
+      assert [_] = LazyHTML.attribute(search_input, "autofocus")
     end
 
     test "component handles class attribute" do
       html = render_component(SearchFieldComponent, %{id: "test-search", class: "custom-class"})
-      doc = Floki.parse_document!(html)
+      doc = LazyHTML.from_document(html)
 
-      search_form = Floki.find(doc, "[data-test-search-form]")
-      assert length(search_form) == 1
+      search_form = LazyHTML.query(doc, "[data-test-search-form]")
+      assert node_count(search_form) == 1
 
-      form_class = Floki.attribute(search_form, "class") |> List.first()
+      form_class = LazyHTML.attribute(search_form, "class") |> List.first()
       assert String.contains?(form_class, "custom-class")
     end
 
     test "initially shows no dropdown" do
       html = render_component(SearchFieldComponent, %{id: "test-search"})
-      doc = Floki.parse_document!(html)
+      doc = LazyHTML.from_document(html)
 
       # Should not have dropdown element
-      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
-      assert length(dropdown) == 0
+      dropdown = LazyHTML.query(doc, "[data-test-search-dropdown]")
+      assert node_count(dropdown) == 0
     end
   end
 
@@ -167,31 +167,31 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
 
       # Get the updated HTML and parse it
       html = render(view)
-      doc = Floki.parse_document!(html)
+      doc = LazyHTML.from_document(html)
 
       # Should show dropdown with results
-      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
-      assert length(dropdown) == 1
+      dropdown = LazyHTML.query(doc, "[data-test-search-dropdown]")
+      assert node_count(dropdown) == 1
 
       # Should have results list (either exact matches or other results)
-      results_lists = Floki.find(doc, "[data-test-results-list]")
+      results_lists = LazyHTML.query(doc, "[data-test-results-list]")
 
-      assert length(results_lists) == 1
+      assert node_count(results_lists) == 1
 
       # Check if we have result items
-      result_items = Floki.find(doc, "[data-test-search-result-item]")
-      assert length(result_items) > 0
+      result_items = LazyHTML.query(doc, "[data-test-search-result-item]")
+      assert node_count(result_items) > 0
 
       # Check if bandit package is in results
-      bandit_item = Floki.find(doc, "[data-test-search-result-item='bandit']")
-      assert length(bandit_item) == 1
+      bandit_item = LazyHTML.query(doc, "[data-test-search-result-item='bandit']")
+      assert node_count(bandit_item) == 1
 
       # Check package name is displayed
-      package_names = Floki.find(doc, "[data-test-package-name]")
+      package_names = LazyHTML.query(doc, "[data-test-package-name]")
 
       package_name_texts =
         Enum.map(package_names, fn element ->
-          element |> Floki.text() |> String.trim()
+          element |> LazyHTML.text() |> String.trim()
         end)
 
       assert "bandit" in package_name_texts
@@ -212,16 +212,16 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
 
       # Get the updated HTML and parse it
       html = render(view)
-      doc = Floki.parse_document!(html)
+      doc = LazyHTML.from_document(html)
 
       # Should show dropdown
-      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
-      assert length(dropdown) == 1
+      dropdown = LazyHTML.query(doc, "[data-test-search-dropdown]")
+      assert node_count(dropdown) == 1
 
       # Should have bandit in exact matches
-      exact_match_items = Floki.find(doc, "[data-test-exact-match='bandit']")
+      exact_match_items = LazyHTML.query(doc, "[data-test-exact-match='bandit']")
 
-      assert length(exact_match_items) == 1
+      assert node_count(exact_match_items) == 1
     end
 
     test "exact match is case insensitive", %{
@@ -239,16 +239,16 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
 
       # Get the updated HTML and parse it
       html = render(view)
-      doc = Floki.parse_document!(html)
+      doc = LazyHTML.from_document(html)
 
       # Should show dropdown
-      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
-      assert length(dropdown) == 1
+      dropdown = LazyHTML.query(doc, "[data-test-search-dropdown]")
+      assert node_count(dropdown) == 1
 
       # Should have bandit in exact matches
-      exact_match_items = Floki.find(doc, "[data-test-exact-match='bandit']")
+      exact_match_items = LazyHTML.query(doc, "[data-test-exact-match='bandit']")
 
-      assert length(exact_match_items) == 1
+      assert node_count(exact_match_items) == 1
     end
 
     test "shows 'No results' when search term has no matches" do
@@ -261,16 +261,16 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
 
       # Get the updated HTML and parse it
       html = render(view)
-      doc = Floki.parse_document!(html)
+      doc = LazyHTML.from_document(html)
 
       # Should show dropdown
-      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
-      assert length(dropdown) == 1
+      dropdown = LazyHTML.query(doc, "[data-test-search-dropdown]")
+      assert node_count(dropdown) == 1
 
       # Should show no results message
-      no_results = Floki.find(doc, "[data-test-no-results-message]")
-      assert length(no_results) == 1
-      assert Floki.text(no_results) =~ "No results for \"nonexistentpackage\""
+      no_results = LazyHTML.query(doc, "[data-test-no-results-message]")
+      assert node_count(no_results) == 1
+      assert LazyHTML.text(no_results) =~ "No results for \"nonexistentpackage\""
     end
 
     test "doesn't show dropdown for search terms shorter than 2 characters" do
@@ -283,11 +283,11 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
 
       # Get the updated HTML and parse it
       html = render(view)
-      doc = Floki.parse_document!(html)
+      doc = LazyHTML.from_document(html)
 
       # Should not show dropdown
-      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
-      assert length(dropdown) == 0
+      dropdown = LazyHTML.query(doc, "[data-test-search-dropdown]")
+      assert node_count(dropdown) == 0
     end
 
     test "hides dropdown when search term is cleared" do
@@ -300,9 +300,9 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
 
       # Verify dropdown is shown
       html = render(view)
-      doc = Floki.parse_document!(html)
-      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
-      assert length(dropdown) == 1
+      doc = LazyHTML.from_document(html)
+      dropdown = LazyHTML.query(doc, "[data-test-search-dropdown]")
+      assert node_count(dropdown) == 1
 
       # Clear the search term
       view
@@ -311,9 +311,9 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
 
       # Verify dropdown is hidden
       html = render(view)
-      doc = Floki.parse_document!(html)
-      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
-      assert length(dropdown) == 0
+      doc = LazyHTML.from_document(html)
+      dropdown = LazyHTML.query(doc, "[data-test-search-dropdown]")
+      assert node_count(dropdown) == 0
     end
   end
 
@@ -333,9 +333,9 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
 
       # Verify dropdown is shown
       html = render(view)
-      doc = Floki.parse_document!(html)
-      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
-      assert length(dropdown) == 1
+      doc = LazyHTML.from_document(html)
+      dropdown = LazyHTML.query(doc, "[data-test-search-dropdown]")
+      assert node_count(dropdown) == 1
 
       # Click on the bandit package
       view
@@ -360,9 +360,9 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
 
       # Verify dropdown is shown
       html = render(view)
-      doc = Floki.parse_document!(html)
-      dropdown = Floki.find(doc, "[data-test-search-dropdown]")
-      assert length(dropdown) == 1
+      doc = LazyHTML.from_document(html)
+      dropdown = LazyHTML.query(doc, "[data-test-search-dropdown]")
+      assert node_count(dropdown) == 1
 
       # Click on the bandit package
       view
@@ -383,5 +383,11 @@ defmodule ToolboxWeb.SearchFieldComponentTest do
       # Should redirect to search page
       assert_redirect(view, "/searches/bandit")
     end
+  end
+
+  defp node_count(lazy_html) do
+    lazy_html
+    |> LazyHTML.to_tree()
+    |> length()
   end
 end
