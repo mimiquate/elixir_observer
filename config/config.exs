@@ -27,7 +27,7 @@ config :toolbox, ToolboxWeb.Endpoint,
 
 # Configure esbuild (the version is required)
 config :esbuild,
-  version: "0.25.2",
+  version: "0.25.10",
   toolbox: [
     args:
       ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
