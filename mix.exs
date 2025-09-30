@@ -93,7 +93,6 @@ defmodule Toolbox.MixProject do
       {:live_debugger, "~> 0.3.1", only: :dev},
 
       # Test
-      {:floki, "~> 0.38.0", only: :test},
       {:wallaby, "~> 0.30.9", runtime: false, only: :test},
       {:test_server, "~> 0.1.20", only: :test},
       # Needed by Phoenix.LiveViewTest
