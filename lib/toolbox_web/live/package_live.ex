@@ -217,11 +217,9 @@ defmodule ToolboxWeb.PackageLive do
 
   defp version(%{name: name}, version) do
     case Toolbox.Hexpm.get_package_version(name, version) do
-      {:ok, {{_, 200, _}, _headers, version_data}} ->
+      {:ok, %{status: 200, body: version_data}} ->
         attrs =
           version_data
-          |> to_string()
-          |> JSON.decode!()
           |> Toolbox.Package.HexpmVersion.build_version_from_api_response()
 
         {:ok, data} =
@@ -233,7 +231,7 @@ defmodule ToolboxWeb.PackageLive do
 
         data
 
-      {:ok, {{_, status, _}, _headers, _version_data}} when status in [400, 404, 429] ->
+      {:ok, %{status: status}} when status in [400, 404, 429] ->
         Logger.warning("Unable to fetch hexpm version for #{name} version #{version}")
 
         nil
