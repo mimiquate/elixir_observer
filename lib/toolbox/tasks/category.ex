@@ -85,32 +85,16 @@ defmodule Toolbox.Tasks.Category do
       }
     }
 
-    {:ok, {{_, 200, _}, _h, response}} =
-      :httpc.request(
-        :post,
-        {
-          ~c"#{base_url()}/v1beta/models/gemini-2.5-flash:generateContent",
-          [
-            {~c"x-goog-api-key", "#{api_key()}"},
-            {~c"user-agent", "elixir client"}
-          ],
-          ~c"application/json",
-          JSON.encode!(body)
-        },
-        [
-          ssl: [
-            verify: :verify_peer,
-            cacerts: :public_key.cacerts_get(),
-            # Support wildcard certificates
-            customize_hostname_check: [
-              match_fun: :public_key.pkix_verify_hostname_match_fun(:https)
-            ]
-          ]
+    {:ok, response} =
+      Req.post("#{base_url()}/v1beta/models/gemini-2.5-flash:generateContent",
+        headers: [
+          {"x-goog-api-key", "#{api_key()}"},
+          {"user-agent", "elixir client"}
         ],
-        []
+        json: body
       )
 
-    response = response |> to_string() |> JSON.decode!()
+    response = response.body
 
     %{"candidates" => [%{"content" => %{"parts" => [%{"text" => text}]}}]} = response
     json = JSON.decode!(text)
