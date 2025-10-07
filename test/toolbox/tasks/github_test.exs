@@ -18,14 +18,18 @@ defmodule Toolbox.Tasks.GitHubTest do
 
       TestServer.add("/repos/owner/test_package",
         to: fn conn ->
-          Plug.Conn.send_resp(conn, 200, ~s({"id": 123}))
+          conn
+          |> Plug.Conn.put_resp_header("content-type", "application/json")
+          |> Plug.Conn.send_resp(200, ~s({"id": 123}))
         end
       )
 
       TestServer.add("/graphql",
         via: :post,
         to: fn conn ->
-          Plug.Conn.send_resp(conn, 200, ~s({
+          conn
+          |> Plug.Conn.put_resp_header("content-type", "application/json")
+          |> Plug.Conn.send_resp(200, ~s({
             "data": {
               "openIssueCount": {"issueCount": 1},
               "closedIssueCount": {"issueCount": 45},
