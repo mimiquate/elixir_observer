@@ -44,7 +44,6 @@ defmodule Toolbox.Tasks.Hexpm do
     {:ok, %{status: 200, body: package_data}} = Toolbox.Hexpm.get_package(name)
     {:ok, %{status: 200, body: owners_data}} = Toolbox.Hexpm.get_package_owners(name)
 
-
     package_data
     |> Map.put("owners", owners_data)
     |> create_hexpm_snapshot()
