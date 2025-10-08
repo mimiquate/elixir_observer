@@ -29,5 +29,13 @@ defmodule Toolbox.PackagesTest do
 
       assert snapshot.data["downloads"] == %{"all" => 10, "recent" => 5}
     end
+
+    test "return packages by name", %{package: package} do
+      assert [package] ==
+               Packages.list_packages_by_names(["test"], :as_query) |> Toolbox.Repo.all()
+
+      assert [] ==
+               Packages.list_packages_by_names(["fake_package"], :as_query) |> Toolbox.Repo.all()
+    end
   end
 end
