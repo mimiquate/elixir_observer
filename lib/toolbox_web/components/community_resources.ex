@@ -27,9 +27,9 @@ defmodule ToolboxWeb.Components.CommunityResources do
         <%= for resource <- @resources do %>
           <li
             class="py-2 last:pb-0"
-            {test_attrs(resource_item: resource.title)}
+            {test_attrs(resource_item: true)}
           >
-            <.link href={resource.url} target="_blank" {test_attrs(resource_link: true)}>
+            <.link href={resource.url} target="_blank" {test_attrs(resource_url: resource.url)}>
               <h4
                 class="flex text-[14px] text-primary-text sm:text-[16px] line-clamp-2 overflow-hidden hover:underline"
                 {test_attrs(resource_title: true)}
@@ -49,11 +49,7 @@ defmodule ToolboxWeb.Components.CommunityResources do
               </span>
             </div>
           </li>
-          <div
-            class="w-auto border-t-[0.5px] border-divider last:hidden"
-            {test_attrs(pr_divider: true)}
-          >
-          </div>
+          <div class="w-auto border-t-[0.5px] border-divider last:hidden"></div>
         <% end %>
       </ul>
     </div>

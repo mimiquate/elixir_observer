@@ -8,6 +8,8 @@ defmodule Toolbox.Packages do
     PackageEmbedding
   }
 
+  alias Ecto.Multi
+
   require Logger
 
   import Ecto.Query
@@ -23,10 +25,6 @@ defmodule Toolbox.Packages do
       ]
     )
     |> Repo.all()
-  end
-
-  def list_packages_by_names(names, :as_query) do
-    from(p in Package, where: p.name in ^names)
   end
 
   def list_categories do
@@ -252,6 +250,31 @@ defmodule Toolbox.Packages do
     GithubSnapshot
     |> where([gs], gs.package_id == ^id)
     |> Repo.delete_all()
+  end
+
+  def bulk_update_community_resources(attrs) do
+    Multi.new()
+    |> Multi.put(:attrs, attrs)
+    |> Multi.all(:packages, &do_list_packages_by_names/1)
+    |> Multi.merge(&do_update_community_resources/1)
+    |> Toolbox.Repo.transact()
+  end
+
+  defp do_list_packages_by_names(%{attrs: attrs}) do
+    names = Map.keys(attrs)
+    from(p in Package, where: p.name in ^names)
+  end
+
+  defp do_update_community_resources(%{packages: packages, attrs: attrs}) do
+    Enum.reduce(packages, Multi.new(), fn package, updated_multi ->
+      updated_multi
+      |> Multi.update(
+        :"update_#{package.name}",
+        Toolbox.Package.community_resources_changeset(package, %{
+          community_resources: attrs[package.name]
+        })
+      )
+    end)
   end
 
   defp latest_github_snaphost_query() do

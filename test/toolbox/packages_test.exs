@@ -29,13 +29,39 @@ defmodule Toolbox.PackagesTest do
 
       assert snapshot.data["downloads"] == %{"all" => 10, "recent" => 5}
     end
+  end
 
-    test "return packages by name", %{package: package} do
-      assert [package] ==
-               Packages.list_packages_by_names(["test"], :as_query) |> Toolbox.Repo.all()
+  describe "bulk_update_community_resources/1" do
+    setup do
+      {:ok, p} = Packages.create_package(%{name: "test"})
 
-      assert [] ==
-               Packages.list_packages_by_names(["fake_package"], :as_query) |> Toolbox.Repo.all()
+      %{package: p}
+    end
+
+    test "updates packages resources", %{package: package} do
+      attrs = %{
+        package.name => [
+          %{
+            "type" => "video",
+            "title" => "Resource 1",
+            "description" => "Description 1",
+            "url" => "Url 1"
+          }
+        ]
+      }
+
+      assert {:ok, _} = Packages.bulk_update_community_resources(attrs)
+
+      package = Repo.reload!(package)
+
+      assert package.community_resources == [
+               %Toolbox.Package.CommunityResource{
+                 type: :video,
+                 title: "Resource 1",
+                 description: "Description 1",
+                 url: "Url 1"
+               }
+             ]
     end
   end
 end
