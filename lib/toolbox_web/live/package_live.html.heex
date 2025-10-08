@@ -27,7 +27,7 @@
       </.link>
     </div>
 
-    <div class="w-1/1 sm:min-w-xs bg-surface px-3 py-3 sm:self-baseline sm:w-auto sm:px-4 sm:w-auto rounded-md mt-7 sm:mt-0">
+    <div class="w-1/1 sm:min-w-xs bg-surface px-3 py-3 sm:self-baseline sm:w-auto sm:px-4 rounded-md mt-7 sm:mt-0">
       <h3 class="text-[14px] mb-4 sm:hidden">Package Resources</h3>
 
       <div class="flex flex-col">
@@ -409,6 +409,12 @@
       </div>
     <% end %>
   </section>
+
+  <%= if Enum.any?(@package.community_resources) do %>
+    <section class="sm:mt-8">
+      <.community_resources resources={@package.community_resources} />
+    </section>
+  <% end %>
 
   <%= if Enum.any?(@related_packages) do %>
     <section class="sm:mt-8">

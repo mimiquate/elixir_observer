@@ -8,6 +8,7 @@ defmodule ToolboxWeb.PackageLive do
   import ToolboxWeb.Components.PackageVersionSelector
   import ToolboxWeb.Components.PackageActivity, only: [package_activity: 1]
   import ToolboxWeb.Components.PackageResource, only: [package_resource: 1]
+  import ToolboxWeb.Components.CommunityResources, only: [community_resources: 1]
 
   import ToolboxWeb.Components.Icons.StarIcon
   import ToolboxWeb.Components.Icons.DownloadIcon
@@ -103,7 +104,8 @@ defmodule ToolboxWeb.PackageLive do
           github_fullname: github.data["full_name"],
           stargazers_count: github.data["stargazers_count"],
           activity: github.activity,
-          github_sync_at: github.sync_at
+          github_sync_at: github.sync_at,
+          community_resources: package.community_resources
         }
       )
     }

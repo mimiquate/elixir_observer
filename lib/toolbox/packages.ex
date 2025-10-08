@@ -1,5 +1,12 @@
 defmodule Toolbox.Packages do
-  alias Toolbox.{GithubSnapshot, HexpmSnapshot, Package, Repo, Category, PackageEmbedding}
+  alias Toolbox.{
+    GithubSnapshot,
+    HexpmSnapshot,
+    Package,
+    Repo,
+    Category,
+    PackageEmbedding
+  }
 
   require Logger
 
@@ -16,6 +23,10 @@ defmodule Toolbox.Packages do
       ]
     )
     |> Repo.all()
+  end
+
+  def list_packages_by_names(names, :as_query) do
+    from(p in Package, where: p.name in ^names)
   end
 
   def list_categories do
