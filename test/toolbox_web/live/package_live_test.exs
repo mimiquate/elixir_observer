@@ -242,5 +242,28 @@ defmodule ToolboxWeb.PackageLiveTest do
       refute has_element?(view, "[data-test-owner-chip]")
       refute has_element?(view, "[data-test-owners-show-more-button]")
     end
+
+    test "displays community section when package has resources", %{conn: conn, package: package} do
+      resources = [
+        %{title: "a title", description: "a description", url: "http://example.com"}
+      ]
+
+      Packages.bulk_update_community_resources(%{
+        package.name => resources
+      })
+
+      {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
+
+      assert has_element?(view, data_test_attr(:community_section))
+    end
+
+    test "does not display community section when package doesn't have resources", %{
+      conn: conn,
+      package: package
+    } do
+      {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
+
+      refute has_element?(view, data_test_attr(:community_section))
+    end
   end
 end

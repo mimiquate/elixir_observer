@@ -411,7 +411,7 @@
   </section>
 
   <%= if Enum.any?(@package.community_resources) do %>
-    <section class="sm:mt-8">
+    <section class="sm:mt-8" {test_attrs(community_section: true)}>
       <.community_resources resources={@package.community_resources} />
     </section>
   <% end %>
