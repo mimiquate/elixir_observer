@@ -17,7 +17,6 @@ defmodule ToolboxWeb.Router do
   end
 
   pipeline :admin do
-    plug :put_layout, html: {JustPollsWeb.Layouts, :admin}
     plug :admin_basic_auth
   end
 
