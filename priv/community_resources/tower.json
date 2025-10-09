@@ -1,5 +1,5 @@
 {
-  "tower": [
+  "resources": [
     {
       "type": "video",
       "title": "GigCityElixir 25 | Gonzalo Rodríguez: Building an Exception Tracker in Elixir Gonzalo",
@@ -11,12 +11,6 @@
       "title": "Tower - Agnostic Error Tracking in Elixir",
       "description": "Tower is an Elixir library that provides a common interface for Error Tracking and Reporting, agnostic to which services or destinations you prefer to report to.",
       "url": "https://elixirforum.com/t/tower-agnostic-error-tracking-in-elixir/66781"
-    },
-    {
-      "type": "podcast",
-      "title": "AMA Tower - The Exception Tracker library",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque fringilla cursus ultricies. Aenean viverra scelerisque nunc, vitae vehicula enim aliquet non.",
-      "url": "http://example.com"
     }
   ]
 }

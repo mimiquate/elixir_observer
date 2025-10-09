@@ -244,13 +244,10 @@ defmodule ToolboxWeb.PackageLiveTest do
     end
 
     test "displays community section when package has resources", %{conn: conn, package: package} do
-      resources = [
-        %{title: "a title", description: "a description", url: "http://example.com"}
-      ]
-
-      Packages.bulk_update_community_resources(%{
-        package.name => resources
-      })
+      package =
+        package
+        |> Ecto.Changeset.cast(%{name: "test"}, [:name])
+        |> Toolbox.Repo.update!(returning: true)
 
       {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
 

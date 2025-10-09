@@ -58,7 +58,7 @@ defmodule ToolboxWeb.Components.CommunityResources do
 
   defp marker(assigns) do
     case assigns.type do
-      :video ->
+      "video" ->
         ~H"""
         <.video_icon class="w-5 dark:stroke-secondary-text" />
         """
