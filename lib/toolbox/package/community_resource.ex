@@ -1,18 +1,30 @@
 defmodule Toolbox.Package.CommunityResource do
-  use Ecto.Schema
+  defstruct [
+    :title,
+    :url,
+    type: "article",
+    description: ""
+  ]
+
   import Ecto.Changeset
 
-  @primary_key false
-  embedded_schema do
-    field :type, Ecto.Enum, values: [:video, :article, :podcast], default: :article
-    field :title, :string
-    field :description, :string
-    field :url, :string
-  end
+  @type t :: %__MODULE__{
+          type: String.t(),
+          title: String.t(),
+          description: String.t() | nil,
+          url: String.t()
+        }
+
+  @schema_types %{
+    type: :string,
+    title: :string,
+    description: :string,
+    url: :string
+  }
 
   def changeset(struct, attrs) do
-    struct
-    |> cast(attrs, [:type, :title, :description, :url])
-    |> validate_required(:title, :url)
+    {struct, @schema_types}
+    |> cast(attrs, Map.keys(@schema_types))
+    |> validate_required([:title, :url])
   end
 end

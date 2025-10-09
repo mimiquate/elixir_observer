@@ -19,8 +19,6 @@ defmodule Toolbox.Package do
     embeds_one :hexpm_latest_stable_version_data, Toolbox.Package.HexpmVersion,
       on_replace: :delete
 
-    embeds_many :community_resources, Toolbox.Package.CommunityResource, on_replace: :delete
-
     timestamps(type: :utc_datetime)
   end
 
@@ -44,12 +42,6 @@ defmodule Toolbox.Package do
     # thats why is not required
     |> cast_embed(:hexpm_owners)
     |> validate_required([:hexpm_owners_sync_at])
-  end
-
-  def community_resources_changeset(package, attrs) do
-    package
-    |> cast(attrs, [])
-    |> cast_embed(:community_resources)
   end
 
   def latest_stable_version_data_changeset(package, attrs) do

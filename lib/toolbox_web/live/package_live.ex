@@ -77,6 +77,9 @@ defmodule ToolboxWeb.PackageLive do
         0
       end
 
+    community_resources =
+      Toolbox.Packages.community_resources_for(package)
+
     {
       :ok,
       assign(
@@ -105,7 +108,7 @@ defmodule ToolboxWeb.PackageLive do
           stargazers_count: github.data["stargazers_count"],
           activity: github.activity,
           github_sync_at: github.sync_at,
-          community_resources: package.community_resources
+          community_resources: community_resources
         }
       )
     }
