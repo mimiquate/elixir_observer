@@ -38,7 +38,6 @@ defmodule Toolbox.Workers.HexpmWorker do
   def perform(%Oban.Job{
         args: %{"action" => "get_latest_stable_version", "name" => name, "version" => version}
       }) do
-
     {:ok, %{status: 200, body: version_data}} = Toolbox.Hexpm.get_package_version(name, version)
 
     Toolbox.Packages.get_package_by_name(name)
