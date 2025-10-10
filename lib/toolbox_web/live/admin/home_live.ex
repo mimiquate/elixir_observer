@@ -6,6 +6,7 @@ defmodule ToolboxWeb.Admin.HomeLive do
       :ok,
       assign(
         socket,
+        search_term: "",
         page_title: "Admin",
         packages_total_count: Toolbox.Packages.total_count(),
         packages: Toolbox.Packages.list_packages()
