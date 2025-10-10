@@ -17,7 +17,6 @@ defmodule ToolboxWeb.Router do
   end
 
   pipeline :admin do
-    plug :put_layout, html: {JustPollsWeb.Layouts, :admin}
     plug :admin_basic_auth
   end
 
@@ -38,8 +37,6 @@ defmodule ToolboxWeb.Router do
   scope "/admin", ToolboxWeb do
     pipe_through [:browser, :admin]
 
-    live "/", Admin.HomeLive
-    live "/packages/:name", Admin.PackageLive
     oban_dashboard("/oban")
 
     import Phoenix.LiveDashboard.Router

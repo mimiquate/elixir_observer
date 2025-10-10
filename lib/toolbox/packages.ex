@@ -82,10 +82,6 @@ defmodule Toolbox.Packages do
     |> Repo.all()
   end
 
-  def total_count do
-    Repo.aggregate(Package, :count)
-  end
-
   # Categories count based on the top 3000 packages
   def categories_counts do
     from(p in Package,
