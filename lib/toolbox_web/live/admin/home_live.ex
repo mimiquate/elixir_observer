@@ -9,7 +9,7 @@ defmodule ToolboxWeb.Admin.HomeLive do
         search_term: "",
         page_title: "Admin",
         packages_total_count: Toolbox.Packages.total_count(),
-        packages: Toolbox.Packages.list_packages()
+        packages_names: Toolbox.Packages.list_packages_names()
       )
     }
   end

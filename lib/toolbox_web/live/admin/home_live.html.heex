@@ -5,7 +5,7 @@
 <hr />
 
 <ol>
-  <li :for={package <- @packages}>
-    <a href={~p"/admin/packages/#{package.name}"}>{package.name}</a>
+  <li :for={name <- @packages_names}>
+    <a href={~p"/admin/packages/#{name}"}>{name}</a>
   </li>
 </ol>
