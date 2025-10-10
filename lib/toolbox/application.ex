@@ -11,6 +11,13 @@ defmodule Toolbox.Application do
     OpentelemetryPhoenix.setup(adapter: :bandit)
     OpentelemetryEcto.setup([:toolbox, :repo], db_statement: :enabled)
 
+    :telemetry.attach(
+      "oban-logger",
+      [:oban, :job, :exception],
+      &Toolbox.ObanLogger.handle_event/4,
+      []
+    )
+
     Supervisor.start_link(
       [
         Toolbox.Cache,
