@@ -9,16 +9,7 @@ defmodule Toolbox.Workers.HexpmWorker do
   end
 
   def perform(%Oban.Job{args: %{"action" => "get_package_owners", "name" => name}}) do
-    {
-      :ok,
-      {
-        {_, 200, _},
-        _headers,
-        owners_data
-      }
-    } = Toolbox.Hexpm.get_package_owners(name)
-
-    owners_data = Phoenix.json_library().decode!(owners_data)
+    {:ok, %{status: 200, body: owners_data}} = Toolbox.Hexpm.get_package_owners(name)
 
     Toolbox.Packages.get_package_by_name(name)
     |> Toolbox.Packages.update_package_owners(%{
@@ -47,16 +38,8 @@ defmodule Toolbox.Workers.HexpmWorker do
   def perform(%Oban.Job{
         args: %{"action" => "get_latest_stable_version", "name" => name, "version" => version}
       }) do
-    {
-      :ok,
-      {
-        {_, 200, _},
-        _headers,
-        version_data
-      }
-    } = Toolbox.Hexpm.get_package_version(name, version)
 
-    version_data = Phoenix.json_library().decode!(version_data)
+    {:ok, %{status: 200, body: version_data}} = Toolbox.Hexpm.get_package_version(name, version)
 
     Toolbox.Packages.get_package_by_name(name)
     |> Toolbox.Packages.update_package_latest_stable_version(%{
