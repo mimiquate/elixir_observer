@@ -37,8 +37,6 @@ defmodule ToolboxWeb.Router do
   scope "/admin", ToolboxWeb do
     pipe_through [:browser, :admin]
 
-    live "/", Admin.HomeLive
-    live "/packages/:name", Admin.PackageLive
     oban_dashboard("/oban")
 
     import Phoenix.LiveDashboard.Router
