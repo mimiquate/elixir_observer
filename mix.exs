@@ -7,6 +7,8 @@ defmodule Toolbox.MixProject do
       version: "0.1.0",
       elixir: "~> 1.18.3",
       elixirc_paths: elixirc_paths(Mix.env()),
+      compilers: [:phoenix_live_view] ++ Mix.compilers(),
+      listeners: [Phoenix.CodeReloader],
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
@@ -42,7 +44,7 @@ defmodule Toolbox.MixProject do
       {:dns_cluster, "~> 0.2.0"},
       {:ecto_sql, "~> 3.10"},
       {:esbuild, "~> 0.10.0", runtime: Mix.env() == :dev},
-      {:gettext, "~> 0.20"},
+      {:gettext, "~> 1.0"},
       {
         :heroicons,
         github: "tailwindlabs/heroicons",
@@ -53,13 +55,13 @@ defmodule Toolbox.MixProject do
         depth: 1
       },
       {:jason, "~> 1.2"},
-      {:phoenix, "~> 1.7.14"},
+      {:phoenix, "~> 1.8.1"},
       {:phoenix_ecto, "~> 4.5"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_dashboard, "~> 0.8.3"},
       {:phoenix_live_view, "~> 1.0"},
       {:postgrex, "~> 0.20.0"},
-      {:tailwind, "~> 0.3.0", runtime: Mix.env() == :dev},
+      {:tailwind, "~> 0.4.0", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
       {:number, "~> 1.0"},
@@ -76,14 +78,14 @@ defmodule Toolbox.MixProject do
       {:opentelemetry, "~> 1.3"},
       {:opentelemetry_api, "~> 1.2"},
       {:opentelemetry_exporter, "~> 1.6"},
-      {:opentelemetry_bandit, "~> 0.2.0"},
+      {:opentelemetry_bandit, "~> 0.3.0"},
       {:opentelemetry_phoenix, "~> 2.0"},
       {:opentelemetry_ecto, "~> 1.2"},
       # XXX https://github.com/open-telemetry/opentelemetry-erlang-contrib/pull/436
       {:opentelemetry_semantic_conventions, "~> 1.27", override: true},
 
       # Dev and Prod
-      {:tower_rollbar, "~> 0.6.3", only: [:dev, :prod]},
+      {:tower_rollbar, "~> 0.6.4", only: [:dev, :prod]},
       {:tower_slack, "~> 0.6.0", only: [:dev, :prod]},
 
       # Dev
@@ -92,9 +94,10 @@ defmodule Toolbox.MixProject do
       {:live_debugger, "~> 0.3.1", only: :dev},
 
       # Test
-      {:floki, "~> 0.38.0", only: :test},
       {:wallaby, "~> 0.30.9", runtime: false, only: :test},
-      {:test_server, "~> 0.1.20", only: [:test]}
+      {:test_server, "~> 0.1.20", only: :test},
+      # Needed by Phoenix.LiveViewTest
+      {:lazy_html, "~> 0.1.0", only: :test}
     ]
   end
 
