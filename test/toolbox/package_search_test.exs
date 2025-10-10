@@ -151,5 +151,10 @@ defmodule Toolbox.PackageSearchTest do
       # Check actual ordering - nil downloads should come AFTER packages with downloads
       assert [%{name: "high_downloads_pkg"}, %{name: "nil_downloads_pkg"}] = packages
     end
+
+    test "minimum package name length" do
+      refute "c" |> Toolbox.PackageSearch.parse() |> Toolbox.PackageSearch.executable?()
+      assert "ch" |> Toolbox.PackageSearch.parse() |> Toolbox.PackageSearch.executable?()
+    end
   end
 end

@@ -17,7 +17,7 @@ defmodule Toolbox.PackageSearch do
   use Nebulex.Caching, cache: Toolbox.Cache
 
   @filter_regex ~r/(?<type>\w+):(?<value>\w+)/
-  @min_search_length 3
+  @min_search_length 2
 
   defstruct [:original_term, :filters, :clean_term]
 
@@ -60,7 +60,7 @@ defmodule Toolbox.PackageSearch do
       iex> PackageSearch.executable?(search)
       false
 
-      iex> search = PackageSearch.parse("ph")
+      iex> search = PackageSearch.parse("p")
       iex> PackageSearch.executable?(search)
       false
   """
