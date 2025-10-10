@@ -12,20 +12,7 @@ defmodule Toolbox.Hexpm do
   end
 
   def get(path) do
-    :httpc.request(
-      :get,
-      {
-        ~c"#{@base_url}/#{path}",
-        [{~c"user-agent", "httpc"}]
-      },
-      [
-        ssl: [
-          verify: :verify_peer,
-          cacerts: :public_key.cacerts_get()
-        ]
-      ],
-      []
-    )
+    Req.get("#{@base_url}/#{path}", headers: [{"user-agent", "toolbox"}])
   end
 
   @decorate cacheable(key: {:hexpm_version, name, version}, opts: [ttl: :timer.hours(24)])
@@ -35,19 +22,6 @@ defmodule Toolbox.Hexpm do
 
   @decorate cacheable(key: {:hexpm_owner, package_name}, opts: [ttl: :timer.hours(24)])
   def get_package_owners(package_name) do
-    :httpc.request(
-      :get,
-      {
-        ~c"#{@base_url}/packages/#{package_name}/owners",
-        [{~c"user-agent", "httpc"}]
-      },
-      [
-        ssl: [
-          verify: :verify_peer,
-          cacerts: :public_key.cacerts_get()
-        ]
-      ],
-      []
-    )
+    Req.get("#{@base_url}/packages/#{package_name}/owners", headers: [{"user-agent", "toolbox"}])
   end
 end

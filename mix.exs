@@ -72,6 +72,7 @@ defmodule Toolbox.MixProject do
       {:oban_web, "~> 2.11"},
       {:logger_json, "~> 7.0"},
       {:pgvector, "~> 0.3.0"},
+      {:req, "~> 0.5.15"},
 
       # OpenTelemetry
       {:opentelemetry, "~> 1.3"},

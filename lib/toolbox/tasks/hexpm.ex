@@ -2,19 +2,11 @@ defmodule Toolbox.Tasks.Hexpm do
   def run do
     Stream.unfold(1, fn
       page ->
-        {
-          :ok,
-          {
-            {_, 200, _},
-            _headers,
-            packages_data
-          }
-        } =
-          Toolbox.Hexpm.get_page(page)
+        {:ok, %{status: 200, body: packages_data}} = Toolbox.Hexpm.get_page(page)
 
         Process.sleep(:timer.seconds(1))
 
-        if packages_data == ~c"[]" do
+        if packages_data == [] do
           nil
         else
           {packages_data, page + 1}
@@ -22,7 +14,6 @@ defmodule Toolbox.Tasks.Hexpm do
     end)
     |> Stream.each(fn packages_data ->
       packages_data
-      |> Jason.decode!()
       |> Enum.each(fn p ->
         Toolbox.Repo.transact(fn ->
           Toolbox.Packages.skip_refresh_latest_hexpm_snapshots()
@@ -41,28 +32,10 @@ defmodule Toolbox.Tasks.Hexpm do
 
   # Useful for development to fetch only one package
   def run(name) when is_binary(name) do
-    {
-      :ok,
-      {
-        {_, 200, _},
-        _headers,
-        package_data
-      }
-    } = Toolbox.Hexpm.get_package(name)
-
-    {
-      :ok,
-      {
-        {_, 200, _},
-        _headers,
-        owners_data
-      }
-    } = Toolbox.Hexpm.get_package_owners(name)
-
-    owners_data = owners_data |> Jason.decode!()
+    {:ok, %{status: 200, body: package_data}} = Toolbox.Hexpm.get_package(name)
+    {:ok, %{status: 200, body: owners_data}} = Toolbox.Hexpm.get_package_owners(name)
 
     package_data
-    |> Jason.decode!()
     |> Map.put("owners", owners_data)
     |> create_hexpm_snapshot()
   end
