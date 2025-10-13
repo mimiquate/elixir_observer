@@ -237,7 +237,7 @@ defmodule ToolboxWeb.PackageLiveTest do
       Packages.create_package(%{
         name: name,
         description: "A pure Elixir HTTP server"
-        })
+      })
 
     {:ok, _} =
       Packages.create_hexpm_snapshot(%{
