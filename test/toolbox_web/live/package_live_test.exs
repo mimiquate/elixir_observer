@@ -7,40 +7,10 @@ defmodule ToolboxWeb.PackageLiveTest do
   alias Toolbox.Packages
 
   describe "Package Live View" do
-    setup do
-      {:ok, bandit} =
-        Packages.create_package(%{
-          name: "bandit_#{System.unique_integer([:positive])}",
-          description: "A pure Elixir HTTP server"
-        })
+    setup context do
+      name = Map.get(context, :package_name, "bandit_#{System.unique_integer([:positive])}")
 
-      {:ok, _} =
-        Packages.create_hexpm_snapshot(%{
-          package_id: bandit.id,
-          data: %{
-            "meta" => %{"description" => "A pure Elixir HTTP server"},
-            "downloads" => %{"recent" => 1000},
-            "releases" => [
-              %{
-                "version" => "1.7.0",
-                "url" => "https://hex.pm/api/packages/bandit/releases/1.7.0",
-                "has_docs" => true,
-                "inserted_at" => "2025-05-29T16:57:22.358745Z"
-              },
-              %{
-                "version" => "1.6.11",
-                "url" => "https://hex.pm/api/packages/bandit/releases/1.6.11",
-                "has_docs" => true,
-                "inserted_at" => "2025-03-31T15:51:08.854619Z"
-              }
-            ],
-            "inserted_at" => "2020-11-05T17:11:46.440731Z",
-            "latest_version" => "1.7.0",
-            "latest_stable_version" => "1.7.0"
-          }
-        })
-
-      %{package: bandit}
+      [package: create_package(name)]
     end
 
     test "mounts successfully", %{conn: conn, package: package} do
@@ -243,12 +213,8 @@ defmodule ToolboxWeb.PackageLiveTest do
       refute has_element?(view, "[data-test-owners-show-more-button]")
     end
 
+    @tag package_name: "test"
     test "displays community section when package has resources", %{conn: conn, package: package} do
-      package =
-        package
-        |> Ecto.Changeset.cast(%{name: "test"}, [:name])
-        |> Toolbox.Repo.update!(returning: true)
-
       {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
 
       assert has_element?(view, data_test_attr(:community_section))
@@ -264,5 +230,41 @@ defmodule ToolboxWeb.PackageLiveTest do
       assert has_element?(view, data_test_attr(:community_section))
       assert has_element?(view, data_test_attr(:community_section_empty))
     end
+  end
+
+  defp create_package(name) do
+    {:ok, package} =
+      Packages.create_package(%{
+        name: name,
+        description: "A pure Elixir HTTP server"
+        })
+
+    {:ok, _} =
+      Packages.create_hexpm_snapshot(%{
+        package_id: package.id,
+        data: %{
+          "meta" => %{"description" => "A pure Elixir HTTP server"},
+          "downloads" => %{"recent" => 1000},
+          "releases" => [
+            %{
+              "version" => "1.7.0",
+              "url" => "https://hex.pm/api/packages/bandit/releases/1.7.0",
+              "has_docs" => true,
+              "inserted_at" => "2025-05-29T16:57:22.358745Z"
+            },
+            %{
+              "version" => "1.6.11",
+              "url" => "https://hex.pm/api/packages/bandit/releases/1.6.11",
+              "has_docs" => true,
+              "inserted_at" => "2025-03-31T15:51:08.854619Z"
+            }
+          ],
+          "inserted_at" => "2020-11-05T17:11:46.440731Z",
+          "latest_version" => "1.7.0",
+          "latest_stable_version" => "1.7.0"
+        }
+      })
+
+    package
   end
 end
