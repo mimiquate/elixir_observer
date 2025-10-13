@@ -60,12 +60,12 @@ defmodule ToolboxWeb.Components.CommunityResources do
     case assigns.type do
       "video" ->
         ~H"""
-        <.video_icon class="w-5 dark:stroke-secondary-text" />
+        <.video_icon class="w-5" />
         """
 
       _ ->
         ~H"""
-        <.article_icon class="w-5 dark:stroke-secondary-text" />
+        <.article_icon class="w-5" />
         """
     end
   end
