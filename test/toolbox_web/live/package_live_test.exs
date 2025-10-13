@@ -252,6 +252,7 @@ defmodule ToolboxWeb.PackageLiveTest do
       {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
 
       assert has_element?(view, data_test_attr(:community_section))
+      refute has_element?(view, data_test_attr(:community_section_empty))
     end
 
     test "does not display community section when package doesn't have resources", %{
@@ -260,7 +261,8 @@ defmodule ToolboxWeb.PackageLiveTest do
     } do
       {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
 
-      refute has_element?(view, data_test_attr(:community_section))
+      assert has_element?(view, data_test_attr(:community_section))
+      assert has_element?(view, data_test_attr(:community_section_empty))
     end
   end
 end
