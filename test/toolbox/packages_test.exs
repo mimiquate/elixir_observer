@@ -5,7 +5,7 @@ defmodule Toolbox.PackagesTest do
 
   describe "create_hexpm_snapshot/1" do
     setup do
-      {:ok, p} = Packages.create_package(%{name: "test"})
+      {:ok, p} = Packages.create_package(%{name: "test_#{System.unique_integer([:positive])}"})
 
       %{package: p}
     end
