@@ -16,10 +16,7 @@ defmodule ToolboxWeb.Components.CommunityResources do
       {test_attrs(resource_list: true)}
     >
       <%= for resource <- @resources do %>
-        <li
-          class="py-2 last:pb-0"
-          {test_attrs(resource_item: true)}
-        >
+        <li {test_attrs(resource_item: true)}>
           <.link href={resource.url} target="_blank" {test_attrs(resource_url: resource.url)}>
             <h4 class="flex items-center text-[14px] text-primary-text sm:text-[16px] line-clamp-2 whitespace-nowrap">
               <.marker type={resource.type} />
@@ -37,7 +34,7 @@ defmodule ToolboxWeb.Components.CommunityResources do
             </span>
           </div>
         </li>
-        <div class="w-auto border-t-[0.5px] border-divider last:hidden"></div>
+        <div class="w-auto border-t-[0.5px] border-divider my-3 last:hidden"></div>
       <% end %>
     </ul>
     """
