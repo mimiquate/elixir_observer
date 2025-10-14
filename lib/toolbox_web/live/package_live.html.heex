@@ -27,7 +27,7 @@
       </.link>
     </div>
 
-    <div class="w-1/1 sm:min-w-xs bg-surface px-3 py-3 sm:self-baseline sm:w-auto sm:px-4 sm:w-auto rounded-md mt-7 sm:mt-0">
+    <div class="w-1/1 sm:min-w-xs bg-surface px-3 py-3 sm:self-baseline sm:w-auto sm:px-4 rounded-md mt-7 sm:mt-0">
       <h3 class="text-[14px] mb-4 sm:hidden">Package Resources</h3>
 
       <div class="flex flex-col">
@@ -198,7 +198,7 @@
     </div>
 
     <%= if @version do %>
-      <div class="bg-surface rounded py-6 px-4">
+      <div class="bg-surface py-6 px-4 border border-stroke rounded-md">
         <div class="flex sm:justify-between">
           <.package_version_selector
             versions={@package.versions}
@@ -408,6 +408,34 @@
         </div>
       </div>
     <% end %>
+  </section>
+
+  <section class="sm:mt-8" {test_attrs(community_section: true)}>
+    <div class="flex items-center justify-between mt-8 mb-3 sm:mb-8">
+      <h2 class="text-[20px] text-primary-text sm:text-[32px] font-semibold">
+        Community
+      </h2>
+    </div>
+    <div class="bg-surface py-6 px-4 border border-stroke rounded-md">
+      <%= if Enum.any?(@package.community_resources) do %>
+        <.community_resources resources={@package.community_resources} />
+      <% else %>
+        <div class="flex justify-center" {test_attrs(community_section_empty: true)}>
+          <div class="p-3 sm:p-5 col-span-2 sm:col-span-3 sm:row-span-2 flex flex-col items-center">
+            <img src={~p"/images/empty-state-figure-alt.png"} />
+            <h3 class="text-primary-text text-[14px] sm:text-[18px] mt-3">
+              Looks like this space is still empty… Want to be the first to contribute?
+            </h3>
+            <p class="text-secondary-text sm:text-[16px]">
+              Share an article, talk, or podcast by <a
+                class="underline"
+                href="https://github.com/mimiquate/elixir_observer/wiki/%F0%9F%A7%A9-Community-Resources"
+              >adding resources to this package</a>.
+            </p>
+          </div>
+        </div>
+      <% end %>
+    </div>
   </section>
 
   <%= if Enum.any?(@related_packages) do %>

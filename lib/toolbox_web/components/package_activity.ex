@@ -95,7 +95,7 @@ defmodule ToolboxWeb.Components.PackageActivity do
               </.link>
             </div>
             <%= if Enum.any?(@activity.pull_requests) do %>
-              <ul class="sm:pt-4 sm:col-span-2" sm:row-span-2 {test_attrs(pr_list: true)}>
+              <ul class="sm:pt-4 sm:col-span-2 sm:row-span-2" {test_attrs(pr_list: true)}>
                 <%= for {pr, i} <- Enum.with_index(@activity.pull_requests) do %>
                   <li class="py-2 last:pb-0" {test_attrs(pr_item: pr.permalink)}>
                     <.link href={pr.permalink} target="_blank" {test_attrs(pr_link: true)}>
