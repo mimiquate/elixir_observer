@@ -27,6 +27,7 @@ defmodule Toolbox.Package do
     package
     |> cast(attrs, [:name, :description, :category])
     |> validate_required([:name])
+    |> unique_constraint(:name)
   end
 
   def category_changeset(package, attrs) do

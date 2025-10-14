@@ -27,7 +27,7 @@ defmodule Toolbox.Repo.Migrations.CreateLatestHexpmSnapshotsMaterializedView do
 
     execute """
       CREATE OR REPLACE TRIGGER refresh
-      AFTER INSERT OR UPDATE OR DELETE OR TRUNCATE
+      AFTER INSERT
       ON hexpm_snapshots
       FOR EACH STATEMENT
       EXECUTE PROCEDURE refresh_latest_hexpm_snapshots();
