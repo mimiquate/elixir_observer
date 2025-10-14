@@ -198,7 +198,7 @@
     </div>
 
     <%= if @version do %>
-      <div class="bg-surface rounded py-6 px-4">
+      <div class="bg-surface py-6 px-4 border border-stroke rounded-md">
         <div class="flex sm:justify-between">
           <.package_version_selector
             versions={@package.versions}
@@ -416,14 +416,14 @@
         Community
       </h2>
     </div>
-    <div class="bg-surface rounded py-6 px-4">
+    <div class="bg-surface py-6 px-4 border border-stroke rounded-md">
       <%= if Enum.any?(@package.community_resources) do %>
         <.community_resources resources={@package.community_resources} />
       <% else %>
         <div class="flex justify-center" {test_attrs(community_section_empty: true)}>
           <div class="p-3 sm:p-5 col-span-2 sm:col-span-3 sm:row-span-2 flex flex-col items-center">
             <img src={~p"/images/empty-state-figure-alt.png"} />
-            <h3 class="text-primary-text sm:text-[24px] mt-3">
+            <h3 class="text-primary-text text-[14px] sm:text-[18px] mt-3">
               Looks like this space is still empty… Want to be the first to contribute?
             </h3>
             <p class="text-secondary-text sm:text-[16px]">
