@@ -91,7 +91,8 @@ defmodule Toolbox.Tasks.Category do
           {"x-goog-api-key", "#{api_key()}"},
           {"user-agent", "elixir client"}
         ],
-        json: body
+        json: body,
+        receive_timeout: 120_000
       )
 
     response = response.body
