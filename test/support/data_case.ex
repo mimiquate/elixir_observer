@@ -24,6 +24,7 @@ defmodule Toolbox.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import Toolbox.DataCase
+      import Toolbox.Factory
     end
   end
 

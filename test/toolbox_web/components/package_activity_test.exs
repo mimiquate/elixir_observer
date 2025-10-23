@@ -304,10 +304,4 @@ defmodule ToolboxWeb.Components.PackageActivityTest do
       assert node_count(pr_dividers) >= 1
     end
   end
-
-  defp node_count(lazy_html) do
-    lazy_html
-    |> LazyHTML.to_tree()
-    |> length()
-  end
 end

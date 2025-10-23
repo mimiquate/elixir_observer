@@ -28,11 +28,25 @@ defmodule ToolboxWeb.ConnCase do
       import Plug.Conn
       import Phoenix.ConnTest
       import ToolboxWeb.ConnCase
+      import Toolbox.Factory
     end
   end
 
   setup tags do
     Toolbox.DataCase.setup_sandbox(tags)
     {:ok, conn: Phoenix.ConnTest.build_conn()}
+  end
+
+  def node_count(lazy_html) do
+    lazy_html
+    |> LazyHTML.to_tree()
+    |> length()
+  end
+
+  def data_test_attr(name) do
+    "[data-test-" <>
+      (name
+       |> to_string()
+       |> String.replace("_", "-")) <> "]"
   end
 end
