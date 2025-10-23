@@ -17,12 +17,15 @@ defmodule ToolboxWeb.Components.CommunityResources do
     >
       <%= for resource <- @resources do %>
         <li {test_attrs(resource_item: true)}>
-          <.link href={resource.url} target="_blank" {test_attrs(resource_url: resource.url)}>
-            <h4 class="flex items-center text-[14px] text-primary-text sm:text-[16px] line-clamp-2 whitespace-nowrap">
-              <.marker type={resource.type} />
-              <span class="ml-2 hover:underline" {test_attrs(resource_title: true)}>
-                {resource.title}
-              </span>
+          <.link
+            href={resource.url}
+            target="_blank"
+            {test_attrs(resource_url: resource.url)}
+            class="flex items-center text-[14px] text-primary-text sm:text-[16px] whitespace-nowrap"
+          >
+            <.marker type={resource.type} />
+            <h4 class="ml-2 truncate hover:underline" {test_attrs(resource_title: true)}>
+              {resource.title}
             </h4>
           </.link>
           <div class="flex mt-1">
