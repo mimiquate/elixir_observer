@@ -55,6 +55,7 @@ config :logger, :default_formatter,
 config :phoenix, :json_library, Jason
 
 config :toolbox, Toolbox.Cache,
+  adapter: Nebulex.Adapters.Local,
   # Max memory size in bytes (e.g., 100MB)
   allocated_memory: 100_000_000
 

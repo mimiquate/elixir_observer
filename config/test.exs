@@ -53,3 +53,5 @@ config :toolbox, Toolbox.CommunityResources,
       "community_resources",
       "*.json"
     ])
+
+config :toolbox, Toolbox.Cache, adapter: Nebulex.Adapters.Nil

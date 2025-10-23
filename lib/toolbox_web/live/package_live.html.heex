@@ -439,7 +439,7 @@
   </section>
 
   <%= if Enum.any?(@related_packages) do %>
-    <section class="sm:mt-8">
+    <section class="sm:mt-8" {test_attrs(related_packages_section: true)}>
       <div class="flex flex-wrap items-center mt-8 mb-3 sm:mb-8">
         <div class="flex items-center justify-between w-full">
           <h2 class="text-[20px] text-primary-text sm:text-[32px] font-semibold">
@@ -456,8 +456,11 @@
           </.link>
         </div>
 
-        <span class="text-[12px] flex-none mt-2 px-2 py-[2px] sm:px-5 rounded-full border-[0.5px] sm:text-[16px] text-accent border-accent bg-chip-bg inline dark:text-text-secondary-button dark:border-stroke">
-          {@related_packages_count} packages
+        <span
+          class="text-[12px] flex-none mt-2 px-2 py-[2px] sm:px-5 rounded-full border-[0.5px] sm:text-[16px] text-accent border-accent bg-chip-bg inline dark:text-text-secondary-button dark:border-stroke"
+          {test_attrs(related_packages_count: @related_packages_count)}
+        >
+          {@related_packages_count} {ngettext("package", "packages", @related_packages_count)}
         </span>
       </div>
 
