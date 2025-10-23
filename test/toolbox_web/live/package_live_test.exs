@@ -8,9 +8,17 @@ defmodule ToolboxWeb.PackageLiveTest do
 
   describe "Package Live View" do
     setup context do
-      name = Map.get(context, :package_name, "bandit_#{System.unique_integer([:positive])}")
+      params =
+        if Map.get(context, :package_name) do
+          [name: Map.get(context, :package_name)]
+        else
+          []
+        end
 
-      [package: create_package(name)]
+      {:ok, package} = create(:package, params)
+      {:ok, _} = create(:hexpm_snapshot, package_id: package.id)
+
+      [package: package]
     end
 
     test "mounts successfully", %{conn: conn, package: package} do
@@ -230,41 +238,5 @@ defmodule ToolboxWeb.PackageLiveTest do
       assert has_element?(view, data_test_attr(:community_section))
       assert has_element?(view, data_test_attr(:community_section_empty))
     end
-  end
-
-  defp create_package(name) do
-    {:ok, package} =
-      Packages.create_package(%{
-        name: name,
-        description: "A pure Elixir HTTP server"
-      })
-
-    {:ok, _} =
-      Packages.create_hexpm_snapshot(%{
-        package_id: package.id,
-        data: %{
-          "meta" => %{"description" => "A pure Elixir HTTP server"},
-          "downloads" => %{"recent" => 1000},
-          "releases" => [
-            %{
-              "version" => "1.7.0",
-              "url" => "https://hex.pm/api/packages/bandit/releases/1.7.0",
-              "has_docs" => true,
-              "inserted_at" => "2025-05-29T16:57:22.358745Z"
-            },
-            %{
-              "version" => "1.6.11",
-              "url" => "https://hex.pm/api/packages/bandit/releases/1.6.11",
-              "has_docs" => true,
-              "inserted_at" => "2025-03-31T15:51:08.854619Z"
-            }
-          ],
-          "inserted_at" => "2020-11-05T17:11:46.440731Z",
-          "latest_version" => "1.7.0",
-          "latest_stable_version" => "1.7.0"
-        }
-      })
-
-    package
   end
 end

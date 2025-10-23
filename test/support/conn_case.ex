@@ -28,6 +28,7 @@ defmodule ToolboxWeb.ConnCase do
       import Plug.Conn
       import Phoenix.ConnTest
       import ToolboxWeb.ConnCase
+      import Toolbox.Factory
     end
   end
 
