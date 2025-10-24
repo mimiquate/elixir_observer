@@ -1,0 +1,28 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Introduction to Telemetry in Elixir",
+      "description": "Hands-on introduction to what Telemetry is and how to emit and handle events.",
+      "url": "https://blog.miguelcoba.com/introduction-to-telemetry-in-elixir"
+    },
+    {
+      "type": "article",
+      "title": "Elixir Telemetry: Metrics and Reporters",
+      "description": "Practical guide to choosing and capturing metrics with Telemetry.Metrics.",
+      "url": "https://samuelmullen.com/articles/elixir-telemetry-metrics-and-reporters"
+    },
+    {
+      "type": "article",
+      "title": "Out-of-the-box Elixir telemetry with Phoenix",
+      "description": "Shows Phoenix’s built-in Telemetry events and how to hook them up for monitoring.",
+      "url": "https://www.honeybadger.io/blog/phoenix-telemetry/"
+    },
+    {
+      "type": "podcast",
+      "title": "Operational Elixir: Observing the Midsize Madness",
+      "description": "Podcast discussion on observability patterns and tools in Elixir systems.",
+      "url": "https://podcast.thinkingelixir.com/193"
+    }
+  ]
+}

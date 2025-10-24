@@ -1,0 +1,34 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Using Tailwind CSS in Phoenix 1.7",
+      "description": "Pragmatic Studio walkthrough of Phoenix 1.7’s built-in Tailwind setup and how to customize it.",
+      "url": "https://pragmaticstudio.com/tutorials/using-tailwind-css-in-phoenix"
+    },
+    {
+      "type": "article",
+      "title": "Tailwind Standalone for Phoenix",
+      "description": "Fly.io Phoenix Files article explaining the standalone Tailwind CLI and no-Node setup.",
+      "url": "https://fly.io/phoenix-files/tailwind-standalone/"
+    },
+    {
+      "type": "video",
+      "title": "Gustavo Oliveira on Tailwind in Phoenix (All Things Elixir)",
+      "description": "Video discussion on getting started with Tailwind in Phoenix projects and common tips.",
+      "url": "https://www.youtube.com/watch?v=a7Oj3lXk_sw"
+    },
+    {
+      "type": "article",
+      "title": "How to Build Visually Cohesive Real-Time Interfaces in Phoenix LiveView Using Tailwind CSS",
+      "description": "Practical design and implementation tips for pairing LiveView with Tailwind for polished UIs.",
+      "url": "https://dev.to/hexshift/how-to-build-visually-cohesive-real-time-interfaces-in-phoenix-liveview-using-tailwind-css-3m5h"
+    },
+    {
+      "type": "article",
+      "title": "Get started with Tailwind in Phoenix",
+      "description": "Step-by-step setup guide (updated for Tailwind 3 and Phoenix 1.6.x) with examples.",
+      "url": "https://fullstackphoenix.com/tutorials/get-started-with-tailwind-in-phoenix"
+    }
+  ]
+}

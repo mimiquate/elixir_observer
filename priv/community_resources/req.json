@@ -1,0 +1,34 @@
+{
+  "resources": [
+    {
+      "type": "video",
+      "title": "Building API Clients with Req — Wojtek Mach (ElixirConf EU)",
+      "description": "Conference talk showing how to design and build robust HTTP API clients in Elixir using Req, with a focus on extensibility and composable steps.",
+      "url": "https://www.youtube.com/watch?v=AexE5JKpNvA"
+    },
+    {
+      "type": "video",
+      "title": "Req — a batteries-included HTTP client for Elixir (ElixirConf 2023)",
+      "description": "Overview of Req’s features like retries, redirects, decompression, and the steps pipeline, with practical examples.",
+      "url": "https://www.youtube.com/watch?v=owz2QacFuoQ"
+    },
+    {
+      "type": "article",
+      "title": "Req API Client Testing",
+      "description": "Dashbit post walking through approaches to testing third-party API integrations built with Req, including helpers and patterns.",
+      "url": "https://dashbit.co/blog/req-api-client-testing"
+    },
+    {
+      "type": "article",
+      "title": "SDKs with Req: S3",
+      "description": "How to create focused SDK-style clients on top of Req, illustrated with S3 operations and a Req plugin.",
+      "url": "https://dashbit.co/blog/sdks-with-req-s3"
+    },
+    {
+      "type": "article",
+      "title": "Tutorial on File Uploads with Req and Multipart Libraries in Elixir",
+      "description": "Guide showing how to perform multipart file uploads with Req by pairing it with a multipart encoder, using a Whisper API example.",
+      "url": "https://elixirmerge.com/p/tutorial-on-file-uploads-with-req-and-multipart-libraries-in-elixir"
+    }
+  ]
+}

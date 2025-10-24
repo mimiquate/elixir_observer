@@ -1,0 +1,34 @@
+{
+  "resources": [
+    {
+      "type": "podcast",
+      "title": "Thinking Elixir 163 — Job Queues using Oban with Parker Selbert",
+      "description": "Interview with Oban’s creator covering design, extensions (Web/Pro), and real-world scale.",
+      "url": "https://podcast.thinkingelixir.com/163"
+    },
+    {
+      "type": "video",
+      "title": "Scaling Oban Applications — ElixirConf EU 2024",
+      "description": "Conference talk on scaling strategies, plugins, backoff, and operational considerations with Oban.",
+      "url": "https://www.youtube.com/watch?v=1v52vTYlblM"
+    },
+    {
+      "type": "article",
+      "title": "Parallel Request Processing with Elixir and Oban",
+      "description": "DockYard tutorial using Oban jobs to parallelize HTTP requests with backoff and rate limiting.",
+      "url": "https://dockyard.com/blog/2024/03/26/parallel-request-processing-with-elixir-and-oban"
+    },
+    {
+      "type": "video",
+      "title": "Oban Beyond the Basics — Joseph Yiasemides",
+      "description": "Meetup talk diving into advanced Oban patterns beyond initial setup.",
+      "url": "https://www.youtube.com/watch?v=jZ237UL7Cq8"
+    },
+    {
+      "type": "article",
+      "title": "How to set up recurring jobs with Oban in Elixir",
+      "description": "Tutorial creating daily scheduled jobs (e.g., digest emails) with Oban and Bamboo.",
+      "url": "https://fullstackphoenix.com/tutorials/how-to-setup-recurring-jobs-with-oban-in-elixir"
+    }
+  ]
+}

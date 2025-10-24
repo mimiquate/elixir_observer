@@ -1,0 +1,34 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Tidewave Web: in-browser coding agent for Rails and Phoenix",
+      "description": "Announcement detailing Tidewave Web’s model-aware, in-browser agent that integrates with Phoenix and Rails for full-stack changes.",
+      "url": "https://tidewave.ai/blog/tidewave-web-phoenix-rails"
+    },
+    {
+      "type": "podcast",
+      "title": "Thinking Elixir 267 — Dive into Tidewave Web with José Valim",
+      "description": "Interview and deep dive into Tidewave’s goals, architecture, and developer workflow inside Phoenix.",
+      "url": "https://podcast.thinkingelixir.com/267"
+    },
+    {
+      "type": "video",
+      "title": "Thinking Elixir 267 — Dive into Tidewave Web (YouTube)",
+      "description": "Video version of the episode covering Tidewave’s in-browser agent and Phoenix integration.",
+      "url": "https://www.youtube.com/watch?v=pKlwt73XzmM"
+    },
+    {
+      "type": "article",
+      "title": "The path to Tidewave: beyond code intelligence",
+      "description": "Dashbit article outlining the vision that led to Tidewave and how it moves from code understanding to system understanding.",
+      "url": "https://dashbit.co/blog/the-path-to-tidewave"
+    },
+    {
+      "type": "article",
+      "title": "Tidewave Web: in-browser coding agent for Phoenix (community discussion)",
+      "description": "Elixir Forum thread announcing and discussing Tidewave’s Phoenix integration, with community feedback.",
+      "url": "https://elixirforum.com/t/tidewave-web-in-browser-coding-agent-for-phoenix-and-liveview/72164"
+    }
+  ]
+}

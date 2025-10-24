@@ -1,0 +1,22 @@
+{
+  "resources": [
+    {
+      "type": "video",
+      "title": "Phoenix Framework REST API Crash Course",
+      "description": "Beginner-friendly crash course to building APIs with Phoenix.",
+      "url": "https://www.youtube.com/watch?v=9xaN44PNxps"
+    },
+    {
+      "type": "video",
+      "title": "Chris McCord on Phoenix 1.8 and AI-Powered Development",
+      "description": "Conversation with Phoenix’s creator on 1.8 updates and DX topics.",
+      "url": "https://www.youtube.com/watch?v=9HePXo5K328"
+    },
+    {
+      "type": "podcast",
+      "title": "Thinking Elixir 259: Chris McCord on phoenix.new",
+      "description": "Interview covering the phoenix.new service and developer onboarding themes.",
+      "url": "https://elixirforum.com/t/thinking-elixir-259-chris-mccord-on-phoenix-new/71505"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Elixir/Phoenix Security: Rate Limits for Authentication with Hammer",
+      "description": "Practical guide to adding authentication rate limits in Phoenix with Hammer, including risks and configuration.",
+      "url": "https://paraxial.io/blog/auth-rate-limit"
+    },
+    {
+      "type": "video",
+      "title": "ElixirCasts #172 — Rate-limiting a Phoenix API with Hammer",
+      "description": "Screencast implementing per-user API rate limiting using Hammer and returning 429 responses.",
+      "url": "https://elixircasts.io/rate-limiting-a-phoenix-api-with-hammer"
+    },
+    {
+      "type": "article",
+      "title": "Rate Limits Phoenix",
+      "description": "Blog post showing how to add a Hammer-based rate limiter plug to a Phoenix API pipeline.",
+      "url": "https://dev.to/vkxni/rate-limits-phoenix-dmd"
+    },
+    {
+      "type": "article",
+      "title": "How to make rate limiting in Phoenix 1.7? (community tips)",
+      "description": "Elixir Forum thread discussing Hammer backends (ETS/Redis) and approaches to per-role limits.",
+      "url": "https://elixirforum.com/t/how-to-make-rate-limiting-in-phoenix-1-7/65381"
+    },
+    {
+      "type": "article",
+      "title": "Building a Distributed Rate Limiter in Elixir with HashRing",
+      "description": "AppSignal article that includes examples wrapping Hammer for clustered rate limiting patterns.",
+      "url": "https://blog.appsignal.com/2025/02/04/building-a-distributed-rate-limiter-in-elixir-with-hashring.html"
+    }
+  ]
+}

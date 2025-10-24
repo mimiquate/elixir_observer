@@ -1,0 +1,34 @@
+{
+  "resources": [
+    {
+      "type": "podcast",
+      "title": "Thinking Elixir 128 — Speedy like a Bandit",
+      "description": "Interview with Bandit’s author on design goals, Phoenix compatibility, and performance vs Cowboy.",
+      "url": "https://podcast.thinkingelixir.com/128"
+    },
+    {
+      "type": "video",
+      "title": "Phoenix Beyond Cowboy — Mat Trudel (ElixirConf EU 2023)",
+      "description": "Talk about Phoenix’s support for alternative web servers and how Bandit fits in.",
+      "url": "https://www.youtube.com/watch?v=usKLrYl4zlY"
+    },
+    {
+      "type": "article",
+      "title": "Bandit — pure Elixir HTTP server (community announcement)",
+      "description": "Elixir Forum post with performance notes, HTTP/1.x and HTTP/2 comparisons, and project background.",
+      "url": "https://elixirforum.com/t/bandit-a-pure-elixir-http-server-for-plug-websock-applications/59146"
+    },
+    {
+      "type": "article",
+      "title": "Perfect Elixir: Adding Bandit to a basic Elixir web app",
+      "description": "Practical snippet-driven guide showing how to run a Plug app on Bandit and wire it into supervision.",
+      "url": "https://dev.to/jonlauridsen/perfect-elixir-foundations-of-a-web-app-95l"
+    },
+    {
+      "type": "article",
+      "title": "Delivering social change with Elixir at Change.org",
+      "description": "Case study mentioning a Bandit-powered Phoenix API as part of Change.org’s stack.",
+      "url": "https://elixir-lang.org/blog/2020/10/27/delivering-social-change-with-elixir-at-change.org/"
+    }
+  ]
+}
