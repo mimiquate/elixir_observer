@@ -99,6 +99,7 @@ defmodule Toolbox.Tasks.GitHubTest do
              }
     end
 
+    @tag capture_log: true
     test "delete old snapshot when not found GitHub", %{} do
       {:ok, package} = Packages.create_package(%{name: "test_package"})
       github_link = "https://github.com/owner/non_existent_repo"

@@ -40,3 +40,16 @@ config :wallaby,
     # Attempt to fix https://github.com/elixir-wallaby/wallaby/issues/787
     binary: ""
   ]
+
+config :toolbox, Toolbox.CommunityResources,
+  path:
+    Path.join([
+      "..",
+      "..",
+      "..",
+      "..",
+      "test",
+      "support",
+      "community_resources",
+      "*.json"
+    ])

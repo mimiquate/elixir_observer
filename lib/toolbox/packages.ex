@@ -1,5 +1,12 @@
 defmodule Toolbox.Packages do
-  alias Toolbox.{GithubSnapshot, HexpmSnapshot, Package, Repo, Category, PackageEmbedding}
+  alias Toolbox.{
+    GithubSnapshot,
+    HexpmSnapshot,
+    Package,
+    Repo,
+    Category,
+    PackageEmbedding
+  }
 
   require Logger
 
@@ -242,6 +249,10 @@ defmodule Toolbox.Packages do
     |> where([gs], gs.package_id == ^id)
     |> Repo.delete_all()
   end
+
+  defdelegate community_resources_for(package),
+    to: Toolbox.CommunityResources,
+    as: :find_by_package
 
   defp latest_github_snaphost_query() do
     from(g in GithubSnapshot)
