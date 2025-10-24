@@ -27,7 +27,7 @@ defmodule ToolboxWeb.CategoryLiveTest do
         data: %{
           "meta" => %{"description" => "A pure Elixir HTTP server"},
           "downloads" => %{"recent" => 1000},
-          "latest_version" => "1.0.0"
+          "latest_stable_version" => "1.0.0"
         }
       })
 
@@ -37,7 +37,7 @@ defmodule ToolboxWeb.CategoryLiveTest do
         data: %{
           "meta" => %{"description" => "Small, fast, modular HTTP server"},
           "downloads" => %{"recent" => 2000},
-          "latest_version" => "2.0.0"
+          "latest_stable_version" => "2.0.0"
         }
       })
 

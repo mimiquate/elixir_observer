@@ -117,7 +117,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
                     class="text-[16px] text-secondary-text ml-4"
                     {test_attrs(package_version: true)}
                   >
-                    {package.latest_hexpm_snapshot.data["latest_version"]}
+                    {package.latest_hexpm_snapshot.data["latest_stable_version"]}
                   </span>
                   <span
                     :if={package.name == String.downcase(@search_term)}

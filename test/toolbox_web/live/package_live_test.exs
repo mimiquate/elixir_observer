@@ -35,7 +35,7 @@ defmodule ToolboxWeb.PackageLiveTest do
               }
             ],
             "inserted_at" => "2020-11-05T17:11:46.440731Z",
-            "latest_version" => "1.7.0",
+            "latest_version" => "2.0.0-rc.1",
             "latest_stable_version" => "1.7.0"
           }
         })

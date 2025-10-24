@@ -34,7 +34,7 @@ defmodule ToolboxWeb.CategoryIndexLiveTest do
         data: %{
           "meta" => %{"description" => "A pure Elixir HTTP server"},
           "downloads" => %{"recent" => 1000},
-          "latest_version" => "1.0.0"
+          "latest_stable_version" => "1.0.0"
         }
       })
 
@@ -44,7 +44,7 @@ defmodule ToolboxWeb.CategoryIndexLiveTest do
         data: %{
           "meta" => %{"description" => "HTTP client library"},
           "downloads" => %{"recent" => 800},
-          "latest_version" => "1.5.0"
+          "latest_stable_version" => "1.5.0"
         }
       })
 
@@ -54,7 +54,7 @@ defmodule ToolboxWeb.CategoryIndexLiveTest do
         data: %{
           "meta" => %{"description" => "Composable, testable & adapter based emails"},
           "downloads" => %{"recent" => 600},
-          "latest_version" => "2.0.0"
+          "latest_stable_version" => "2.0.0"
         }
       })
 
