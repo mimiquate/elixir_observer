@@ -1,0 +1,22 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "How to download large file in Elixir with :hackney",
+      "description": "Walkthrough of streaming a large CSV from S3 using the :hackney Erlang HTTP client.",
+      "url": "https://dev.to/onpointvn/download-stream-large-file-with-hackney-in-elixir-539m"
+    },
+    {
+      "type": "article",
+      "title": "Is httpc considered bad? Why shouldn’t I use it?",
+      "description": "Forum thread comparing Erlang HTTP clients and why projects often choose :hackney.",
+      "url": "https://erlangforums.com/t/is-httpc-considered-bad-why-shouldn-t-i-use-it/3505"
+    },
+    {
+      "type": "article",
+      "title": "Elixir: How to send body parameters using hackney",
+      "description": "StackOverflow Q&A showing correct request body handling with :hackney.",
+      "url": "https://stackoverflow.com/questions/59739588/elixir-how-to-send-body-parameters-using-hackney"
+    }
+  ]
+}

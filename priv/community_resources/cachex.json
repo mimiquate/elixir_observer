@@ -1,0 +1,34 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Powerful Caching in Elixir with Cachex",
+      "description": "Hands-on article showing Cachex patterns to speed up applications and avoid redundant work.",
+      "url": "https://blog.appsignal.com/2024/03/05/powerful-caching-in-elixir-with-cachex.html"
+    },
+    {
+      "type": "video",
+      "title": "ElixirCasts #79 — Caching with Cachex",
+      "description": "Short screencast demonstrating how to add and use Cachex in an Elixir app.",
+      "url": "https://elixircasts.io/caching-with-cachex"
+    },
+    {
+      "type": "article",
+      "title": "Cachex with Phoenix",
+      "description": "Step-by-step blog post wiring Cachex into a Phoenix project for expensive queries.",
+      "url": "https://www.alenm.com/code/phoenix-cachex"
+    },
+    {
+      "type": "article",
+      "title": "Use caching to speed up data loading in Phoenix LiveView",
+      "description": "Quick tip showing how to use Cachex to avoid double database hits during LiveView mount.",
+      "url": "https://fullstackphoenix.com/quick_tips/liveview-caching"
+    },
+    {
+      "type": "article",
+      "title": "Caching in Phoenix/Elixir with Cachex",
+      "description": "A concise walkthrough for setting up Cachex and organizing a cache service in Phoenix.",
+      "url": "https://alvinrapada.medium.com/caching-in-phoenix-elixir-with-cachex-1ca2c9442618"
+    }
+  ]
+}

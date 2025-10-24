@@ -1,0 +1,28 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Listen to Database Changes with Postgres Triggers and Elixir",
+      "description": "Guide to using LISTEN/NOTIFY with Postgrex and Phoenix for reactive apps.",
+      "url": "https://peterullrich.com/listen-to-database-changes-with-postgres-triggers-and-elixir"
+    },
+    {
+      "type": "article",
+      "title": "CDC with Postgrex & Elixir",
+      "description": "Change Data Capture using Postgres logical replication from Elixir.",
+      "url": "https://simonth.dev/posts/cdc-with-elixir/"
+    },
+    {
+      "type": "podcast",
+      "title": "Postgres PubSub and Elixir",
+      "description": "Podcast episode on using Postgres notifications through the postgrex library.",
+      "url": "https://podcast.thinkingelixir.com/33"
+    },
+    {
+      "type": "article",
+      "title": "Top Ten Tips for LISTEN/NOTIFY with Phoenix LiveView",
+      "description": "Practical patterns for wiring Postgrex.Notifications into LiveView apps.",
+      "url": "https://hexshift.medium.com/top-ten-tips-for-using-postgresql-listen-notify-with-phoenix-liveview-53c134a15931"
+    }
+  ]
+}

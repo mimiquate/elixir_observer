@@ -1,0 +1,28 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Cowboy architecture and execution flow",
+      "description": "Overview of Cowboy built on Ranch and how they power many Erlang/Elixir web apps.",
+      "url": "https://medium.com/%40scarfacedeb/cowboy-architecture-and-execution-flow-df7227a6573"
+    },
+    {
+      "type": "article",
+      "title": "Survey of Cowboy Webserver Performance - Part 1",
+      "description": "Explains Cowboy’s architecture and how Ranch serves as its TCP acceptor pool.",
+      "url": "https://stressgrid.com/blog/cowboy_performance/"
+    },
+    {
+      "type": "article",
+      "title": "Achieving 100k connections per second with Elixir",
+      "description": "Benchmark write-up featuring Ranch as the socket acceptor pool at the heart of Cowboy.",
+      "url": "https://stressgrid.com/blog/100k_cps_with_elixir/"
+    },
+    {
+      "type": "article",
+      "title": "Visualizing Parallel Requests in Elixir",
+      "description": "Shows how Cowboy uses Ranch and how Plug fits into the request pipeline.",
+      "url": "https://www.codemancers.com/blog/2016-01-15-visualizing-parallel-requests-in-elixir"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Unable to colorize escript text output",
+      "description": "Elixir Forum discussion about using Bunt for CLI colors and gotchas in escripts.",
+      "url": "https://elixirforum.com/t/unable-to-colorize-escript-text-output/2563"
+    },
+    {
+      "type": "article",
+      "title": "How to colorize JSON on terminal?",
+      "description": "Community thread exploring approaches to colorized terminal output in Elixir projects.",
+      "url": "https://elixirforum.com/t/how-to-colorize-json-on-terminal/12448"
+    },
+    {
+      "type": "article",
+      "title": "Cool CLIs in Elixir (Part 2) with IO.ANSI",
+      "description": "Tutorial on coloring terminal output in Elixir CLIs; useful context alongside Bunt.",
+      "url": "https://dennisbeatty.com/cool-clis-in-elixir-part-2-with-io-ansi/"
+    }
+  ]
+}
