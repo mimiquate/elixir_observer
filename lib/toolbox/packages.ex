@@ -100,6 +100,8 @@ defmodule Toolbox.Packages do
     |> Map.new()
   end
 
+  def category_count(nil), do: 0
+
   def category_count(category) do
     from(p in Package,
       where: p.id in ^top_3000_packages_ids(),

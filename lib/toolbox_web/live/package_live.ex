@@ -66,16 +66,12 @@ defmodule ToolboxWeb.PackageLive do
     end
 
     related_packages =
-      Toolbox.Packages.list_packages_from_category(package.category, 5)
+      package.category
+      |> Toolbox.Packages.list_packages_from_category(5)
       |> Enum.reject(&(&1.name == name))
       |> Enum.slice(0, 4)
 
-    related_packages_count =
-      if package.category do
-        Toolbox.Packages.category_count(package.category)
-      else
-        0
-      end
+    related_packages_count = Toolbox.Packages.category_count(package.category) - 1
 
     community_resources =
       Toolbox.Packages.community_resources_for(package)

@@ -5,8 +5,6 @@ defmodule ToolboxWeb.CategoryIndexLiveTest do
   alias Toolbox.{Category, Packages}
 
   setup do
-    Toolbox.Cache.delete_all()
-
     {:ok, bandit_package} =
       Packages.create_package(%{
         name: "bandit",

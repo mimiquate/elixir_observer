@@ -30,6 +30,7 @@ defmodule Toolbox.DataCase do
 
   setup tags do
     Toolbox.DataCase.setup_sandbox(tags)
+
     :ok
   end
 
