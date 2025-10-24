@@ -37,7 +37,7 @@ defmodule ToolboxWeb.SearchLiveTest do
         data: %{
           "meta" => %{"description" => "A pure Elixir HTTP server"},
           "downloads" => %{"recent" => 1000},
-          "latest_version" => "1.0.0"
+          "latest_stable_version" => "1.0.0"
         }
       })
 
@@ -47,7 +47,7 @@ defmodule ToolboxWeb.SearchLiveTest do
         data: %{
           "meta" => %{"description" => "Composable, testable & adapter based emails"},
           "downloads" => %{"recent" => 800},
-          "latest_version" => "2.0.0"
+          "latest_stable_version" => "2.0.0"
         }
       })
 
@@ -57,7 +57,7 @@ defmodule ToolboxWeb.SearchLiveTest do
         data: %{
           "meta" => %{"description" => "HTTP client library"},
           "downloads" => %{"recent" => 500},
-          "latest_version" => "1.5.0"
+          "latest_stable_version" => "1.5.0"
         }
       })
 
@@ -67,7 +67,7 @@ defmodule ToolboxWeb.SearchLiveTest do
         data: %{
           "meta" => %{"description" => "Urban development tools"},
           "downloads" => %{"recent" => 300},
-          "latest_version" => "0.5.0"
+          "latest_stable_version" => "0.5.0"
         }
       })
 

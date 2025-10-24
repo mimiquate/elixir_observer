@@ -22,7 +22,7 @@ defmodule Toolbox.Factory do
         package.id
       end)
 
-    defaults = %{
+    %{
       package_id: package_id,
       data: %{
         "meta" => %{"description" => "A pure Elixir HTTP server"},
@@ -42,12 +42,10 @@ defmodule Toolbox.Factory do
           }
         ],
         "inserted_at" => "2020-11-05T17:11:46.440731Z",
-        "latest_version" => "1.7.0",
+        "latest_version" => "2.0.0-rc.1",
         "latest_stable_version" => "1.7.0"
       }
     }
-
-    defaults
     |> Map.merge(Enum.into(params, %{}))
     |> Packages.create_hexpm_snapshot()
   end
