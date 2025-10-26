@@ -4,13 +4,13 @@ defmodule ToolboxWeb.PackageLiveTest do
 
   use Oban.Testing, repo: Toolbox.Repo
 
-  alias Toolbox.Packages
+  alias Toolbox.{Category, Packages}
 
   describe "Package Live View" do
     setup context do
       params =
-        if Map.get(context, :package_name) do
-          [name: Map.get(context, :package_name)]
+        if Map.get(context, :package_attrs) do
+          Map.get(context, :package_attrs)
         else
           []
         end
@@ -221,7 +221,7 @@ defmodule ToolboxWeb.PackageLiveTest do
       refute has_element?(view, "[data-test-owners-show-more-button]")
     end
 
-    @tag package_name: "test"
+    @tag package_attrs: [name: "test"]
     test "displays community section when package has resources", %{conn: conn, package: package} do
       {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
 
@@ -237,6 +237,39 @@ defmodule ToolboxWeb.PackageLiveTest do
 
       assert has_element?(view, data_test_attr(:community_section))
       assert has_element?(view, data_test_attr(:community_section_empty))
+    end
+
+    @category Category.find_by_name("Actors")
+
+    @tag package_attrs: [category: @category]
+    test "displays related packages section when package has a category with more than one package",
+         %{conn: conn} do
+      {:ok, package} = create(:package, category: @category)
+      {:ok, _} = create(:hexpm_snapshot, package_id: package.id)
+
+      {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
+
+      assert has_element?(view, data_test_attr(:related_packages_section))
+      assert has_element?(view, data_test_attr(:related_packages_count, "1"))
+    end
+
+    @tag package: [category: @category]
+    test "does not display related packages section when category has exactly one element", %{
+      conn: conn,
+      package: package
+    } do
+      {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
+
+      refute has_element?(view, data_test_attr(:related_packages_section))
+    end
+
+    test "does not display related packages section when package has no category", %{
+      conn: conn,
+      package: package
+    } do
+      {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
+
+      refute has_element?(view, data_test_attr(:related_packages_section))
     end
   end
 end

@@ -34,6 +34,7 @@ defmodule ToolboxWeb.ConnCase do
 
   setup tags do
     Toolbox.DataCase.setup_sandbox(tags)
+
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 
@@ -48,5 +49,12 @@ defmodule ToolboxWeb.ConnCase do
       (name
        |> to_string()
        |> String.replace("_", "-")) <> "]"
+  end
+
+  def data_test_attr(name, value) do
+    "[data-test-" <>
+      (name
+       |> to_string()
+       |> String.replace("_", "-")) <> "=\"#{value}\"]"
   end
 end
