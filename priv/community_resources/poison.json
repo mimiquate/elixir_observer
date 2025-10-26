@@ -1,0 +1,16 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Poison v6.0.0 released (performance discussion)",
+      "description": "Community thread noting significant parsing and encoding performance improvements.",
+      "url": "https://www.reddit.com/r/elixir/comments/1dbrl4b/poison_v600_released/"
+    },
+    {
+      "type": "article",
+      "title": "Poison vs Jason (community comparison)",
+      "description": "Community comparison page tracking popularity, activity, and library highlights.",
+      "url": "https://elixir.libhunt.com/compare-poison-vs-jason"
+    }
+  ]
+}

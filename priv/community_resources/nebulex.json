@@ -1,0 +1,28 @@
+{
+  "resources": [
+    {
+      "type": "podcast",
+      "title": "Thinking Elixir 124 — Caching Things Anywhere with Nebulex",
+      "description": "Conversation with Nebulex’s author on decorator-style caching, adapters, and use cases.",
+      "url": "https://podcast.thinkingelixir.com/124"
+    },
+    {
+      "type": "podcast",
+      "title": "EMx 235 — Caching Complexity: The Evolution of Nebulex",
+      "description": "Elixir Mix episode exploring algorithms, eviction policies, and Nebulex’s architecture.",
+      "url": "https://topenddevs.com/podcasts/elixir-mix/episodes/caching-complexity-the-evolution-of-nebulex-in-elixir-applications-emx-235"
+    },
+    {
+      "type": "article",
+      "title": "How to Cache Locally in Elixir with Nebulex",
+      "description": "AppSignal guide introducing Nebulex and showing local cache set-up and usage.",
+      "url": "https://blog.appsignal.com/2022/12/13/how-to-cache-locally-in-elixir-with-nebulex.html"
+    },
+    {
+      "type": "podcast",
+      "title": "Caching Complexity: The Evolution of Nebulex (Spotify)",
+      "description": "Audio stream of the Nebulex discussion covering strategies and trade-offs.",
+      "url": "https://open.spotify.com/episode/2b9Gvg1wMXJCxrf6ohumy6"
+    }
+  ]
+}

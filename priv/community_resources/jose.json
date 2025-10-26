@@ -1,0 +1,22 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Encrypting a JSON Web Token in Erlang, using JOSE",
+      "description": "Step-by-step JOSE example for signing and encrypting JWTs (Erlang, applicable to Elixir).",
+      "url": "https://blog.differentpla.net/blog/2023/02/13/jwt-encryption-jose/"
+    },
+    {
+      "type": "article",
+      "title": "Elixir and Phoenix Decoded: Configuring Guardian and GuardianDB",
+      "description": "Tutorial that includes generating Guardian secret keys using JOSE.",
+      "url": "https://medium.com/%40erickipnis/elixir-and-phoenix-decoded-configuring-guardian-and-guardiandb-b49f68adb98b"
+    },
+    {
+      "type": "article",
+      "title": "Using Joken for JWE? (discussion referencing erlang-jose)",
+      "description": "Elixir Forum thread on when to use JOSE directly for JWE versus higher-level JWT libraries.",
+      "url": "https://elixirforum.com/t/using-joken-for-jwe/41170"
+    }
+  ]
+}

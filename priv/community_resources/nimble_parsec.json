@@ -1,0 +1,28 @@
+{
+  "resources": [
+    {
+      "type": "video",
+      "title": "Craft your domain-specific query language with NimbleParsec and Ecto",
+      "description": "Talk demonstrating building a DSL parser with NimbleParsec and turning it into an AST.",
+      "url": "https://www.youtube.com/watch?v=T4komUAGMp8"
+    },
+    {
+      "type": "article",
+      "title": "Understanding NimbleParsec in Elixir",
+      "description": "Recent overview of how NimbleParsec works and when to use parser combinators.",
+      "url": "https://medium.com/beamworld/understanding-nimbleparsec-in-elixir-building-powerful-parsers-with-ease-808c554e4f01"
+    },
+    {
+      "type": "article",
+      "title": "Parser Combinators in Elixir: Taming Semi-Structured Text",
+      "description": "Intro tutorial using NimbleParsec to parse and normalize text inputs.",
+      "url": "https://blog.appsignal.com/2022/10/18/parser-combinators-in-elixir-taming-semi-structured-text.html"
+    },
+    {
+      "type": "article",
+      "title": "Writing a boolean expression parser in Elixir using NimbleParsec",
+      "description": "Step-by-step tutorial building a boolean expression parser.",
+      "url": "https://stefan.lapers.be/posts/elixir-writing-an-expression-parser-with-nimble-parsec/"
+    }
+  ]
+}

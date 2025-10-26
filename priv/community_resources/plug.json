@@ -1,0 +1,22 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "A deeper dive in Elixir’s Plug",
+      "description": "Explains the Plug specification, pipelines, and how Plug integrates with servers like Cowboy.",
+      "url": "https://ieftimov.com/posts/a-deeper-dive-in-elixir-plug/"
+    },
+    {
+      "type": "article",
+      "title": "Building Blocks of Elixir: Plug",
+      "description": "Beginner-friendly intro to Plug with a small project to learn the basics.",
+      "url": "https://www.viget.com/articles/building-blocks-of-elixir-plug/"
+    },
+    {
+      "type": "article",
+      "title": "Elixir Plug unveiled",
+      "description": "Conceptual look under the hood at how Plug works and compiles.",
+      "url": "https://medium.com/%40kansi/elixir-plug-unveiled-bf354e364641"
+    }
+  ]
+}
