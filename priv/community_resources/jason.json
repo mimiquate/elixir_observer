@@ -4,25 +4,25 @@
       "type": "article",
       "title": "Serialize and Deserialize JSON in Elixir",
       "description": "Step-by-step guide on encoding/decoding JSON with Jason, pitfalls, and custom encoders/decoders.",
-      "url": "[https://ssojet.com/serialize-and-deserialize/serialize-and-deserialize-json-in-elixir/](https://ssojet.com/serialize-and-deserialize/serialize-and-deserialize-json-in-elixir/)"
+      "url": "https://ssojet.com/serialize-and-deserialize/serialize-and-deserialize-json-in-elixir"
     },
     {
       "type": "article",
       "title": "Custom JSON encoding for structs in Elixir with Jason",
       "description": "How to implement custom Jason.Encoder for your structs, with examples and rationale.",
-      "url": "[https://www.chriis.dev/opinion/how-to-custom-jason-encoding-for-structs-in-elixir](https://www.chriis.dev/opinion/how-to-custom-jason-encoding-for-structs-in-elixir)"
+      "url": "https://www.chriis.dev/opinion/how-to-custom-jason-encoding-for-structs-in-elixir"
     },
     {
       "type": "article",
       "title": "Jason: a blazing fast JSON parser and generator in pure Elixir",
       "description": "Community discussion and benchmarks around Jason vs other JSON libraries.",
-      "url": "[https://elixirforum.com/t/jason-a-blazing-fast-json-parser-and-generator-in-pure-elixir/11030](https://elixirforum.com/t/jason-a-blazing-fast-json-parser-and-generator-in-pure-elixir/11030)"
+      "url": "https://elixirforum.com/t/jason-a-blazing-fast-json-parser-and-generator-in-pure-elixir/11030"
     },
     {
       "type": "article",
       "title": "How to have custom encoding for struct using Jason?",
       "description": "StackOverflow thread showing patterns for custom encoding and common gotchas.",
-      "url": "[https://stackoverflow.com/questions/71436312/how-to-have-custom-enconding-for-struct-using-jason](https://stackoverflow.com/questions/71436312/how-to-have-custom-enconding-for-struct-using-jason)"
+      "url": "https://stackoverflow.com/questions/71436312/how-to-have-custom-enconding-for-struct-using-jason"
     }
   ]
 }
