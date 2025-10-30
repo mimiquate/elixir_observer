@@ -31,15 +31,10 @@ config :toolbox, ToolboxWeb.Endpoint,
 
 config :tower, reporters: [Tower.EphemeralReporter]
 
-# Uncomment to see trace locally
+# Comment to see traces locally
+# use Signoz for a local dashboard like honeycomb
 # https://signoz.io/docs/install/docker/
-# config :opentelemetry, :processors,
-#     otel_batch_processor: %{
-#       exporter:
-#       {:opentelemetry_exporter,
-#       %{endpoints: ["http://localhost:4318"]}
-#       }
-#   }
+config :opentelemetry, traces_exporter: :none
 
 # ## SSL Support
 #
