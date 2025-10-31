@@ -21,6 +21,12 @@ defmodule ToolboxWeb.CategoryLive do
     }
   end
 
+  def handle_event("logout", _params, socket) do
+    {:noreply,
+     socket
+     |> redirect(to: ~p"/auth/logout")}
+  end
+
   def handle_info({:hide_dropdown, component_id}, socket) do
     send_update(ToolboxWeb.SearchFieldComponent, id: component_id.cid, show_dropdown: false)
     {:noreply, socket}

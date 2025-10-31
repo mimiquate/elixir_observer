@@ -143,6 +143,12 @@ defmodule ToolboxWeb.PackageLive do
     end
   end
 
+  def handle_event("logout", _params, socket) do
+    {:noreply,
+     socket
+     |> redirect(to: ~p"/auth/logout")}
+  end
+
   def handle_info(%{action: :refresh_owners, owners: owners, owners_sync_at: sync_at}, socket) do
     p = %{socket.assigns.package | owners: owners, owners_sync_at: sync_at}
 
