@@ -118,6 +118,10 @@ end
 
 if config_env() in [:prod, :dev] do
   config :toolbox,
+    github_oauth_client_id: System.fetch_env!("GITHUB_OAUTH_CLIENT_ID"),
+    github_oauth_client_secret: System.fetch_env!("GITHUB_OAUTH_CLIENT_SECRET")
+
+  config :toolbox,
     github_authorization_token: System.fetch_env!("GITHUB_AUTHORIZATION_TOKEN"),
     gemini_api_key: System.fetch_env!("GEMINI_API_KEY")
 end
