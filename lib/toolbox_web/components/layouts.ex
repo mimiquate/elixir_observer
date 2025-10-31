@@ -10,6 +10,8 @@ defmodule ToolboxWeb.Layouts do
   """
   use ToolboxWeb, :html
 
+  import ToolboxWeb.Components.Icons.GithubIcon
+
   embed_templates "layouts/*"
 
   def og_title(%{package: %{name: name}}) do
