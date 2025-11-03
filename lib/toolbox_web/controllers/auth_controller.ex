@@ -4,13 +4,8 @@ defmodule ToolboxWeb.AuthController do
   alias Toolbox.Auth.Github, as: GithubAuth
 
   def authorize(conn, _params) do
-    referer = case get_req_header(conn, "referer") do
-      [referer] -> referer
-      [] -> url(~p"/")
-    end
-
     code_verifier = GithubAuth.generate_code_verifier()
-    authorize_url = GithubAuth.authorize_url(referer, code_verifier)
+    authorize_url = GithubAuth.authorize_url(last_url(conn), code_verifier)
 
     conn
     |> put_session(:code_verifier, code_verifier)
@@ -40,13 +35,15 @@ defmodule ToolboxWeb.AuthController do
   end
 
   def logout(conn, _params) do
+    conn
+    |> clear_session()
+    |> redirect(external: last_url(conn))
+  end
+
+  def last_url(conn) do
     referer = case get_req_header(conn, "referer") do
       [referer] -> referer
       [] -> url(~p"/")
     end
-
-    conn
-    |> clear_session()
-    |> redirect(external: referer)
   end
 end
