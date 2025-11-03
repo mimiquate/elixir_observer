@@ -4,6 +4,7 @@ defmodule ToolboxWeb.Components.MobileMenu do
   import ToolboxWeb.Components.Icons.AnimatedHamburgerIcon
 
   attr :class, :string, default: nil
+  attr :current_user, :map, default: nil
 
   def mount(socket) do
     {:ok, assign(socket, show: false)}
@@ -77,6 +78,39 @@ defmodule ToolboxWeb.Components.MobileMenu do
                 >
                   Source
                 </.link>
+
+                <%= if @current_user do %>
+                  <.link
+                    class={[
+                      "block text-[20px] font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline transition-all duration-300 ease-out delay-200",
+                      (@show && "translate-y-0 opacity-100") || "translate-y-4 opacity-0"
+                    ]}
+                  >
+                    {@current_user.login}
+                  </.link>
+
+                  <.link
+                    href={~p"/auth/github"}
+                    class={[
+                      "block text-[20px] font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline transition-all duration-300 ease-out delay-200",
+                      (@show && "translate-y-0 opacity-100") || "translate-y-4 opacity-0"
+                    ]}
+                    phx-click="logout"
+                    phx-target={@myself}
+                  >
+                    Logout
+                  </.link>
+                <% else %>
+                  <.link
+                    navigate={~p"/auth/github"}
+                    class={[
+                      "block text-[20px] font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline transition-all duration-300 ease-out delay-200",
+                      (@show && "translate-y-0 opacity-100") || "translate-y-4 opacity-0"
+                    ]}
+                  >
+                    Login
+                  </.link>
+                <% end %>
               </nav>
             </div>
           </div>
@@ -88,5 +122,11 @@ defmodule ToolboxWeb.Components.MobileMenu do
 
   def handle_event("toggle_mobile_menu", _params, socket) do
     {:noreply, assign(socket, :show, !socket.assigns.show)}
+  end
+
+  def handle_event("logout", _params, socket) do
+    {:noreply,
+     socket
+     |> redirect(to: ~p"/auth/logout")}
   end
 end
