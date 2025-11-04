@@ -49,10 +49,4 @@ defmodule ToolboxWeb.CategoryIndexLive do
       assign(socket, category_packages: new_category_packages)
     }
   end
-
-  def handle_event("logout", _params, socket) do
-    {:noreply,
-     socket
-     |> redirect(to: ~p"/auth/logout")}
-  end
 end

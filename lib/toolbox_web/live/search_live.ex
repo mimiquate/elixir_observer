@@ -36,10 +36,4 @@ defmodule ToolboxWeb.SearchLive do
       )
     }
   end
-
-  def handle_event("logout", _params, socket) do
-    {:noreply,
-     socket
-     |> redirect(to: ~p"/auth/logout")}
-  end
 end

@@ -87,17 +87,16 @@ defmodule ToolboxWeb.Components.MobileMenu do
                     {@current_user.login}
                   </.link>
 
-                  <.link
-                    href={~p"/auth/github"}
+                  <.live_component
+                    module={ToolboxWeb.Components.LogoutButton}
+                    id="mobile-logout-button"
                     class={[
-                      "block text-[20px] font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline transition-all duration-300 ease-out delay-200",
+                      "inline text-[20px] font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline transition-all duration-300 ease-out delay-200",
                       (@show && "translate-y-0 opacity-100") || "translate-y-4 opacity-0"
                     ]}
-                    phx-click="logout"
-                    phx-target={@myself}
                   >
                     Logout
-                  </.link>
+                  </.live_component>
                 <% else %>
                   <.link
                     navigate={~p"/auth/github"}
@@ -120,11 +119,5 @@ defmodule ToolboxWeb.Components.MobileMenu do
 
   def handle_event("toggle_mobile_menu", _params, socket) do
     {:noreply, assign(socket, :show, !socket.assigns.show)}
-  end
-
-  def handle_event("logout", _params, socket) do
-    {:noreply,
-     socket
-     |> redirect(to: ~p"/auth/logout")}
   end
 end

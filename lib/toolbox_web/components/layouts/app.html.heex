@@ -67,12 +67,13 @@
               </button>
 
               <div id="user-dropdown-menu" class="hidden absolute top-14 right-10 rounded-md z-50">
-                <button
-                  phx-click="logout"
-                  class="block w-full text-left px-4 py-2 text-[16px] font-medium text-secondary-text dark:text-primary-text"
+                <.live_component
+                  module={ToolboxWeb.Components.LogoutButton}
+                  id="desktop-logout-button"
+                  class="inline text-[16px] px-4 py-2 font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline transition-all duration-300cl ease-out delay-200"
                 >
                   Log Out
-                </button>
+                </.live_component>
               </div>
             </div>
           <% else %>
