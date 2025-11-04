@@ -66,10 +66,13 @@ defmodule Toolbox.Auth.Github do
            ]
     ) do
       {:ok, %{status: 200, body: body}} ->
+        {:ok, primary_email} = get_primary_email(access_token)
+
         user_info = %{
           id: body["id"],
           login: body["login"],
           email: body["email"],
+          primary_email: primary_email,
           name: body["name"],
           avatar_url: body["avatar_url"],
         }

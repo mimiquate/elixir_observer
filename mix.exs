@@ -73,6 +73,7 @@ defmodule Toolbox.MixProject do
       {:logger_json, "~> 7.0"},
       {:pgvector, "~> 0.3.0"},
       {:req, "~> 0.5.15"},
+      {:uniq, "~> 0.6"},
 
       # OpenTelemetry
       {:opentelemetry, "~> 1.3"},
