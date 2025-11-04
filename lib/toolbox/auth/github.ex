@@ -27,17 +27,17 @@ defmodule Toolbox.Auth.Github do
     client_secret = Application.fetch_env!(:toolbox, :github_oauth_client_secret)
 
     case Req.post(@github_access_token_url,
-      headers: [
-        {"accept", "application/json"},
-        {"user-agent", "toolbox"}
-      ],
-      form: [
-        code_verifier: code_verifier,
-        client_id: client_id,
-        client_secret: client_secret,
-        code: code,
-      ]
-    )  do
+           headers: [
+             {"accept", "application/json"},
+             {"user-agent", "toolbox"}
+           ],
+           form: [
+             code_verifier: code_verifier,
+             client_id: client_id,
+             client_secret: client_secret,
+             code: code
+           ]
+         ) do
       {:ok, %{status: 200, body: %{"access_token" => access_token}}} ->
         {:ok, access_token}
 
@@ -64,7 +64,7 @@ defmodule Toolbox.Auth.Github do
              {"authorization", "Bearer #{access_token}"},
              {"user-agent", "toolbox"}
            ]
-    ) do
+         ) do
       {:ok, %{status: 200, body: body}} ->
         {:ok, primary_email} = get_primary_email(access_token)
 
@@ -74,10 +74,11 @@ defmodule Toolbox.Auth.Github do
           email: body["email"],
           primary_email: primary_email,
           name: body["name"],
-          avatar_url: body["avatar_url"],
+          avatar_url: body["avatar_url"]
         }
 
         {:ok, user_info}
+
       {:ok, body} ->
         {:error, body}
 
@@ -92,11 +93,12 @@ defmodule Toolbox.Auth.Github do
              {"authorization", "Bearer #{access_token}"},
              {"user-agent", "toolbox"}
            ]
-    ) do
+         ) do
       {:ok, %{status: 200, body: body}} ->
-        %{"email" => email} = Enum.find(body, &(&1["primary"]))
+        %{"email" => email} = Enum.find(body, & &1["primary"])
 
         {:ok, email}
+
       {:ok, body} ->
         {:error, body}
 

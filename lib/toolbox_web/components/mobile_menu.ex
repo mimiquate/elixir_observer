@@ -80,12 +80,10 @@ defmodule ToolboxWeb.Components.MobileMenu do
                 </.link>
 
                 <%= if @current_user do %>
-                  <.link
-                    class={[
-                      "block text-[20px] font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline transition-all duration-300 ease-out delay-200",
-                      (@show && "translate-y-0 opacity-100") || "translate-y-4 opacity-0"
-                    ]}
-                  >
+                  <.link class={[
+                    "block text-[20px] font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline transition-all duration-300 ease-out delay-200",
+                    (@show && "translate-y-0 opacity-100") || "translate-y-4 opacity-0"
+                  ]}>
                     {@current_user.login}
                   </.link>
 

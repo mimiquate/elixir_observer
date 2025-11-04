@@ -37,6 +37,7 @@ defmodule Toolbox.Users do
   Returns nil if id is nil.
   """
   def get_user(nil), do: nil
+
   def get_user(id) do
     Repo.get(User, id)
   end

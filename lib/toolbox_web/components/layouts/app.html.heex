@@ -6,26 +6,32 @@
           <.logo class="w-[153px]" />
         </.link>
 
-
         <%= unless assigns[:disable_search] do %>
           <div class="hidden sm:inline pt-3 sm:pt-0 grow ml-14 mr-8">
-              <.live_component
-                module={ToolboxWeb.SearchFieldComponent}
-                id="search-field"
-                search_term={@search_term}
-              />
+            <.live_component
+              module={ToolboxWeb.SearchFieldComponent}
+              id="search-field"
+              search_term={@search_term}
+            />
           </div>
         <% end %>
 
-        <.live_component module={ToolboxWeb.Components.MobileMenu} id="mobile-menu" current_user={@current_user} class="ml-auto"/>
+        <.live_component
+          module={ToolboxWeb.Components.MobileMenu}
+          id="mobile-menu"
+          current_user={@current_user}
+          class="ml-auto"
+        />
       </div>
 
-
       <div class="flex">
-        <.link navigate={~p"/categories"} class={[
-          "mr-2 ml:auto sm:mr-8 sm:py-2 sm:px-5",
-          assigns[:disable_search] && "ml-auto"
-        ]}>
+        <.link
+          navigate={~p"/categories"}
+          class={[
+            "mr-2 ml:auto sm:mr-8 sm:py-2 sm:px-5",
+            assigns[:disable_search] && "ml-auto"
+          ]}
+        >
           <span class="hidden sm:inline text-[16px] font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline">
             Categories
           </span>
@@ -48,7 +54,10 @@
 
         <div class="hidden sm:flex justify-center w-[120px]">
           <%= if @current_user do %>
-            <div class="hidden sm:flex text-[16px] font-medium text-secondary-text hover:text-accent active:text-accent active:underline" id="user-dropdown">
+            <div
+              class="hidden sm:flex text-[16px] font-medium text-secondary-text hover:text-accent active:text-accent active:underline"
+              id="user-dropdown"
+            >
               <button class="" phx-click={JS.toggle(to: "#user-dropdown-menu", display: "flex")}>
                 <img
                   src={@current_user.avatar_url}
@@ -71,7 +80,6 @@
               href={~p"/auth/github"}
               class="hidden sm:flex items-center py-2 px-5 bg-accent rounded-lg text-white"
             >
-
               <.github_icon class="mr-2 w-4 dark:fill-white" />
               <span class="text-[16px] font-medium">Log in</span>
             </.link>

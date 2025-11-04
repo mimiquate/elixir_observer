@@ -18,9 +18,8 @@ defmodule ToolboxWeb.AuthController do
     code_verifier = get_session(conn, "code_verifier")
 
     with {:ok, access_token} <- GithubAuth.exchange_code_for_token(code, code_verifier),
-      {:ok, user_info} <- GithubAuth.get_user_info(access_token),
-      {:ok, user} <- Users.upsert_from_github(user_info)
-    do
+         {:ok, user_info} <- GithubAuth.get_user_info(access_token),
+         {:ok, user} <- Users.upsert_from_github(user_info) do
       conn
       |> delete_session(:code_verifier)
       |> put_session(:user_id, user.id)
