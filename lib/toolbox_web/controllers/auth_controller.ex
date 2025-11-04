@@ -40,7 +40,7 @@ defmodule ToolboxWeb.AuthController do
   end
 
   def last_url(conn) do
-    referer = case get_req_header(conn, "referer") do
+    case get_req_header(conn, "referer") do
       [referer] -> referer
       [] -> url(~p"/")
     end

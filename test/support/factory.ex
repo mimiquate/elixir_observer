@@ -1,5 +1,5 @@
 defmodule Toolbox.Factory do
-  alias Toolbox.Packages
+  alias Toolbox.{Packages, Users}
 
   def create(model, params \\ [])
 
@@ -48,5 +48,30 @@ defmodule Toolbox.Factory do
     }
     |> Map.merge(Enum.into(params, %{}))
     |> Packages.create_hexpm_snapshot()
+  end
+
+  def create(:user, params) do
+    defaults = %{
+      github_id: System.unique_integer([:positive]),
+      login: "user_#{System.unique_integer([:positive])}",
+      email: "public_user_#{System.unique_integer([:positive])}@example.com",
+      primary_email: "primary_user_#{System.unique_integer([:positive])}@example.com",
+      name: "Test User",
+      avatar_url: "https://avatars.githubusercontent.com/u/123456"
+    }
+
+    attrs = Map.merge(defaults, Enum.into(params, %{}))
+
+    github_user_info = %{
+      id: attrs.github_id,
+      login: attrs.login,
+      email: attrs.email,
+      primary_email: attrs.primary_email,
+      name: attrs.name,
+      avatar_url: attrs.avatar_url
+    }
+
+    {:ok, user} = Users.upsert_from_github(github_user_info)
+    user
   end
 end

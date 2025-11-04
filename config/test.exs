@@ -32,7 +32,10 @@ config :phoenix_live_view,
 
 config :toolbox, Oban, testing: :manual
 
-config :toolbox, github_authorization_token: "123"
+config :toolbox,
+  github_authorization_token: "123",
+  github_oauth_client_id: "test_client_id",
+  github_oauth_client_secret: "test_client_secret"
 
 config :wallaby,
   otp_app: :toolbox,
