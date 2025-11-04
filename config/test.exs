@@ -32,6 +32,8 @@ config :phoenix_live_view,
 
 config :toolbox, Oban, testing: :manual
 
+config :opentelemetry, traces_exporter: :none
+
 config :toolbox,
   github_authorization_token: "123",
   github_oauth_client_id: "test_client_id",
