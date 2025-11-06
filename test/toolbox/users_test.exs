@@ -56,37 +56,25 @@ defmodule Toolbox.UsersTest do
     end
   end
 
-  describe "get_by_github_id/1" do
-    test "returns user when found" do
-      user = create(:user, github_id: 99999)
+  test "get_by_github_id/1" do
+    user = create(:user, github_id: 1)
 
-      found_user = Users.get_by_github_id(99999)
+    found_user = Users.get_by_github_id(1)
 
-      assert found_user.id == user.id
-      assert found_user.github_id == 99999
-    end
+    assert found_user.id == user.id
+    assert found_user.github_id == 1
 
-    test "returns nil when user not found" do
-      assert Users.get_by_github_id(99999) == nil
-    end
+    assert Users.get_by_github_id(-1) == nil
   end
 
-  describe "get_user/1" do
-    test "returns user when found" do
-      user = create(:user)
+  test "get_user/1" do
+    user = create(:user)
 
-      found_user = Users.get_user(user.id)
+    found_user = Users.get_user(user.id)
+    assert found_user.id == user.id
+    assert found_user.github_id == user.github_id
 
-      assert found_user.id == user.id
-      assert found_user.github_id == user.github_id
-    end
-
-    test "returns nil when user not found" do
-      assert Users.get_user(Uniq.UUID.uuid7()) == nil
-    end
-
-    test "returns nil when id is nil" do
-      assert Users.get_user(nil) == nil
-    end
+    assert Users.get_user(Uniq.UUID.uuid7()) == nil
+    assert Users.get_user(nil) == nil
   end
 end

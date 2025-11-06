@@ -9,18 +9,34 @@ defmodule ToolboxWeb.AuthControllerTest do
 
       conn = get(conn, ~p"/auth/github")
 
-      assert redirected_to(conn, 302) =~ "#{TestServer.url(oauth_server)}/login/oauth/authorize"
-      assert get_session(conn, :code_verifier) != nil
-    end
+      location = redirected_to(conn, 302)
+      assert location =~ "#{TestServer.url(oauth_server)}/login/oauth/authorize"
 
-    test "stores code_verifier in session", %{conn: conn} do
-      _oauth_server = test_server_github_oauth()
+      # Validate query parameters sent to GitHub
+      uri = URI.parse(location)
+      params = URI.decode_query(uri.query)
 
-      conn = get(conn, ~p"/auth/github")
+      assert %{
+               "client_id" => "test_client_id",
+               "redirect_uri" => redirect_uri,
+               "scope" => "user:email",
+               "state" => state,
+               "code_challenge_method" => "S256",
+               "code_challenge" => code_challenge
+             } = params
 
+      assert redirect_uri =~ "/auth/github/callback"
+      assert state =~ "/"
+      assert code_challenge != nil
+
+      # Validate code_challenge matches the code_verifier from session
       code_verifier = get_session(conn, :code_verifier)
       assert code_verifier != nil
-      assert String.length(code_verifier) == 128
+
+      expected_challenge =
+        Base.url_encode64(:crypto.hash(:sha256, code_verifier), padding: false)
+
+      assert code_challenge == expected_challenge
     end
 
     test "includes current URL from referer in state parameter", %{conn: conn} do
@@ -45,6 +61,20 @@ defmodule ToolboxWeb.AuthControllerTest do
       # Mock GitHub OAuth token exchange
       TestServer.add(oauth_server, "/login/oauth/access_token",
         via: :post,
+        match: fn conn ->
+          {:ok, body, _conn} = Plug.Conn.read_body(conn)
+          params = URI.decode_query(body)
+
+          match?(
+            %{
+              "client_id" => "test_client_id",
+              "client_secret" => "test_client_secret",
+              "code" => "github_code_123",
+              "code_verifier" => "test_verifier"
+            },
+            params
+          )
+        end,
         to: fn conn ->
           conn
           |> Plug.Conn.put_resp_header("content-type", "application/json")
@@ -54,6 +84,9 @@ defmodule ToolboxWeb.AuthControllerTest do
 
       # Mock GitHub user info endpoint
       TestServer.add(api_server, "/user",
+        match: fn conn ->
+          Plug.Conn.get_req_header(conn, "authorization") == ["Bearer test_access_token_123"]
+        end,
         to: fn conn ->
           conn
           |> Plug.Conn.put_resp_header("content-type", "application/json")
@@ -72,6 +105,9 @@ defmodule ToolboxWeb.AuthControllerTest do
 
       # Mock GitHub user emails endpoint
       TestServer.add(api_server, "/user/emails",
+        match: fn conn ->
+          Plug.Conn.get_req_header(conn, "authorization") == ["Bearer test_access_token_123"]
+        end,
         to: fn conn ->
           conn
           |> Plug.Conn.put_resp_header("content-type", "application/json")
