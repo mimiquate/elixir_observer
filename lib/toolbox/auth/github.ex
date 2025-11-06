@@ -18,7 +18,7 @@ defmodule Toolbox.Auth.Github do
   end
 
   def authorize_url(current_url, code_verifier) do
-    client_id = Application.fetch_env!(:toolbox, :github_oauth_client_id)
+    client_id = Keyword.fetch!(config(), :oauth_client_id)
     redirect_uri = url(~p"/auth/github/callback")
 
     params = %{
@@ -34,8 +34,8 @@ defmodule Toolbox.Auth.Github do
   end
 
   def exchange_code_for_token(code, code_verifier) do
-    client_id = Application.fetch_env!(:toolbox, :github_oauth_client_id)
-    client_secret = Application.fetch_env!(:toolbox, :github_oauth_client_secret)
+    client_id = Keyword.fetch!(config(), :oauth_client_id)
+    client_secret = Keyword.fetch!(config(), :oauth_client_secret)
 
     case Req.post("#{oauth_host().connect_url()}/login/oauth/access_token",
            headers: [
