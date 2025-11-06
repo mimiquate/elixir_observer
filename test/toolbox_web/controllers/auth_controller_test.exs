@@ -1,15 +1,21 @@
 defmodule ToolboxWeb.AuthControllerTest do
   use ToolboxWeb.ConnCase, async: true
 
+  import Helpers
+
   describe "GET /auth/github" do
     test "redirects to GitHub authorization URL", %{conn: conn} do
+      oauth_server = test_server_github_oauth()
+
       conn = get(conn, ~p"/auth/github")
 
-      assert redirected_to(conn, 302) =~ "https://github.com/login/oauth/authorize"
+      assert redirected_to(conn, 302) =~ "#{TestServer.url(oauth_server)}/login/oauth/authorize"
       assert get_session(conn, :code_verifier) != nil
     end
 
     test "stores code_verifier in session", %{conn: conn} do
+      _oauth_server = test_server_github_oauth()
+
       conn = get(conn, ~p"/auth/github")
 
       code_verifier = get_session(conn, :code_verifier)
@@ -18,6 +24,8 @@ defmodule ToolboxWeb.AuthControllerTest do
     end
 
     test "includes current URL from referer in state parameter", %{conn: conn} do
+      _oauth_server = test_server_github_oauth()
+
       conn =
         conn
         |> put_req_header("referer", "https://example.com/packages")
@@ -30,9 +38,51 @@ defmodule ToolboxWeb.AuthControllerTest do
 
   describe "GET /auth/github/callback" do
     test "creates user and redirects to state URL on successful authentication", %{conn: conn} do
-      # Note: This test would require mocking the GitHub API calls
-      # For now, we'll test the basic flow structure
+      oauth_server = test_server_github_oauth()
+      api_server = test_server_github_api()
       state_url = "https://example.com/dashboard"
+
+      # Mock GitHub OAuth token exchange
+      TestServer.add(oauth_server, "/login/oauth/access_token",
+        via: :post,
+        to: fn conn ->
+          conn
+          |> Plug.Conn.put_resp_header("content-type", "application/json")
+          |> Plug.Conn.send_resp(200, ~s({"access_token": "test_access_token_123"}))
+        end
+      )
+
+      # Mock GitHub user info endpoint
+      TestServer.add(api_server, "/user",
+        to: fn conn ->
+          conn
+          |> Plug.Conn.put_resp_header("content-type", "application/json")
+          |> Plug.Conn.send_resp(
+            200,
+            ~s({
+              "id": 12345,
+              "login": "testuser",
+              "email": "test@example.com",
+              "name": "Test User",
+              "avatar_url": "https://avatars.githubusercontent.com/u/12345"
+            })
+          )
+        end
+      )
+
+      # Mock GitHub user emails endpoint
+      TestServer.add(api_server, "/user/emails",
+        to: fn conn ->
+          conn
+          |> Plug.Conn.put_resp_header("content-type", "application/json")
+          |> Plug.Conn.send_resp(
+            200,
+            ~s([
+              {"email": "test@example.com", "primary": true, "verified": true}
+            ])
+          )
+        end
+      )
 
       conn =
         conn
@@ -42,24 +92,36 @@ defmodule ToolboxWeb.AuthControllerTest do
           "code" => "github_code_123"
         })
 
-      # Since we can't easily mock the GitHub API in this test without additional setup,
-      # we expect this to fail authentication and redirect back
       assert redirected_to(conn, 302) =~ state_url
+      assert get_session(conn, :user_id) != nil
+      assert get_session(conn, :code_verifier) == nil
     end
 
     test "redirects back to state URL on authentication failure", %{conn: conn} do
+      oauth_server = test_server_github_oauth()
       state_url = "https://example.com/dashboard"
+
+      # Mock GitHub OAuth token exchange to fail
+      TestServer.add(oauth_server, "/login/oauth/access_token",
+        via: :post,
+        to: fn conn ->
+          conn
+          |> Plug.Conn.put_resp_header("content-type", "application/json")
+          |> Plug.Conn.send_resp(401, ~s({"error": "bad_verification_code"}))
+        end
+      )
 
       conn =
         conn
         |> init_test_session(%{code_verifier: "test_verifier"})
         |> get(~p"/auth/github/callback", %{
           "state" => state_url,
-          "code" => "github_code_123"
+          "code" => "invalid_code"
         })
 
       assert redirected_to(conn, 302) =~ state_url
       assert Phoenix.Flash.get(conn.assigns.flash, :error) == "Authentication failed"
+      assert get_session(conn, :user_id) == nil
     end
   end
 

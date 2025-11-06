@@ -96,6 +96,10 @@ config :toolbox,
   github_base_url: "https://api.github.com",
   gemini_base_url: "https://generativelanguage.googleapis.com"
 
+config :toolbox, :github_auth,
+  oauth_host: Toolbox.Auth.Github.OAuthProdHost,
+  api_host: Toolbox.Auth.Github.APIProdHost
+
 config :toolbox, Toolbox.CommunityResources,
   path: Path.join(["priv", "community_resources", "*.json"])
 

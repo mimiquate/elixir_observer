@@ -39,6 +39,10 @@ config :toolbox,
   github_oauth_client_id: "test_client_id",
   github_oauth_client_secret: "test_client_secret"
 
+config :toolbox, :github_auth,
+  oauth_host: Toolbox.Auth.Github.OAuthTestHost,
+  api_host: Toolbox.Auth.Github.APITestHost
+
 config :wallaby,
   otp_app: :toolbox,
   chromedriver: [

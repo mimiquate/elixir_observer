@@ -1,6 +1,8 @@
 defmodule Toolbox.Auth.GithubTest do
   use Toolbox.DataCase, async: true
 
+  import Helpers
+
   alias Toolbox.Auth.Github
 
   describe "generate_code_verifier/0" do
@@ -27,12 +29,13 @@ defmodule Toolbox.Auth.GithubTest do
 
   describe "authorize_url/2" do
     test "generates a valid GitHub authorization URL" do
+      _oauth_server = test_server_github_oauth()
       current_url = "https://example.com/dashboard"
       code_verifier = Github.generate_code_verifier()
 
       url = Github.authorize_url(current_url, code_verifier)
 
-      assert String.starts_with?(url, "https://github.com/login/oauth/authorize?")
+      assert url =~ "/login/oauth/authorize?"
       assert url =~ "client_id="
       assert url =~ "redirect_uri="
       assert url =~ "scope=user%3Aemail"
@@ -42,6 +45,7 @@ defmodule Toolbox.Auth.GithubTest do
     end
 
     test "includes correct PKCE challenge derived from verifier" do
+      _oauth_server = test_server_github_oauth()
       current_url = "https://example.com/dashboard"
       code_verifier = "test_verifier_123"
 

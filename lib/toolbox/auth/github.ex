@@ -1,10 +1,21 @@
 defmodule Toolbox.Auth.Github do
-  @github_authorize_url "https://github.com/login/oauth/authorize"
-  @github_access_token_url "https://github.com/login/oauth/access_token"
-
   use Phoenix.VerifiedRoutes,
     router: ToolboxWeb.Router,
     endpoint: ToolboxWeb.Endpoint
+
+  defmodule Host do
+    @callback connect_url() :: String.t()
+  end
+
+  defmodule OAuthProdHost do
+    @behaviour Host
+    def connect_url, do: "https://github.com"
+  end
+
+  defmodule APIProdHost do
+    @behaviour Host
+    def connect_url, do: "https://api.github.com"
+  end
 
   def authorize_url(current_url, code_verifier) do
     client_id = Application.fetch_env!(:toolbox, :github_oauth_client_id)
@@ -19,14 +30,14 @@ defmodule Toolbox.Auth.Github do
       code_challenge: Base.url_encode64(:crypto.hash(:sha256, code_verifier), padding: false)
     }
 
-    "#{@github_authorize_url}?#{URI.encode_query(params)}"
+    "#{oauth_host().connect_url()}/login/oauth/authorize?#{URI.encode_query(params)}"
   end
 
   def exchange_code_for_token(code, code_verifier) do
     client_id = Application.fetch_env!(:toolbox, :github_oauth_client_id)
     client_secret = Application.fetch_env!(:toolbox, :github_oauth_client_secret)
 
-    case Req.post(@github_access_token_url,
+    case Req.post("#{oauth_host().connect_url()}/login/oauth/access_token",
            headers: [
              {"accept", "application/json"},
              {"user-agent", "toolbox"}
@@ -59,7 +70,7 @@ defmodule Toolbox.Auth.Github do
   end
 
   def get_user_info(access_token) do
-    case Req.get("https://api.github.com/user",
+    case Req.get("#{api_host().connect_url()}/user",
            headers: [
              {"authorization", "Bearer #{access_token}"},
              {"user-agent", "toolbox"}
@@ -88,7 +99,7 @@ defmodule Toolbox.Auth.Github do
   end
 
   def get_primary_email(access_token) do
-    case Req.get("https://api.github.com/user/emails",
+    case Req.get("#{api_host().connect_url()}/user/emails",
            headers: [
              {"authorization", "Bearer #{access_token}"},
              {"user-agent", "toolbox"}
@@ -106,4 +117,9 @@ defmodule Toolbox.Auth.Github do
         {:error, reason}
     end
   end
+
+  defp config, do: Application.fetch_env!(:toolbox, :github_auth)
+
+  defp oauth_host, do: Keyword.fetch!(config(), :oauth_host)
+  defp api_host, do: Keyword.fetch!(config(), :api_host)
 end
