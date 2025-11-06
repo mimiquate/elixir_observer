@@ -15,6 +15,6 @@ defmodule Toolbox.Repo.Migrations.CreateUsers do
     end
 
     create unique_index(:users, [:github_id])
-    create index(:users, [:login])
+    create unique_index(:users, [:login])
   end
 end
