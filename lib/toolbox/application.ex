@@ -19,6 +19,7 @@ defmodule Toolbox.Application do
         {Oban, Application.fetch_env!(:toolbox, Oban)},
         {DNSCluster, query: Application.get_env(:toolbox, :dns_cluster_query) || :ignore},
         {Phoenix.PubSub, name: Toolbox.PubSub},
+        {PlugAttack.Storage.Ets, name: ToolboxWeb.PlugAttack.Storage, clean_period: 60_000},
         ToolboxWeb.Endpoint
       ],
       # See https://hexdocs.pm/elixir/Supervisor.html

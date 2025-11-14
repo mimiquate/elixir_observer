@@ -4,6 +4,8 @@ defmodule ToolboxWeb.Router do
   import Oban.Web.Router
 
   pipeline :browser do
+    plug RemoteIp, headers: ["fly-client-ip"]
+    plug ToolboxWeb.PlugAttack
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash

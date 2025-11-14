@@ -96,6 +96,8 @@ config :toolbox,
   github_base_url: "https://api.github.com",
   gemini_base_url: "https://generativelanguage.googleapis.com"
 
+config :toolbox, ToolboxWeb.PlugAttack, limit: 100
+
 config :toolbox, Toolbox.CommunityResources,
   path: Path.join(["priv", "community_resources", "*.json"])
 
