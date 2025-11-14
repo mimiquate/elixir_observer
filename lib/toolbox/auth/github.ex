@@ -77,16 +77,26 @@ defmodule Toolbox.Auth.Github do
              {"user-agent", "toolbox"}
            ]
          ) do
-      {:ok, %{status: 200, body: body}} ->
+      {:ok,
+       %{
+         status: 200,
+         body: %{
+           "id" => id,
+           "login" => login,
+           "email" => email,
+           "name" => name,
+           "avatar_url" => avatar_url
+         }
+       }} ->
         {:ok, primary_email} = get_primary_email(access_token)
 
         user_info = %{
-          id: body["id"],
-          login: body["login"],
-          email: body["email"],
+          id: id,
+          login: login,
+          email: email,
           primary_email: primary_email,
-          name: body["name"],
-          avatar_url: body["avatar_url"]
+          name: name,
+          avatar_url: avatar_url
         }
 
         {:ok, user_info}
