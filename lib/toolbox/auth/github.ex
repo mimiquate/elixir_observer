@@ -61,12 +61,13 @@ defmodule Toolbox.Auth.Github do
   end
 
   def generate_code_verifier() do
-    length = 128
-    byte_length = ceil(length * 3 / 4)
+    characters_length = 128
+    # 3 bytes -> 4 base 64 characters
+    byte_length = ceil(characters_length * 3 / 4)
 
     :crypto.strong_rand_bytes(byte_length)
     |> Base.url_encode64(padding: false)
-    |> binary_part(0, length)
+    |> binary_part(0, characters_length)
   end
 
   def get_user_info(access_token) do
