@@ -55,3 +55,5 @@ config :toolbox, Toolbox.CommunityResources,
     ])
 
 config :toolbox, Toolbox.Cache, adapter: Nebulex.Adapters.Nil
+
+config :toolbox, ToolboxWeb.PlugAttack, limit: 1

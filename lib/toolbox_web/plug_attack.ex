@@ -10,7 +10,7 @@ defmodule ToolboxWeb.PlugAttack do
   rule "throttle by ip", conn do
     throttle(conn.remote_ip,
       period: 60_000,
-      limit: 100,
+      limit: Application.fetch_env!(:toolbox, __MODULE__)[:limit],
       storage: @storage
     )
   end

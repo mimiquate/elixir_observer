@@ -7,19 +7,17 @@ defmodule ToolboxWeb.PlugAttackTest do
       conn = %{conn | remote_ip: {127, 0, 0, 1}}
 
       # Make more than the limit from localhost
-      Enum.each(1..101, fn _ ->
+      Enum.each(1..2, fn _ ->
         conn = get(conn, "/")
         assert conn.status == 200
       end)
     end
 
-    test "ban per ip after 100 requests", %{conn: conn} do
-      Enum.each(1..100, fn _ ->
-        assert %{status: 200} =
-                 conn
-                 |> put_req_header("fly-client-ip", "198.51.100.50")
-                 |> get("/")
-      end)
+    test "ban per ip after 1 request", %{conn: conn} do
+      assert %{status: 200} =
+               conn
+               |> put_req_header("fly-client-ip", "198.51.100.50")
+               |> get("/")
 
       assert %{status: 403} =
                conn
