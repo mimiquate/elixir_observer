@@ -32,7 +32,14 @@ config :phoenix_live_view,
 
 config :toolbox, Oban, testing: :manual
 
-config :toolbox, github_authorization_token: "123"
+config :opentelemetry, traces_exporter: :none
+
+config :toolbox, :github,
+  oauth_host: Toolbox.Github.OAuthTestHost,
+  api_host: Toolbox.Github.APITestHost,
+  oauth_client_id: "test_client_id",
+  oauth_client_secret: "test_client_secret",
+  authorization_token: "123"
 
 config :wallaby,
   otp_app: :toolbox,

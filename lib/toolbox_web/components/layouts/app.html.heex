@@ -1,46 +1,63 @@
 <main class="min-h-screen flex flex-col h-full justify-between px-5 bg-background overflow-auto">
   <div class="min-h-screen container mx-auto flex flex-col">
     <nav class="sm:flex sm:justify-between sm:items-center sm:relative py-3">
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between w-full">
         <.link navigate="/">
           <.logo class="w-[153px]" />
         </.link>
 
+        <%= unless assigns[:disable_search] do %>
+          <div class="hidden sm:inline pt-3 sm:pt-0 grow ml-14 mr-8">
+            <.live_component
+              module={ToolboxWeb.SearchFieldComponent}
+              id="search-field"
+              search_term={@search_term}
+            />
+          </div>
+        <% end %>
+
         <.live_component
           module={ToolboxWeb.Components.MobileMenu}
           id="mobile-menu"
+          current_user={@current_user}
           class="ml-auto"
         />
       </div>
 
-      <div class="pt-3 sm:ml-auto sm:mr-8 sm:w-1/2 sm:pt-0">
+      <div class="flex">
+        <.link
+          navigate={~p"/categories"}
+          class={[
+            "mr-2 ml:auto sm:mr-8 sm:py-2 sm:px-5",
+            assigns[:disable_search] && "ml-auto"
+          ]}
+        >
+          <span class="hidden sm:inline text-[16px] font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline">
+            Categories
+          </span>
+        </.link>
+        <.link
+          href="https://github.com/mimiquate/elixir_observer"
+          target="_blank"
+          class="mr-2 sm:mr-8 sm:py-2 sm:px-5"
+        >
+          <span class="hidden sm:inline text-[16px] font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline">
+            Source
+          </span>
+        </.link>
+
+        <.link navigate={~p"/about"} class="mr-2 sm:mr-8 sm:py-2 sm:px-5">
+          <span class="hidden sm:inline text-[16px] font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline">
+            About
+          </span>
+        </.link>
+
         <.live_component
-          module={ToolboxWeb.SearchFieldComponent}
-          id="search-field"
-          class="w-full"
-          search_term={@search_term}
+          module={ToolboxWeb.Components.UserMenu}
+          id="user-menu"
+          current_user={@current_user}
         />
       </div>
-
-      <.link navigate={~p"/categories"} class="mr-2 sm:mr-8 sm:py-2 sm:px-5">
-        <span class="hidden sm:inline text-[16px] font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline">
-          Categories
-        </span>
-      </.link>
-      <.link
-        href="https://github.com/mimiquate/elixir_observer"
-        target="_blank"
-        class="mr-2 sm:mr-8 sm:py-2 sm:px-5"
-      >
-        <span class="hidden sm:inline text-[16px] font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline">
-          Source
-        </span>
-      </.link>
-      <.link navigate={~p"/about"} class="sm:py-2 sm:px-5">
-        <span class="hidden sm:inline text-[16px] font-medium text-secondary-text hover:text-accent active:text-accent active:underline">
-          About
-        </span>
-      </.link>
     </nav>
 
     <.flash_group flash={@flash} />

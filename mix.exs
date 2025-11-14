@@ -73,6 +73,7 @@ defmodule Toolbox.MixProject do
       {:logger_json, "~> 7.0"},
       {:pgvector, "~> 0.3.0"},
       {:req, "~> 0.5.15"},
+      {:uniq, "~> 0.6"},
       {:remote_ip, "~> 1.2"},
       {:plug_attack, "~> 0.4.3"},
 
@@ -98,6 +99,7 @@ defmodule Toolbox.MixProject do
       # Test
       {:wallaby, "~> 0.30.9", runtime: false, only: :test},
       {:test_server, "~> 0.1.20", only: :test},
+      {:mox, "~> 1.0", only: :test},
       # Needed by Phoenix.LiveViewTest
       {:lazy_html, "~> 0.1.0", only: :test}
     ]

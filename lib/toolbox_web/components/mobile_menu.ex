@@ -4,6 +4,7 @@ defmodule ToolboxWeb.Components.MobileMenu do
   import ToolboxWeb.Components.Icons.AnimatedHamburgerIcon
 
   attr :class, :string, default: nil
+  attr :current_user, :map, default: nil
 
   def mount(socket) do
     {:ok, assign(socket, show: false)}
@@ -77,6 +78,36 @@ defmodule ToolboxWeb.Components.MobileMenu do
                 >
                   Source
                 </.link>
+
+                <%= if @current_user do %>
+                  <.link class={[
+                    "block text-[20px] font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline transition-all duration-300 ease-out delay-200",
+                    (@show && "translate-y-0 opacity-100") || "translate-y-4 opacity-0"
+                  ]}>
+                    {@current_user.login}
+                  </.link>
+
+                  <.live_component
+                    module={ToolboxWeb.Components.LogoutButton}
+                    id="mobile-logout-button"
+                    class={[
+                      "inline text-[20px] font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline transition-all duration-300 ease-out delay-200",
+                      (@show && "translate-y-0 opacity-100") || "translate-y-4 opacity-0"
+                    ]}
+                  >
+                    Logout
+                  </.live_component>
+                <% else %>
+                  <.link
+                    navigate={~p"/auth/github"}
+                    class={[
+                      "block text-[20px] font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline transition-all duration-300 ease-out delay-200",
+                      (@show && "translate-y-0 opacity-100") || "translate-y-4 opacity-0"
+                    ]}
+                  >
+                    Login
+                  </.link>
+                <% end %>
               </nav>
             </div>
           </div>

@@ -93,8 +93,11 @@ config :opentelemetry,
   ]
 
 config :toolbox,
-  github_base_url: "https://api.github.com",
   gemini_base_url: "https://generativelanguage.googleapis.com"
+
+config :toolbox, :github,
+  oauth_host: Toolbox.Github.OAuthProdHost,
+  api_host: Toolbox.Github.APIProdHost
 
 config :toolbox, ToolboxWeb.PlugAttack, limit: 100
 

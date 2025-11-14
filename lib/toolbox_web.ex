@@ -54,6 +54,7 @@ defmodule ToolboxWeb do
       use Phoenix.LiveView,
         layout: {ToolboxWeb.Layouts, :app}
 
+      on_mount ToolboxWeb.AssignCurrentUser
       unquote(html_helpers())
     end
   end
