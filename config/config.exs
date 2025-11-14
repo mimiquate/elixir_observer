@@ -99,6 +99,8 @@ config :toolbox, :github,
   oauth_host: Toolbox.Github.OAuthProdHost,
   api_host: Toolbox.Github.APIProdHost
 
+config :toolbox, ToolboxWeb.PlugAttack, limit: 100
+
 config :toolbox, Toolbox.CommunityResources,
   path: Path.join(["priv", "community_resources", "*.json"])
 
