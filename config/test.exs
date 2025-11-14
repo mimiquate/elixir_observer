@@ -34,14 +34,12 @@ config :toolbox, Oban, testing: :manual
 
 config :opentelemetry, traces_exporter: :none
 
-config :toolbox,
-  github_authorization_token: "123"
-
-config :toolbox, :github_auth,
-  oauth_host: Toolbox.Auth.Github.OAuthTestHost,
-  api_host: Toolbox.Auth.Github.APITestHost,
+config :toolbox, :github,
+  oauth_host: Toolbox.Github.OAuthTestHost,
+  api_host: Toolbox.Github.APITestHost,
   oauth_client_id: "test_client_id",
-  oauth_client_secret: "test_client_secret"
+  oauth_client_secret: "test_client_secret",
+  authorization_token: "123"
 
 config :wallaby,
   otp_app: :toolbox,

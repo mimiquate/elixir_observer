@@ -8,6 +8,8 @@ defmodule Toolbox.Tasks.GitHubTest do
 
   describe "run/2" do
     test "creates github snapshot with successful response" do
+      test_server = Helpers.test_server_github_api()
+
       {:ok, package} = Packages.create_package(%{name: "test_package"})
       github_link = "https://github.com/owner/test_package"
 
@@ -16,7 +18,7 @@ defmodule Toolbox.Tasks.GitHubTest do
         data: %{}
       })
 
-      TestServer.add("/repos/owner/test_package",
+      TestServer.add(test_server, "/repos/owner/test_package",
         to: fn conn ->
           conn
           |> Plug.Conn.put_resp_header("content-type", "application/json")
@@ -24,7 +26,7 @@ defmodule Toolbox.Tasks.GitHubTest do
         end
       )
 
-      TestServer.add("/graphql",
+      TestServer.add(test_server, "/graphql",
         via: :post,
         to: fn conn ->
           conn
@@ -68,8 +70,6 @@ defmodule Toolbox.Tasks.GitHubTest do
         end
       )
 
-      Application.put_env(:toolbox, :github_base_url, TestServer.url())
-
       GitHub.run(package, github_link)
 
       snapshot = Packages.get_package_by_name(package.name).latest_github_snapshot
@@ -101,6 +101,8 @@ defmodule Toolbox.Tasks.GitHubTest do
 
     @tag capture_log: true
     test "delete old snapshot when not found GitHub", %{} do
+      test_server = Helpers.test_server_github_api()
+
       {:ok, package} = Packages.create_package(%{name: "test_package"})
       github_link = "https://github.com/owner/non_existent_repo"
 
@@ -114,13 +116,11 @@ defmodule Toolbox.Tasks.GitHubTest do
         data: %{}
       })
 
-      TestServer.add("/repos/owner/non_existent_repo",
+      TestServer.add(test_server, "/repos/owner/non_existent_repo",
         to: fn conn ->
           Plug.Conn.send_resp(conn, 404, "")
         end
       )
-
-      Application.put_env(:toolbox, :github_base_url, TestServer.url())
 
       GitHub.run(package, github_link)
 

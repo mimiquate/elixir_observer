@@ -117,12 +117,12 @@ if config_env() == :prod do
 end
 
 if config_env() in [:prod, :dev] do
-  config :toolbox, :github_auth,
+  config :toolbox, :github,
     oauth_client_id: System.fetch_env!("GITHUB_OAUTH_CLIENT_ID"),
-    oauth_client_secret: System.fetch_env!("GITHUB_OAUTH_CLIENT_SECRET")
+    oauth_client_secret: System.fetch_env!("GITHUB_OAUTH_CLIENT_SECRET"),
+    authorization_token: System.fetch_env!("GITHUB_AUTHORIZATION_TOKEN")
 
   config :toolbox,
-    github_authorization_token: System.fetch_env!("GITHUB_AUTHORIZATION_TOKEN"),
     gemini_api_key: System.fetch_env!("GEMINI_API_KEY")
 end
 

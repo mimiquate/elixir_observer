@@ -1,11 +1,11 @@
-Mox.defmock(Toolbox.Auth.Github.OAuthTestHost, for: Toolbox.Auth.Github.Host)
-Mox.defmock(Toolbox.Auth.Github.APITestHost, for: Toolbox.Auth.Github.Host)
+Mox.defmock(Toolbox.Github.OAuthTestHost, for: Toolbox.Github.Host)
+Mox.defmock(Toolbox.Github.APITestHost, for: Toolbox.Github.Host)
 
 defmodule Helpers do
   def test_server_github_oauth do
     {:ok, test_server} = TestServer.start()
 
-    Mox.stub(Toolbox.Auth.Github.OAuthTestHost, :connect_url, fn ->
+    Mox.stub(Toolbox.Github.OAuthTestHost, :connect_url, fn ->
       TestServer.url(test_server)
     end)
 
@@ -15,7 +15,7 @@ defmodule Helpers do
   def test_server_github_api do
     {:ok, test_server} = TestServer.start()
 
-    Mox.stub(Toolbox.Auth.Github.APITestHost, :connect_url, fn ->
+    Mox.stub(Toolbox.Github.APITestHost, :connect_url, fn ->
       TestServer.url(test_server)
     end)
 

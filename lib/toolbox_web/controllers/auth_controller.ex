@@ -1,12 +1,12 @@
 defmodule ToolboxWeb.AuthController do
   use ToolboxWeb, :controller
 
-  alias Toolbox.Auth.Github, as: GithubAuth
+  alias Toolbox.Github
   alias Toolbox.Users
 
   def authorize(conn, _params) do
-    code_verifier = GithubAuth.generate_code_verifier()
-    authorize_url = GithubAuth.authorize_url(last_url(conn), code_verifier)
+    code_verifier = Github.generate_code_verifier()
+    authorize_url = Github.authorize_url(last_url(conn), code_verifier)
 
     conn
     |> put_session(:code_verifier, code_verifier)
@@ -17,8 +17,8 @@ defmodule ToolboxWeb.AuthController do
   def callback(conn, %{"state" => url, "code" => code}) do
     code_verifier = get_session(conn, "code_verifier")
 
-    with {:ok, access_token} <- GithubAuth.exchange_code_for_token(code, code_verifier),
-         {:ok, user_info} <- GithubAuth.get_user_info(access_token),
+    with {:ok, access_token} <- Github.exchange_code_for_token(code, code_verifier),
+         {:ok, user_info} <- Github.get_user_info(access_token),
          {:ok, user} <- Users.upsert_from_github(user_info) do
       conn
       |> delete_session(:code_verifier)
