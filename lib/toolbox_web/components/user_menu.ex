@@ -36,7 +36,7 @@ defmodule ToolboxWeb.Components.UserMenu do
           href={~p"/auth/github"}
           class="hidden sm:flex items-center py-2 px-5 bg-accent rounded-lg text-white"
         >
-          <.github_icon class="mr-2 w-4 dark:fill-white" />
+          <.github_icon class="mr-2 w-4 fill-white" />
           <span class="text-[16px] font-medium">Log in</span>
         </.link>
       <% end %>
