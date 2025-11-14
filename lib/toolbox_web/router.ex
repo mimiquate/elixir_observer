@@ -35,6 +35,8 @@ defmodule ToolboxWeb.Router do
     live "/categories", CategoryIndexLive, private: %{seo: true}
     live "/categories/:permalink", CategoryLive, private: %{seo: true}
 
+    live "/profile", ProfileLive
+
     get "/auth/github", AuthController, :authorize
     get "/auth/github/callback", AuthController, :callback
     get "/auth/logout", AuthController, :logout

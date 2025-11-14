@@ -1,12 +1,32 @@
 <article class="pt-3 sm:pt-10">
   <section class="flex flex-wrap sm:flex-nowrap min-w-40 justify-between pb-3 sm:pb-10">
     <div class="w-full">
-      <h3
-        class="text-[42px] sm:text-[64px] text-primary-text font-semibold font-serif break-all"
-        {test_attrs(package_name: true)}
-      >
-        {@package.name}
-      </h3>
+      <div class="flex gap-4">
+        <h3
+          class="text-[42px] sm:text-[64px] text-primary-text font-semibold font-serif break-all"
+          {test_attrs(package_name: true)}
+        >
+          {@package.name}
+        </h3>
+        <div class="flex-row mt-4">
+          <button
+            :if={@package.is_following}
+            phx-click="unfollow"
+            class="group py-[2px] px-3 sm:px-4 rounded-full border border-stroke bg-chip-bg-exact-match text-white hover:bg-[#DC4C3E] hover:text-white text-[12px] sm:text-[14px] font-medium transition-colors duration-200"
+          >
+            <span class="group-hover:hidden">Following</span>
+            <span class="hidden group-hover:inline">Unfollow</span>
+          </button>
+
+          <button
+            :if={!@package.is_following}
+            phx-click="follow"
+            class="py-[2px] px-3 sm:px-4 rounded-full border border-stroke bg-chip-bg text-accent text-[12px] sm:text-[14px] font-medium"
+          >
+            Follow
+          </button>
+        </div>
+      </div>
 
       <p class="text-[18px] font-mono text-secondary-text" {test_attrs(package_description: true)}>
         {@package.description}

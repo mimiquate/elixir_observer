@@ -1,0 +1,136 @@
+<article
+  class={"pt-3 sm:pt-10 #{if(@packages == [], do: "h-full")}"}
+  {test_attrs(profile_page: true)}
+>
+  <div {test_attrs(profile_page_header: true)}>
+    <h1
+      class="text-[42px] sm:text-[64px] text-primary-text font-semibold font-serif break-all"
+      {test_attrs(profile_page_title: true)}
+    >
+      Profile
+    </h1>
+
+    <p class="text-[14px] sm:text-[18px] font-mono text-secondary-text">
+      This is your personal space on Observer.
+    </p>
+  </div>
+
+  <div class="flex items-center justify-between mt-8 mb-3 sm:mb-8">
+    <h2 class="text-[20px] text-primary-text sm:text-[32px] font-semibold">
+      Followed packages
+    </h2>
+  </div>
+
+  <%= if @packages != [] do %>
+    <div class="mt-7 sm:mt-10" {test_attrs(profile_packages: true)}>
+      <ul {test_attrs(results_list: true)}>
+        <li
+          :for={package <- @packages}
+          class="mt-5 flex py-2 px-3 flex-col bg-surface rounded-md border border-stroke sm:py-3 sm:px-5 sm:flex-row sm:justify-between"
+          {test_attrs(result_item: package.name)}
+        >
+          <div>
+            <div class="flex items-center">
+              <.link
+                navigate={~p"/packages/#{package.name}"}
+                class="text-[16px] sm:text-[18px] hover:underline"
+                {test_attrs(package_link: package.name)}
+              >
+                {package.name}
+              </.link>
+              <span
+                class="ml-4 text-[16px] sm:text-[18px] text-secondary-text"
+                {test_attrs(version: package.latest_hexpm_snapshot.data["latest_stable_version"])}
+              >
+                {package.latest_hexpm_snapshot.data["latest_stable_version"]}
+              </span>
+            </div>
+
+            <p
+              class="mt-2 text-[12px] sm:text-[14px] text-secondary-text"
+              {test_attrs(package_description: true)}
+            >
+              {package.description}
+            </p>
+
+            <.link
+              :if={package.category}
+              navigate={~p"/categories/#{package.category.permalink}"}
+              class="flex items-center mt-2 sm:mt-1 cursor-pointer"
+            >
+              <.bookmark_icon class="w-[14px] h-[17px]" />
+
+              <span class="text-[14px] sm:text-[16px] ml-2 sm:ml-3 sm:ml-2 text-accent hover:underline">
+                {package.category.name}
+              </span>
+            </.link>
+
+            <div class="flex items-center mt-3 sm:hidden">
+              <div class="flex w-[50px]">
+                <div class="p-1 rounded-md">
+                  <.star_icon class="w-3" />
+                </div>
+                <span
+                  class="ml-1 text-primary-text text-[12px] sm:text-[16px]"
+                  {test_attrs(package_stars_mobile: true)}
+                >
+                  <%= if package.latest_github_snapshot do %>
+                    {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
+                  <% else %>
+                    -
+                  <% end %>
+                </span>
+              </div>
+
+              <div class="flex ml-4 items-center justify-end sm:hidden">
+                <div class="p-1 w-fit rounded-md">
+                  <.download_icon class="w-3" />
+                </div>
+                <span
+                  class="text-[12px] text-primary-text ml-1"
+                  {test_attrs(package_downloads_mobile: true)}
+                >
+                  {humanized_number(package.latest_hexpm_snapshot.data["downloads"]["recent"])}
+                </span>
+                <span class="text-[12px] text-secondary-text ml-1">last 90 days</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hidden sm:flex items-center">
+            <div class="flex items-center min-w-25 justify-start">
+              <div class="p-1 w-fit rounded-md">
+                <.star_icon class="w-5" />
+              </div>
+              <span class="text-[18px] ml-2" {test_attrs(package_stars_desktop: true)}>
+                <%= if package.latest_github_snapshot do %>
+                  {humanized_number(package.latest_github_snapshot.data["stargazers_count"])}
+                <% else %>
+                  -
+                <% end %>
+              </span>
+            </div>
+            <div class="flex items-center min-w-25 justify-start">
+              <div class="p-1 w-fit rounded-md ml-2">
+                <.download_icon class="w-5" />
+              </div>
+              <span class="text-[18px] ml-2" {test_attrs(package_downloads_desktop: true)}>
+                {humanized_number(package.latest_hexpm_snapshot.data["downloads"]["recent"])}
+              </span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  <% else %>
+    <div class="flex flex-col items-center">
+      <img src={~p"/images/empty-state-figure.png"} />
+      <h3 class="text-primary-text sm:text-[24px] mt-3" {test_attrs(no_packages_title: true)}>
+        No packages yet
+      </h3>
+      <p class="text-secondary-text sm:text-[16px]" {test_attrs(no_packages_message: true)}>
+        Start following packages to see them here
+      </p>
+    </div>
+  <% end %>
+</article>

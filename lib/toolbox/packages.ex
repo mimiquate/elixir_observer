@@ -89,6 +89,20 @@ defmodule Toolbox.Packages do
     |> Repo.all()
   end
 
+  def list_packages_from_user(user_id) do
+    from(p in Package,
+      join: up in Toolbox.UserPackage,
+      on: up.package_id == p.id,
+      where: up.user_id == ^user_id and up.following == true,
+      preload: [
+        latest_hexpm_snapshot: ^latest_hexpm_snaphost_query(),
+        latest_github_snapshot: ^latest_github_snaphost_query()
+      ],
+      order_by: [desc: up.inserted_at]
+    )
+    |> Repo.all()
+  end
+
   # Categories count based on the top 3000 packages
   def categories_counts do
     from(p in Package,

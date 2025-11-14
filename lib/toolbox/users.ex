@@ -1,5 +1,5 @@
 defmodule Toolbox.Users do
-  alias Toolbox.{User, Repo}
+  alias Toolbox.{User, UserPackage, Repo}
   import Ecto.Query
 
   @doc """
@@ -40,5 +40,29 @@ defmodule Toolbox.Users do
 
   def get_user(id) do
     Repo.get(User, id)
+  end
+
+  def follow_package(user_id, package_id) do
+    update_user_package(user_id, package_id, true)
+  end
+
+  def unfollow_package(user_id, package_id) do
+    update_user_package(user_id, package_id, false)
+  end
+
+  def following_package?(user_id, package_id) do
+    from(up in UserPackage,
+      where: up.user_id == ^user_id and up.package_id == ^package_id and up.following == true
+    )
+    |> Repo.exists?()
+  end
+
+  defp update_user_package(user_id, package_id, following) do
+    %UserPackage{}
+    |> UserPackage.changeset(%{user_id: user_id, package_id: package_id, following: following})
+    |> Repo.insert(
+      on_conflict: {:replace, [:following, :updated_at]},
+      conflict_target: [:user_id, :package_id]
+    )
   end
 end
