@@ -10,7 +10,7 @@ defmodule ToolboxWeb.ProfileLive do
     current_user = socket.assigns[:current_user]
 
     if current_user do
-      packages = Packages.list_packages_from_user(current_user.id)
+      packages = Packages.list_user_followed_packages(current_user.id)
 
       {
         :ok,

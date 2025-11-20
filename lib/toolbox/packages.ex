@@ -89,7 +89,7 @@ defmodule Toolbox.Packages do
     |> Repo.all()
   end
 
-  def list_packages_from_user(user_id) do
+  def list_user_followed_packages(user_id) do
     from(p in Package,
       join: up in Toolbox.UserPackage,
       on: up.package_id == p.id,
