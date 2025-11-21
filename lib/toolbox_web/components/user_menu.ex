@@ -21,11 +21,20 @@ defmodule ToolboxWeb.Components.UserMenu do
             />
           </button>
 
-          <div id="user-dropdown-menu" class="hidden absolute top-14 right-10 rounded-md z-50">
+          <div
+            id="user-dropdown-menu"
+            class="hidden absolute top-14 right-10 bg-background rounded-md z-50 flex flex-col"
+          >
+            <.link
+              navigate={~p"/profile"}
+              class="text-[16px] px-4 py-2 font-medium text-secondary-text hover:text-accent active:text-accent active:underline transition-all duration-300cl ease-out delay-200"
+            >
+              Profile
+            </.link>
             <.live_component
               module={ToolboxWeb.Components.LogoutButton}
               id="desktop-logout-button"
-              class="inline text-[16px] px-4 py-2 font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline transition-all duration-300cl ease-out delay-200"
+              class="inline text-[16px] px-4 py-2 font-medium text-secondary-text hover:text-accent active:text-accent active:underline transition-all duration-300cl ease-out delay-200"
             >
               Log Out
             </.live_component>

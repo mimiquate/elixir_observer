@@ -1,0 +1,39 @@
+<article
+  class={"pt-3 sm:pt-10 #{if(@packages == [], do: "h-full")}"}
+  {test_attrs(profile_page: true)}
+>
+  <div {test_attrs(profile_page_header: true)}>
+    <h1
+      class="text-[42px] sm:text-[64px] text-primary-text font-semibold font-serif break-all"
+      {test_attrs(profile_page_title: true)}
+    >
+      Profile
+    </h1>
+
+    <p class="text-[14px] sm:text-[18px] font-mono text-secondary-text">
+      This is your personal space on Observer.
+    </p>
+  </div>
+
+  <div class="flex items-center justify-between mt-8 mb-3 sm:mb-8">
+    <h2 class="text-[20px] text-primary-text sm:text-[32px] font-semibold">
+      Followed packages
+    </h2>
+  </div>
+
+  <%= if Enum.any?(@packages) do %>
+    <div class="mt-6 sm:mt-8" {test_attrs(profile_packages: true)}>
+      <ToolboxWeb.Components.PackageList.package_list packages={@packages} />
+    </div>
+  <% else %>
+    <div class="flex flex-col items-center">
+      <img src={~p"/images/empty-state-figure.png"} />
+      <h3 class="text-primary-text sm:text-[24px] mt-3" {test_attrs(no_packages_title: true)}>
+        No packages yet
+      </h3>
+      <p class="text-secondary-text sm:text-[16px]" {test_attrs(no_packages_message: true)}>
+        Start following packages to see them here
+      </p>
+    </div>
+  <% end %>
+</article>

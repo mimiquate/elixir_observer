@@ -76,6 +76,15 @@ defmodule ToolboxWeb.PackageLive do
     community_resources =
       Toolbox.Packages.community_resources_for(package)
 
+    current_user = socket.assigns.current_user
+
+    is_following =
+      if current_user do
+        Toolbox.Users.following_package?(current_user.id, package.id)
+      else
+        false
+      end
+
     {
       :ok,
       assign(
@@ -85,6 +94,7 @@ defmodule ToolboxWeb.PackageLive do
         related_packages: related_packages,
         related_packages_count: related_packages_count,
         package: %{
+          id: package.id,
           name: package.name,
           category: package.category,
           description: package.description,
@@ -104,6 +114,7 @@ defmodule ToolboxWeb.PackageLive do
           stargazers_count: github.data["stargazers_count"],
           activity: github.activity,
           github_sync_at: github.sync_at,
+          is_following: is_following,
           community_resources: community_resources
         }
       )
@@ -141,6 +152,32 @@ defmodule ToolboxWeb.PackageLive do
     else
       {:noreply, push_patch(socket, to: ~p"/packages/#{name}/#{version}")}
     end
+  end
+
+  def handle_event("follow", _params, %{assigns: %{current_user: nil}} = socket) do
+    {:noreply, socket |> redirect(to: ~p"/auth/github")}
+  end
+
+  def handle_event(
+        "follow",
+        _params,
+        %{assigns: %{current_user: %{id: user_id}, package: %{id: package_id}}} = socket
+      ) do
+    {:ok, _} = Toolbox.Users.follow_package(user_id, package_id)
+
+    p = %{socket.assigns.package | is_following: true}
+    {:noreply, assign(socket, package: p)}
+  end
+
+  def handle_event(
+        "unfollow",
+        _params,
+        %{assigns: %{current_user: %{id: user_id}, package: %{id: package_id}}} = socket
+      ) do
+    {:ok, _} = Toolbox.Users.unfollow_package(user_id, package_id)
+
+    p = %{socket.assigns.package | is_following: false}
+    {:noreply, assign(socket, package: p)}
   end
 
   def handle_info(%{action: :refresh_owners, owners: owners, owners_sync_at: sync_at}, socket) do

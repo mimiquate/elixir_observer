@@ -1,6 +1,7 @@
 defmodule ToolboxWeb.PackageLiveTest do
   use ToolboxWeb.ConnCase, async: true
   import Phoenix.LiveViewTest
+  import Helpers
 
   use Oban.Testing, repo: Toolbox.Repo
 
@@ -270,6 +271,138 @@ defmodule ToolboxWeb.PackageLiveTest do
       {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
 
       refute has_element?(view, data_test_attr(:related_packages_section))
+    end
+  end
+
+  describe "Follow/Unfollow Package" do
+    setup do
+      user = create(:user)
+      {:ok, package} = create(:package)
+      {:ok, _} = create(:hexpm_snapshot, package_id: package.id)
+
+      [user: user, package: package]
+    end
+
+    test "shows follow button when user is logged in and not following", %{
+      conn: conn,
+      user: user,
+      package: package
+    } do
+      conn = init_test_session(conn, %{user_id: user.id})
+
+      {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
+
+      assert has_element?(view, "button[phx-click='follow']")
+      refute has_element?(view, "button[phx-click='unfollow']")
+    end
+
+    test "shows following button when user is logged in and following", %{
+      conn: conn,
+      user: user,
+      package: package
+    } do
+      Toolbox.Users.follow_package(user.id, package.id)
+      conn = init_test_session(conn, %{user_id: user.id})
+
+      {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
+
+      assert has_element?(view, "button[phx-click='unfollow']")
+      refute has_element?(view, "button[phx-click='follow']")
+    end
+
+    test "shows follow button and redirects to auth when user is not logged in", %{
+      conn: conn,
+      package: package
+    } do
+      _oauth_server = test_server_github_oauth()
+
+      {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
+
+      assert has_element?(view, "button[phx-click='follow']")
+      refute has_element?(view, "button[phx-click='unfollow']")
+
+      # Clicking follow should redirect to auth
+      result =
+        view
+        |> element("button[phx-click='follow']")
+        |> render_click()
+
+      assert {:error, {:redirect, %{to: "/auth/github"}}} = result
+    end
+
+    test "follows a package when clicking follow button", %{
+      conn: conn,
+      user: user,
+      package: package
+    } do
+      conn = init_test_session(conn, %{user_id: user.id})
+
+      {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
+
+      assert has_element?(view, "button[phx-click='follow']")
+
+      view
+      |> element("button[phx-click='follow']")
+      |> render_click()
+
+      assert has_element?(view, "button[phx-click='unfollow']")
+      refute has_element?(view, "button[phx-click='follow']")
+
+      # Verify in database
+      assert Toolbox.Users.following_package?(user.id, package.id) == true
+    end
+
+    test "unfollows a package when clicking following button", %{
+      conn: conn,
+      user: user,
+      package: package
+    } do
+      Toolbox.Users.follow_package(user.id, package.id)
+      conn = init_test_session(conn, %{user_id: user.id})
+
+      {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
+
+      assert has_element?(view, "button[phx-click='unfollow']")
+
+      view
+      |> element("button[phx-click='unfollow']")
+      |> render_click()
+
+      assert has_element?(view, "button[phx-click='follow']")
+      refute has_element?(view, "button[phx-click='unfollow']")
+
+      # Verify in database
+      assert Toolbox.Users.following_package?(user.id, package.id) == false
+    end
+
+    test "can follow and unfollow multiple times", %{conn: conn, user: user, package: package} do
+      conn = init_test_session(conn, %{user_id: user.id})
+
+      {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
+
+      # Follow
+      view
+      |> element("button[phx-click='follow']")
+      |> render_click()
+
+      assert has_element?(view, "button[phx-click='unfollow']")
+
+      # Unfollow
+      view
+      |> element("button[phx-click='unfollow']")
+      |> render_click()
+
+      assert has_element?(view, "button[phx-click='follow']")
+
+      # Follow again
+      view
+      |> element("button[phx-click='follow']")
+      |> render_click()
+
+      assert has_element?(view, "button[phx-click='unfollow']")
+
+      # Verify final state in database
+      assert Toolbox.Users.following_package?(user.id, package.id) == true
     end
   end
 end
