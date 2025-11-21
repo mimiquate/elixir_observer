@@ -13,9 +13,6 @@ defmodule Toolbox.User do
     field :name, :string
     field :avatar_url, :string
 
-    has_many :user_packages, Toolbox.UserPackage
-    has_many :packages, through: [:user_packages, :package]
-
     timestamps()
   end
 
