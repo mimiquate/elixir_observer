@@ -56,9 +56,9 @@ defmodule ToolboxWeb.ProfileLiveTest do
       {:ok, view, _html} = live(conn, ~p"/profile")
 
       assert has_element?(view, data_test_attr(:profile_packages))
-      assert has_element?(view, data_test_attr(:results_list))
-      assert has_element?(view, data_test_attr(:result_item, package1.name))
-      assert has_element?(view, data_test_attr(:result_item, package2.name))
+      assert has_element?(view, data_test_attr(:packages_list))
+      assert has_element?(view, data_test_attr(:package_item, package1.name))
+      assert has_element?(view, data_test_attr(:package_item, package2.name))
       assert has_element?(view, data_test_attr(:package_link, package1.name))
       assert has_element?(view, data_test_attr(:package_link, package2.name))
       refute has_element?(view, data_test_attr(:no_packages_title))

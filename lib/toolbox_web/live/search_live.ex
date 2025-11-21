@@ -1,10 +1,6 @@
 defmodule ToolboxWeb.SearchLive do
   use ToolboxWeb, :live_view
 
-  import ToolboxWeb.Components.Icons.StarIcon
-  import ToolboxWeb.Components.Icons.DownloadIcon
-  import ToolboxWeb.Components.Icons.BookmarkIcon
-
   def mount(%{"term" => term}, _session, socket) do
     Logger.metadata(
       tower: %{

@@ -2,9 +2,6 @@ defmodule ToolboxWeb.CategoryLive do
   use ToolboxWeb, :live_view
   alias Toolbox.Packages
 
-  import ToolboxWeb.Components.Icons.StarIcon
-  import ToolboxWeb.Components.Icons.DownloadIcon
-
   def mount(%{"permalink" => permalink}, _session, socket) do
     category = Packages.get_category_by_permalink!(permalink)
     packages = Packages.list_packages_from_category(category)

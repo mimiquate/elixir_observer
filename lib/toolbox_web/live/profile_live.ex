@@ -2,10 +2,6 @@ defmodule ToolboxWeb.ProfileLive do
   use ToolboxWeb, :live_view
   alias Toolbox.Packages
 
-  import ToolboxWeb.Components.Icons.StarIcon
-  import ToolboxWeb.Components.Icons.DownloadIcon
-  import ToolboxWeb.Components.Icons.BookmarkIcon
-
   def mount(_params, _session, socket) do
     current_user = socket.assigns[:current_user]
 

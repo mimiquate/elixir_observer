@@ -114,7 +114,7 @@ defmodule ToolboxWeb.SearchLiveTest do
       assert html =~ "2 packages found"
 
       # Should have bandit in other results
-      assert has_element?(view, "[data-test-result-item='bandit']")
+      assert has_element?(view, "[data-test-package-item='bandit']")
     end
 
     test "shows no results when search term has no matches" do
@@ -152,7 +152,7 @@ defmodule ToolboxWeb.SearchLiveTest do
       assert html =~ "A pure Elixir HTTP server"
 
       # Should have latest version
-      assert has_element?(view, "[data-test-result-item='bandit'] [data-test-version='1.0.0']")
+      assert has_element?(view, "[data-test-package-item='bandit'] [data-test-version='1.0.0']")
 
       # Show exact match chip
       assert has_element?(view, "[data-test-exact-match='bandit']")
@@ -231,10 +231,10 @@ defmodule ToolboxWeb.SearchLiveTest do
 
       # Should find 2 packages with "HTTP" in description
       assert html =~ "2 packages found"
-      assert has_element?(view, "[data-test-result-item='bandit']")
-      assert has_element?(view, "[data-test-result-item='tesla']")
-      refute has_element?(view, "[data-test-result-item='bamboo']")
-      refute has_element?(view, "[data-test-result-item='urban']")
+      assert has_element?(view, "[data-test-package-item='bandit']")
+      assert has_element?(view, "[data-test-package-item='tesla']")
+      refute has_element?(view, "[data-test-package-item='bamboo']")
+      refute has_element?(view, "[data-test-package-item='urban']")
     end
 
     test "finds packages by description search with case-insensitive", %{
@@ -248,10 +248,10 @@ defmodule ToolboxWeb.SearchLiveTest do
 
       # Should find 2 packages with "HTTP" in description
       assert html =~ "2 packages found"
-      assert has_element?(view, "[data-test-result-item='bandit']")
-      assert has_element?(view, "[data-test-result-item='tesla']")
-      refute has_element?(view, "[data-test-result-item='bamboo']")
-      refute has_element?(view, "[data-test-result-item='urban']")
+      assert has_element?(view, "[data-test-package-item='bandit']")
+      assert has_element?(view, "[data-test-package-item='tesla']")
+      refute has_element?(view, "[data-test-package-item='bamboo']")
+      refute has_element?(view, "[data-test-package-item='urban']")
     end
   end
 end
