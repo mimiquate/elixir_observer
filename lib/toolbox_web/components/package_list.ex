@@ -23,7 +23,7 @@ defmodule ToolboxWeb.Components.PackageList do
           <div class="flex items-center">
             <.link
               navigate={~p"/packages/#{package.name}"}
-              class="text-[16px] sm:text-[18px] hover:underline"
+              class="text-[14px] sm:text-[18px] hover:underline"
               {test_attrs(package_link: package.name)}
             >
               {package.name}
@@ -45,7 +45,7 @@ defmodule ToolboxWeb.Components.PackageList do
           </div>
 
           <p
-            class="text-[12px] sm:text-[16px] text-secondary-text"
+            class="mt-2 sm:mt-1 text-[12px] sm:text-[16px] text-secondary-text"
             {test_attrs(package_description: true)}
           >
             {package.description}
