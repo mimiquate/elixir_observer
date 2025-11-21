@@ -87,6 +87,16 @@ defmodule ToolboxWeb.Components.MobileMenu do
                     {@current_user.login}
                   </.link>
 
+                  <.link
+                    navigate={~p"/profile"}
+                    class={[
+                      "block text-[20px] font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline transition-all duration-300 ease-out delay-200",
+                      (@show && "translate-y-0 opacity-100") || "translate-y-4 opacity-0"
+                    ]}
+                  >
+                    Profile
+                  </.link>
+
                   <.live_component
                     module={ToolboxWeb.Components.LogoutButton}
                     id="mobile-logout-button"
