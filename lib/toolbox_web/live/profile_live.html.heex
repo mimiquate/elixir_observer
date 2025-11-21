@@ -21,7 +21,7 @@
     </h2>
   </div>
 
-  <%= if @packages != [] do %>
+  <%= if Enum.any?(@packages) do %>
     <div class="mt-7 sm:mt-10" {test_attrs(profile_packages: true)}>
       <ul {test_attrs(results_list: true)}>
         <li
