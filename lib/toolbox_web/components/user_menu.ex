@@ -27,14 +27,14 @@ defmodule ToolboxWeb.Components.UserMenu do
           >
             <.link
               navigate={~p"/profile"}
-              class="text-[16px] px-4 py-2 font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline transition-all duration-300cl ease-out delay-200"
+              class="text-[16px] px-4 py-2 font-medium text-secondary-text hover:text-accent active:text-accent active:underline transition-all duration-300cl ease-out delay-200"
             >
               Profile
             </.link>
             <.live_component
               module={ToolboxWeb.Components.LogoutButton}
               id="desktop-logout-button"
-              class="inline text-[16px] px-4 py-2 font-medium text-secondary-text dark:text-primary-text hover:text-accent active:text-accent active:underline transition-all duration-300cl ease-out delay-200"
+              class="inline text-[16px] px-4 py-2 font-medium text-secondary-text hover:text-accent active:text-accent active:underline transition-all duration-300cl ease-out delay-200"
             >
               Log Out
             </.live_component>
