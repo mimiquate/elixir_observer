@@ -12,7 +12,7 @@
           <button
             :if={@package.is_following}
             phx-click="unfollow"
-            class="group py-[2px] px-3 sm:px-4 rounded-full border border-stroke bg-chip-bg-exact-match text-white hover:bg-[#DC4C3E] hover:text-white text-[12px] sm:text-[14px] font-medium transition-colors duration-200"
+            class="group py-[2px] px-3 sm:px-4 rounded-full border border-stroke bg-chip-bg-exact-match text-white hover:bg-[#EEAFAC] hover:text-[#5C221F] text-[12px] sm:text-[14px] font-medium transition-colors duration-200"
           >
             <span class="group-hover:hidden">Following</span>
             <span class="hidden group-hover:inline">Unfollow</span>
@@ -21,7 +21,7 @@
           <button
             :if={!@package.is_following}
             phx-click="follow"
-            class="py-[2px] px-3 sm:px-4 rounded-full border border-stroke bg-chip-bg text-accent text-[12px] sm:text-[14px] font-medium"
+            class="py-[2px] px-3 sm:px-4 rounded-full border border-stroke bg-chip-bg text-accent text-[12px] sm:text-[14px] font-medium dark:text-text-secondary-button"
           >
             Follow
           </button>
