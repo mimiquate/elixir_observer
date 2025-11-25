@@ -12,18 +12,7 @@ defmodule ToolboxWeb.Components.Icons.HexIcon do
       class={"fill-accent #{@class}"}
     >
       <g clip-path="url(#clip0_3820_61816)">
-        <mask
-          id="mask0_3820_61816"
-          style="mask-type:alpha"
-          maskUnits="userSpaceOnUse"
-          x="0"
-          y="0"
-          width="24"
-          height="24"
-        >
-          <rect width="24" height="24" />
-        </mask>
-        <g mask="url(#mask0_3820_61816)">
+        <g>
           <path
             d="M16.92 3.5H7.10995L2.19995 12L7.10995 20.5H16.92L21.83 12L16.92 3.5ZM15.99 18.88H8.03995L4.06995 12L8.03995 5.12H15.99L19.96 12L15.99 18.88Z"
             fill="#975EC9"
@@ -32,7 +21,7 @@ defmodule ToolboxWeb.Components.Icons.HexIcon do
         </g>
       </g>
       <defs>
-        <clipPath id="clip0_3820_61816">
+        <clipPath>
           <rect width="24" height="24" fill="white" />
         </clipPath>
       </defs>
