@@ -11,7 +11,7 @@ defmodule ToolboxWeb.Components.Icons.ChevronIcon do
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       id={@id}
-      class={"stroke-primary-text dark:stroke-secondary-text fill-primary-text dark:fill-secondary-text #{@class}"}
+      class={"fill-primary-text dark:fill-secondary-text #{@class}"}
     >
       <g>
         <path d="M10.5003 10L6.66699 6.16667L7.83366 5L12.8337 10L7.83366 15L6.66699 13.8333L10.5003 10Z" />
