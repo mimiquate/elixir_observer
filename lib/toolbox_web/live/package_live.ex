@@ -23,6 +23,7 @@ defmodule ToolboxWeb.PackageLive do
   import ToolboxWeb.Components.Icons.PathIcon
   import ToolboxWeb.Components.Icons.InspectIcon
   import ToolboxWeb.Components.Icons.BookmarkIcon
+  import ToolboxWeb.Components.Icons.HistoryIcon
 
   alias ToolboxWeb.Components.PackageOwners
 
