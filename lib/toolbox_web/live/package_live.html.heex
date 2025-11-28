@@ -102,7 +102,7 @@
 
       <.stats_card class="w-1/2 sm:w-auto" title="Unreleased Activity">
         <:icon>
-          <.history_icon class="w-6 dark:fill-secondary-text" />
+          <.history_icon class="w-6" />
         </:icon>
         <div class="flex items-center">
           <%= if @package.activity do %>
@@ -277,7 +277,7 @@
             class="h-fit order-2"
           >
             <:icon>
-              <.doc_icon class="w-6 dark:fill-secondary-text" />
+              <.doc_icon class="w-6" />
             </:icon>
             <:text>
               {if @package.docs_html_url,
@@ -381,7 +381,7 @@
           <div class="order-2 sm:mt-0">
             <.package_resource href={@package.changelog_url} class="h-fit">
               <:icon>
-                <.changelog_icon class="w-6 dark:fill-secondary-text" />
+                <.changelog_icon class="w-6" />
               </:icon>
               <:text>
                 {if @package.changelog_url,
