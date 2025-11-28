@@ -27,7 +27,7 @@ defmodule ToolboxWeb.Components.PackageResource do
       </div>
       <div class="flex-1"></div>
       <div class="flex-shrink-0 cursor-pointer">
-        <.chevron_icon class="w-5" />
+        <.chevron_icon class="w-6" />
       </div>
     </.link>
     """
