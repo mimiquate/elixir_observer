@@ -106,7 +106,7 @@
         </:icon>
         <div class="flex items-center">
           <%= if @package.activity do %>
-            <%= if @package.activity.last_tag do %>
+            <%= if last_tag_match_latest_stable_version(@package) do %>
               <.link
                 class="flex text-accent"
                 href={"#{@package.github_repo_url}/compare/#{@package.activity.last_tag}...HEAD"}
