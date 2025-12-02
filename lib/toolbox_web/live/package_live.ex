@@ -9,6 +9,7 @@ defmodule ToolboxWeb.PackageLive do
   import ToolboxWeb.Components.PackageActivity, only: [package_activity: 1]
   import ToolboxWeb.Components.PackageResource, only: [package_resource: 1]
   import ToolboxWeb.Components.CommunityResources, only: [community_resources: 1]
+
   import ToolboxWeb.Components.UnreleasedActivityStatsCard,
     only: [unreleased_activity_stats_card: 1]
 
@@ -306,9 +307,5 @@ defmodule ToolboxWeb.PackageLive do
 
   defp source_url(name, version) do
     "https://preview.hex.pm/preview/#{name}/#{version}"
-  end
-
-  defp last_tag_match_latest_stable_version(package) do
-    String.replace(package.activity.last_tag || "", "v", "") == package.latest_stable_version
   end
 end
