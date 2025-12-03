@@ -1,0 +1,10 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "How to Use Broadway in Your Elixir Application",
+      "description": "Strategies for reliability, batching and telemetry.",
+      "url": "https://blog.appsignal.com/2019/12/12/how-to-use-broadway-in-your-elixir-application.html"
+    }
+  ]
+}
