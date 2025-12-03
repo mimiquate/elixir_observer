@@ -65,7 +65,8 @@ config :toolbox, ToolboxWeb.Endpoint,
     patterns: [
       ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/toolbox_web/(controllers|live|components)/.*(ex|heex)$"
+      ~r"lib/toolbox_web/(controllers|live|components)/.*(ex|heex)$",
+      ~r"community_resources/.*\.json$"
     ]
   ]
 
