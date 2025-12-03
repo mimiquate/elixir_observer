@@ -27,7 +27,11 @@ defmodule Toolbox.CommunityResources do
 
   Module.register_attribute(__MODULE__, :raw_resources, accumulate: true)
 
-  for file <- Path.join(["community_resources", "*.json"]) |> Path.relative_to_cwd() |> Path.expand() |> Path.wildcard() do
+  for file <-
+        Path.join(["community_resources", "*.json"])
+        |> Path.relative_to_cwd()
+        |> Path.expand()
+        |> Path.wildcard() do
     @external_resource file
     @raw_resources file |> File.read!() |> Parser.parse(file)
   end
