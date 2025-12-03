@@ -1,0 +1,10 @@
+{
+  "resources": [
+    {
+      "type": "video",
+      "title": "Making a GraphQL Server with Absinthe & Dataloader",
+      "description": "ElixirConf 2018 talk - Making a GraphQL Server with Absinthe & Dataloader by Aaron Votre",
+      "url": "https://www.youtube.com/watch?v=m26i1L2D7Yk"
+    }
+  ]
+}

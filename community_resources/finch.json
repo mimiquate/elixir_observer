@@ -1,0 +1,10 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "The State of Elixir HTTP Clients: Finch, Req, Mint & Co.",
+      "description": "Pros/cons and usage tips for Finch and other modern HTTP clients in Elixir.",
+      "url": "https://blog.appsignal.com/2020/07/28/the-state-of-elixir-http-clients.html"
+    }
+  ]
+}

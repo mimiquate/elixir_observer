@@ -1,0 +1,22 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Elixir Mocking Library Options",
+      "description": "Overview of Mock, Mox, Mimic and where each shines in tests.",
+      "url": "https://brittonbroderick.com/2021/01/15/elixir-mocking-library-options/"
+    },
+    {
+      "type": "article",
+      "title": "An Introduction to Mocking Tools for Elixir",
+      "description": "Survey of mocking tools (including Mimic) with pros/cons and examples.",
+      "url": "https://blog.appsignal.com/2023/04/11/an-introduction-to-mocking-tools-for-elixir.html"
+    },
+    {
+      "type": "article",
+      "title": "Mocking in Elixir: Mox, Mockery, Mimic, Syringe…",
+      "description": "Comparison write-up with snippets and guidance selecting a library.",
+      "url": "https://dev.to/calvinsadewa/mocking-in-elixir-comparison-between-mox-mockery-mimic-syringe-and-lightweight-di-3d5h"
+    }
+  ]
+}

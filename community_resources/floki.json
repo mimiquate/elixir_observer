@@ -1,0 +1,16 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Scraping data with Elixir and Floki",
+      "description": "Beginner tutorial scraping and parsing a public site using Finch + Floki.",
+      "url": "https://fullstackphoenix.com/tutorials/scraping-data-with-elixir-and-floki"
+    },
+    {
+      "type": "article",
+      "title": "Web Scraping with Elixir",
+      "description": "Modern 2025 guide featuring Crawly and Floki for extraction.",
+      "url": "https://www.scrapingbee.com/blog/web-scraping-elixir/"
+    }
+  ]
+}

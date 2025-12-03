@@ -1,0 +1,28 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Elixir Alchemy: Understanding GenStages",
+      "description": "Back-pressure explained with a real example and producer/consumer code.",
+      "url": "https://blog.appsignal.com/2018/11/13/elixir-alchemy-understanding-elixirs-genstages-querying-the-blockchain.html"
+    },
+    {
+      "type": "article",
+      "title": "Backpressure with GenStage",
+      "description": "Intro to GenStage/Flow with diagrams and sample pipelines.",
+      "url": "https://dev.to/dcdourado/understanding-genstage-back-pressure-mechanism-1b0i"
+    },
+    {
+      "type": "article",
+      "title": "More Than 1:1 With Elixir's Genstage",
+      "description": "Coordinating many producers safely using demand and buffering.",
+      "url": "https://samuelmullen.com/articles/more-than-1-1-with-elixirs-genstage"
+    },
+    {
+      "type": "article",
+      "title": "A few things about GenStage I wish I knew some time ago",
+      "description": "A practical overview of Elixir’s GenStage with real-world tips on demand handling, event pushing, backpressure, dynamic consumers, and dispatcher choices.",
+      "url": "https://medium.com/@andreichernykh/elixir-a-few-things-about-genstage-id-wish-to-knew-some-time-ago-b826ca7d48ba"
+    }
+  ]
+}

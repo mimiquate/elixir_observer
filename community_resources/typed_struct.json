@@ -1,0 +1,16 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Typed Elixir structs without boilerplate",
+      "description": "Short article introducing the typed_struct library, which lets you define Elixir structs and their types in one place without boilerplate.",
+      "url": "https://medium.com/@ejpcmac/typed-elixir-structs-without-boilerplate-c565520691a3"
+    },
+    {
+      "type": "article",
+      "title": "Typespec patterns and typed structs in practice",
+      "description": "Community thread with patterns and examples for typed structs.",
+      "url": "https://elixirforum.com/t/how-to-convert-a-typed-definition-to-a-typedstruct/53386"
+    }
+  ]
+}

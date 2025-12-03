@@ -1,0 +1,22 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Sending emails in Phoenix using Swoosh",
+      "description": "Modern tutorial for Phoenix + Swoosh including templates and adapters.",
+      "url": "https://blog.logrocket.com/sending-emails-phoenix-using-swoosh/"
+    },
+    {
+      "type": "article",
+      "title": "Sending Emails with Swoosh and Oban",
+      "description": "Queue and deliver emails reliably by offloading to background jobs.",
+      "url": "https://peterullrich.com/sending-emails-with-swoosh-and-oban"
+    },
+    {
+      "type": "video",
+      "title": "Making Beautiful Transactional Emails in Phoenix",
+      "description": "Design nicer phx.gen.auth emails; structure and styling ideas.",
+      "url": "https://www.youtube.com/watch?v=FsjuGLhKi-I"
+    }
+  ]
+}

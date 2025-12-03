@@ -1,0 +1,16 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Writing a Custom Credo Check in Elixir",
+      "description": "How to write and ship your own Credo checks for team-specific rules.",
+      "url": "https://blog.appsignal.com/2023/08/29/writing-a-custom-credo-check-in-elixir.html"
+    },
+    {
+      "type": "article",
+      "title": "Making a Custom Credo Rule",
+      "description": "Walkthrough of implementing and testing a custom rule in Credo.",
+      "url": "https://gabriel.perales.me/blog/making-a-custom-credo-rule"
+    }
+  ]
+}
