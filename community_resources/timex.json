@@ -1,0 +1,16 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Parsing dates with different formats using Elixir Timex",
+      "description": "Strategies for handling multiple input date formats with Timex.",
+      "url": "https://www.yellowduck.be/posts/parsing-dates-with-different-formats-using-elixir-timex"
+    },
+    {
+      "type": "video",
+      "title": "Working With Time Zones in an Elixir Phoenix App",
+      "description": "Talk covering time zones, storage strategies, and Timex usage.",
+      "url": "https://mikezornek.com/posts/2020/3/working-with-time-zones-in-an-elixir-phoenix-app/"
+    }
+  ]
+}

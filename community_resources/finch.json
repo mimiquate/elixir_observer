@@ -1,0 +1,16 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "The State of Elixir HTTP Clients: Finch, Req, Mint & Co.",
+      "description": "Pros/cons and usage tips for Finch and other modern HTTP clients in Elixir.",
+      "url": "https://blog.appsignal.com/2020/07/28/the-state-of-elixir-http-clients.html"
+    },
+    {
+      "type": "article",
+      "title": "Finch's Efficient Building of a Streamed HTTP Response",
+      "description": "Walkthrough of implementing streamed HTTP responses in Elixir using Finch, covering performance considerations and practical patterns.",
+      "url": "https://medium.com/elixir-learnings/finchs-efficient-building-of-a-streamed-http-response-1e704db4e534"
+    }
+  ]
+}

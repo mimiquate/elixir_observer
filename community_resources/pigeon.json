@@ -1,0 +1,16 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Push Notification with Elixir/Phoenix and iOS",
+      "description": "Walkthrough sending APNs pushes from an Elixir app (APNs setup + code).",
+      "url": "https://blog.devgenius.io/push-notification-with-elixir-and-ios-6c2f80b0c946"
+    },
+    {
+      "type": "article",
+      "title": "Pigeon – iOS and Android push notifications for Elixir",
+      "description": "Library announcement and discussion with pointers to adapters.",
+      "url": "https://elixirforum.com/t/pigeon-ios-and-android-push-notifications-for-elixir/9030"
+    }
+  ]
+}
