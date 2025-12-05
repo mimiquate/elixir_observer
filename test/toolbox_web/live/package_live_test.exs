@@ -222,7 +222,7 @@ defmodule ToolboxWeb.PackageLiveTest do
       refute has_element?(view, "[data-test-owners-show-more-button]")
     end
 
-    @tag package_attrs: [name: "test"]
+    @tag package_attrs: [name: "tower"]
     test "displays community section when package has resources", %{conn: conn, package: package} do
       {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
 

@@ -4,44 +4,41 @@ defmodule Toolbox.CommunityResources do
   alias Ecto.Changeset
 
   defmodule Parser do
-    def parse(blob) do
+    def parse(blob, file) do
       json = Jason.decode!(blob)
 
-      Enum.map(json["resources"], fn resource_attrs ->
-        %CommunityResource{}
-        |> CommunityResource.changeset(resource_attrs)
-        |> Changeset.apply_action(:validate)
-        |> case do
-          {:ok, data} ->
-            data
+      resources =
+        Enum.map(json["resources"], fn resource_attrs ->
+          %CommunityResource{}
+          |> CommunityResource.changeset(resource_attrs)
+          |> Changeset.apply_action(:validate)
+          |> case do
+            {:ok, data} ->
+              data
 
-          {:error, changeset} ->
-            raise "Error loading Community Resources from JSON file. Errors: #{inspect(changeset.errors)}"
-        end
-      end)
+            {:error, changeset} ->
+              raise "Error loading Community Resources from JSON file. Errors: #{inspect(changeset.errors)}"
+          end
+        end)
+
+      {Path.basename(file, ".json"), resources}
     end
   end
 
-  defmodule Loader do
-    def load(path) do
-      for file_name <- Path.wildcard(Path.expand(path)), into: %{} do
-        package_name = Path.basename(file_name, ".json")
+  Module.register_attribute(__MODULE__, :raw_resources, accumulate: true)
 
-        resources =
-          file_name
-          |> File.read!()
-          |> Parser.parse()
-
-        {package_name, resources}
-      end
-    end
+  for file <-
+        Path.join(["community_resources", "*.json"])
+        |> Path.relative_to_cwd()
+        |> Path.expand()
+        |> Path.wildcard() do
+    @external_resource file
+    @raw_resources file |> File.read!() |> Parser.parse(file)
   end
 
-  @resources Path.join([
-               Application.app_dir(:toolbox),
-               Application.compile_env!(:toolbox, [Toolbox.CommunityResources, :path])
-             ])
-             |> Loader.load()
+  @resources Enum.into(@raw_resources, %{})
+
+  Module.delete_attribute(__MODULE__, :raw_resources)
 
   @spec find_by_package(Package.t()) :: [CommunityResource.t()]
   def find_by_package(%Package{name: name}) do
