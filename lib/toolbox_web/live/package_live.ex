@@ -10,6 +10,9 @@ defmodule ToolboxWeb.PackageLive do
   import ToolboxWeb.Components.PackageResource, only: [package_resource: 1]
   import ToolboxWeb.Components.CommunityResources, only: [community_resources: 1]
 
+  import ToolboxWeb.Components.UnreleasedActivityStatsCard,
+    only: [unreleased_activity_stats_card: 1]
+
   import ToolboxWeb.Components.Icons.StarIcon
   import ToolboxWeb.Components.Icons.DownloadIcon
   import ToolboxWeb.Components.Icons.CalendarIcon
@@ -23,7 +26,6 @@ defmodule ToolboxWeb.PackageLive do
   import ToolboxWeb.Components.Icons.PathIcon
   import ToolboxWeb.Components.Icons.InspectIcon
   import ToolboxWeb.Components.Icons.BookmarkIcon
-  import ToolboxWeb.Components.Icons.HistoryIcon
 
   alias ToolboxWeb.Components.PackageOwners
 

@@ -100,41 +100,7 @@
         </div>
       </.stats_card>
 
-      <.stats_card class="w-1/2 sm:w-auto" title="Unreleased Activity">
-        <:icon>
-          <.history_icon class="w-6" />
-        </:icon>
-        <div class="flex items-center">
-          <%= if @package.activity do %>
-            <%= if @package.activity.last_tag do %>
-              <.link
-                class="flex text-accent"
-                href={"#{@package.github_repo_url}/compare/#{@package.activity.last_tag}...HEAD"}
-                target="_blank"
-              >
-                <%= if @package.activity.last_tag_behind_by == 0 do %>
-                  <span class="text-[12px] sm:text-[18px]/[48px]">
-                    Up to date
-                  </span>
-                <% else %>
-                  <h3 class="text-[20px] sm:text-[32px] font-semibold">
-                    {humanized_number(@package.activity.last_tag_behind_by)}
-                  </h3>
-                  <span class="text-[10px] sm:text-[14px] self-center ml-2">
-                    commits
-                  </span>
-                <% end %>
-              </.link>
-            <% else %>
-              <span class="text-[12px] sm:text-[18px]/[48px]">
-                Unknown
-              </span>
-            <% end %>
-          <% else %>
-            -
-          <% end %>
-        </div>
-      </.stats_card>
+      <.unreleased_activity_stats_card class="w-1/2 sm:w-auto" package={@package} />
     </div>
 
     <div class="p-3 sm:px-8 sm:py-5 md:col-span-5 border border-stroke rounded-md bg-surface flex flex-wrap sm:flex-nowrap justify-between gap-y-4">
