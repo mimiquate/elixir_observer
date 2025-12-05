@@ -3,20 +3,6 @@ defmodule Toolbox.Github do
     router: ToolboxWeb.Router,
     endpoint: ToolboxWeb.Endpoint
 
-  defmodule Host do
-    @callback connect_url() :: String.t()
-  end
-
-  defmodule OAuthProdHost do
-    @behaviour Host
-    def connect_url, do: "https://github.com"
-  end
-
-  defmodule APIProdHost do
-    @behaviour Host
-    def connect_url, do: "https://api.github.com"
-  end
-
   def parse_link(link) do
     Regex.named_captures(
       ~r/^https?:\/\/(?:www\.)?github.com\/(?<owner>[^\/]*)\/(?<repo>[^\/\n]*)/,
@@ -37,14 +23,14 @@ defmodule Toolbox.Github do
       code_challenge: Base.url_encode64(:crypto.hash(:sha256, code_verifier), padding: false)
     }
 
-    "#{oauth_host().connect_url()}/login/oauth/authorize?#{URI.encode_query(params)}"
+    "#{oauth_host_url()}/login/oauth/authorize?#{URI.encode_query(params)}"
   end
 
   def exchange_code_for_token(code, code_verifier) do
     client_id = Keyword.fetch!(config(), :oauth_client_id)
     client_secret = Keyword.fetch!(config(), :oauth_client_secret)
 
-    case Req.post("#{oauth_host().connect_url()}/login/oauth/access_token",
+    case Req.post("#{oauth_host_url()}/login/oauth/access_token",
            headers: [
              {"accept", "application/json"},
              {"user-agent", "toolbox"}
@@ -78,7 +64,7 @@ defmodule Toolbox.Github do
   end
 
   def get_user_info(access_token) do
-    case Req.get("#{api_host().connect_url()}/user",
+    case Req.get("#{api_host_url()}/user",
            headers: [
              {"authorization", "Bearer #{access_token}"},
              {"user-agent", "toolbox"}
@@ -117,7 +103,7 @@ defmodule Toolbox.Github do
   end
 
   def get_primary_email(access_token) do
-    case Req.get("#{api_host().connect_url()}/user/emails",
+    case Req.get("#{api_host_url()}/user/emails",
            headers: [
              {"authorization", "Bearer #{access_token}"},
              {"user-agent", "toolbox"}
@@ -191,7 +177,7 @@ defmodule Toolbox.Github do
     """
 
     Req.post(
-      url: "#{api_host().connect_url()}/graphql",
+      url: "#{api_host_url()}/graphql",
       headers: [
         {"authorization", "Bearer #{authorization_token()}"},
         {"user-agent", "toolbox"}
@@ -201,7 +187,7 @@ defmodule Toolbox.Github do
   end
 
   defp get(path) do
-    Req.get("#{api_host().connect_url()}/#{path}",
+    Req.get("#{api_host_url()}/#{path}",
       headers: [
         {"authorization", "Bearer #{authorization_token()}"},
         {"user-agent", "toolbox"}
@@ -209,9 +195,14 @@ defmodule Toolbox.Github do
     )
   end
 
-  defp config, do: Application.fetch_env!(:toolbox, :github)
+  if Mix.env() == :test do
+    defp oauth_host_url, do: ProcessTree.get({__MODULE__, :oauth_host_url})
+    defp api_host_url, do: ProcessTree.get({__MODULE__, :api_host_url})
+  else
+    defp oauth_host_url, do: "https://github.com"
+    defp api_host_url, do: "https://api.github.com"
+  end
 
-  defp oauth_host, do: Keyword.fetch!(config(), :oauth_host)
-  defp api_host, do: Keyword.fetch!(config(), :api_host)
+  defp config, do: Application.fetch_env!(:toolbox, :github)
   defp authorization_token, do: Keyword.fetch!(config(), :authorization_token)
 end

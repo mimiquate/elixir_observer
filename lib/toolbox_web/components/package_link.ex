@@ -18,7 +18,7 @@ defmodule ToolboxWeb.Components.PackageLink do
     >
       {render_slot(@icon)}
       <span class="sm:mt-0 mr-2">{@text}</span>
-      <.chevron_icon class="w-5 ml-auto" />
+      <.chevron_icon class="w-6 ml-auto" />
     </.link>
     """
   end

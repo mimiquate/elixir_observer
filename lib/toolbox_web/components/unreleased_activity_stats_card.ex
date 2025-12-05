@@ -2,7 +2,7 @@ defmodule ToolboxWeb.Components.UnreleasedActivityStatsCard do
   use ToolboxWeb, :html
 
   import ToolboxWeb.Components.StatsCard
-  import ToolboxWeb.Components.Icons.ChangelogIcon
+  import ToolboxWeb.Components.Icons.HistoryIcon
 
   attr :class, :string, default: ""
   attr :package, :map, required: true
@@ -11,7 +11,7 @@ defmodule ToolboxWeb.Components.UnreleasedActivityStatsCard do
     ~H"""
     <.stats_card class={@class} title="Unreleased Activity">
       <:icon>
-        <.changelog_icon class="w-6 dark:fill-secondary-text" />
+        <.history_icon class="w-6" />
       </:icon>
       <div class="flex items-center" {test_attrs(unreleased_activity_content: true)}>
         <%= if @package.activity do %>

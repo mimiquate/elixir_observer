@@ -226,7 +226,7 @@
 
         <div class="mt-6 grid grid-cols-1 order-1 sm:grid-cols-2 gap-4 sm:gap-x-8 sm:gap-y-5">
           <div class="grid-cols-1 bg-surface sm:bg-surface-alt flex items-center px-3 py-2 sm:px-5 sm:py-3 rounded border border-stroke">
-            <.elixir_icon class="w-5" />
+            <.elixir_icon class="w-6" />
             <%= if @version.elixir_requirement do %>
               <span class="ml-2 text-[16px] text-primary-text sm:text-[18px]">
                 Elixir Version Requirement {@version.elixir_requirement}
@@ -243,7 +243,7 @@
             class="h-fit order-2"
           >
             <:icon>
-              <.doc_icon class="w-5 dark:stroke-secondary-text" />
+              <.doc_icon class="w-6" />
             </:icon>
             <:text>
               {if @package.docs_html_url,
@@ -254,7 +254,7 @@
 
           <div class="h-fit dark:bg-surface sm:dark:bg-surface-alt px-3 py-2 sm:px-5 sm:py-3 rounded md:grow border border-stroke sm:col-start-1 sm:row-start-2 sm:row-span-2">
             <div class="flex items-center">
-              <.dependencies_icon class="h-5 w-5" />
+              <.dependencies_icon class="h-6 w-6" />
               <% text_size_class =
                 if Enum.count(@version.required) > 0,
                   do: "text-[20px] sm:text-[24px] font-medium",
@@ -347,7 +347,7 @@
           <div class="order-2 sm:mt-0">
             <.package_resource href={@package.changelog_url} class="h-fit">
               <:icon>
-                <.changelog_icon class="w-5 dark:fill-secondary-text" />
+                <.changelog_icon class="w-6" />
               </:icon>
               <:text>
                 {if @package.changelog_url,
@@ -361,7 +361,7 @@
               class="h-fit mt-4"
             >
               <:icon>
-                <.inspect_icon class="w-5" />
+                <.inspect_icon class="w-6" />
               </:icon>
               <:text>
                 Inspect source for {@version.version}

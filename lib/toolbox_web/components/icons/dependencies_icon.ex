@@ -8,7 +8,7 @@ defmodule ToolboxWeb.Components.Icons.DependenciesIcon do
     <svg
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      class={"stroke-accent fill-accent dark:fill-secondary-text dark:stroke-secondary-text #{@class}"}
+      class={"stroke-accent fill-accent #{@class}"}
     >
       <g>
         <path
