@@ -1,0 +1,10 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "A guide to properly get started with GraphQL using Elixir",
+      "description": "A step-by-step tutorial on how to build a GraphQL API in Elixir using the Phoenix Framework and Absinthe.",
+      "url": "https://www.curiosum.com/blog/absinthe-with-phoenix-framework-a-guide-to-properly-get-started-with-graphql-using-elixir"
+    }
+  ]
+}

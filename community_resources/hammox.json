@@ -1,0 +1,10 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Exploring approaches for testing external calls in Elixir",
+      "description": "Comparing Mox and Hammox with examples and when to use each.",
+      "url": "https://medium.com/wttj-tech/exploring-various-approaches-for-testing-external-calls-in-elixir-4f22e8c8fdae"
+    }
+  ]
+}

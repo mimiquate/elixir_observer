@@ -1,0 +1,22 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Cloak Your Ecto Data",
+      "description": "Introductory post by the author: encrypting fields, key rotation, and zero-downtime migrations.",
+      "url": "https://blog.danielberkompas.com/2015/09/22/cloak-your-ecto-data/"
+    },
+    {
+      "type": "article",
+      "title": "What is the best way of encrypting data at rest with Ecto?",
+      "description": "Forum thread comparing approaches and linking to Cloak Ecto usage.",
+      "url": "https://elixirforum.com/t/what-is-the-best-way-of-encrypting-data-at-rest-with-ecto/45162"
+    },
+    {
+      "type": "video",
+      "title": "Encrypting Personal Data with Elixir and Cloak Ecto",
+      "description": "A short talk on how to encrypt and decrypt sensitive personal data in an Elixir app using the Cloak Ecto library.",
+      "url": "https://www.youtube.com/watch?v=ncrELVn2UmI"
+    }
+  ]
+}

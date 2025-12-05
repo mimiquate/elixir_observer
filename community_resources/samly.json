@@ -1,0 +1,22 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "SAML Authentication for Phoenix",
+      "description": "Blog post by the library author showing how to integrate Samly.",
+      "url": "https://handnot2.github.io/blog/auth/saml-auth-for-phoenix"
+    },
+    {
+      "type": "article",
+      "title": "Samly – Add SAML SSO to your Phoenix application",
+      "description": "Forum announcement and discussion, with links to sample IdP and how-to apps.",
+      "url": "https://elixirforum.com/t/samly-add-saml-sso-to-your-phoenix-application-now-with-multiple-identity-provider-support/8511"
+    },
+    {
+      "type": "article",
+      "title": "SamlyHowto – Sample Phoenix application using Samly",
+      "description": "Complete example project wiring Samly as a SAML 2.0 Service Provider.",
+      "url": "https://github.com/handnot2/samly_howto"
+    }
+  ]
+}

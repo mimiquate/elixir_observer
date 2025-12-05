@@ -1,0 +1,22 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "ExMachina for Elixir: Factories with a Functional Twist",
+      "description": "Announcement/overview by the maintainers with core examples.",
+      "url": "https://thoughtbot.com/blog/announcing-ex-machina"
+    },
+    {
+      "type": "article",
+      "title": "An Introduction to Test Factories and Fixtures for Elixir",
+      "description": "When and how to use factories (with ExMachina) to speed up tests.",
+      "url": "https://blog.appsignal.com/2023/02/28/an-introduction-to-test-factories-and-fixtures-for-elixir.html"
+    },
+    {
+      "type": "article",
+      "title": "Generating Test Data in Phoenix using ExMachina & Faker",
+      "description": "Step-by-step setup of factories and Faker integration.",
+      "url": "https://nimblehq.co/blog/test-data-phoenix-applications-exmachina-faker"
+    }
+  ]
+}
