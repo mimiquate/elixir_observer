@@ -1,0 +1,22 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Authentication in Elixir Web Applications with Guardian (Part 1)",
+      "description": "Setting up Guardian + Ueberauth with Phoenix in a test-driven flow.",
+      "url": "https://thoughtbot.com/blog/authentication-in-elixir-web-applications-with-guardian-part-1"
+    },
+    {
+      "type": "article",
+      "title": "Authentication in Elixir Web Apps with Guardian (Part 2)",
+      "description": "Adding account registration and tying it into Guardian flows.",
+      "url": "https://thoughtbot.com/blog/authentication-in-elixir-web-applications-with-guardian-part-2"
+    },
+    {
+      "type": "article",
+      "title": "How to authenticate Phoenix with Guardian",
+      "description": "Modern Phoenix 1.7 walkthrough of JWT auth using Guardian.",
+      "url": "https://blog.logrocket.com/authenticate-phoenix-guardian/"
+    }
+  ]
+}

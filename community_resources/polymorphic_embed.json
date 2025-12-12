@@ -1,0 +1,22 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Polymorphic embeds in Ecto",
+      "description": "Implementing polymorphic embeds via a parameterized Ecto type.",
+      "url": "https://danschultzer.com/posts/polymorphic-embeds-in-ecto"
+    },
+    {
+      "type": "article",
+      "title": "Polymorphic_embed – library announcement & discussion",
+      "description": "Thread introducing the library, features, and use cases.",
+      "url": "https://elixirforum.com/t/polymorphic-embed-polymorphic-embeds-in-ecto/31951"
+    },
+    {
+      "type": "article",
+      "title": "Implementing Polymorphic Embeds using Ecto in Elixir",
+      "description": "Another walkthrough with code showing how to wire polymorphic embeds.",
+      "url": "https://elixirmerge.com/p/implementing-polymorphic-embeds-using-ecto-in-elixir"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Everything You Need to Know About Ash Framework",
+      "description": "A survey of Ash concepts (resources, actions, DSLs) with practical examples and caveats.",
+      "url": "https://alembic.com.au/ash-framework"
+    },
+    {
+      "type": "article",
+      "title": "Introduction to Ash Framework",
+      "description": "Beginner-friendly overview of Ash and where it fits alongside Phoenix and Ecto.",
+      "url": "https://elixirmerge.com/p/introduction-to-the-ash-framework-for-building-elixir-applications"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Elixir HTTP clients in 2024",
+      "description": "Comparison including Mint, with advice on when to adopt it directly.",
+      "url": "https://blog.appsignal.com/2020/07/28/the-state-of-elixir-http-clients.html"
+    }
+  ]
+}

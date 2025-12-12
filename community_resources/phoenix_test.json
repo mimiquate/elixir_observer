@@ -1,0 +1,22 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Introducing PhoenixTest: Unified Feature Tests",
+      "description": "Announcing PhoenixTest and how it bridges LiveView and static pages.",
+      "url": "https://www.germanvelasco.com/blog/introducing-phoenix-test"
+    },
+    {
+      "type": "article",
+      "title": "Overview of PhoenixTest for Elixir",
+      "description": "High-level overview with examples of pipeable test flows.",
+      "url": "https://elixirmerge.com/p/overview-of-phoenixtest-for-elixir"
+    },
+    {
+      "type": "article",
+      "title": "PhoenixTest – a unified way of writing feature tests",
+      "description": "Forum thread introducing the library and rationale.",
+      "url": "https://elixirforum.com/t/phoenixtest-a-unified-way-of-writing-feature-tests-for-liveview-and-static-pages/61387"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "How to Add Feature Flags in a Phoenix App Using fun_with_flags",
+      "description": "DockYard tutorial configuring storage, UI, and rule gates.",
+      "url": "https://dockyard.com/blog/2023/02/28/how-to-add-feature-flags-in-a-phoenix-application-using-fun_with_flags"
+    },
+    {
+      "type": "article",
+      "title": "Feature Flagging in Elixir with FunWithFlags",
+      "description": "Practical examples toggling features globally, per user and group.",
+      "url": "https://brittonbroderick.com/2022/11/29/feature-flagging-in-elixir-with-funwithflags/"
+    },
+    {
+      "type": "video",
+      "title": "ElixirCasts #51 – Feature Flags",
+      "description": "Short screencast enabling feature flags with FunWithFlags and the UI plug.",
+      "url": "https://elixircasts.io/feature-flags"
+    }
+  ]
+}

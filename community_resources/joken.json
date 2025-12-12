@@ -1,0 +1,22 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "JWT Auth in Elixir with Joken",
+      "description": "ElixirSchool tutorial adding signed JWTs to a Phoenix app with Joken.",
+      "url": "https://elixirschool.com/blog/jwt-auth-with-joken"
+    },
+    {
+      "type": "article",
+      "title": "Implementing a JWT Stateless authentication with Phoenix, Pow and Joken",
+      "description": "Build a stateless API using Pow for auth and Joken for JWT management.",
+      "url": "https://medium.com/@ygorcastor/implementing-a-jwt-stateless-authentication-using-elixir-phoenix-pow-and-joken-5c2e1f41ba38"
+    },
+    {
+      "type": "article",
+      "title": "JWT authentication based API in Phoenix (with Joken)",
+      "description": "Case study wiring Joken into a Phoenix API with channel auth considerations.",
+      "url": "https://medium.com/brightergy-engineering/jwt-authentication-based-api-in-phoenix-6c4b51909b19"
+    }
+  ]
+}

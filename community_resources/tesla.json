@@ -1,0 +1,28 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Building an API Wrapper with Elixir and Tesla",
+      "description": "Step-by-step guide to creating a clean API client using Tesla middlewares and adapters.",
+      "url": "https://medium.com/@russbredihin/building-an-api-wrapper-with-elixir-and-tesla-468889ce820"
+    },
+    {
+      "type": "article",
+      "title": "Introducing Tesla — the flexible HTTP client for Elixir",
+      "description": "Tesla’s original announcement post explaining the middleware pipeline and adapter concept.",
+      "url": "https://medium.com/@teamon/introducing-tesla-the-flexible-http-client-for-elixir-95b699656d88"
+    },
+    {
+      "type": "video",
+      "title": "Let’s Learn Elixir – GitHub REST API Client with Tesla",
+      "description": "Live-coding a GitHub API client using Tesla from scratch.",
+      "url": "https://www.youtube.com/watch?v=fmkeXRfgXEs"
+    },
+    {
+      "type": "article",
+      "title": "Tracking Errors in Tesla with AppSignal for Elixir",
+      "description": "How to capture and troubleshoot HTTP failures when calling external APIs via Tesla.",
+      "url": "https://blog.appsignal.com/2025/01/21/tracking-errors-in-tesla-with-appsignal-for-elixir.html"
+    }
+  ]
+}
