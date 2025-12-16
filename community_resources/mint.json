@@ -1,0 +1,22 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Elixir HTTP clients in 2024",
+      "description": "Comparison including Mint, with advice on when to adopt it directly.",
+      "url": "https://blog.appsignal.com/2020/07/28/the-state-of-elixir-http-clients.html"
+    },
+    {
+      "type": "article",
+      "title": "Mint HTTP library for Elixir (news & overview)",
+      "description": "High-level overview of Mint and how it differs from wrapper clients.",
+      "url": "https://www.packtpub.com/sa-es/learning/tech-news/introducing-mint-a-new-http-client-for-elixir?srsltid=AfmBOoqBO64mxGqmv3_7WohZYTHnxC_jfKR5WLcRSmbFoZBdDqD93VUj"
+    },
+    {
+      "type": "article",
+      "title": "Mint: a new HTTP client for Elixir",
+      "description": "An introduction to Mint, a low-level, processless HTTP/1 and HTTP/2 client for Elixir focused on correctness and explicit control over connections.",
+      "url": "https://elixir-lang.org/blog/2019/02/25/mint-a-new-http-library-for-elixir/"
+    }
+  ]
+}

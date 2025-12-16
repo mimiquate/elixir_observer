@@ -1,0 +1,16 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Working with Decimals in Elixir",
+      "description": "Pitfalls of floats, Decimal basics, comparisons and formatting.",
+      "url": "https://mojoauth.com/binary-encoding-decoding/decimal-with-elixir/"
+    },
+    {
+      "type": "article",
+      "title": "Precision Handling in Elixir with Decimal",
+      "description": "Practical examples of financial calculations using the Decimal library.",
+      "url": "https://ssojet.com/binary-encoding-decoding/decimal-in-elixir/"
+    }
+  ]
+}

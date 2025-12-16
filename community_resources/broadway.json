@@ -1,0 +1,22 @@
+{
+  "resources": [
+    {
+      "type": "article",
+      "title": "Announcing Broadway",
+      "description": "Dashbit introduces Broadway, a higher-level abstraction over GenStage for building concurrent data ingestion pipelines.",
+      "url": "https://dashbit.co/blog/announcing-broadway"
+    },
+    {
+      "type": "video",
+      "title": "José Valim – Keynote: Announcing Broadway (ElixirConf EU)",
+      "description": "Keynote presentation introducing Broadway’s goals, architecture, and how it streamlines data processing in Elixir.",
+      "url": "https://www.youtube.com/watch?v=IzFmNQGzApQ"
+    },
+    {
+      "type": "article",
+      "title": "How to Use Broadway in Your Elixir Application",
+      "description": "Strategies for reliability, batching and telemetry.",
+      "url": "https://blog.appsignal.com/2019/12/12/how-to-use-broadway-in-your-elixir-application.html"
+    }
+  ]
+}
