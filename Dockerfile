@@ -51,6 +51,8 @@ COPY lib lib
 
 COPY assets assets
 
+COPY community_resources community_resources
+
 # compile assets
 RUN mix assets.deploy
 
