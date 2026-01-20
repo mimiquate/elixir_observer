@@ -6,6 +6,7 @@ defmodule Toolbox.Package.HexpmVersion do
   embedded_schema do
     field :version, :string
     field :elixir_requirement, :string
+    field :has_docs, :boolean
 
     embeds_many :required, Toolbox.Package.HexpmRequirement, on_replace: :delete
     embeds_many :optional, Toolbox.Package.HexpmRequirement, on_replace: :delete
@@ -22,6 +23,7 @@ defmodule Toolbox.Package.HexpmVersion do
     |> cast(attrs, [
       :version,
       :elixir_requirement,
+      :has_docs,
       :published_at,
       :published_by_username,
       :published_by_email
@@ -48,6 +50,7 @@ defmodule Toolbox.Package.HexpmVersion do
     %{
       version: data["version"],
       elixir_requirement: data["meta"]["elixir"],
+      has_docs: data["has_docs"],
       retirement: data["retirement"],
       required: required,
       optional: optional,

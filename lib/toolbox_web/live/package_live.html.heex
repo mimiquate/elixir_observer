@@ -239,14 +239,17 @@
           </div>
 
           <.package_resource
-            href={@package.docs_html_url && @package.docs_html_url <> @version.version}
+            href={
+              @package.docs_html_url && @version.has_docs &&
+                @package.docs_html_url <> @version.version
+            }
             class="h-fit order-2"
           >
             <:icon>
               <.doc_icon class="w-6" />
             </:icon>
             <:text>
-              {if @package.docs_html_url,
+              {if @package.docs_html_url && @version.has_docs,
                 do: "Documentation for #{@version.version}",
                 else: "No documentation for #{@version.version}"}
             </:text>
