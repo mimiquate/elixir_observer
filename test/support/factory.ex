@@ -27,6 +27,7 @@ defmodule Toolbox.Factory do
       data: %{
         "meta" => %{"description" => "A pure Elixir HTTP server"},
         "downloads" => %{"recent" => 1000},
+        "docs_html_url" => "https://hexdocs.pm/bandit/",
         "releases" => [
           %{
             "version" => "1.7.0",

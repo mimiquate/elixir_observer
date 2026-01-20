@@ -272,6 +272,39 @@ defmodule ToolboxWeb.PackageLiveTest do
 
       refute has_element?(view, data_test_attr(:related_packages_section))
     end
+
+    test "shows documentation link when version has_docs is true", %{conn: conn, package: package} do
+      Packages.update_package_latest_stable_version(package, %{
+        hexpm_latest_stable_version_data: %{
+          published_at: DateTime.utc_now(),
+          published_by_username: "username",
+          version: "1.7.0",
+          has_docs: true
+        }
+      })
+
+      {:ok, _view, html} = live(conn, ~p"/packages/#{package.name}")
+
+      assert html =~ "Documentation for 1.7.0"
+    end
+
+    test "does not show documentation link when version has_docs is false", %{
+      conn: conn,
+      package: package
+    } do
+      Packages.update_package_latest_stable_version(package, %{
+        hexpm_latest_stable_version_data: %{
+          published_at: DateTime.utc_now(),
+          published_by_username: "username",
+          version: "1.7.0",
+          has_docs: false
+        }
+      })
+
+      {:ok, _view, html} = live(conn, ~p"/packages/#{package.name}")
+
+      assert html =~ "No documentation for 1.7.0"
+    end
   end
 
   describe "Follow/Unfollow Package" do
