@@ -238,9 +238,12 @@
             <% end %>
           </div>
 
+          <%!-- has_docs can be nil for records saved before this field was added.
+               We treat nil as true to maintain the existing behavior of showing
+               documentation links by default. Only explicitly false values will hide the link. --%>
           <.package_resource
             href={
-              @package.docs_html_url && @version.has_docs &&
+              @package.docs_html_url && (@version.has_docs != false) &&
                 @package.docs_html_url <> @version.version
             }
             class="h-fit order-2"
@@ -249,7 +252,7 @@
               <.doc_icon class="w-6" />
             </:icon>
             <:text>
-              {if @package.docs_html_url && @version.has_docs,
+              {if @package.docs_html_url && (@version.has_docs != false),
                 do: "Documentation for #{@version.version}",
                 else: "No documentation for #{@version.version}"}
             </:text>
