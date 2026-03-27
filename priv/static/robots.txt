@@ -4,3 +4,7 @@ User-agent: *
 Disallow:
 
 Sitemap: https://elixir-observer.com/sitemap.txt
+
+# LLM context file
+# See https://llmstxt.org for more information
+LLMsTxt: https://elixir-observer.com/llms.txt
