@@ -10,6 +10,7 @@ defmodule Toolbox.Package.HexpmVersionTest do
       response = %{
         "version" => "1.0.0",
         "meta" => %{"elixir" => ">= 1.7.0"},
+        "has_docs" => true,
         "requirements" => %{
           "ecto" => %{"requirement" => "~> 3.0", "optional" => false},
           "phoenix" => %{"requirement" => "~> 1.7", "optional" => true}
@@ -29,6 +30,7 @@ defmodule Toolbox.Package.HexpmVersionTest do
 
       assert result.version == "1.0.0"
       assert result.elixir_requirement == ">= 1.7.0"
+      assert result.has_docs == true
       assert result.published_at == inserted_at
       assert result.published_by_username == "test_user"
       assert result.published_by_email == "test@example.com"
