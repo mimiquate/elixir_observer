@@ -16,6 +16,8 @@ defmodule Helpers do
   end
 end
 
+Req.default_options(retry: false)
+
 ExUnit.start()
 Ecto.Adapters.SQL.Sandbox.mode(Toolbox.Repo, :manual)
 Application.put_env(:wallaby, :base_url, ToolboxWeb.Endpoint.url())
