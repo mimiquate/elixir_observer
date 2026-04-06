@@ -5,7 +5,7 @@ defmodule Toolbox.Github do
 
   def parse_link(link) do
     Regex.named_captures(
-      ~r/^https?:\/\/(?:www\.)?github.com\/(?<owner>[^\/]*)\/(?<repo>[^\/\n]*)/,
+      ~r/^https?:\/\/(?:www\.)?github.com\/(?<owner>[[:alnum:]\-_]*)\/(?<repo>[[:alnum:]\-_]*)/,
       link
     )
   end

@@ -126,5 +126,58 @@ defmodule Toolbox.Tasks.GitHubTest do
 
       refute Packages.get_package_by_name(package.name).latest_github_snapshot
     end
+
+    test "returns error tuple when fetching repo returns server errors", %{} do
+      test_server = Helpers.test_server_github_api()
+
+      {:ok, package} = Packages.create_package(%{name: "test_package"})
+      github_link = "https://github.com/owner/test_package"
+
+      Packages.create_hexpm_snapshot(%{
+        package_id: package.id,
+        data: %{}
+      })
+
+      TestServer.add(test_server, "/repos/owner/test_package",
+        to: fn conn ->
+          Plug.Conn.send_resp(conn, 502, "")
+        end
+      )
+
+      assert {:error,
+              "failed to fetch github data https://github.com/owner/test_package with status 502"} =
+               GitHub.run(package, github_link)
+    end
+
+    test "returns error tuple when fetching repo activity returns server errors", %{} do
+      test_server = Helpers.test_server_github_api()
+
+      {:ok, package} = Packages.create_package(%{name: "test_package"})
+      github_link = "https://github.com/owner/test_package"
+
+      Packages.create_hexpm_snapshot(%{
+        package_id: package.id,
+        data: %{}
+      })
+
+      TestServer.add(test_server, "/repos/owner/test_package",
+        to: fn conn ->
+          conn
+          |> Plug.Conn.put_resp_header("content-type", "application/json")
+          |> Plug.Conn.send_resp(200, ~s({"id": 123}))
+        end
+      )
+
+      TestServer.add(test_server, "/graphql",
+        via: :post,
+        to: fn conn ->
+          Plug.Conn.send_resp(conn, 502, "")
+        end
+      )
+
+      assert {:error,
+              "failed to fetch github data https://github.com/owner/test_package with status 502"} =
+               GitHub.run(package, github_link)
+    end
   end
 end
