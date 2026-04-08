@@ -85,7 +85,7 @@ defmodule Toolbox.Tasks.Category do
       }
     }
 
-    {:ok, response} =
+    categorization_response =
       Req.post("#{base_url()}/v1beta/models/gemini-2.5-flash:generateContent",
         headers: [
           {"x-goog-api-key", "#{api_key()}"},
@@ -95,19 +95,26 @@ defmodule Toolbox.Tasks.Category do
         receive_timeout: 120_000
       )
 
-    response = response.body
+    case categorization_response do
+      {:ok, %{status: 200, body: categorization_response_body}} ->
+        %{"candidates" => [%{"content" => %{"parts" => [%{"text" => text}]}}]} =
+          categorization_response_body
 
-    %{"candidates" => [%{"content" => %{"parts" => [%{"text" => text}]}}]} = response
-    json = JSON.decode!(text)
+        json = JSON.decode!(text)
 
-    result =
-      Enum.into(json, %{}, fn %{"name" => name, "category" => category} ->
-        {name, category}
-      end)
+        result =
+          Enum.into(json, %{}, fn %{"name" => name, "category" => category} ->
+            {name, category}
+          end)
 
-    for package <- packages do
-      category = Toolbox.Packages.get_category_by_id!(result[package.name]["id"])
-      Toolbox.Packages.update_package_category(package, %{category: category})
+        for package <- packages do
+          category = Toolbox.Packages.get_category_by_id!(result[package.name]["id"])
+          Toolbox.Packages.update_package_category(package, %{category: category})
+        end
+
+      {:ok, %{status: server_error}} when server_error in 500..599 ->
+        first_5_package_names = packages |> Enum.take(5) |> Enum.map(& &1.name) |> Enum.join(", ")
+        {:error, "failed to categorize #{first_5_package_names} with status #{server_error}"}
     end
   end
 
