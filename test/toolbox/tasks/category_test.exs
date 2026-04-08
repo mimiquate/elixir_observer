@@ -4,7 +4,7 @@ defmodule Toolbox.Tasks.CategoryTest do
   alias Toolbox.Packages
   alias Toolbox.Tasks.Category
 
-  @gemini_path "/v1beta/models/gemini-2.5-flash:generateContent"
+  @gemini_path "/v1beta/models/gemini-2.5-flash\\:generateContent"
 
   defp test_server_gemini do
     {:ok, test_server} = TestServer.start()
@@ -32,9 +32,6 @@ defmodule Toolbox.Tasks.CategoryTest do
 
       TestServer.add(test_server, @gemini_path,
         via: :post,
-        match: fn %{request_path: path} ->
-          path == @gemini_path
-        end,
         to: fn conn ->
           response_body = %{
             "candidates" => [
@@ -81,9 +78,6 @@ defmodule Toolbox.Tasks.CategoryTest do
       # Mock server error response
       TestServer.add(test_server, @gemini_path,
         via: :post,
-        match: fn %{request_path: path} ->
-          path == @gemini_path
-        end,
         to: fn conn ->
           Plug.Conn.send_resp(conn, 502, "Bad Gateway")
         end
