@@ -1,0 +1,58 @@
+# Elixir Observer
+
+> Elixir Observer is a comprehensive search engine and explorer for the Elixir ecosystem. Find, compare, and discover Elixir packages from Hex.pm with real-time GitHub activity insights, maintenance status, and community resources.
+
+## What Makes Elixir Observer Different
+
+Unlike Hex.pm (the official package registry), Elixir Observer provides:
+
+- **GitHub Activity Data**: Stars, recent commits, unreleased changes
+- **Maintenance Status**: See if a package is actively maintained based on commit history
+- **Package Comparisons**: Related packages in the same category
+- **Community Resources**: Tutorials, articles, and talks about each package
+- **Download Trends**: 90-day download statistics
+
+## Main Pages
+
+- [Home](https://elixir-observer.com/): Search and discover Elixir packages
+- [Categories](https://elixir-observer.com/categories): Browse packages organized by category
+- [About](https://elixir-observer.com/about): Learn about Elixir Observer
+
+## Popular Package Categories
+
+- [Web Frameworks](https://elixir-observer.com/categories/web-frameworks): Phoenix, Plug, Bandit
+- [Database](https://elixir-observer.com/categories/database): Ecto, Postgrex, Ecto SQL
+- [Authentication](https://elixir-observer.com/categories/authentication): Guardian, Pow, Ueberauth
+- [Testing](https://elixir-observer.com/categories/testing): ExUnit, Mox, ExMachina
+- [HTTP Clients](https://elixir-observer.com/categories/http-clients): Req, Finch, HTTPoison
+
+## Most Popular Packages
+
+- [Phoenix](https://elixir-observer.com/packages/phoenix): Peace of mind from prototype to production
+- [Ecto](https://elixir-observer.com/packages/ecto): A toolkit for data mapping and language integrated query
+- [Plug](https://elixir-observer.com/packages/plug): Compose web applications with functions
+- [Jason](https://elixir-observer.com/packages/jason): A blazing fast JSON parser and generator
+- [Swoosh](https://elixir-observer.com/packages/swoosh): Compose, deliver and test your emails easily
+- [Oban](https://elixir-observer.com/packages/oban): Robust job processing in Elixir
+- [LiveView](https://elixir-observer.com/packages/phoenix_live_view): Rich, real-time user experiences with server-rendered HTML
+
+## Common Questions This Site Can Answer
+
+- Is [package name] actively maintained?
+- What are the most popular Elixir packages for [category]?
+- How many GitHub stars does [package] have?
+- When was the last release of [package]?
+- What are alternatives to [package]?
+- What packages depend on [package]?
+
+## Technical Details
+
+- Data synced from Hex.pm and GitHub APIs
+- ~2000+ Elixir packages indexed
+- Updated hourly for activity data
+- Built with Phoenix LiveView
+
+## Contact
+
+- GitHub: https://github.com/mimiquate/elixir_observer
+- Website: https://elixir-observer.com

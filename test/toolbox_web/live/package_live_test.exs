@@ -438,4 +438,119 @@ defmodule ToolboxWeb.PackageLiveTest do
       assert Toolbox.Users.following_package?(user.id, package.id) == true
     end
   end
+
+  describe "JSON-LD Schema" do
+    setup do
+      {:ok, package} = create(:package, name: "phoenix", description: "Web framework for Elixir")
+      {:ok, _} = create(:hexpm_snapshot, package_id: package.id)
+
+      [package: package]
+    end
+
+    test "renders JSON-LD script tag", %{conn: conn, package: package} do
+      {:ok, _view, html} = live(conn, ~p"/packages/#{package.name}")
+
+      assert html =~ ~s(<script type="application/ld+json">)
+      assert html =~ ~s("@context":"https://schema.org")
+      assert html =~ ~s("@type":"SoftwareApplication")
+    end
+
+    test "includes package name and description in JSON-LD", %{conn: conn, package: package} do
+      {:ok, _view, html} = live(conn, ~p"/packages/#{package.name}")
+
+      json_ld = extract_json_ld(html, "SoftwareApplication")
+
+      assert json_ld["name"] == package.name
+      assert json_ld["description"] == package.description
+    end
+
+    test "includes package URLs in JSON-LD", %{conn: conn, package: package} do
+      {:ok, _view, html} = live(conn, ~p"/packages/#{package.name}")
+
+      json_ld = extract_json_ld(html, "SoftwareApplication")
+
+      assert json_ld["url"] =~ "/packages/#{package.name}"
+      assert json_ld["applicationCategory"] == "Developer Tools"
+      assert json_ld["operatingSystem"] == "Elixir/Erlang BEAM VM"
+    end
+
+    test "includes aggregateRating when package has GitHub stars", %{conn: conn, package: package} do
+      {:ok, _} =
+        Packages.upsert_github_snapshot(%{
+          package_id: package.id,
+          data: %{
+            "stargazers_count" => 21000,
+            "full_name" => "phoenixframework/phoenix",
+            "html_url" => "https://github.com/phoenixframework/phoenix"
+          }
+        })
+
+      {:ok, _view, html} = live(conn, ~p"/packages/#{package.name}")
+
+      json_ld = extract_json_ld(html, "SoftwareApplication")
+
+      assert json_ld["aggregateRating"]["@type"] == "AggregateRating"
+      assert json_ld["aggregateRating"]["ratingCount"] == 21000
+      assert json_ld["aggregateRating"]["ratingValue"] == 5
+    end
+
+    test "does not include aggregateRating when package has no GitHub stars", %{
+      conn: conn,
+      package: package
+    } do
+      {:ok, _view, html} = live(conn, ~p"/packages/#{package.name}")
+
+      json_ld = extract_json_ld(html, "SoftwareApplication")
+
+      refute Map.has_key?(json_ld, "aggregateRating")
+    end
+
+    test "includes sameAs with external URLs when available", %{conn: conn, package: package} do
+      {:ok, _} =
+        Packages.upsert_github_snapshot(%{
+          package_id: package.id,
+          data: %{
+            "stargazers_count" => 100,
+            "full_name" => "phoenixframework/phoenix",
+            "html_url" => "https://github.com/phoenixframework/phoenix"
+          }
+        })
+
+      {:ok, _view, html} = live(conn, ~p"/packages/#{package.name}")
+
+      json_ld = extract_json_ld(html, "SoftwareApplication")
+
+      assert is_list(json_ld["sameAs"])
+      assert "https://github.com/phoenixframework/phoenix" in json_ld["sameAs"]
+    end
+
+    test "includes offer with free price", %{conn: conn, package: package} do
+      {:ok, _view, html} = live(conn, ~p"/packages/#{package.name}")
+
+      json_ld = extract_json_ld(html, "SoftwareApplication")
+
+      assert json_ld["offers"]["@type"] == "Offer"
+      assert json_ld["offers"]["price"] == "0"
+      assert json_ld["offers"]["priceCurrency"] == "USD"
+      assert json_ld["isAccessibleForFree"] == true
+    end
+
+    test "renders WebSite JSON-LD in root layout", %{conn: conn, package: package} do
+      {:ok, _view, html} = live(conn, ~p"/packages/#{package.name}")
+
+      json_ld = extract_json_ld(html, "WebSite")
+
+      assert json_ld["name"] == "Elixir Observer"
+      assert json_ld["url"] =~ "/"
+      assert json_ld["potentialAction"]["@type"] == "SearchAction"
+    end
+
+    defp extract_json_ld(html, type) do
+      ~r/<script type="application\/ld\+json">\s*(.+?)\s*<\/script>/s
+      |> Regex.scan(html, capture: :all_but_first)
+      |> Enum.map(&List.first/1)
+      |> Enum.map(&Jason.decode!/1)
+      |> Enum.find(&(&1["@type"] == type))
+    end
+  end
 end
