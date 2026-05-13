@@ -92,7 +92,7 @@ defmodule Toolbox.Tasks.Category do
           {"user-agent", "elixir client"}
         ],
         json: body,
-        receive_timeout: 120_000
+        receive_timeout: 600_000
       )
 
     case categorization_response do
