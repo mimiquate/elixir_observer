@@ -90,6 +90,7 @@ defmodule Toolbox.MixProject do
       # Dev and Prod
       {:tower_rollbar, "~> 0.6.4", only: [:dev, :prod]},
       {:tower_slack, "~> 0.6.0", only: [:dev, :prod]},
+      {:tower_db, "~> 0.1.0", organization: "mimiquate"},
 
       # Dev
       {:dotenv_parser, "~> 2.0", only: :dev},

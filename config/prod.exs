@@ -11,7 +11,7 @@ config :toolbox, ToolboxWeb.Endpoint, cache_static_manifest: "priv/static/cache_
 config :logger, level: :info
 
 config :tower,
-  reporters: [TowerSlack, TowerRollbar, Tower.EphemeralReporter],
+  reporters: [TowerDB, TowerSlack, TowerRollbar, Tower.EphemeralReporter],
   logger_metadata: [:tower]
 
 config :tower_slack, otp_app: :toolbox
