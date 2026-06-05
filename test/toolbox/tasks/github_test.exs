@@ -41,8 +41,8 @@ defmodule Toolbox.Tasks.GitHubTest do
                 "pullRequests": {
                   "nodes": [
                     {
-                      "createdAt": "2025-05-23T16:57:23Z",
-                      "mergedAt": "2025-05-25T16:58:30Z",
+                      "createdAt": "2026-05-23T16:57:23Z",
+                      "mergedAt": "2026-05-25T16:58:30Z",
                       "permalink": "https://github.com/mtrudel/bandit/pull/495",
                       "mergedBy": {
                         "login": "mtrudel",
@@ -89,9 +89,9 @@ defmodule Toolbox.Tasks.GitHubTest do
                pull_requests: [
                  %PullRequest{
                    permalink: "https://github.com/mtrudel/bandit/pull/495",
-                   created_at: ~U[2025-05-23 16:57:23Z],
+                   created_at: ~U[2026-05-23 16:57:23Z],
                    title: "Streamline keepalive logic",
-                   merged_at: ~U[2025-05-25 16:58:30Z],
+                   merged_at: ~U[2026-05-25 16:58:30Z],
                    merged_by_login: "mtrudel",
                    merged_by_avatar_url: "https://avatars.githubusercontent.com/"
                  }
