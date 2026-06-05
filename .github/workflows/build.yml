@@ -43,6 +43,9 @@ jobs:
       with:
         path: _build
         key: ${{ runner.os }}-mix-build-${{ steps.beam.outputs.elixir-version }}-${{ steps.beam.outputs.otp-version }}-${{ hashFiles('**/mix.lock') }}
+    - run: mix hex.organization auth mimiquate --key $HEX_API_KEY
+      env:
+        HEX_API_KEY: ${{ secrets.HEX_API_KEY }}
     - run: mix deps.get
     - run: mix deps.unlock --check-unused
     - run: mix compile --warnings-as-errors
@@ -58,6 +61,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only
+      - run: flyctl deploy --remote-only --build-secret HEX_API_KEY="$HEX_API_KEY"
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          HEX_API_KEY: ${{ secrets.HEX_API_KEY}}

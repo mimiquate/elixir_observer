@@ -76,6 +76,8 @@ defmodule Toolbox.MixProject do
       {:uniq, "~> 0.6"},
       {:remote_ip, "~> 1.2"},
       {:plug_attack, "~> 0.4.3"},
+      {:tower_db, "~> 0.1.0", organization: "mimiquate"},
+      {:tower_web, "~> 0.1.0", organization: "mimiquate"},
 
       # OpenTelemetry
       {:opentelemetry, "~> 1.3"},
@@ -90,8 +92,6 @@ defmodule Toolbox.MixProject do
       # Dev and Prod
       {:tower_rollbar, "~> 0.6.4", only: [:dev, :prod]},
       {:tower_slack, "~> 0.6.0", only: [:dev, :prod]},
-      {:tower_db, "~> 0.1.0", organization: "mimiquate", only: [:dev, :prod]},
-      {:tower_web, "~> 0.1.0", organization: "mimiquate", only: [:dev, :prod]},
 
       # Dev
       {:dotenv_parser, "~> 2.0", only: :dev},
