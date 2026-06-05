@@ -50,7 +50,7 @@ defmodule ToolboxWeb.Router do
 
     import Phoenix.LiveDashboard.Router
     live_dashboard "/dashboard", metrics: ToolboxWeb.Telemetry
-    tower_dashboard "/errors"
+    tower_dashboard("/errors")
   end
 
   defp admin_basic_auth(conn, _opts) do
