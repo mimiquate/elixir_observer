@@ -36,6 +36,11 @@ ENV MIX_ENV="prod"
 
 # install mix dependencies
 COPY mix.exs mix.lock ./
+
+RUN --mount=type=secret,id=HEX_API_KEY \
+    export HEX_API_KEY="$(cat /run/secrets/HEX_API_KEY)" && \
+    mix hex.organization auth mimiquate --key "$HEX_API_KEY"
+
 RUN mix deps.get --only $MIX_ENV
 RUN mkdir config
 
