@@ -2,6 +2,7 @@ defmodule ToolboxWeb.Router do
   use ToolboxWeb, :router
 
   import Oban.Web.Router
+  import TowerWeb.Router
 
   pipeline :browser do
     plug RemoteIp, headers: ["fly-client-ip"]
@@ -49,6 +50,7 @@ defmodule ToolboxWeb.Router do
 
     import Phoenix.LiveDashboard.Router
     live_dashboard "/dashboard", metrics: ToolboxWeb.Telemetry
+    tower_dashboard "/errors"
   end
 
   defp admin_basic_auth(conn, _opts) do
