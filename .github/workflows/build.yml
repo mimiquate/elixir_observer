@@ -27,7 +27,7 @@ jobs:
           --health-retries 5
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - uses: erlef/setup-beam@v1
       id: beam
       with:
@@ -59,7 +59,7 @@ jobs:
     runs-on: ubuntu-22.04
     concurrency: deploy-group
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: flyctl deploy --remote-only --build-secret HEX_API_KEY="$HEX_API_KEY"
         env:
