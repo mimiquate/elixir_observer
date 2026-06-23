@@ -126,8 +126,8 @@ defmodule ToolboxWeb.PackageLive do
 
   def handle_params(params, _uri, socket) do
     package = socket.assigns.package
-    version = params["version"] || package.latest_stable_version
     versions = Enum.map(package.versions, & &1.version)
+    version = params["version"] || package.latest_stable_version || List.first(versions)
 
     if version not in versions do
       raise HexpmVersionNotFoundError, "#{version} not found for #{package.name}"
