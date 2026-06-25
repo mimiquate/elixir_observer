@@ -88,6 +88,31 @@ defmodule ToolboxWeb.PackageLive do
         false
       end
 
+    package_assigns = %{
+      id: package.id,
+      name: package.name,
+      category: package.category,
+      description: package.description,
+      owners_sync_at: package.hexpm_owners_sync_at,
+      owners: package.hexpm_owners,
+      recent_downloads: hexpm_data["downloads"]["recent"],
+      versions: versions,
+      latest_version_at: hd(hexpm_data["releases"])["inserted_at"],
+      latest_stable_version: hexpm_data["latest_stable_version"],
+      latest_stable_version_data: package.hexpm_latest_stable_version_data,
+      html_url: hexpm_data["html_url"],
+      changelog_url: changelog_url(hexpm_data, github.data),
+      docs_html_url: hexpm_data["docs_html_url"],
+      hexpm_created_at: hexpm_data["inserted_at"],
+      github_repo_url: github.data["html_url"],
+      github_fullname: github.data["full_name"],
+      stargazers_count: github.data["stargazers_count"],
+      activity: github.activity,
+      github_sync_at: github.sync_at,
+      is_following: is_following,
+      community_resources: community_resources
+    }
+
     {
       :ok,
       assign(
@@ -96,30 +121,8 @@ defmodule ToolboxWeb.PackageLive do
         search_term: "",
         related_packages: related_packages,
         related_packages_count: related_packages_count,
-        package: %{
-          id: package.id,
-          name: package.name,
-          category: package.category,
-          description: package.description,
-          owners_sync_at: package.hexpm_owners_sync_at,
-          owners: package.hexpm_owners,
-          recent_downloads: hexpm_data["downloads"]["recent"],
-          versions: versions,
-          latest_version_at: hd(hexpm_data["releases"])["inserted_at"],
-          latest_stable_version: hexpm_data["latest_stable_version"],
-          latest_stable_version_data: package.hexpm_latest_stable_version_data,
-          html_url: hexpm_data["html_url"],
-          changelog_url: changelog_url(hexpm_data, github.data),
-          docs_html_url: hexpm_data["docs_html_url"],
-          hexpm_created_at: hexpm_data["inserted_at"],
-          github_repo_url: github.data["html_url"],
-          github_fullname: github.data["full_name"],
-          stargazers_count: github.data["stargazers_count"],
-          activity: github.activity,
-          github_sync_at: github.sync_at,
-          is_following: is_following,
-          community_resources: community_resources
-        }
+        json_ld_schema: package_json_ld(package_assigns, url(~p"/packages/#{package.name}")),
+        package: package_assigns
       )
     }
   end
@@ -307,5 +310,55 @@ defmodule ToolboxWeb.PackageLive do
 
   defp source_url(name, version) do
     "https://preview.hex.pm/preview/#{name}/#{version}"
+  end
+
+  defp package_json_ld(package, package_url) do
+    %{
+      "@context" => "https://schema.org",
+      "@type" => "SoftwareApplication",
+      "name" => package.name,
+      "description" => package.description,
+      "applicationCategory" => "Developer Tools",
+      "operatingSystem" => "Elixir/Erlang BEAM VM",
+      "url" => package_url,
+      "downloadUrl" => package.html_url,
+      "softwareVersion" => package.latest_stable_version,
+      "datePublished" => package.hexpm_created_at,
+      "dateModified" => package.latest_version_at,
+      "offers" => %{
+        "@type" => "Offer",
+        "price" => "0",
+        "priceCurrency" => "USD"
+      },
+      "isAccessibleForFree" => true,
+      "license" => "https://opensource.org/licenses"
+    }
+    |> maybe_add_aggregate_rating(package)
+    |> maybe_add_same_as(package)
+    |> Jason.encode!()
+  end
+
+  defp maybe_add_aggregate_rating(schema, %{stargazers_count: nil}), do: schema
+  defp maybe_add_aggregate_rating(schema, %{stargazers_count: 0}), do: schema
+
+  defp maybe_add_aggregate_rating(schema, %{stargazers_count: count}) do
+    Map.put(schema, "aggregateRating", %{
+      "@type" => "AggregateRating",
+      "ratingValue" => 5,
+      "ratingCount" => count,
+      "bestRating" => 5,
+      "worstRating" => 1
+    })
+  end
+
+  defp maybe_add_same_as(schema, package) do
+    same_as =
+      [package.html_url, package.github_repo_url, package.docs_html_url]
+      |> Enum.reject(&is_nil/1)
+
+    case same_as do
+      [] -> schema
+      urls -> Map.put(schema, "sameAs", urls)
+    end
   end
 end

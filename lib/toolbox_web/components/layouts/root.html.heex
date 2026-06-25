@@ -26,6 +26,10 @@
 
     <meta name="robots" content={robots(assigns)} />
 
+    <script type="application/ld+json">
+      {website_json_ld()}
+    </script>
+
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
 
     <%!-- Custom Fonts --%>

@@ -12,6 +12,34 @@ defmodule ToolboxWeb.Layouts do
 
   embed_templates "layouts/*"
 
+  def website_json_ld do
+    base_url = url(~p"/")
+
+    %{
+      "@context" => "https://schema.org",
+      "@type" => "WebSite",
+      "name" => "Elixir Observer",
+      "url" => base_url,
+      "description" =>
+        "Find, compare, and explore Elixir packages for your next project. " <>
+          "Search 2000+ packages with GitHub activity insights.",
+      "potentialAction" => %{
+        "@type" => "SearchAction",
+        "target" => %{
+          "@type" => "EntryPoint",
+          "urlTemplate" => "#{base_url}searches/{search_term_string}"
+        },
+        "query-input" => "required name=search_term_string"
+      },
+      "publisher" => %{
+        "@type" => "Organization",
+        "name" => "Mimiquate",
+        "url" => "https://mimiquate.com"
+      }
+    }
+    |> Jason.encode!()
+  end
+
   def og_title(%{package: %{name: name}}) do
     name
   end

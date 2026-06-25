@@ -17,7 +17,18 @@ defmodule ToolboxWeb do
   those modules here.
   """
 
-  def static_paths, do: ~w(assets fonts images files robots.txt sitemap.txt)
+  # Static assets served from priv/static
+  @static_paths ~w(
+    assets
+    fonts
+    images
+    files
+    robots.txt
+    sitemap.txt
+    llms.txt
+  )
+
+  def static_paths, do: @static_paths
 
   def router do
     quote do
