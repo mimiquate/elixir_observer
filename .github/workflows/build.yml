@@ -43,9 +43,6 @@ jobs:
       with:
         path: _build
         key: ${{ runner.os }}-mix-build-${{ steps.beam.outputs.elixir-version }}-${{ steps.beam.outputs.otp-version }}-${{ hashFiles('**/mix.lock') }}
-    - run: mix hex.repo add mimiquate https://hex-registry.mimiquate.com --fetch-public-key="SHA256:TH5p6I3rBK/tsTscIxNwpvSusumRTmPb4l9LbagLvdk" --auth-key="$HEX_AUTH_KEY"
-      env:
-        HEX_AUTH_KEY: ${{ secrets.HEX_AUTH_KEY }}
     - run: mix deps.get
     - run: mix deps.unlock --check-unused
     - run: mix compile --warnings-as-errors
@@ -61,7 +58,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only --build-secret HEX_AUTH_KEY="$HEX_AUTH_KEY"
+      - run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-          HEX_AUTH_KEY: ${{ secrets.HEX_AUTH_KEY}}
