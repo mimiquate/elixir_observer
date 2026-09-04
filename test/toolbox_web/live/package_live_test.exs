@@ -96,6 +96,37 @@ defmodule ToolboxWeb.PackageLiveTest do
       assert has_element?(view, "h2", "Version 2.0.0-rc.1")
     end
 
+    test "does not enqueue a get_latest_stable_version job when latest_stable_version is nil",
+         %{conn: conn, package: package} do
+      {:ok, _} =
+        Packages.create_hexpm_snapshot(%{
+          package_id: package.id,
+          data: %{
+            "meta" => %{"description" => "A pure Elixir HTTP server"},
+            "downloads" => %{"recent" => 1000},
+            "docs_html_url" => "https://hexdocs.pm/bandit/",
+            "releases" => [
+              %{
+                "version" => "2.0.0-rc.1",
+                "url" => "https://hex.pm/api/packages/bandit/releases/2.0.0-rc.1",
+                "has_docs" => true,
+                "inserted_at" => "2025-05-29T16:57:22.358745Z"
+              }
+            ],
+            "inserted_at" => "2020-11-05T17:11:46.440731Z",
+            "latest_version" => "2.0.0-rc.1",
+            "latest_stable_version" => nil
+          }
+        })
+
+      {:ok, _view, _html} = live(conn, ~p"/packages/#{package.name}")
+
+      refute_enqueued(
+        worker: Toolbox.Workers.HexpmWorker,
+        args: %{action: "get_latest_stable_version"}
+      )
+    end
+
     test "handles invalid version gracefully", %{conn: conn, package: package} do
       assert_raise ToolboxWeb.PackageLive.HexpmVersionNotFoundError, fn ->
         live(conn, ~p"/packages/#{package.name}/invalid_version")
