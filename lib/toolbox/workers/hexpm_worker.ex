@@ -48,13 +48,11 @@ defmodule Toolbox.Workers.HexpmWorker do
   def perform(%Oban.Job{
         args: %{"action" => "get_latest_stable_version", "name" => name, "version" => version}
       }) do
-    with %Toolbox.Package{} = package <- Toolbox.Packages.get_package_by_name(name),
-         {:ok, %{status: 200, body: version_data}} <-
-           Toolbox.Hexpm.get_package_version(name, version),
+    with {:ok, package} <- get_package_by_name(name),
+         {:ok, version_data} <- get_package_version(name, version),
          {:ok, p} <-
            Toolbox.Packages.update_package_latest_stable_version(package, %{
-             hexpm_latest_stable_version_data:
-               Toolbox.Package.HexpmVersion.build_version_from_api_response(version_data)
+             hexpm_latest_stable_version_data: version_data
            }) do
       Phoenix.PubSub.broadcast(
         Toolbox.PubSub,
@@ -67,21 +65,36 @@ defmodule Toolbox.Workers.HexpmWorker do
 
       {:ok, p}
     else
-      nil ->
-        Logger.warning("HEXPM package #{name} not found in database")
+      {:skip, reason} ->
+        Logger.warning(reason)
 
         :ok
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  defp get_package_by_name(name) do
+    case Toolbox.Packages.get_package_by_name(name) do
+      %Toolbox.Package{} = package -> {:ok, package}
+      nil -> {:skip, "package #{name} not found"}
+    end
+  end
+
+  defp get_package_version(name, version) do
+    case Toolbox.Hexpm.get_package_version(name, version) do
+      {:ok, %{status: 200, body: version_data}} ->
+        {:ok, Toolbox.Package.HexpmVersion.build_version_from_api_response(version_data)}
 
       {:ok, %{status: status}} when status in [400, 404, 429] ->
-        Logger.warning("Unable to fetch hexpm version for #{name} version #{version}")
-
-        :ok
+        {:skip, "Unable to fetch hexpm version for #{name} version #{version}"}
 
       {:ok, %{status: status}} ->
         {:error, "failed to fetch hexpm version #{version} for #{name} with status #{status}"}
 
-      {:error, _reason} = error ->
-        error
+      {:error, reason} ->
+        {:error, reason}
     end
   end
 end
