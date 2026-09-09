@@ -101,6 +101,9 @@ defmodule ToolboxWeb do
 
       def humanized_number(_other), do: "-"
 
+      def humanized_stable_version(version) when is_binary(version), do: version
+      def humanized_stable_version(_other), do: "-"
+
       def humanized_datetime(datetime) when is_binary(datetime) do
         Calendar.strftime(
           NaiveDateTime.from_iso8601!(datetime),

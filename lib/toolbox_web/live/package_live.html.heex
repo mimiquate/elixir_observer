@@ -160,7 +160,7 @@
         </:icon>
         <div class="flex items-center">
           <h3 class="text-[20px] sm:text-[32px] font-semibold text-primary-text">
-            {@package.latest_stable_version || "-"}
+            {humanized_stable_version(@package.latest_stable_version)}
           </h3>
         </div>
       </.stats_card>
