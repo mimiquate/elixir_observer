@@ -68,7 +68,6 @@ defmodule Toolbox.Workers.HexpmWorkerTest do
     end
 
     test "returns :ok and never calls hex.pm when version is nil" do
-      Helpers.test_server_hexpm()
       {:ok, package} = create(:package)
 
       log =
