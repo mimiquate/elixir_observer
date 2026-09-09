@@ -104,4 +104,78 @@ defmodule Toolbox.Workers.HexpmWorkerTest do
       assert message =~ "502"
     end
   end
+
+  describe "perform/1 with get_package_owners" do
+    test "updates the package and broadcasts on success" do
+      test_server = Helpers.test_server_hexpm()
+      {:ok, package} = create(:package)
+
+      Phoenix.PubSub.subscribe(Toolbox.PubSub, "package_live:#{package.name}")
+
+      TestServer.add(test_server, "/packages/#{package.name}/owners",
+        to: fn conn ->
+          conn
+          |> Plug.Conn.put_resp_header("content-type", "application/json")
+          |> Plug.Conn.send_resp(200, ~s([
+            {"email": "user@example.com", "username": "someuser"}
+          ]))
+        end
+      )
+
+      assert {:ok, %Toolbox.Package{} = updated} =
+               perform_job(HexpmWorker, %{
+                 action: "get_package_owners",
+                 name: package.name
+               })
+
+      assert [%{username: "someuser", email: "user@example.com"}] = updated.hexpm_owners
+      assert updated.hexpm_owners_sync_at
+
+      assert_receive %{
+        action: :refresh_owners,
+        owners: [%{username: "someuser"}]
+      }
+    end
+
+    @tag capture_log: true
+    test "returns :ok and skips the update on 404 (package removed from hex.pm)" do
+      test_server = Helpers.test_server_hexpm()
+      {:ok, package} = create(:package)
+
+      TestServer.add(test_server, "/packages/#{package.name}/owners",
+        to: fn conn ->
+          conn
+          |> Plug.Conn.put_resp_header("content-type", "application/json")
+          |> Plug.Conn.send_resp(404, ~s({"message": "Page not found", "status": 404}))
+        end
+      )
+
+      assert perform_job(HexpmWorker, %{
+               action: "get_package_owners",
+               name: package.name
+             }) == :ok
+
+      assert Packages.get_package_by_name(package.name).hexpm_owners == []
+    end
+
+    @tag capture_log: true
+    test "returns an error tuple on server errors so Oban retries" do
+      test_server = Helpers.test_server_hexpm()
+      {:ok, package} = create(:package)
+
+      TestServer.add(test_server, "/packages/#{package.name}/owners",
+        to: fn conn ->
+          Plug.Conn.send_resp(conn, 502, "")
+        end
+      )
+
+      assert {:error, message} =
+               perform_job(HexpmWorker, %{
+                 action: "get_package_owners",
+                 name: package.name
+               })
+
+      assert message =~ "502"
+    end
+  end
 end
