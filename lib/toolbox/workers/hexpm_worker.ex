@@ -11,10 +11,10 @@ defmodule Toolbox.Workers.HexpmWorker do
   end
 
   def perform(%Oban.Job{args: %{"action" => "get_package_owners", "name" => name}}) do
-    with {:ok, owners_data} <- get_package_owners(name),
+    with {:ok, package} <- get_package_by_name(name),
+         {:ok, owners_data} <- get_package_owners(name),
          {:ok, p} <-
-           Toolbox.Packages.get_package_by_name(name)
-           |> Toolbox.Packages.update_package_owners(%{
+           Toolbox.Packages.update_package_owners(package, %{
              hexpm_owners_sync_at: DateTime.utc_now(),
              hexpm_owners: owners_data
            }) do
