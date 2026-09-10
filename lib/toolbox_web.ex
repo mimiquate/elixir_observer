@@ -159,6 +159,13 @@ defmodule ToolboxWeb do
 
         "https://www.gravatar.com/avatar/#{hash}?s=#{size}&d=retro"
       end
+
+      # GitHub shows merges by deleted accounts as the "ghost" user
+      def merged_by_login(nil), do: "ghost"
+      def merged_by_login(login), do: login
+
+      def merged_by_avatar_url(nil), do: "https://github.com/ghost.png"
+      def merged_by_avatar_url(avatar_url), do: avatar_url
     end
   end
 

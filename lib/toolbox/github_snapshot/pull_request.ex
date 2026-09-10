@@ -22,8 +22,12 @@ defmodule Toolbox.GithubSnapshot.PullRequest do
       :merged_by_login
     ]
 
+    # mergedBy is null for PRs merged by a deleted account
+    # thats why those fields are not required
+    required_fields = fields -- [:merged_by_avatar_url, :merged_by_login]
+
     pr
     |> cast(attrs, fields)
-    |> validate_required(fields)
+    |> validate_required(required_fields)
   end
 end

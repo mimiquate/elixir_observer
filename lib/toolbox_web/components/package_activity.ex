@@ -109,16 +109,16 @@ defmodule ToolboxWeb.Components.PackageActivity do
                     <div class="flex mt-1">
                       <img
                         class="w-6 rounded-full"
-                        src={pr.merged_by_avatar_url}
+                        src={merged_by_avatar_url(pr.merged_by_avatar_url)}
                         {test_attrs(pr_avatar: true)}
                       />
                       <.link
-                        href={"https://github.com/#{pr.merged_by_login}"}
+                        href={"https://github.com/#{merged_by_login(pr.merged_by_login)}"}
                         target="_blank"
                         class="text-[14px] ml-2 hover:underline"
                         {test_attrs(pr_author: true)}
                       >
-                        {pr.merged_by_login}
+                        {merged_by_login(pr.merged_by_login)}
                       </.link>
                       <% {merged_at_number, merged_at_relative_label} =
                         relative_datetime(pr.merged_at) %>

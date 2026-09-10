@@ -150,6 +150,47 @@ defmodule ToolboxWeb.Components.PackageActivityTest do
       assert node_count(pr_dividers) >= 1
     end
 
+    test "renders GitHub's ghost user as fallback when merged_by is nil" do
+      activity = %Activity{
+        open_issue_count: 0,
+        closed_issue_count: 0,
+        open_pr_count: 0,
+        merged_pr_count: 1,
+        pull_requests: [
+          %PullRequest{
+            title: "Fix bug in authentication",
+            permalink: "https://github.com/owner/repo/pull/123",
+            merged_by_login: nil,
+            merged_by_avatar_url: nil,
+            merged_at: ~U[2024-01-15 10:30:00Z]
+          }
+        ]
+      }
+
+      html =
+        render_component(&package_activity/1,
+          activity: activity,
+          github_fullname: "owner/repo"
+        )
+
+      doc = LazyHTML.from_document(html)
+
+      # Check the PR is rendered
+      pr_items = LazyHTML.query(doc, "[data-test-pr-item]")
+      assert node_count(pr_items) == 1
+
+      # Check the ghost avatar is used as fallback
+      pr_avatars = LazyHTML.query(doc, "[data-test-pr-avatar]")
+      assert node_count(pr_avatars) == 1
+      assert LazyHTML.attribute(pr_avatars, "src") == ["https://github.com/ghost.png"]
+
+      # Check the ghost user is used as fallback author
+      pr_authors = LazyHTML.query(doc, "[data-test-pr-author]")
+      assert node_count(pr_authors) == 1
+      assert LazyHTML.attribute(pr_authors, "href") == ["https://github.com/ghost"]
+      assert LazyHTML.text(pr_authors) =~ "ghost"
+    end
+
     test "renders activity section with no pull requests" do
       activity = %Activity{
         open_issue_count: 0,
