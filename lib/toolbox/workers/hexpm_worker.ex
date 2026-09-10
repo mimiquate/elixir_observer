@@ -11,29 +11,31 @@ defmodule Toolbox.Workers.HexpmWorker do
   end
 
   def perform(%Oban.Job{args: %{"action" => "get_package_owners", "name" => name}}) do
-    {:ok, %{status: 200, body: owners_data}} = Toolbox.Hexpm.get_package_owners(name)
+    with {:ok, package} <- get_package_by_name(name),
+         {:ok, owners_data} <- get_package_owners(name),
+         {:ok, p} <-
+           Toolbox.Packages.update_package_owners(package, %{
+             hexpm_owners_sync_at: DateTime.utc_now(),
+             hexpm_owners: owners_data
+           }) do
+      Phoenix.PubSub.broadcast(
+        Toolbox.PubSub,
+        "package_live:#{name}",
+        %{
+          action: :refresh_owners,
+          owners_sync_at: p.hexpm_owners_sync_at,
+          owners: p.hexpm_owners
+        }
+      )
 
-    Toolbox.Packages.get_package_by_name(name)
-    |> Toolbox.Packages.update_package_owners(%{
-      hexpm_owners_sync_at: DateTime.utc_now(),
-      hexpm_owners: owners_data
-    })
-    |> case do
-      {:ok, p} ->
-        Phoenix.PubSub.broadcast(
-          Toolbox.PubSub,
-          "package_live:#{name}",
-          %{
-            action: :refresh_owners,
-            owners_sync_at: p.hexpm_owners_sync_at,
-            owners: p.hexpm_owners
-          }
-        )
+      {:ok, p}
+    else
+      {:skip, reason} ->
+        Logger.warning(reason)
+        :ok
 
-        {:ok, p}
-
-      err ->
-        err
+      {:error, reason} ->
+        {:error, reason}
     end
   end
 
@@ -93,6 +95,22 @@ defmodule Toolbox.Workers.HexpmWorker do
       {:ok, %{status: server_error}} when server_error in 500..599 ->
         {:error,
          "failed to fetch hexpm version #{version} for #{name} with status #{server_error}"}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  defp get_package_owners(name) do
+    case Toolbox.Hexpm.get_package_owners(name) do
+      {:ok, %{status: 200, body: owners_data}} ->
+        {:ok, owners_data}
+
+      {:ok, %{status: status}} when status in [400, 404] ->
+        {:skip, "Unable to fetch hexpm owners for #{name}"}
+
+      {:ok, %{status: server_error}} when server_error in 500..599 ->
+        {:error, "failed to fetch hexpm owners for #{name} with status #{server_error}"}
 
       {:error, reason} ->
         {:error, reason}
