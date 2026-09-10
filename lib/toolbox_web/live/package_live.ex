@@ -220,8 +220,9 @@ defmodule ToolboxWeb.PackageLive do
     latest_stable_version = package.latest_hexpm_snapshot.data["latest_stable_version"]
     latest_stable_version_data = package.hexpm_latest_stable_version_data
 
-    if !latest_stable_version_data or
-         latest_stable_version_data.version != latest_stable_version do
+    if is_binary(latest_stable_version) and
+         (!latest_stable_version_data or
+            latest_stable_version_data.version != latest_stable_version) do
       %{action: :get_latest_stable_version, name: package.name, version: latest_stable_version}
       |> Toolbox.Workers.HexpmWorker.new()
       |> Oban.insert()
