@@ -164,6 +164,16 @@ defmodule Toolbox.Packages do
     |> Repo.all()
   end
 
+  def list_packages_not_synced_since(datetime) do
+    from(p in Package,
+      left_join: s in HexpmSnapshot.Latest,
+      on: s.package_id == p.id,
+      where: is_nil(s.package_id) or s.inserted_at < ^datetime,
+      select: %{id: p.id, name: p.name}
+    )
+    |> Repo.all()
+  end
+
   def get_category_by_id!(id) do
     Category.all()
     |> Enum.find(fn c -> c.id == id end)
@@ -264,6 +274,23 @@ defmodule Toolbox.Packages do
     GithubSnapshot
     |> where([gs], gs.package_id == ^id)
     |> Repo.delete_all()
+  end
+
+  def delete_hexpm_snapshots(%Package{id: id}) do
+    HexpmSnapshot
+    |> where([hs], hs.package_id == ^id)
+    |> Repo.delete_all()
+  end
+
+  def delete_package(%Package{} = package) do
+    Repo.transact(fn ->
+      skip_refresh_latest_hexpm_snapshots()
+
+      delete_hexpm_snapshots(package)
+      delete_github_snapshots(package)
+
+      Repo.delete(package)
+    end)
   end
 
   defdelegate community_resources_for(package),

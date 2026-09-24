@@ -68,7 +68,8 @@ config :toolbox, Oban,
      crontab: [
        {"0 5 * * WED,SUN", Toolbox.Workers.HexpmWorker},
        {"0 6 * * WED,SUN", Toolbox.Workers.SCMWorker},
-       {"0 7 * * WED,SUN", Toolbox.Workers.CategoryWorker}
+       {"0 7 * * WED,SUN", Toolbox.Workers.CategoryWorker},
+       {"0 8 * * WED,SUN", Toolbox.Workers.HexpmCleanupWorker}
      ]}
   ],
   queues: [
