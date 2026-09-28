@@ -1,6 +1,7 @@
 defmodule Toolbox.PackagesTest do
   use Toolbox.DataCase, async: true
 
+  alias Toolbox.Category
   alias Toolbox.Packages
 
   describe "list_packages_not_synced_since/1" do
@@ -51,6 +52,18 @@ defmodule Toolbox.PackagesTest do
 
       assert Repo.all(from(gs in Toolbox.GithubSnapshot, where: gs.package_id == ^package.id)) ==
                []
+    end
+  end
+
+  describe "get_category_by_permalink/1" do
+    test "returns the category matching the permalink" do
+      category = Category.find_by_name("HTTP Server")
+
+      assert Packages.get_category_by_permalink(category.permalink) == category
+    end
+
+    test "returns nil when no category matches the permalink" do
+      assert Packages.get_category_by_permalink("does-not-exist") == nil
     end
   end
 

@@ -183,13 +183,9 @@ defmodule Toolbox.Packages do
     end
   end
 
-  def get_category_by_permalink!(permalink) do
+  def get_category_by_permalink(permalink) do
     Category.all()
     |> Enum.find(fn c -> c.permalink == permalink end)
-    |> case do
-      nil -> raise Ecto.NoResultsError, queryable: Category
-      c -> c
-    end
   end
 
   def create_package(attributes \\ %{}) do
