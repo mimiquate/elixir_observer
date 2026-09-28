@@ -182,21 +182,12 @@ defmodule Toolbox.Workers.HexpmWorker do
   end
 
   defp collect_page(results) do
-    error =
-      Enum.find_value(results, fn
-        {_version, {:error, reason}} -> {:error, reason}
-        _ -> nil
-      end)
+    Enum.reduce_while(results, {:ok, []}, fn
+      {version, {:ok, downloads}}, {:ok, entries} ->
+        {:cont, {:ok, entries ++ [%{version: version, downloads: downloads}]}}
 
-    if error do
-      error
-    else
-      entries =
-        Enum.map(results, fn {version, {:ok, downloads}} ->
-          %{version: version, downloads: downloads}
-        end)
-
-      {:ok, entries}
-    end
+      {_version, {:error, reason}}, _acc ->
+        {:halt, {:error, reason}}
+    end)
   end
 end
