@@ -1,6 +1,8 @@
 defmodule Toolbox.Workers.SCMWorker do
   use Oban.Worker, queue: :scm, max_attempts: 3
 
+  require Logger
+
   @impl Oban.Worker
   def perform(%Oban.Job{meta: %{"cron" => true}}) do
     names = Toolbox.Packages.list_packages_names()
@@ -33,8 +35,22 @@ defmodule Toolbox.Workers.SCMWorker do
 
   @impl Oban.Worker
   def perform(%Oban.Job{args: %{"name" => name}}) do
-    Toolbox.Tasks.SCM.run(name)
+    case get_package_by_name(name) do
+      {:ok, package} ->
+        Toolbox.Tasks.SCM.run(package)
 
-    :ok
+        :ok
+
+      {:skip, reason} ->
+        Logger.warning(reason)
+        :ok
+    end
+  end
+
+  defp get_package_by_name(name) do
+    case Toolbox.Packages.get_package_by_name(name) do
+      %Toolbox.Package{} = package -> {:ok, package}
+      nil -> {:skip, "package #{name} not found"}
+    end
   end
 end
