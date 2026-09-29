@@ -1,8 +1,6 @@
 defmodule ToolboxWeb.Components.VersionDownloadsChart do
   use ToolboxWeb, :html
 
-  import ToolboxWeb.Components.Icons.SpinnerIcon
-
   @bar_color "bg-accent"
   @other_color "bg-primary-200"
 
@@ -40,7 +38,11 @@ defmodule ToolboxWeb.Components.VersionDownloadsChart do
             class="flex flex-col items-center justify-center py-10"
             {test_attrs(version_downloads_loading: true)}
           >
-            <.spinner_icon class="w-10 h-10" />
+            <img
+              src={~p"/images/spinner.svg"}
+              class="w-10 h-10 animate-[spin_2s_linear_infinite]"
+              alt=""
+            />
             <p class="mt-4 text-[14px] text-secondary-text text-center">
               Loading visualizations for the latest version downloads. <br />
               This may take a few seconds.
@@ -95,7 +97,11 @@ defmodule ToolboxWeb.Components.VersionDownloadsChart do
                   class="flex items-center gap-2 py-2"
                   {test_attrs(version_downloads_loading_more: true)}
                 >
-                  <.spinner_icon class="w-4 h-4" />
+                  <img
+                    src={~p"/images/spinner.svg"}
+                    class="w-4 h-4 animate-[spin_2s_linear_infinite]"
+                    alt=""
+                  />
                   <span class="text-[14px] text-secondary-text">Loading more...</span>
                 </div>
               <% @has_more? and @others_left? -> %>
