@@ -297,6 +297,36 @@ defmodule Toolbox.Workers.HexpmWorkerTest do
       assert Enum.map(entries, & &1.version) == ["2.0.0", "1.0.0"]
     end
 
+    test "returns :ok and broadcasts nothing when a version is not found on hex.pm" do
+      test_server = Helpers.test_server_hexpm()
+
+      package = create_package_with_releases(["2.0.0", "1.0.0"], 500)
+
+      Phoenix.PubSub.subscribe(Toolbox.PubSub, "package_live:#{package.name}")
+
+      TestServer.add(test_server, "/packages/#{package.name}/releases/2.0.0",
+        to: fn conn ->
+          conn
+          |> Plug.Conn.put_resp_header("content-type", "application/json")
+          |> Plug.Conn.send_resp(404, ~s({"message": "Page not found", "status": 404}))
+        end
+      )
+
+      stub_downloads(test_server, package.name, "1.0.0", 500)
+
+      log =
+        capture_log(fn ->
+          assert perform_job(HexpmWorker, %{
+                   action: "get_version_downloads",
+                   name: package.name,
+                   offset: 0
+                 }) == :ok
+        end)
+
+      assert log =~ "Unable to fetch hexpm downloads for #{package.name} version 2.0.0"
+      refute_receive %{action: :refresh_version_downloads}
+    end
+
     @tag capture_log: true
     test "returns an error tuple on server errors so Oban retries" do
       test_server = Helpers.test_server_hexpm()

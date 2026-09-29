@@ -153,7 +153,7 @@ defmodule Toolbox.Workers.HexpmWorker do
         {:ok, downloads}
 
       {:ok, %{status: status}} when status in [400, 404] ->
-        {:ok, 0}
+        {:skip, "Unable to fetch hexpm downloads for #{name} version #{version}"}
 
       {:ok, %{status: server_error}} when server_error in 500..599 ->
         {:error,
@@ -185,6 +185,9 @@ defmodule Toolbox.Workers.HexpmWorker do
     Enum.reduce_while(results, {:ok, []}, fn
       {version, {:ok, downloads}}, {:ok, entries} ->
         {:cont, {:ok, entries ++ [%{version: version, downloads: downloads}]}}
+
+      {_version, {:skip, reason}}, _acc ->
+        {:halt, {:skip, reason}}
 
       {_version, {:error, reason}}, _acc ->
         {:halt, {:error, reason}}
