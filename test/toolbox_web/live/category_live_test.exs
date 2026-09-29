@@ -32,5 +32,11 @@ defmodule ToolboxWeb.CategoryLiveTest do
       assert has_element?(view, data_test_attr(:package_link, package1.name))
       assert has_element?(view, data_test_attr(:package_link, package2.name))
     end
+
+    test "handles invalid category permalink gracefully", %{conn: conn} do
+      assert_raise ToolboxWeb.CategoryLive.CategoryNotFoundError, fn ->
+        live(conn, "/categories/does-not-exist")
+      end
+    end
   end
 end

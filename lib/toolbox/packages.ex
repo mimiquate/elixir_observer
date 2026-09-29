@@ -14,6 +14,10 @@ defmodule Toolbox.Packages do
 
   use Nebulex.Caching, cache: Toolbox.Cache
 
+  defmodule CategoryNotFoundError do
+    defexception [:message]
+  end
+
   def list_packages do
     from(
       p in Package,
@@ -178,18 +182,14 @@ defmodule Toolbox.Packages do
     Category.all()
     |> Enum.find(fn c -> c.id == id end)
     |> case do
-      nil -> raise Ecto.NoResultsError, queryable: Category
+      nil -> raise CategoryNotFoundError, "category with id #{inspect(id)} not found"
       c -> c
     end
   end
 
-  def get_category_by_permalink!(permalink) do
+  def get_category_by_permalink(permalink) do
     Category.all()
     |> Enum.find(fn c -> c.permalink == permalink end)
-    |> case do
-      nil -> raise Ecto.NoResultsError, queryable: Category
-      c -> c
-    end
   end
 
   def create_package(attributes \\ %{}) do
