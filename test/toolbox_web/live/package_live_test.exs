@@ -123,6 +123,7 @@ defmodule ToolboxWeb.PackageLiveTest do
       Phoenix.PubSub.broadcast(Toolbox.PubSub, "package_live:#{package.name}", %{
         action: :refresh_version_downloads,
         offset: 0,
+        next_offset: 5,
         version_downloads: Enum.map(1..5, &%{version: "#{&1}.0.0", downloads: 10})
       })
 
@@ -138,6 +139,7 @@ defmodule ToolboxWeb.PackageLiveTest do
       Phoenix.PubSub.broadcast(Toolbox.PubSub, "package_live:#{package.name}", %{
         action: :refresh_version_downloads,
         offset: 5,
+        next_offset: 10,
         version_downloads: Enum.map(6..8, &%{version: "#{&1}.0.0", downloads: 5})
       })
 
@@ -146,6 +148,31 @@ defmodule ToolboxWeb.PackageLiveTest do
       for n <- 1..8 do
         assert html =~ "#{n}.0.0"
       end
+    end
+
+    test "'show more' advances a full page even when a version in the previous page was skipped",
+         %{conn: conn} do
+      package = create_package_with_many_versions(8)
+
+      {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
+
+      render_click(view, "expand_version_downloads")
+
+      Phoenix.PubSub.broadcast(Toolbox.PubSub, "package_live:#{package.name}", %{
+        action: :refresh_version_downloads,
+        offset: 0,
+        next_offset: 5,
+        version_downloads: Enum.map(1..4, &%{version: "#{&1}.0.0", downloads: 10})
+      })
+
+      render(view)
+
+      render_click(view, "show_more_version_downloads")
+
+      assert_enqueued(
+        worker: Toolbox.Workers.HexpmWorker,
+        args: %{action: "get_version_downloads", name: package.name, offset: 5}
+      )
     end
 
     test "shows a failure state after a stuck first page, and retrying clears it", %{
@@ -180,6 +207,7 @@ defmodule ToolboxWeb.PackageLiveTest do
       Phoenix.PubSub.broadcast(Toolbox.PubSub, "package_live:#{package.name}", %{
         action: :refresh_version_downloads,
         offset: 0,
+        next_offset: 5,
         version_downloads: Enum.map(1..5, &%{version: "#{&1}.0.0", downloads: 10})
       })
 
@@ -207,6 +235,7 @@ defmodule ToolboxWeb.PackageLiveTest do
       Phoenix.PubSub.broadcast(Toolbox.PubSub, "package_live:#{package.name}", %{
         action: :refresh_version_downloads,
         offset: 5,
+        next_offset: 10,
         version_downloads: [%{version: "9.9.9", downloads: 1}]
       })
 

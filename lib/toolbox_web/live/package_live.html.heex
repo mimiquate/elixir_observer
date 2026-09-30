@@ -216,7 +216,7 @@
             state={@version_downloads_state}
             has_more?={
               not is_nil(@version_downloads) and
-                length(@version_downloads) < @version_downloads_stable_count
+                @version_downloads_next_offset < @version_downloads_stable_count
             }
           />
         </div>

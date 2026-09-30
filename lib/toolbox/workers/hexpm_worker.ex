@@ -92,6 +92,7 @@ defmodule Toolbox.Workers.HexpmWorker do
         %{
           action: :refresh_version_downloads,
           offset: offset,
+          next_offset: offset + @page_size,
           version_downloads: entries
         }
       )
@@ -153,7 +154,8 @@ defmodule Toolbox.Workers.HexpmWorker do
         {:ok, downloads}
 
       {:ok, %{status: status}} when status in [400, 404] ->
-        {:skip, "Unable to fetch hexpm downloads for #{name} version #{version}"}
+        Logger.warning("Unable to fetch hexpm downloads for #{name} version #{version}")
+        :skip
 
       {:ok, %{status: server_error}} when server_error in 500..599 ->
         {:error,
@@ -186,8 +188,8 @@ defmodule Toolbox.Workers.HexpmWorker do
       {version, {:ok, downloads}}, {:ok, entries} ->
         {:cont, {:ok, entries ++ [%{version: version, downloads: downloads}]}}
 
-      {_version, {:skip, reason}}, _acc ->
-        {:halt, {:skip, reason}}
+      {_version, :skip}, acc ->
+        {:cont, acc}
 
       {_version, {:error, reason}}, _acc ->
         {:halt, {:error, reason}}

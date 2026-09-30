@@ -108,6 +108,7 @@ defmodule ToolboxWeb.PackageLive do
         version_downloads: nil,
         version_downloads_stable_count: version_downloads_stable_count,
         version_downloads_pending_offset: nil,
+        version_downloads_next_offset: 0,
         version_downloads_state: :idle,
         package: %{
           id: package.id,
@@ -211,8 +212,7 @@ defmodule ToolboxWeb.PackageLive do
   end
 
   def handle_event("show_more_version_downloads", _params, socket) do
-    revealed = socket.assigns.version_downloads || []
-    offset = length(revealed)
+    offset = socket.assigns.version_downloads_next_offset
 
     if socket.assigns.version_downloads_state == :loading or
          offset >= socket.assigns.version_downloads_stable_count do
@@ -246,7 +246,12 @@ defmodule ToolboxWeb.PackageLive do
   end
 
   def handle_info(
-        %{action: :refresh_version_downloads, offset: offset, version_downloads: entries},
+        %{
+          action: :refresh_version_downloads,
+          offset: offset,
+          next_offset: next_offset,
+          version_downloads: entries
+        },
         %{assigns: %{version_downloads_pending_offset: offset}} = socket
       ) do
     revealed = socket.assigns.version_downloads || []
@@ -257,6 +262,7 @@ defmodule ToolboxWeb.PackageLive do
      assign(socket,
        version_downloads: revealed ++ new_entries,
        version_downloads_pending_offset: nil,
+       version_downloads_next_offset: next_offset,
        version_downloads_state: :idle
      )}
   end

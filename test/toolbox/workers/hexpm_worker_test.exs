@@ -235,7 +235,12 @@ defmodule Toolbox.Workers.HexpmWorkerTest do
                offset: 0
              }) == :ok
 
-      assert_receive %{action: :refresh_version_downloads, offset: 0, version_downloads: entries}
+      assert_receive %{
+        action: :refresh_version_downloads,
+        offset: 0,
+        next_offset: 5,
+        version_downloads: entries
+      }
 
       assert Enum.map(entries, & &1.version) == ["8.0.0", "7.0.0", "6.0.0", "5.0.0", "4.0.0"]
       assert Enum.all?(entries, &(&1.downloads == 100))
@@ -259,7 +264,13 @@ defmodule Toolbox.Workers.HexpmWorkerTest do
                offset: 5
              }) == :ok
 
-      assert_receive %{action: :refresh_version_downloads, offset: 5, version_downloads: entries}
+      assert_receive %{
+        action: :refresh_version_downloads,
+        offset: 5,
+        next_offset: 10,
+        version_downloads: entries
+      }
+
       assert Enum.map(entries, & &1.version) == ["3.0.0", "2.0.0", "1.0.0"]
     end
 
@@ -297,7 +308,7 @@ defmodule Toolbox.Workers.HexpmWorkerTest do
       assert Enum.map(entries, & &1.version) == ["2.0.0", "1.0.0"]
     end
 
-    test "returns :ok and broadcasts nothing when a version is not found on hex.pm" do
+    test "logs a warning and continues with the remaining versions when one is not found on hex.pm" do
       test_server = Helpers.test_server_hexpm()
 
       package = create_package_with_releases(["2.0.0", "1.0.0"], 500)
@@ -324,7 +335,13 @@ defmodule Toolbox.Workers.HexpmWorkerTest do
         end)
 
       assert log =~ "Unable to fetch hexpm downloads for #{package.name} version 2.0.0"
-      refute_receive %{action: :refresh_version_downloads}
+
+      assert_receive %{
+        action: :refresh_version_downloads,
+        offset: 0,
+        next_offset: 5,
+        version_downloads: [%{version: "1.0.0", downloads: 500}]
+      }
     end
 
     @tag capture_log: true
