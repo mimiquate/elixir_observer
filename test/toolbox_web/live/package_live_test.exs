@@ -22,6 +22,33 @@ defmodule ToolboxWeb.PackageLiveTest do
       [package: package]
     end
 
+    defp create_package_with_many_versions(count) do
+      {:ok, package} = create(:package)
+
+      releases =
+        for n <- count..1//-1,
+            do: %{
+              "version" => "#{n}.0.0",
+              "inserted_at" => "2025-05-29T16:57:22.358745Z"
+            }
+
+      {:ok, _} =
+        Packages.create_hexpm_snapshot(%{
+          package_id: package.id,
+          data: %{
+            "meta" => %{"description" => "A pure Elixir HTTP server"},
+            "downloads" => %{"recent" => 1_000},
+            "docs_html_url" => "https://hexdocs.pm/bandit/",
+            "releases" => releases,
+            "inserted_at" => "2020-11-05T17:11:46.440731Z",
+            "latest_version" => "#{count}.0.0",
+            "latest_stable_version" => "#{count}.0.0"
+          }
+        })
+
+      Packages.get_package_by_name(package.name)
+    end
+
     test "mounts successfully", %{conn: conn, package: package} do
       Packages.update_package_owners(package, %{
         hexpm_owners_sync_at: DateTime.utc_now(),
@@ -64,6 +91,158 @@ defmodule ToolboxWeb.PackageLiveTest do
                "action" => "get_package_owners",
                "name" => package.name
              }
+    end
+
+    test "does not enqueue get_version_downloads until the section is expanded", %{
+      conn: conn,
+      package: package
+    } do
+      {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
+
+      refute_enqueued(
+        worker: Toolbox.Workers.HexpmWorker,
+        args: %{action: "get_version_downloads"}
+      )
+
+      render_click(view, "expand_version_downloads")
+
+      assert_enqueued(
+        worker: Toolbox.Workers.HexpmWorker,
+        queue: :hexpm,
+        args: %{action: "get_version_downloads", name: package.name, offset: 0}
+      )
+    end
+
+    test "'show more' requests the next offset and appends", %{conn: conn} do
+      package = create_package_with_many_versions(8)
+
+      {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
+
+      render_click(view, "expand_version_downloads")
+
+      Phoenix.PubSub.broadcast(Toolbox.PubSub, "package_live:#{package.name}", %{
+        action: :refresh_version_downloads,
+        offset: 0,
+        next_offset: 5,
+        version_downloads: Enum.map(1..5, &%{version: "#{&1}.0.0", downloads: 10})
+      })
+
+      render(view)
+
+      render_click(view, "show_more_version_downloads")
+
+      assert_enqueued(
+        worker: Toolbox.Workers.HexpmWorker,
+        args: %{action: "get_version_downloads", name: package.name, offset: 5}
+      )
+
+      Phoenix.PubSub.broadcast(Toolbox.PubSub, "package_live:#{package.name}", %{
+        action: :refresh_version_downloads,
+        offset: 5,
+        next_offset: 10,
+        version_downloads: Enum.map(6..8, &%{version: "#{&1}.0.0", downloads: 5})
+      })
+
+      html = render(view)
+
+      for n <- 1..8 do
+        assert html =~ "#{n}.0.0"
+      end
+    end
+
+    test "'show more' advances a full page even when a version in the previous page was skipped",
+         %{conn: conn} do
+      package = create_package_with_many_versions(8)
+
+      {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
+
+      render_click(view, "expand_version_downloads")
+
+      Phoenix.PubSub.broadcast(Toolbox.PubSub, "package_live:#{package.name}", %{
+        action: :refresh_version_downloads,
+        offset: 0,
+        next_offset: 5,
+        version_downloads: Enum.map(1..4, &%{version: "#{&1}.0.0", downloads: 10})
+      })
+
+      render(view)
+
+      render_click(view, "show_more_version_downloads")
+
+      assert_enqueued(
+        worker: Toolbox.Workers.HexpmWorker,
+        args: %{action: "get_version_downloads", name: package.name, offset: 5}
+      )
+    end
+
+    test "shows a failure state after a stuck first page, and retrying clears it", %{
+      conn: conn,
+      package: package
+    } do
+      {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
+
+      render_click(view, "expand_version_downloads")
+      refute has_element?(view, "[data-test-version-downloads-failed]")
+
+      send(view.pid, {:version_downloads_timeout, 0})
+      render(view)
+
+      assert has_element?(view, "[data-test-version-downloads-failed]")
+
+      render_click(view, "expand_version_downloads")
+
+      refute has_element?(view, "[data-test-version-downloads-failed]")
+      assert has_element?(view, "[data-test-version-downloads-loading]")
+    end
+
+    test "a failed 'show more' shows the inline error without wiping already-revealed data", %{
+      conn: conn
+    } do
+      package = create_package_with_many_versions(8)
+
+      {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
+
+      render_click(view, "expand_version_downloads")
+
+      Phoenix.PubSub.broadcast(Toolbox.PubSub, "package_live:#{package.name}", %{
+        action: :refresh_version_downloads,
+        offset: 0,
+        next_offset: 5,
+        version_downloads: Enum.map(1..5, &%{version: "#{&1}.0.0", downloads: 10})
+      })
+
+      render(view)
+      render_click(view, "show_more_version_downloads")
+
+      send(view.pid, {:version_downloads_timeout, 5})
+      html = render(view)
+
+      refute has_element?(view, "[data-test-version-downloads-failed]")
+      assert has_element?(view, "[data-test-version-downloads-more-failed]")
+      assert html =~ "1.0.0"
+      assert html =~ "5.0.0"
+    end
+
+    test "ignores a broadcast for an offset this session isn't waiting on", %{
+      conn: conn,
+      package: package
+    } do
+      {:ok, view, _html} = live(conn, ~p"/packages/#{package.name}")
+
+      render_click(view, "expand_version_downloads")
+
+      # Some other session's "show more" click, on the same package.
+      Phoenix.PubSub.broadcast(Toolbox.PubSub, "package_live:#{package.name}", %{
+        action: :refresh_version_downloads,
+        offset: 5,
+        next_offset: 10,
+        version_downloads: [%{version: "9.9.9", downloads: 1}]
+      })
+
+      html = render(view)
+
+      refute html =~ "9.9.9"
+      assert has_element?(view, "[data-test-version-downloads-loading]")
     end
 
     test "falls back to the first version when latest_stable_version is nil", %{

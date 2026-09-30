@@ -10,6 +10,9 @@ defmodule ToolboxWeb.PackageLive do
   import ToolboxWeb.Components.PackageResource, only: [package_resource: 1]
   import ToolboxWeb.Components.CommunityResources, only: [community_resources: 1]
 
+  import ToolboxWeb.Components.VersionDownloadsChart,
+    only: [version_downloads_chart: 1]
+
   import ToolboxWeb.Components.UnreleasedActivityStatsCard,
     only: [unreleased_activity_stats_card: 1]
 
@@ -26,6 +29,7 @@ defmodule ToolboxWeb.PackageLive do
   import ToolboxWeb.Components.Icons.PathIcon
   import ToolboxWeb.Components.Icons.InspectIcon
   import ToolboxWeb.Components.Icons.BookmarkIcon
+  import ToolboxWeb.Components.Icons.ChartIcon
 
   alias ToolboxWeb.Components.PackageOwners
 
@@ -60,6 +64,11 @@ defmodule ToolboxWeb.PackageLive do
 
     hexpm_data = package.latest_hexpm_snapshot.data
     versions = versions(hexpm_data)
+
+    version_downloads_stable_count =
+      hexpm_data["releases"]
+      |> Toolbox.Hexpm.stable_versions_desc()
+      |> length()
 
     if connected?(socket) do
       Phoenix.PubSub.subscribe(Toolbox.PubSub, "package_live:#{name}")
@@ -96,6 +105,11 @@ defmodule ToolboxWeb.PackageLive do
         search_term: "",
         related_packages: related_packages,
         related_packages_count: related_packages_count,
+        version_downloads: nil,
+        version_downloads_stable_count: version_downloads_stable_count,
+        version_downloads_pending_offset: nil,
+        version_downloads_next_offset: 0,
+        version_downloads_state: :idle,
         package: %{
           id: package.id,
           name: package.name,
@@ -183,6 +197,31 @@ defmodule ToolboxWeb.PackageLive do
     {:noreply, assign(socket, package: p)}
   end
 
+  def handle_event("expand_version_downloads", _params, socket) do
+    cond do
+      nothing_to_chart?(socket) ->
+        {:noreply, assign(socket, version_downloads: [])}
+
+      is_nil(socket.assigns.version_downloads) and
+          socket.assigns.version_downloads_state != :loading ->
+        request_version_downloads_page(socket, 0)
+
+      true ->
+        {:noreply, socket}
+    end
+  end
+
+  def handle_event("show_more_version_downloads", _params, socket) do
+    offset = socket.assigns.version_downloads_next_offset
+
+    if socket.assigns.version_downloads_state == :loading or
+         offset >= socket.assigns.version_downloads_stable_count do
+      {:noreply, socket}
+    else
+      request_version_downloads_page(socket, offset)
+    end
+  end
+
   def handle_info(%{action: :refresh_owners, owners: owners, owners_sync_at: sync_at}, socket) do
     p = %{socket.assigns.package | owners: owners, owners_sync_at: sync_at}
 
@@ -204,6 +243,43 @@ defmodule ToolboxWeb.PackageLive do
     p = %{socket.assigns.package | activity: activity}
 
     {:noreply, assign(socket, package: p)}
+  end
+
+  def handle_info(
+        %{
+          action: :refresh_version_downloads,
+          offset: offset,
+          next_offset: next_offset,
+          version_downloads: entries
+        },
+        %{assigns: %{version_downloads_pending_offset: offset}} = socket
+      ) do
+    revealed = socket.assigns.version_downloads || []
+    known = MapSet.new(revealed, & &1.version)
+    new_entries = Enum.reject(entries, &MapSet.member?(known, &1.version))
+
+    {:noreply,
+     assign(socket,
+       version_downloads: revealed ++ new_entries,
+       version_downloads_pending_offset: nil,
+       version_downloads_next_offset: next_offset,
+       version_downloads_state: :idle
+     )}
+  end
+
+  def handle_info(%{action: :refresh_version_downloads, offset: _other_offset}, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_info(
+        {:version_downloads_timeout, offset},
+        %{assigns: %{version_downloads_pending_offset: offset}} = socket
+      ) do
+    {:noreply, assign(socket, version_downloads_state: :failed)}
+  end
+
+  def handle_info({:version_downloads_timeout, _offset}, socket) do
+    {:noreply, socket}
   end
 
   def update_owners_if_outdated(package) do
@@ -235,6 +311,43 @@ defmodule ToolboxWeb.PackageLive do
       |> Toolbox.Workers.SCMWorker.new()
       |> Oban.insert()
     end
+  end
+
+  defp nothing_to_chart?(socket) do
+    socket.assigns.version_downloads_stable_count == 0 or
+      (socket.assigns.package.recent_downloads || 0) <= 0
+  end
+
+  defp request_version_downloads_page(socket, offset) do
+    enqueue_version_downloads_page(socket.assigns.package.name, offset)
+
+    Process.send_after(
+      self(),
+      {:version_downloads_timeout, offset},
+      version_downloads_timeout_ms()
+    )
+
+    {:noreply,
+     assign(socket,
+       version_downloads_pending_offset: offset,
+       version_downloads_state: :loading
+     )}
+  end
+
+  def enqueue_version_downloads_page(name, offset) do
+    %{action: :get_version_downloads, name: name, offset: offset}
+    |> Toolbox.Workers.HexpmWorker.new(
+      unique: [
+        keys: [:action, :name, :offset],
+        period: :infinity,
+        states: [:available, :scheduled, :executing, :retryable]
+      ]
+    )
+    |> Oban.insert()
+  end
+
+  defp version_downloads_timeout_ms do
+    Application.get_env(:toolbox, __MODULE__, [])[:version_downloads_timeout_ms] || 60_000
   end
 
   defp versions(hexpm_data) do
