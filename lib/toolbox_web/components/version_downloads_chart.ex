@@ -2,7 +2,7 @@ defmodule ToolboxWeb.Components.VersionDownloadsChart do
   use ToolboxWeb, :html
 
   @bar_color "bg-accent"
-  @other_color "bg-primary-200"
+  @other_color "bg-light-violet"
 
   attr :class, :string, default: ""
   attr :version_downloads, :any, default: nil
