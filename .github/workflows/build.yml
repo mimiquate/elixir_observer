@@ -43,6 +43,10 @@ jobs:
       with:
         path: _build
         key: ${{ runner.os }}-mix-build-${{ steps.beam.outputs.elixir-version }}-${{ steps.beam.outputs.otp-version }}-${{ hashFiles('**/mix.lock') }}
+    - name: Allow fetching private git dependencies
+      run: git config --global url."https://x-access-token:${GH_DEPS_TOKEN}@github.com/".insteadOf "https://github.com/"
+      env:
+        GH_DEPS_TOKEN: ${{ secrets.GH_DEPS_TOKEN }}
     - run: mix deps.get
     - run: mix deps.unlock --check-unused
     - run: mix compile --warnings-as-errors
@@ -58,6 +62,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only
+      - run: flyctl deploy --remote-only --build-secret GH_DEPS_TOKEN="$GH_DEPS_TOKEN"
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          GH_DEPS_TOKEN: ${{ secrets.GH_DEPS_TOKEN }}

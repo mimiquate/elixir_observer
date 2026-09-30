@@ -37,7 +37,13 @@ ENV MIX_ENV="prod"
 # install mix dependencies
 COPY mix.exs mix.lock ./
 
-RUN mix deps.get --only $MIX_ENV
+# Private git dependencies (mimiquate/porthole) are fetched with a read-only
+# token passed as a build secret. It is only used by this command: the git
+# config that holds it is removed in the same step, so it is not in the image.
+RUN --mount=type=secret,id=GH_DEPS_TOKEN \
+    git config --global url."https://x-access-token:$(cat /run/secrets/GH_DEPS_TOKEN)@github.com/".insteadOf "https://github.com/" && \
+    mix deps.get --only $MIX_ENV && \
+    rm -f ~/.gitconfig
 RUN mkdir config
 
 # copy compile-time config files before we compile dependencies
