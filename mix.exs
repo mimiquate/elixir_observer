@@ -42,9 +42,6 @@ defmodule Toolbox.MixProject do
     [
       {:bandit, "~> 1.5"},
       {:dns_cluster, "~> 0.2.0"},
-      # Read-only SQL over the live system for agents, queried from a separate
-      # sidecar app. Adds no processes or native code here. Private for now:
-      # CI and the Docker build fetch it with the GH_DEPS_TOKEN secret.
       {:porthole, github: "mimiquate/porthole"},
       {:ecto_sql, "~> 3.10"},
       {:esbuild, "~> 0.10.0", runtime: Mix.env() == :dev},

@@ -12,12 +12,14 @@ Smarter package insights for the Elixir Ecosystem
 
 ## Porthole (inspecting production)
 
+**How to deploy and use it: [Deploying the sidecar on Fly.io](https://github.com/mimiquate/porthole/blob/main/guides/deploy-fly.md)**
+(Porthole repository).
+
 [Porthole](https://github.com/mimiquate/porthole) lets coding agents inspect
 the live cluster with read-only SQL. This app only carries Porthole's
 collectors (the `:porthole` dependency); queries are served by a separate
 sidecar Fly app, `ex-tools-porthole`, built and configured from the Porthole
-repository. Follow [Deploying the sidecar on Fly.io](https://github.com/mimiquate/porthole/blob/main/guides/deploy-fly.md)
-with these values for ex-tools:
+repository. The guide's commands, with the values for ex-tools:
 
 ```console
 $ fly deploy . \
