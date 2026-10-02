@@ -10,8 +10,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
      assign(socket,
        results: [],
        show_dropdown: false,
-       search_term: "",
-       focused: false
+       search_term: ""
      )}
   end
 
@@ -29,7 +28,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
   def render(assigns) do
     ~H"""
     <div
-      class="relative"
+      class="relative group"
       phx-click-away="hide_dropdown"
       phx-target={@myself}
       {test_attrs(search_container: true)}
@@ -57,7 +56,6 @@ defmodule ToolboxWeb.SearchFieldComponent do
             phx-target={@myself}
             phx-debounce="300"
             phx-focus="handle_focus"
-            phx-blur="handle_blur"
             {test_attrs(search_input: true)}
             id="search-input"
           />
@@ -76,9 +74,9 @@ defmodule ToolboxWeb.SearchFieldComponent do
         </button>
       </.form>
 
-      <%= if @focused and !@show_dropdown and String.length(@search_term) < 2 do %>
+      <%= if !@show_dropdown and String.length(@search_term) < 2 do %>
         <div
-          class="absolute top-full left-0 right-0 z-50 mt-1 bg-surface rounded-md shadow-lg border border-surface-alt"
+          class="hidden group-focus-within:block absolute top-full left-0 right-0 z-50 mt-1 bg-surface rounded-md shadow-lg border border-surface-alt"
           {test_attrs(semantic_search_help: true)}
         >
           <div class="p-4">
@@ -169,11 +167,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
   end
 
   def handle_event("handle_focus", _params, socket) do
-    do_search(socket, socket.assigns.search_term, %{focused: true})
-  end
-
-  def handle_event("handle_blur", _params, socket) do
-    {:noreply, assign(socket, focused: false)}
+    do_search(socket, socket.assigns.search_term)
   end
 
   def handle_event("show_dropdown_if_results", _params, socket) do
@@ -193,7 +187,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
     {:noreply, assign(socket, show_dropdown: show_dropdown)}
   end
 
-  defp do_search(socket, term, options \\ %{}) do
+  defp do_search(socket, term) do
     term = String.trim(term)
 
     %{clean_term: clean_term} = parsed_search = Toolbox.PackageSearch.parse(term)
@@ -213,8 +207,7 @@ defmodule ToolboxWeb.SearchFieldComponent do
      assign(socket,
        results: results,
        show_dropdown: show_dropdown,
-       search_term: term,
-       focused: Map.get(options, :focused, false)
+       search_term: term
      )}
   end
 end
