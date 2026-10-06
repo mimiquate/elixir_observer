@@ -51,6 +51,8 @@ jobs:
     - run: mix deps.unlock --check-unused
     - run: mix compile --warnings-as-errors
     - run: mix format --check-formatted
+    - run: mix assets.setup
+    - run: mix assets.build
     - run: mix test
 
   deploy:
