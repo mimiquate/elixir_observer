@@ -15,6 +15,14 @@ defmodule Helpers do
     test_server
   end
 
+  def test_server_jev do
+    {:ok, test_server} = TestServer.start()
+
+    Process.put({Toolbox.Tasks.Category, :base_url}, TestServer.url(test_server))
+
+    test_server
+  end
+
   def test_server_hexpm do
     {:ok, test_server} = TestServer.start()
 
@@ -24,7 +32,7 @@ defmodule Helpers do
   end
 end
 
-Req.default_options(retry: false)
+Req.default_options(retry: false, retry_delay: 0)
 
 ExUnit.start()
 Ecto.Adapters.SQL.Sandbox.mode(Toolbox.Repo, :manual)
