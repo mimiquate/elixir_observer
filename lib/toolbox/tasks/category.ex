@@ -12,7 +12,11 @@ defmodule Toolbox.Tasks.Category do
       {:ok, choice} ->
         category = choice |> String.to_integer() |> Packages.get_category_by_id!()
 
-        Packages.update_package_category(package, %{category: category})
+        if package.category == category do
+          {:ok, package}
+        else
+          Packages.update_package_category(package, %{category: category})
+        end
 
       {:error, _reason} = error ->
         error

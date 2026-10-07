@@ -20,6 +20,21 @@ defmodule Toolbox.Tasks.CategoryTest do
       assert Packages.get_package_by_name("pager").category.id == 92
     end
 
+    test "does not update the package when the category does not change" do
+      test_server = Helpers.test_server_jev()
+      {:ok, package} = create(:package, name: "same", category: 92)
+      old_updated_at = ~U[2020-01-01 00:00:00Z]
+
+      Repo.update_all(from(p in Toolbox.Package, where: p.id == ^package.id),
+        set: [updated_at: old_updated_at]
+      )
+
+      stub_choice(test_server, "92")
+
+      assert {:ok, _} = Category.run(Packages.get_package_by_name("same"))
+      assert Packages.get_package_by_name("same").updated_at == old_updated_at
+    end
+
     test "sends the package data to Jev", %{package: package} do
       test_server = Helpers.test_server_jev()
       stub_choice(test_server, "92")
