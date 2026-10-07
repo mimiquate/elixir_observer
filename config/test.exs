@@ -32,6 +32,8 @@ config :phoenix_live_view,
 
 config :toolbox, Oban, testing: :manual
 
+config :toolbox, jev_api_key: "test-api-key"
+
 config :opentelemetry, traces_exporter: :none
 
 config :toolbox, :github,
@@ -62,3 +64,7 @@ config :toolbox, Toolbox.CommunityResources,
 config :toolbox, Toolbox.Cache, adapter: Nebulex.Adapters.Nil
 
 config :toolbox, ToolboxWeb.PlugAttack, limit: 1
+
+# Jev answers 529 when overloaded but Plug (used by TestServer) only knows RFC
+# statuses and raises on 529 unless it is registered here.
+config :plug, :statuses, %{529 => "Overloaded"}

@@ -1,132 +1,83 @@
 defmodule Toolbox.Tasks.Category do
-  require Logger
+  alias Toolbox.Packages
 
-  def run(packages) when is_list(packages) do
-    prompt = """
-      You are an Elixir/Hex package classification expert. Your task is to classify the given Elixir package into exactly ONE of the predefined categories below.
+  @instructions "Which category best describes the primary purpose of the package in `name`, given its `description`? Pick the most specific one."
 
-      **Categories:** - ID | NAME | DESCRIPTION
-      #{for category <- Toolbox.Category.all(), into: "" do
-      "- #{category.id} | #{category.name} | #{category.description} \n"
-    end}
+  # Same policy as Typesafe's SDK: 408, 429 and any 5xx (Jev's 529 included).
+  # `retry: :transient` is not used because it leaves out the 529.
+  defguardp is_transient_status(status) when status in [408, 429] or status in 500..599
 
-      **Instructions:**
-      1. Analyze the package's primary purpose and functionality in the Elixir/OTP ecosystem
-      2. Consider the package's main use case in typical Elixir/Phoenix applications
-      3  Read the package documentation
-      3. If a package could fit multiple categories, choose the MOST SPECIFIC and PRIMARY category
-      4. Consider Elixir-specific patterns like GenServers, supervisors, and OTP principles
-      5. Base your classification on the package's core functionality, not secondary features
+  def run(%Toolbox.Package{} = package) do
+    case classify(package) do
+      {:ok, choice} ->
+        category = choice |> String.to_integer() |> Packages.get_category_by_id!()
 
-      **Input**
-      Package Name: [package_name]
-      Description: [brief description if available]
-      Documentation Link: [link to documentation if available]
+        Packages.update_package_category(package, %{category: category})
 
-      **Output::**
-      id, category and reasoning of the selected category
-
-      **Example:**
-      **Input**
-      Package Name: guardian
-      Description: An authentication framework for use with Elixir applications
-      Documentation: https://hexdocs.pm/guardian
-
-
-      **Output**
-      "package_name": guardian
-      "id": 1,
-      "category": "Authentication/Authorization",
-      "reasoning": "Guardian's primary purpose is handling JWT-based authentication and authorization in Elixir applications."
-
-      Now classify these packages:
-
-      #{for package <- packages, into: "" do
-      """
-        Package Name: #{package.name}
-        Description: #{package.description}
-        Documentation: https://hexdocs.pm/#{package.name}
-
-      """
-    end}
-    """
-
-    body = %{
-      contents: [
-        %{
-          parts: [
-            %{
-              text: prompt
-            }
-          ]
-        }
-      ],
-      generationConfig: %{
-        responseMimeType: "application/json",
-        responseSchema: %{
-          type: "ARRAY",
-          items: %{
-            type: "OBJECT",
-            properties: %{
-              name: %{type: "STRING"},
-              category: %{
-                type: "OBJECT",
-                properties: %{
-                  id: %{type: "INTEGER"},
-                  name: %{type: "STRING"},
-                  reasoning: %{type: "STRING"}
-                },
-                propertyOrdering: ["id", "name", "reasoning"]
-              }
-            },
-            propertyOrdering: ["name", "category"]
-          }
-        }
-      }
-    }
-
-    categorization_response =
-      Req.post("#{base_url()}/v1beta/models/gemini-2.5-flash:generateContent",
-        headers: [
-          {"x-goog-api-key", "#{api_key()}"},
-          {"user-agent", "elixir client"}
-        ],
-        json: body,
-        receive_timeout: 600_000
-      )
-
-    case categorization_response do
-      {:ok, %{status: 200, body: categorization_response_body}} ->
-        %{"candidates" => [%{"content" => %{"parts" => [%{"text" => text}]}}]} =
-          categorization_response_body
-
-        json = JSON.decode!(text)
-
-        result =
-          Enum.into(json, %{}, fn %{"name" => name, "category" => category} ->
-            {name, category}
-          end)
-
-        for package <- packages do
-          category = Toolbox.Packages.get_category_by_id!(result[package.name]["id"])
-          Toolbox.Packages.update_package_category(package, %{category: category})
-        end
-
-      {:ok, %{status: server_error}} when server_error in 500..599 ->
-        first_5_package_names = packages |> Enum.take(5) |> Enum.map(& &1.name) |> Enum.join(", ")
-        {:error, "failed to categorize #{first_5_package_names} with status #{server_error}"}
+      {:error, _reason} = error ->
+        error
     end
   end
 
-  def run(packages) do
-    run([packages])
+  defp classify(package) do
+    request =
+      Req.new(
+        url: "#{base_url()}/v1/systemone",
+        auth: {:bearer, api_key()},
+        json: body(package),
+        receive_timeout: 10_000,
+        retry: &retry?/2,
+        max_retries: 2
+      )
+
+    case Req.post(request) do
+      {:ok, %{status: 200, body: %{"answers" => %{"category" => %{"choice" => choice}}}}} ->
+        {:ok, choice}
+
+      {:ok, %{status: status}} when is_transient_status(status) ->
+        {:error, {:http_status, status}}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
   end
 
-  def base_url() do
-    Application.fetch_env!(:toolbox, :gemini_base_url)
+  defp body(package) do
+    %{
+      model: "jev-latest",
+      state: %{
+        name: package.name,
+        description: package.description || "",
+        docs_url: "https://hexdocs.pm/#{package.name}"
+      },
+      questions: %{
+        category: %{
+          type: "choice",
+          instructions: @instructions,
+          criteria: criteria()
+        }
+      }
+    }
   end
 
-  def api_key() do
-    Application.fetch_env!(:toolbox, :gemini_api_key)
+  defp criteria do
+    Map.new(Toolbox.Category.all(), fn category ->
+      {Integer.to_string(category.id), "#{category.name}: #{category.description}"}
+    end)
   end
+
+  defp retry?(_request, %Req.Response{status: status}), do: is_transient_status(status)
+
+  defp retry?(_request, %Req.TransportError{reason: reason}),
+    do: reason in [:timeout, :econnrefused, :closed]
+
+  defp retry?(_request, _other), do: false
+
+  if Mix.env() == :test do
+    defp base_url, do: ProcessTree.get({__MODULE__, :base_url})
+  else
+    defp base_url, do: Application.fetch_env!(:toolbox, :jev_base_url)
+  end
+
+  defp api_key, do: Application.fetch_env!(:toolbox, :jev_api_key)
 end

@@ -123,7 +123,8 @@ if config_env() in [:prod, :dev] do
     authorization_token: System.fetch_env!("GITHUB_AUTHORIZATION_TOKEN")
 
   config :toolbox,
-    gemini_api_key: System.fetch_env!("GEMINI_API_KEY")
+    gemini_api_key: System.fetch_env!("GEMINI_API_KEY"),
+    jev_api_key: System.fetch_env!("TYPESAFE_API_KEY")
 end
 
 config :toolbox,
