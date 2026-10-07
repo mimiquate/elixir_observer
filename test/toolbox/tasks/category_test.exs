@@ -35,6 +35,26 @@ defmodule Toolbox.Tasks.CategoryTest do
       assert Packages.get_package_by_name("same").updated_at == old_updated_at
     end
 
+    test "deletes the embedding when the category changes" do
+      test_server = Helpers.test_server_jev()
+      {:ok, package} = create(:package, name: "moves", category: 61)
+      insert_embedding(package)
+      stub_choice(test_server, "92")
+
+      assert {:ok, _} = Category.run(Packages.get_package_by_name("moves"))
+      assert "moves" in Packages.list_packages_names_with_no_embedding()
+    end
+
+    test "keeps the embedding when the category does not change" do
+      test_server = Helpers.test_server_jev()
+      {:ok, package} = create(:package, name: "same", category: 92)
+      insert_embedding(package)
+      stub_choice(test_server, "92")
+
+      assert {:ok, _} = Category.run(Packages.get_package_by_name("same"))
+      assert "same" not in Packages.list_packages_names_with_no_embedding()
+    end
+
     test "sends the package data to Jev", %{package: package} do
       test_server = Helpers.test_server_jev()
       stub_choice(test_server, "92")
@@ -77,6 +97,14 @@ defmodule Toolbox.Tasks.CategoryTest do
 
       assert {:error, %Req.TransportError{reason: :econnrefused}} = Category.run(package)
     end
+  end
+
+  defp insert_embedding(package) do
+    {:ok, _} =
+      Packages.upsert_package_embeddings(%{
+        package_id: package.id,
+        embedding: List.duplicate(0.1, 768)
+      })
   end
 
   defp stub_choice(test_server, choice) do
