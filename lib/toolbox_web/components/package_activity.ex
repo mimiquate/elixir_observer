@@ -1,6 +1,8 @@
 defmodule ToolboxWeb.Components.PackageActivity do
   use ToolboxWeb, :html
 
+  import ToolboxWeb.Components.Icons.ActivityIcon
+
   @doc """
   Renders the activity section for a package.
 
@@ -18,23 +20,22 @@ defmodule ToolboxWeb.Components.PackageActivity do
       class={"md:col-span-8 bg-surface rounded-md py-6 px-4 border border-stroke #{@class}"}
       {test_attrs(activity_section: true)}
     >
-      <div class="flex justify-between w-full">
+      <div class="flex justify-between items-center w-full mb-4 sm:mb-6">
         <h3
-          class="text-[20px] text-primary-text sm:text-[24px] font-medium mb-4 sm:mb-6"
+          class="flex items-center gap-2 text-[20px] text-primary-text sm:text-[24px] font-medium"
           {test_attrs(activity_title: true)}
         >
+          <.activity_icon class="w-5 h-5 sm:w-6 sm:h-6" />
           Activity
         </h3>
 
         <%= if @activity do %>
-          <div
-            class="flex justify-center items-center gap 2 h-fit py-1 px-3 sm:px-5 rounded-2xl border border-accent dark:border-violet bg-white dark:bg-violet"
+          <span
+            class="text-[12px] sm:text-[16px] text-secondary-text"
             {test_attrs(last_year_badge: true)}
           >
-            <span class="text-[12px] sm:text-[16px] text-accent dark:text-primary-text">
-              last year
-            </span>
-          </div>
+            Last Year
+          </span>
         <% end %>
       </div>
 
