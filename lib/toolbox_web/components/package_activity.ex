@@ -25,8 +25,7 @@ defmodule ToolboxWeb.Components.PackageActivity do
           class="flex items-center gap-2 text-[20px] text-primary-text sm:text-[24px] font-medium"
           {test_attrs(activity_title: true)}
         >
-          <.activity_icon class="w-5 h-5 sm:w-6 sm:h-6" />
-          Activity
+          <.activity_icon class="w-5 h-5 sm:w-6 sm:h-6" /> Activity
         </h3>
 
         <%= if @activity do %>
