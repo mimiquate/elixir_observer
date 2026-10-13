@@ -26,7 +26,7 @@ defmodule ToolboxWeb.Components.PackageVersionSelector do
 
   def package_version_selector(assigns) do
     ~H"""
-    <form phx-change="version-change">
+    <form phx-change="version-change" phx-ignore-missing-id>
       <select
         name="version"
         class={"border border-stroke rounded dark:bg-surface-alt sm:w-62 text-[14px] sm:text-[16px] #{@class}"}
