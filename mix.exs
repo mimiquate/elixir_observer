@@ -72,7 +72,7 @@ defmodule Toolbox.MixProject do
       {:oban_web, "~> 2.11"},
       {:logger_json, "~> 7.0"},
       {:pgvector, "~> 0.3.0"},
-      {:req, "~> 0.5.15"},
+      {:req, "~> 0.7.0"},
       {:uniq, "~> 0.6"},
       {:remote_ip, "~> 1.2"},
       {:plug_attack, "~> 0.4.3"},
