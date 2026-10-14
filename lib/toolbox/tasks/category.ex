@@ -9,7 +9,7 @@ defmodule Toolbox.Tasks.Category do
   # `retry: :transient` is not used because it leaves out the 529.
   defguardp is_transient_status(status) when status in [408, 429] or status in 500..599
 
-  def categorize(%Toolbox.Package{} = package) do
+  def categorize(%Toolbox.Package{} = package, log: log) do
     case classify(package) do
       {:ok, choice} ->
         category = choice |> String.to_integer() |> Packages.get_category_by_id!()
@@ -17,30 +17,24 @@ defmodule Toolbox.Tasks.Category do
         if package.category == category do
           :ok
         else
-          update_category(package, category)
+          case Packages.update_package_category(package, %{category: category}) do
+            {:ok, _updated} ->
+              if log do
+                Logger.warning(
+                  "recategorized #{package.name}: #{category_name(package.category)} -> #{category.name}"
+                )
+              end
+
+              :ok
+
+            {:error, _reason} = error ->
+              error
+          end
         end
 
       {:error, _reason} = error ->
         error
     end
-  end
-
-  defp update_category(package, category) do
-    case Packages.update_package_category(package, %{category: category}) do
-      {:ok, _updated} ->
-        maybe_log_recategorization(package, category)
-        :ok
-
-      {:error, _reason} = error ->
-        error
-    end
-  end
-
-  # log packages that already had a category and changed it (recategorization)
-  defp maybe_log_recategorization(%{category: nil}, _category), do: :ok
-
-  defp maybe_log_recategorization(package, category) do
-    Logger.warning("recategorized #{package.name}: #{package.category.name} -> #{category.name}")
   end
 
   defp classify(package) do
@@ -89,6 +83,9 @@ defmodule Toolbox.Tasks.Category do
       {Integer.to_string(category.id), "#{category.name}: #{category.description}"}
     end)
   end
+
+  defp category_name(nil), do: "none"
+  defp category_name(category), do: category.name
 
   defp retry?(_request, %Req.Response{status: status}), do: is_transient_status(status)
 

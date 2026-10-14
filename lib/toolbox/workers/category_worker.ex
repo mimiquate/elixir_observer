@@ -7,13 +7,14 @@ defmodule Toolbox.Workers.CategoryWorker do
 
   @impl Oban.Worker
   def perform(%Oban.Job{meta: %{"cron" => true}}) do
-    enqueue(Packages.list_packages_names_with_no_category())
+    Packages.list_packages_names_with_no_category()
+    |> enqueue(log: false)
   end
 
-  def perform(%Oban.Job{args: %{"name" => name}}) do
+  def perform(%Oban.Job{args: %{"name" => name, "log" => log}}) do
     case get_package_by_name(name) do
       {:ok, package} ->
-        Toolbox.Tasks.Category.categorize(package)
+        Toolbox.Tasks.Category.categorize(package, log: log)
 
       {:skip, reason} ->
         Logger.warning(reason)
@@ -23,12 +24,13 @@ defmodule Toolbox.Workers.CategoryWorker do
   end
 
   def recategorize do
-    enqueue(Packages.list_packages_names())
+    Packages.list_packages_names()
+    |> enqueue(log: true)
   end
 
-  defp enqueue(names) do
+  defp enqueue(names, log: log) do
     names
-    |> Enum.map(&new(%{name: &1}))
+    |> Enum.map(&new(%{name: &1, log: log}))
     |> Enum.chunk_every(500)
     |> Enum.each(&Oban.insert_all/1)
   end

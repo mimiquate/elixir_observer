@@ -1,6 +1,8 @@
 defmodule Toolbox.Tasks.CategoryTest do
   use Toolbox.DataCase, async: true
 
+  import ExUnit.CaptureLog
+
   alias Toolbox.Packages
   alias Toolbox.Tasks.Category
 
@@ -11,13 +13,37 @@ defmodule Toolbox.Tasks.CategoryTest do
     %{package: package}
   end
 
-  describe "categorize/1" do
+  describe "categorize/2" do
     test "updates the package category with the choice returned by Jev", %{package: package} do
       test_server = Helpers.test_server_jev()
       stub_choice(test_server, "92")
 
-      assert :ok = Category.categorize(package)
+      assert :ok = Category.categorize(package, log: false)
       assert Packages.get_package_by_name("pager").category.id == 92
+    end
+
+    test "logs when the category changes and log: true", %{package: package} do
+      test_server = Helpers.test_server_jev()
+      stub_choice(test_server, "92")
+
+      log =
+        capture_log(fn ->
+          assert :ok = Category.categorize(package, log: true)
+        end)
+
+      assert log =~ "recategorized pager: none -> Pagination"
+    end
+
+    test "does not log when the category changes and log: false", %{package: package} do
+      test_server = Helpers.test_server_jev()
+      stub_choice(test_server, "92")
+
+      log =
+        capture_log(fn ->
+          assert :ok = Category.categorize(package, log: false)
+        end)
+
+      refute log =~ "recategorized"
     end
 
     test "does not update the package when the category does not change" do
@@ -31,7 +57,7 @@ defmodule Toolbox.Tasks.CategoryTest do
 
       stub_choice(test_server, "92")
 
-      assert :ok = Category.categorize(Packages.get_package_by_name("same"))
+      assert :ok = Category.categorize(Packages.get_package_by_name("same"), log: false)
       assert Packages.get_package_by_name("same").updated_at == old_updated_at
     end
 
@@ -41,7 +67,7 @@ defmodule Toolbox.Tasks.CategoryTest do
       insert_embedding(package)
       stub_choice(test_server, "92")
 
-      assert :ok = Category.categorize(Packages.get_package_by_name("moves"))
+      assert :ok = Category.categorize(Packages.get_package_by_name("moves"), log: false)
       assert "moves" in Packages.list_packages_names_with_no_embedding()
     end
 
@@ -51,7 +77,7 @@ defmodule Toolbox.Tasks.CategoryTest do
       insert_embedding(package)
       stub_choice(test_server, "92")
 
-      assert :ok = Category.categorize(Packages.get_package_by_name("same"))
+      assert :ok = Category.categorize(Packages.get_package_by_name("same"), log: false)
       assert "same" not in Packages.list_packages_names_with_no_embedding()
     end
 
@@ -59,7 +85,7 @@ defmodule Toolbox.Tasks.CategoryTest do
       test_server = Helpers.test_server_jev()
       stub_choice(test_server, "92")
 
-      Category.categorize(package)
+      Category.categorize(package, log: false)
 
       assert_received {:jev_request, body}
 
@@ -77,7 +103,7 @@ defmodule Toolbox.Tasks.CategoryTest do
       stub_status(test_server, 529)
       stub_choice(test_server, "92")
 
-      assert :ok = Category.categorize(package)
+      assert :ok = Category.categorize(package, log: false)
     end
 
     @tag capture_log: true
@@ -86,7 +112,7 @@ defmodule Toolbox.Tasks.CategoryTest do
       stub_status(test_server, 501)
       stub_choice(test_server, "92")
 
-      assert :ok = Category.categorize(package)
+      assert :ok = Category.categorize(package, log: false)
     end
 
     @tag capture_log: true
@@ -95,7 +121,8 @@ defmodule Toolbox.Tasks.CategoryTest do
 
       TestServer.stop(test_server)
 
-      assert {:error, %Req.TransportError{reason: :econnrefused}} = Category.categorize(package)
+      assert {:error, %Req.TransportError{reason: :econnrefused}} =
+               Category.categorize(package, log: false)
     end
   end
 
