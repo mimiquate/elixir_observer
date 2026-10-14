@@ -1,26 +1,46 @@
 defmodule Toolbox.Tasks.Category do
   alias Toolbox.Packages
 
+  require Logger
+
   @instructions "Which category best describes the primary purpose of the package in `name`, given its `description`? Pick the most specific one."
 
   # Same policy as Typesafe's SDK: 408, 429 and any 5xx (Jev's 529 included).
   # `retry: :transient` is not used because it leaves out the 529.
   defguardp is_transient_status(status) when status in [408, 429] or status in 500..599
 
-  def run(%Toolbox.Package{} = package) do
+  def categorize(%Toolbox.Package{} = package) do
     case classify(package) do
       {:ok, choice} ->
         category = choice |> String.to_integer() |> Packages.get_category_by_id!()
 
         if package.category == category do
-          {:ok, package}
+          :ok
         else
-          Packages.update_package_category(package, %{category: category})
+          update_category(package, category)
         end
 
       {:error, _reason} = error ->
         error
     end
+  end
+
+  defp update_category(package, category) do
+    case Packages.update_package_category(package, %{category: category}) do
+      {:ok, _updated} ->
+        maybe_log_recategorization(package, category)
+        :ok
+
+      {:error, _reason} = error ->
+        error
+    end
+  end
+
+  # log packages that already had a category and changed it (recategorization)
+  defp maybe_log_recategorization(%{category: nil}, _category), do: :ok
+
+  defp maybe_log_recategorization(package, category) do
+    Logger.warning("recategorized #{package.name}: #{package.category.name} -> #{category.name}")
   end
 
   defp classify(package) do
@@ -58,13 +78,13 @@ defmodule Toolbox.Tasks.Category do
         category: %{
           type: "choice",
           instructions: @instructions,
-          criteria: criteria()
+          criteria: categories_as_map()
         }
       }
     }
   end
 
-  defp criteria do
+  defp categories_as_map do
     Map.new(Toolbox.Category.all(), fn category ->
       {Integer.to_string(category.id), "#{category.name}: #{category.description}"}
     end)

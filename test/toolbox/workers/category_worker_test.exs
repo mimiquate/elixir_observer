@@ -68,6 +68,62 @@ defmodule Toolbox.Workers.CategoryWorkerTest do
     end
   end
 
+  describe "recategorize/0" do
+    test "enqueues one CategoryWorker job per package" do
+      for n <- 1..3, do: create(:package, name: "package_#{n}")
+
+      assert :ok = CategoryWorker.recategorize()
+
+      names =
+        [worker: CategoryWorker]
+        |> all_enqueued()
+        |> Enum.map(& &1.args["name"])
+        |> Enum.sort()
+
+      assert names == ["package_1", "package_2", "package_3"]
+    end
+  end
+
+  describe "perform/1 for a package that is recategorized" do
+    test "updates the category and logs the change" do
+      test_server = Helpers.test_server_jev()
+      {:ok, _} = create(:package, name: "moves", category: 61)
+      stub_choice(test_server, "92")
+
+      log =
+        capture_log(fn ->
+          assert :ok == perform_job(CategoryWorker, %{name: "moves"})
+        end)
+
+      assert Packages.get_package_by_name("moves").category.id == 92
+      assert log =~ "recategorized moves: ORM and Datamapping -> Pagination"
+    end
+
+    test "does not log when the category stays the same" do
+      test_server = Helpers.test_server_jev()
+      {:ok, _} = create(:package, name: "stays", category: 92)
+      stub_choice(test_server, "92")
+
+      log =
+        capture_log(fn ->
+          assert :ok == perform_job(CategoryWorker, %{name: "stays"})
+        end)
+
+      refute log =~ "recategorized stays"
+    end
+
+    @tag capture_log: true
+    test "returns the error so Oban retries the job" do
+      test_server = Helpers.test_server_jev()
+      {:ok, _} = create(:package, name: "moves", category: 61)
+      # Req makes 1 request + 2 retries before returning the error to the worker
+      for _ <- 1..3, do: stub_status(test_server, 502)
+
+      assert {:error, {:http_status, 502}} = perform_job(CategoryWorker, %{name: "moves"})
+      assert Packages.get_package_by_name("moves").category.id == 61
+    end
+  end
+
   defp stub_choice(test_server, choice) do
     TestServer.add(test_server, "/v1/systemone",
       via: :post,

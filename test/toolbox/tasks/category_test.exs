@@ -11,12 +11,12 @@ defmodule Toolbox.Tasks.CategoryTest do
     %{package: package}
   end
 
-  describe "run/1" do
+  describe "categorize/1" do
     test "updates the package category with the choice returned by Jev", %{package: package} do
       test_server = Helpers.test_server_jev()
       stub_choice(test_server, "92")
 
-      assert {:ok, %{name: "pager"}} = Category.run(package)
+      assert :ok = Category.categorize(package)
       assert Packages.get_package_by_name("pager").category.id == 92
     end
 
@@ -31,7 +31,7 @@ defmodule Toolbox.Tasks.CategoryTest do
 
       stub_choice(test_server, "92")
 
-      assert {:ok, _} = Category.run(Packages.get_package_by_name("same"))
+      assert :ok = Category.categorize(Packages.get_package_by_name("same"))
       assert Packages.get_package_by_name("same").updated_at == old_updated_at
     end
 
@@ -41,7 +41,7 @@ defmodule Toolbox.Tasks.CategoryTest do
       insert_embedding(package)
       stub_choice(test_server, "92")
 
-      assert {:ok, _} = Category.run(Packages.get_package_by_name("moves"))
+      assert :ok = Category.categorize(Packages.get_package_by_name("moves"))
       assert "moves" in Packages.list_packages_names_with_no_embedding()
     end
 
@@ -51,7 +51,7 @@ defmodule Toolbox.Tasks.CategoryTest do
       insert_embedding(package)
       stub_choice(test_server, "92")
 
-      assert {:ok, _} = Category.run(Packages.get_package_by_name("same"))
+      assert :ok = Category.categorize(Packages.get_package_by_name("same"))
       assert "same" not in Packages.list_packages_names_with_no_embedding()
     end
 
@@ -59,7 +59,7 @@ defmodule Toolbox.Tasks.CategoryTest do
       test_server = Helpers.test_server_jev()
       stub_choice(test_server, "92")
 
-      Category.run(package)
+      Category.categorize(package)
 
       assert_received {:jev_request, body}
 
@@ -77,7 +77,7 @@ defmodule Toolbox.Tasks.CategoryTest do
       stub_status(test_server, 529)
       stub_choice(test_server, "92")
 
-      assert {:ok, _} = Category.run(package)
+      assert :ok = Category.categorize(package)
     end
 
     @tag capture_log: true
@@ -86,7 +86,7 @@ defmodule Toolbox.Tasks.CategoryTest do
       stub_status(test_server, 501)
       stub_choice(test_server, "92")
 
-      assert {:ok, _} = Category.run(package)
+      assert :ok = Category.categorize(package)
     end
 
     @tag capture_log: true
@@ -95,7 +95,7 @@ defmodule Toolbox.Tasks.CategoryTest do
 
       TestServer.stop(test_server)
 
-      assert {:error, %Req.TransportError{reason: :econnrefused}} = Category.run(package)
+      assert {:error, %Req.TransportError{reason: :econnrefused}} = Category.categorize(package)
     end
   end
 
