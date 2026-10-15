@@ -18,29 +18,29 @@ defmodule Toolbox.Tasks.CategoryTest do
       test_server = Helpers.test_server_jev()
       stub_choice(test_server, "92")
 
-      assert :ok = Category.categorize(package, log: false)
+      assert :ok = Category.categorize(package)
       assert Packages.get_package_by_name("pager").category.id == 92
     end
 
-    test "logs when the category changes and log: true", %{package: package} do
+    test "logs when the category changes and log_on_update: true", %{package: package} do
       test_server = Helpers.test_server_jev()
       stub_choice(test_server, "92")
 
       log =
         capture_log(fn ->
-          assert :ok = Category.categorize(package, log: true)
+          assert :ok = Category.categorize(package, log_on_update: true)
         end)
 
       assert log =~ "recategorized pager: none -> Pagination"
     end
 
-    test "does not log when the category changes and log: false", %{package: package} do
+    test "does not log when the category changes by default", %{package: package} do
       test_server = Helpers.test_server_jev()
       stub_choice(test_server, "92")
 
       log =
         capture_log(fn ->
-          assert :ok = Category.categorize(package, log: false)
+          assert :ok = Category.categorize(package)
         end)
 
       refute log =~ "recategorized"
@@ -57,7 +57,7 @@ defmodule Toolbox.Tasks.CategoryTest do
 
       stub_choice(test_server, "92")
 
-      assert :ok = Category.categorize(Packages.get_package_by_name("same"), log: false)
+      assert :ok = Category.categorize(Packages.get_package_by_name("same"))
       assert Packages.get_package_by_name("same").updated_at == old_updated_at
     end
 
@@ -67,7 +67,7 @@ defmodule Toolbox.Tasks.CategoryTest do
       insert_embedding(package)
       stub_choice(test_server, "92")
 
-      assert :ok = Category.categorize(Packages.get_package_by_name("moves"), log: false)
+      assert :ok = Category.categorize(Packages.get_package_by_name("moves"))
       assert "moves" in Packages.list_packages_names_with_no_embedding()
     end
 
@@ -77,7 +77,7 @@ defmodule Toolbox.Tasks.CategoryTest do
       insert_embedding(package)
       stub_choice(test_server, "92")
 
-      assert :ok = Category.categorize(Packages.get_package_by_name("same"), log: false)
+      assert :ok = Category.categorize(Packages.get_package_by_name("same"))
       assert "same" not in Packages.list_packages_names_with_no_embedding()
     end
 
@@ -85,7 +85,7 @@ defmodule Toolbox.Tasks.CategoryTest do
       test_server = Helpers.test_server_jev()
       stub_choice(test_server, "92")
 
-      Category.categorize(package, log: false)
+      Category.categorize(package)
 
       assert_received {:jev_request, body}
 
@@ -103,7 +103,7 @@ defmodule Toolbox.Tasks.CategoryTest do
       stub_status(test_server, 529)
       stub_choice(test_server, "92")
 
-      assert :ok = Category.categorize(package, log: false)
+      assert :ok = Category.categorize(package)
     end
 
     @tag capture_log: true
@@ -112,7 +112,7 @@ defmodule Toolbox.Tasks.CategoryTest do
       stub_status(test_server, 501)
       stub_choice(test_server, "92")
 
-      assert :ok = Category.categorize(package, log: false)
+      assert :ok = Category.categorize(package)
     end
 
     @tag capture_log: true
@@ -122,7 +122,7 @@ defmodule Toolbox.Tasks.CategoryTest do
       TestServer.stop(test_server)
 
       assert {:error, %Req.TransportError{reason: :econnrefused}} =
-               Category.categorize(package, log: false)
+               Category.categorize(package)
     end
   end
 

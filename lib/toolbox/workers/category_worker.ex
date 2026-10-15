@@ -8,13 +8,13 @@ defmodule Toolbox.Workers.CategoryWorker do
   @impl Oban.Worker
   def perform(%Oban.Job{meta: %{"cron" => true}}) do
     Packages.list_packages_names_with_no_category()
-    |> enqueue(log: false)
+    |> enqueue(log_on_update: false)
   end
 
-  def perform(%Oban.Job{args: %{"name" => name, "log" => log}}) do
+  def perform(%Oban.Job{args: %{"name" => name, "log_on_update" => log_on_update}}) do
     case get_package_by_name(name) do
       {:ok, package} ->
-        Toolbox.Tasks.Category.categorize(package, log: log)
+        Toolbox.Tasks.Category.categorize(package, log_on_update: log_on_update)
 
       {:skip, reason} ->
         Logger.warning(reason)
@@ -25,12 +25,12 @@ defmodule Toolbox.Workers.CategoryWorker do
 
   def recategorize do
     Packages.list_packages_names()
-    |> enqueue(log: true)
+    |> enqueue(log_on_update: true)
   end
 
-  defp enqueue(names, log: log) do
+  defp enqueue(names, log_on_update: log_on_update) do
     names
-    |> Enum.map(&new(%{name: &1, log: log}))
+    |> Enum.map(&new(%{name: &1, log_on_update: log_on_update}))
     |> Enum.chunk_every(500)
     |> Enum.each(&Oban.insert_all/1)
   end
