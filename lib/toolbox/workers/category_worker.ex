@@ -1,5 +1,5 @@
 defmodule Toolbox.Workers.CategoryWorker do
-  use Oban.Worker, queue: :category, max_attempts: 10
+  use Oban.Worker, queue: :category, max_attempts: 5
 
   require Logger
 
@@ -12,9 +12,12 @@ defmodule Toolbox.Workers.CategoryWorker do
   end
 
   def perform(%Oban.Job{args: %{"name" => name, "log_on_update" => log_on_update}}) do
-    case get_package_by_name(name) do
-      {:ok, package} ->
-        Toolbox.Tasks.Category.categorize(package, log_on_update: log_on_update)
+    with {:ok, package} <- get_package_by_name(name),
+         :ok <- Toolbox.Tasks.Category.categorize(package, log_on_update: log_on_update) do
+      :ok
+    else
+      {:error, reason} ->
+        {:error, reason}
 
       {:skip, reason} ->
         Logger.warning(reason)

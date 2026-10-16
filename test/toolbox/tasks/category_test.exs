@@ -96,32 +96,21 @@ defmodule Toolbox.Tasks.CategoryTest do
              }
     end
 
-    @tag capture_log: true
-    test "retries 429 and 529 and then succeeds", %{package: package} do
+    test "returns an error when Jev answers 429", %{package: package} do
       test_server = Helpers.test_server_jev()
       stub_status(test_server, 429)
-      stub_status(test_server, 529)
-      stub_choice(test_server, "92")
 
-      assert :ok = Category.categorize(package)
+      assert {:error, "Failed to classify package pager with status 429"} =
+               Category.categorize(package)
     end
 
-    @tag capture_log: true
-    test "retries a 5xx outside the usual list, e.g. 501", %{package: package} do
+    test "returns a skip when Jev rejects the package with a 4xx other than 408 and 429", %{
+      package: package
+    } do
       test_server = Helpers.test_server_jev()
-      stub_status(test_server, 501)
-      stub_choice(test_server, "92")
+      stub_status(test_server, 403)
 
-      assert :ok = Category.categorize(package)
-    end
-
-    @tag capture_log: true
-    test "returns the transport error when the connection keeps failing", %{package: package} do
-      test_server = Helpers.test_server_jev()
-
-      TestServer.stop(test_server)
-
-      assert {:error, %Req.TransportError{reason: :econnrefused}} =
+      assert {:skip, "Unable to classify package pager with status 403"} =
                Category.categorize(package)
     end
   end
@@ -156,11 +145,7 @@ defmodule Toolbox.Tasks.CategoryTest do
   defp stub_status(test_server, status) do
     TestServer.add(test_server, "/v1/systemone",
       via: :post,
-      to: fn conn ->
-        {:ok, _raw, conn} = Plug.Conn.read_body(conn)
-
-        Plug.Conn.send_resp(conn, status, "")
-      end
+      to: fn conn -> Plug.Conn.send_resp(conn, status, "") end
     )
   end
 end

@@ -32,7 +32,7 @@ defmodule Helpers do
   end
 end
 
-Req.default_options(retry: false, retry_delay: 0)
+Req.default_options(retry: false)
 
 ExUnit.start()
 Ecto.Adapters.SQL.Sandbox.mode(Toolbox.Repo, :manual)

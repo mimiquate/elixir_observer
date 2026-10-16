@@ -64,7 +64,3 @@ config :toolbox, Toolbox.CommunityResources,
 config :toolbox, Toolbox.Cache, adapter: Nebulex.Adapters.Nil
 
 config :toolbox, ToolboxWeb.PlugAttack, limit: 1
-
-# Jev answers 529 when overloaded but Plug (used by TestServer) only knows RFC
-# statuses and raises on 529 unless it is registered here.
-config :plug, :statuses, %{529 => "Overloaded"}

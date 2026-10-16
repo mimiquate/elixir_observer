@@ -52,11 +52,24 @@ defmodule Toolbox.Workers.CategoryWorkerTest do
     test "returns the error so Oban retries the job" do
       test_server = Helpers.test_server_jev()
       {:ok, _} = create(:package, name: "pager")
-      # Req makes 1 request + 2 retries before returning the error to the worker
-      for _ <- 1..3, do: stub_status(test_server, 529)
+      stub_status(test_server, 429)
 
-      assert {:error, {:http_status, 529}} =
+      assert {:error, "Failed to classify package pager with status 429"} =
                perform_job(CategoryWorker, %{name: "pager", log_on_update: false})
+    end
+
+    test "cancels the job and logs a warning when Jev rejects the package with a 4xx" do
+      test_server = Helpers.test_server_jev()
+      {:ok, _} = create(:package, name: "pager")
+      stub_status(test_server, 403)
+
+      log =
+        capture_log(fn ->
+          assert {:cancel, "Unable to classify package pager with status 403"} =
+                   perform_job(CategoryWorker, %{name: "pager", log_on_update: false})
+        end)
+
+      assert log =~ "Unable to classify package pager with status 403"
     end
 
     test "cancels the job and logs a warning when the package no longer exists" do
@@ -118,10 +131,9 @@ defmodule Toolbox.Workers.CategoryWorkerTest do
     test "returns the error so Oban retries the job" do
       test_server = Helpers.test_server_jev()
       {:ok, _} = create(:package, name: "moves", category: 61)
-      # Req makes 1 request + 2 retries before returning the error to the worker
-      for _ <- 1..3, do: stub_status(test_server, 502)
+      stub_status(test_server, 408)
 
-      assert {:error, {:http_status, 502}} =
+      assert {:error, "Failed to classify package moves with status 408"} =
                perform_job(CategoryWorker, %{name: "moves", log_on_update: true})
 
       assert Packages.get_package_by_name("moves").category.id == 61

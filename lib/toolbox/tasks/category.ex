@@ -5,10 +5,6 @@ defmodule Toolbox.Tasks.Category do
 
   @instructions "Which category best describes the primary purpose of the package in `name`, given its `description`? Pick the most specific one."
 
-  # Same policy as Typesafe's SDK: 408, 429 and any 5xx (Jev's 529 included).
-  # `retry: :transient` is not used because it leaves out the 529.
-  defguardp is_transient_status(status) when status in [408, 429] or status in 500..599
-
   def categorize(%Toolbox.Package{} = package, opts \\ []) do
     log_on_update = Keyword.get(opts, :log_on_update, false)
 
@@ -39,17 +35,18 @@ defmodule Toolbox.Tasks.Category do
         url: "#{base_url()}/v1/systemone",
         auth: {:bearer, api_key()},
         json: body(package),
-        receive_timeout: 10_000,
-        retry: &retry?/2,
-        max_retries: 2
+        receive_timeout: 10_000
       )
 
     case Req.post(request) do
       {:ok, %{status: 200, body: %{"answers" => %{"category" => %{"choice" => choice}}}}} ->
         {:ok, choice}
 
-      {:ok, %{status: status}} when is_transient_status(status) ->
-        {:error, {:http_status, status}}
+      {:ok, %{status: status}} when status in [408, 429] ->
+        {:error, "Failed to classify package #{package.name} with status #{status}"}
+
+      {:ok, %{status: status}} when status in 400..499 ->
+        {:skip, "Unable to classify package #{package.name} with status #{status}"}
 
       {:error, reason} ->
         {:error, reason}
@@ -82,13 +79,6 @@ defmodule Toolbox.Tasks.Category do
 
   defp category_name(nil), do: "none"
   defp category_name(category), do: category.name
-
-  defp retry?(_request, %Req.Response{status: status}), do: is_transient_status(status)
-
-  defp retry?(_request, %Req.TransportError{reason: reason}),
-    do: reason in [:timeout, :econnrefused, :closed]
-
-  defp retry?(_request, _other), do: false
 
   if Mix.env() == :test do
     defp base_url, do: ProcessTree.get({__MODULE__, :base_url})
