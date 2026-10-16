@@ -1,92 +1,151 @@
 defmodule Toolbox.Tasks.CategoryTest do
   use Toolbox.DataCase, async: true
 
+  import ExUnit.CaptureLog
+
   alias Toolbox.Packages
   alias Toolbox.Tasks.Category
 
-  @gemini_path "/v1beta/models/gemini-2.5-flash\\:generateContent"
+  setup do
+    {:ok, package} =
+      create(:package, name: "pager", description: "Pagination for Ecto queries")
 
-  defp test_server_gemini do
-    {:ok, test_server} = TestServer.start()
-
-    Application.put_env(:toolbox, :gemini_base_url, TestServer.url(test_server))
-    Application.put_env(:toolbox, :gemini_api_key, "test-api-key")
-
-    test_server
+    %{package: package}
   end
 
-  describe "run/1" do
-    test "successfully categorizes packages when API returns 200" do
-      test_server = test_server_gemini()
+  describe "categorize/2" do
+    test "updates the package category with the choice returned by Jev", %{package: package} do
+      test_server = Helpers.test_server_jev()
+      stub_choice(test_server, "92")
 
-      {:ok, package1} =
-        Packages.create_package(%{
-          name: "test_package_1",
-          description: "A test authentication package"
-        })
-
-      {:ok, package2} =
-        Packages.create_package(%{name: "test_package_2", description: "A test web package"})
-
-      # We'll use existing categories: id 6 = Authentication, id 2 = Algorithms and Data structures
-
-      TestServer.add(test_server, @gemini_path,
-        via: :post,
-        to: fn conn ->
-          response_body = %{
-            "candidates" => [
-              %{
-                "content" => %{
-                  "parts" => [
-                    %{
-                      "text" =>
-                        Jason.encode!([
-                          %{"name" => "test_package_1", "category" => %{"id" => 6}},
-                          %{"name" => "test_package_2", "category" => %{"id" => 2}}
-                        ])
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-
-          conn
-          |> Plug.Conn.put_resp_header("content-type", "application/json")
-          |> Plug.Conn.send_resp(200, Jason.encode!(response_body))
-        end
-      )
-
-      Category.run([package1, package2])
-
-      updated_package1 = Packages.get_package_by_name("test_package_1")
-      updated_package2 = Packages.get_package_by_name("test_package_2")
-
-      assert updated_package1.category.id == 6
-      assert updated_package2.category.id == 2
+      assert :ok = Category.categorize(package)
+      assert Packages.get_package_by_name("pager").category.id == 92
     end
 
-    test "returns error tuple when API returns 5xx server error" do
-      test_server = test_server_gemini()
+    test "logs when the category changes and log_on_update: true", %{package: package} do
+      test_server = Helpers.test_server_jev()
+      stub_choice(test_server, "92")
 
-      {:ok, package1} =
-        Packages.create_package(%{name: "test_package_1", description: "A test package"})
+      log =
+        capture_log(fn ->
+          assert :ok = Category.categorize(package, log_on_update: true)
+        end)
 
-      {:ok, package2} =
-        Packages.create_package(%{name: "test_package_2", description: "Another test package"})
+      assert log =~ "recategorized pager: none -> Pagination"
+    end
 
-      # Mock server error response
-      TestServer.add(test_server, @gemini_path,
-        via: :post,
-        to: fn conn ->
-          Plug.Conn.send_resp(conn, 502, "Bad Gateway")
-        end
+    test "does not log when the category changes by default", %{package: package} do
+      test_server = Helpers.test_server_jev()
+      stub_choice(test_server, "92")
+
+      log =
+        capture_log(fn ->
+          assert :ok = Category.categorize(package)
+        end)
+
+      refute log =~ "recategorized"
+    end
+
+    test "does not update the package when the category does not change" do
+      test_server = Helpers.test_server_jev()
+      {:ok, package} = create(:package, name: "same", category: 92)
+      old_updated_at = ~U[2020-01-01 00:00:00Z]
+
+      Repo.update_all(from(p in Toolbox.Package, where: p.id == ^package.id),
+        set: [updated_at: old_updated_at]
       )
 
-      result = Category.run([package1, package2])
+      stub_choice(test_server, "92")
 
-      assert {:error, "failed to categorize test_package_1, test_package_2 with status 502"} =
-               result
+      assert :ok = Category.categorize(Packages.get_package_by_name("same"))
+      assert Packages.get_package_by_name("same").updated_at == old_updated_at
     end
+
+    test "deletes the embedding when the category changes" do
+      test_server = Helpers.test_server_jev()
+      {:ok, package} = create(:package, name: "moves", category: 61)
+      insert_embedding(package)
+      stub_choice(test_server, "92")
+
+      assert :ok = Category.categorize(Packages.get_package_by_name("moves"))
+      assert "moves" in Packages.list_packages_names_with_no_embedding()
+    end
+
+    test "keeps the embedding when the category does not change" do
+      test_server = Helpers.test_server_jev()
+      {:ok, package} = create(:package, name: "same", category: 92)
+      insert_embedding(package)
+      stub_choice(test_server, "92")
+
+      assert :ok = Category.categorize(Packages.get_package_by_name("same"))
+      assert "same" not in Packages.list_packages_names_with_no_embedding()
+    end
+
+    test "sends the package data to Jev", %{package: package} do
+      test_server = Helpers.test_server_jev()
+      stub_choice(test_server, "92")
+
+      Category.categorize(package)
+
+      assert_received {:jev_request, body}
+
+      assert body["state"] == %{
+               "name" => "pager",
+               "description" => "Pagination for Ecto queries",
+               "docs_url" => "https://hexdocs.pm/pager"
+             }
+    end
+
+    test "returns an error when Jev answers 429", %{package: package} do
+      test_server = Helpers.test_server_jev()
+      stub_status(test_server, 429)
+
+      assert {:error, "Failed to classify package pager with status 429"} =
+               Category.categorize(package)
+    end
+
+    test "returns a skip when Jev rejects the package with a 4xx other than 408 and 429", %{
+      package: package
+    } do
+      test_server = Helpers.test_server_jev()
+      stub_status(test_server, 403)
+
+      assert {:skip, "Unable to classify package pager with status 403"} =
+               Category.categorize(package)
+    end
+  end
+
+  defp insert_embedding(package) do
+    {:ok, _} =
+      Packages.upsert_package_embeddings(%{
+        package_id: package.id,
+        embedding: List.duplicate(0.1, 768)
+      })
+  end
+
+  defp stub_choice(test_server, choice) do
+    test_pid = self()
+
+    TestServer.add(test_server, "/v1/systemone",
+      via: :post,
+      to: fn conn ->
+        {:ok, raw, conn} = Plug.Conn.read_body(conn)
+        send(test_pid, {:jev_request, Jason.decode!(raw)})
+
+        conn
+        |> Plug.Conn.put_resp_header("content-type", "application/json")
+        |> Plug.Conn.send_resp(
+          200,
+          Jason.encode!(%{"answers" => %{"category" => %{"choice" => choice}}})
+        )
+      end
+    )
+  end
+
+  defp stub_status(test_server, status) do
+    TestServer.add(test_server, "/v1/systemone",
+      via: :post,
+      to: fn conn -> Plug.Conn.send_resp(conn, status, "") end
+    )
   end
 end

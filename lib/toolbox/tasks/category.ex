@@ -1,132 +1,90 @@
 defmodule Toolbox.Tasks.Category do
+  alias Toolbox.Packages
+
   require Logger
 
-  def run(packages) when is_list(packages) do
-    prompt = """
-      You are an Elixir/Hex package classification expert. Your task is to classify the given Elixir package into exactly ONE of the predefined categories below.
+  @instructions "Which category best describes the primary purpose of the package in `name`, given its `description`? Pick the most specific one."
 
-      **Categories:** - ID | NAME | DESCRIPTION
-      #{for category <- Toolbox.Category.all(), into: "" do
-      "- #{category.id} | #{category.name} | #{category.description} \n"
-    end}
+  def categorize(%Toolbox.Package{} = package, opts \\ []) do
+    log_on_update = Keyword.get(opts, :log_on_update, false)
 
-      **Instructions:**
-      1. Analyze the package's primary purpose and functionality in the Elixir/OTP ecosystem
-      2. Consider the package's main use case in typical Elixir/Phoenix applications
-      3  Read the package documentation
-      3. If a package could fit multiple categories, choose the MOST SPECIFIC and PRIMARY category
-      4. Consider Elixir-specific patterns like GenServers, supervisors, and OTP principles
-      5. Base your classification on the package's core functionality, not secondary features
+    with {:ok, choice} <- classify(package) do
+      category = choice |> String.to_integer() |> Packages.get_category_by_id!()
 
-      **Input**
-      Package Name: [package_name]
-      Description: [brief description if available]
-      Documentation Link: [link to documentation if available]
-
-      **Output::**
-      id, category and reasoning of the selected category
-
-      **Example:**
-      **Input**
-      Package Name: guardian
-      Description: An authentication framework for use with Elixir applications
-      Documentation: https://hexdocs.pm/guardian
-
-
-      **Output**
-      "package_name": guardian
-      "id": 1,
-      "category": "Authentication/Authorization",
-      "reasoning": "Guardian's primary purpose is handling JWT-based authentication and authorization in Elixir applications."
-
-      Now classify these packages:
-
-      #{for package <- packages, into: "" do
-      """
-        Package Name: #{package.name}
-        Description: #{package.description}
-        Documentation: https://hexdocs.pm/#{package.name}
-
-      """
-    end}
-    """
-
-    body = %{
-      contents: [
-        %{
-          parts: [
-            %{
-              text: prompt
-            }
-          ]
-        }
-      ],
-      generationConfig: %{
-        responseMimeType: "application/json",
-        responseSchema: %{
-          type: "ARRAY",
-          items: %{
-            type: "OBJECT",
-            properties: %{
-              name: %{type: "STRING"},
-              category: %{
-                type: "OBJECT",
-                properties: %{
-                  id: %{type: "INTEGER"},
-                  name: %{type: "STRING"},
-                  reasoning: %{type: "STRING"}
-                },
-                propertyOrdering: ["id", "name", "reasoning"]
-              }
-            },
-            propertyOrdering: ["name", "category"]
-          }
-        }
-      }
-    }
-
-    categorization_response =
-      Req.post("#{base_url()}/v1beta/models/gemini-2.5-flash:generateContent",
-        headers: [
-          {"x-goog-api-key", "#{api_key()}"},
-          {"user-agent", "elixir client"}
-        ],
-        json: body,
-        receive_timeout: 600_000
-      )
-
-    case categorization_response do
-      {:ok, %{status: 200, body: categorization_response_body}} ->
-        %{"candidates" => [%{"content" => %{"parts" => [%{"text" => text}]}}]} =
-          categorization_response_body
-
-        json = JSON.decode!(text)
-
-        result =
-          Enum.into(json, %{}, fn %{"name" => name, "category" => category} ->
-            {name, category}
-          end)
-
-        for package <- packages do
-          category = Toolbox.Packages.get_category_by_id!(result[package.name]["id"])
-          Toolbox.Packages.update_package_category(package, %{category: category})
-        end
-
-      {:ok, %{status: server_error}} when server_error in 500..599 ->
-        first_5_package_names = packages |> Enum.take(5) |> Enum.map(& &1.name) |> Enum.join(", ")
-        {:error, "failed to categorize #{first_5_package_names} with status #{server_error}"}
+      put_category(package, category, log_on_update)
     end
   end
 
-  def run(packages) do
-    run([packages])
+  defp put_category(%{category: category}, category, _log), do: :ok
+
+  defp put_category(package, category, log_on_update) do
+    with {:ok, _updated} <- Packages.update_package_category(package, %{category: category}) do
+      if log_on_update do
+        Logger.warning(
+          "recategorized #{package.name}: #{category_name(package.category)} -> #{category.name}"
+        )
+      end
+
+      :ok
+    end
   end
 
-  def base_url() do
-    Application.fetch_env!(:toolbox, :gemini_base_url)
+  defp classify(package) do
+    request =
+      Req.new(
+        url: "#{base_url()}/v1/systemone",
+        auth: {:bearer, api_key()},
+        json: body(package),
+        receive_timeout: 10_000
+      )
+
+    case Req.post(request) do
+      {:ok, %{status: 200, body: %{"answers" => %{"category" => %{"choice" => choice}}}}} ->
+        {:ok, choice}
+
+      {:ok, %{status: status}} when status in [408, 429] ->
+        {:error, "Failed to classify package #{package.name} with status #{status}"}
+
+      {:ok, %{status: status}} when status in 400..499 ->
+        {:skip, "Unable to classify package #{package.name} with status #{status}"}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
   end
 
-  def api_key() do
-    Application.fetch_env!(:toolbox, :gemini_api_key)
+  defp body(package) do
+    %{
+      model: "jev-latest",
+      state: %{
+        name: package.name,
+        description: package.description || "",
+        docs_url: "https://hexdocs.pm/#{package.name}"
+      },
+      questions: %{
+        category: %{
+          type: "choice",
+          instructions: @instructions,
+          criteria: categories_as_map()
+        }
+      }
+    }
   end
+
+  defp categories_as_map do
+    Map.new(Toolbox.Category.all(), fn category ->
+      {Integer.to_string(category.id), "#{category.name}: #{category.description}"}
+    end)
+  end
+
+  defp category_name(nil), do: "none"
+  defp category_name(category), do: category.name
+
+  if Mix.env() == :test do
+    defp base_url, do: ProcessTree.get({__MODULE__, :base_url})
+  else
+    defp base_url, do: Application.fetch_env!(:toolbox, :jev_base_url)
+  end
+
+  defp api_key, do: Application.fetch_env!(:toolbox, :jev_api_key)
 end

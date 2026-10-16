@@ -32,6 +32,8 @@ config :phoenix_live_view,
 
 config :toolbox, Oban, testing: :manual
 
+config :toolbox, jev_api_key: "test-api-key"
+
 config :opentelemetry, traces_exporter: :none
 
 config :toolbox, :github,

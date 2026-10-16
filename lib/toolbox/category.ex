@@ -576,6 +576,13 @@ defmodule Toolbox.Category do
         description:
           "YAML parsing and generation libraries for configuration and data serialization",
         permalink: "yaml"
+      },
+      %__MODULE__{
+        id: 92,
+        name: "Pagination",
+        description:
+          "Libraries for paginating query results and collections, including offset and cursor-based pagination",
+        permalink: "pagination"
       }
     ]
   end
