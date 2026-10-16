@@ -16,13 +16,13 @@ defmodule Toolbox.Workers.CategoryWorker do
          :ok <- Toolbox.Tasks.Category.categorize(package, log_on_update: log_on_update) do
       :ok
     else
-      {:error, reason} ->
-        {:error, reason}
-
       {:skip, reason} ->
         Logger.warning(reason)
 
         {:cancel, reason}
+
+      other ->
+        other
     end
   end
 
