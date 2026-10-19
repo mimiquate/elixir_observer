@@ -76,8 +76,7 @@ defmodule Toolbox.MixProject do
       {:uniq, "~> 0.6"},
       {:remote_ip, "~> 1.2"},
       {:plug_attack, "~> 0.4.3"},
-      {:tower_db, "~> 0.8.0"},
-      {:tower_web, "~> 0.6.0"},
+      {:tower_web, "~> 0.9.1"},
 
       # OpenTelemetry
       {:opentelemetry, "~> 1.3"},
