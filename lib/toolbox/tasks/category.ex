@@ -73,9 +73,15 @@ defmodule Toolbox.Tasks.Category do
 
   defp categories_as_map do
     Map.new(Toolbox.Category.all(), fn category ->
-      {Integer.to_string(category.id), "#{category.name}: #{category.description}"}
+      {Integer.to_string(category.id), describe_category(category)}
     end)
   end
+
+  defp describe_category(%{notes: nil} = category),
+    do: "#{category.name}: #{category.description}"
+
+  defp describe_category(category),
+    do: "#{category.name}: #{category.description}. Notes: #{category.notes}"
 
   defp category_name(nil), do: "none"
   defp category_name(category), do: category.name
