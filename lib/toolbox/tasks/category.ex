@@ -77,11 +77,11 @@ defmodule Toolbox.Tasks.Category do
     end)
   end
 
-  defp describe_category(%{notes: nil} = category),
+  defp describe_category(%{ai_classifier_notes: nil} = category),
     do: "#{category.name}: #{category.description}"
 
   defp describe_category(category),
-    do: "#{category.name}: #{category.description}. Notes: #{category.notes}"
+    do: "#{category.name}: #{category.description}. Notes: #{category.ai_classifier_notes}"
 
   defp category_name(nil), do: "none"
   defp category_name(category), do: category.name
