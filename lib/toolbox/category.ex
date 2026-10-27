@@ -1,7 +1,7 @@
 defmodule Toolbox.Category do
   use Ecto.Type
 
-  defstruct [:id, :name, :description, :permalink]
+  defstruct [:id, :name, :description, :permalink, :ai_classifier_notes]
 
   @compile {:inline, all: 0}
 
@@ -47,14 +47,18 @@ defmodule Toolbox.Category do
         name: "Algorithms and Data structures",
         description:
           "Implementations of algorithms and data structures optimized for Elixir's functional programming paradigm",
-        permalink: "algorithms-and-data-structures"
+        permalink: "algorithms-and-data-structures",
+        ai_classifier_notes:
+          "Also covers algorithmic building blocks such as entity-component systems, operational transformation and synchronization algorithms."
       },
       %__MODULE__{
         id: 4,
         name: "Artificial Intelligence",
         description:
           "Machine learning, neural networks, and AI-related libraries for Elixir including Nx and Axon",
-        permalink: "artificial-intelligence"
+        permalink: "artificial-intelligence",
+        ai_classifier_notes:
+          "Also covers LLM provider clients, agent frameworks, and MCP servers or clients, not only numerical machine learning."
       },
       %__MODULE__{
         id: 5,
@@ -96,7 +100,9 @@ defmodule Toolbox.Category do
         name: "BSON",
         description:
           "Libraries for Binary JSON encoding and decoding, commonly used with MongoDB",
-        permalink: "bson"
+        permalink: "bson",
+        ai_classifier_notes:
+          "The BSON format itself (encoding and decoding). Database drivers that merely use BSON are not covered here."
       },
       %__MODULE__{
         id: 12,
@@ -136,7 +142,9 @@ defmodule Toolbox.Category do
         id: 17,
         name: "Command Line Applications",
         description: "Libraries for building CLI tools and command-line interfaces",
-        permalink: "command-line-applications"
+        permalink: "command-line-applications",
+        ai_classifier_notes:
+          "Also covers terminal output styling such as ANSI colors and escape codes."
       },
       %__MODULE__{
         id: 18,
@@ -219,7 +227,9 @@ defmodule Toolbox.Category do
         id: 30,
         name: "Encoding and Compression",
         description: "Data encoding, decoding, and compression utilities for various formats",
-        permalink: "encoding-and-compression"
+        permalink: "encoding-and-compression",
+        ai_classifier_notes:
+          "Also covers readers and writers for specific file or data formats (for example DBF, dBASE, LDIF). Parsing of programming or markup languages is not covered here."
       },
       %__MODULE__{
         id: 31,
@@ -262,7 +272,9 @@ defmodule Toolbox.Category do
         id: 38,
         name: "Framework Components",
         description: "Reusable components and plugins for web frameworks like Phoenix",
-        permalink: "framework-components"
+        permalink: "framework-components",
+        ai_classifier_notes:
+          "Reusable pieces that only make sense inside a specific web framework, such as UI or LiveView components and framework extensions. Plugs and adapters whose function belongs to another domain (security, monitoring, validation, HTTP serving, events) are not covered here."
       },
       %__MODULE__{
         id: 39,
@@ -354,7 +366,9 @@ defmodule Toolbox.Category do
         id: 54,
         name: "Macros",
         description: "Metaprogramming utilities and macro libraries for code generation",
-        permalink: "macros"
+        permalink: "macros",
+        ai_classifier_notes:
+          "Also covers small syntax helpers implemented with macros, such as pipe operators, guards, constants and named functions."
       },
       %__MODULE__{
         id: 55,
@@ -366,7 +380,9 @@ defmodule Toolbox.Category do
         id: 56,
         name: "Miscellaneous",
         description: "Utility libraries and tools that don't fit into other specific categories",
-        permalink: "miscellaneous"
+        permalink: "miscellaneous",
+        ai_classifier_notes:
+          "Use for placeholders, scaffolds, test packages and packages with empty or uninformative descriptions. Packages that clearly belong to another category, even small or unusual ones, are not covered here."
       },
       %__MODULE__{
         id: 57,
@@ -386,7 +402,9 @@ defmodule Toolbox.Category do
         name: "Networking",
         description:
           "Network programming libraries for sockets, protocols, and network communication",
-        permalink: "networking"
+        permalink: "networking",
+        ai_classifier_notes:
+          "Also covers clients and implementations of network protocols (for example LDAP, CalDAV, Nostr, OCPP) and interaction with network equipment. Agent protocols such as MCP are not covered here."
       },
       %__MODULE__{
         id: 60,
@@ -399,7 +417,9 @@ defmodule Toolbox.Category do
         id: 61,
         name: "ORM and Datamapping",
         description: "Object-relational mapping and database abstraction layers, primarily Ecto",
-        permalink: "orm-and-datamapping"
+        permalink: "orm-and-datamapping",
+        ai_classifier_notes:
+          "Also covers database drivers and clients for relational, document, graph and key-value stores, including embedded ones, not only ORMs."
       },
       %__MODULE__{
         id: 62,
@@ -472,7 +492,9 @@ defmodule Toolbox.Category do
         id: 74,
         name: "Security",
         description: "Security tools, vulnerability scanners, and security-focused utilities",
-        permalink: "security"
+        permalink: "security",
+        ai_classifier_notes:
+          "Also covers rate limiting (libraries and plugs), CORS and security headers, certificate (ACME) clients, captcha verification, and secrets and password management."
       },
       %__MODULE__{
         id: 75,
@@ -514,7 +536,9 @@ defmodule Toolbox.Category do
         id: 81,
         name: "Testing",
         description: "Testing frameworks, mocking libraries, and test utilities beyond ExUnit",
-        permalink: "testing"
+        permalink: "testing",
+        ai_classifier_notes:
+          "Also covers clients and wrappers for testing tools and services, such as browser automation and webdriver clients, visual testing and fault injection."
       },
       %__MODULE__{
         id: 82,
@@ -526,7 +550,9 @@ defmodule Toolbox.Category do
         id: 83,
         name: "Third Party APIs",
         description: "Integration libraries for external APIs and web services",
-        permalink: "third-party-apis"
+        permalink: "third-party-apis",
+        ai_classifier_notes:
+          "Clients and SDKs built around a specific, named external service (a SaaS product, a payments provider, a social network). Database drivers, LLM provider clients and network protocol implementations are not covered here."
       },
       %__MODULE__{
         id: 84,

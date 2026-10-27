@@ -96,6 +96,36 @@ defmodule Toolbox.Tasks.CategoryTest do
              }
     end
 
+    test "sends the category AI classifier notes to Jev when the category has them", %{
+      package: package
+    } do
+      test_server = Helpers.test_server_jev()
+      stub_choice(test_server, "92")
+
+      category = Enum.find(Toolbox.Category.all(), & &1.ai_classifier_notes)
+
+      Category.categorize(package)
+
+      assert_received {:jev_request, body}
+
+      assert body["questions"]["category"]["criteria"][Integer.to_string(category.id)] ==
+               "#{category.name}: #{category.description}. Notes: #{category.ai_classifier_notes}"
+    end
+
+    test "does not send a notes marker when the category has none", %{package: package} do
+      test_server = Helpers.test_server_jev()
+      stub_choice(test_server, "92")
+
+      category = Enum.find(Toolbox.Category.all(), &is_nil(&1.ai_classifier_notes))
+
+      Category.categorize(package)
+
+      assert_received {:jev_request, body}
+
+      assert body["questions"]["category"]["criteria"][Integer.to_string(category.id)] ==
+               "#{category.name}: #{category.description}"
+    end
+
     test "returns an error when Jev answers 429", %{package: package} do
       test_server = Helpers.test_server_jev()
       stub_status(test_server, 429)
