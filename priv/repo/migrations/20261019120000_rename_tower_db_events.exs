@@ -4,28 +4,24 @@ defmodule Toolbox.Repo.Migrations.RenameTowerDbEvents do
   def up do
     execute("ALTER TABLE IF EXISTS tower_db_events RENAME TO tower_web_events")
 
-    rename(index(:tower_web_events, [:name], name: "tower_db_events_pkey"),
-      to: "tower_web_events_pkey"
+    execute(
+      "ALTER INDEX IF EXISTS tower_db_events_pkey RENAME TO tower_web_events_pkey"
     )
 
-    rename(index(:tower_web_events, [:name], name: "tower_db_events_datetime_index"),
-      to: "tower_web_events_datetime_index"
+    execute(
+      "ALTER INDEX IF EXISTS tower_db_events_datetime_index RENAME TO tower_web_events_datetime_index"
     )
 
-    rename(index(:tower_web_events, [:name], name: "tower_db_events_level_index"),
-      to: "tower_web_events_level_index"
+    execute(
+      "ALTER INDEX IF EXISTS tower_db_events_level_index RENAME TO tower_web_events_level_index"
     )
 
-    rename(
-      index(:tower_web_events, [:name],
-        name: "tower_db_events_normalized_reason_gin_trgm_ops_index"
-      ),
-      to: "tower_web_events_normalized_reason_gin_trgm_ops_index"
+    execute(
+      "ALTER INDEX IF EXISTS tower_db_events_normalized_reason_gin_trgm_ops_index RENAME TO tower_web_events_normalized_reason_gin_trgm_ops_index"
     )
 
-    rename(
-      index(:tower_web_events, [:name], name: "tower_db_events_similarity_id_datetime_DESC_index"),
-      to: "tower_web_events_similarity_id_datetime_DESC_index"
+    execute(
+      "ALTER INDEX IF EXISTS tower_db_events_similarity_id_datetime_DESC_index RENAME TO tower_web_events_similarity_id_datetime_DESC_index"
     )
 
     TowerWeb.DB.Migration.up(from: 0, to: 3)
