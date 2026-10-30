@@ -84,7 +84,7 @@ config :toolbox, Oban,
   notifier: Oban.Notifiers.PG,
   repo: Toolbox.Repo
 
-config :tower_db, repo: Toolbox.Repo
+config :tower_web, repo: Toolbox.Repo
 
 config :opentelemetry,
   sampler: {Toolbox.OtelSampler, %{}},
