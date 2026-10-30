@@ -20,9 +20,10 @@ defmodule Toolbox.Repo.Migrations.RenameTowerDbEvents do
       "ALTER INDEX IF EXISTS tower_db_events_normalized_reason_gin_trgm_ops_index RENAME TO tower_web_events_normalized_reason_gin_trgm_ops_index"
     )
 
-    execute(
-      "ALTER INDEX IF EXISTS tower_db_events_similarity_id_datetime_DESC_index RENAME TO tower_web_events_similarity_id_datetime_DESC_index"
-    )
+    execute("""
+      ALTER INDEX IF EXISTS "tower_db_events_similarity_id_datetime_DESC_index"
+      RENAME TO "tower_web_events_similarity_id_datetime_DESC_index"
+    """)
 
     TowerWeb.DB.Migration.up(from: 0, to: 3)
 
