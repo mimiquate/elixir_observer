@@ -4,9 +4,7 @@ defmodule Toolbox.Repo.Migrations.RenameTowerDbEvents do
   def up do
     execute("ALTER TABLE IF EXISTS tower_db_events RENAME TO tower_web_events")
 
-    execute(
-      "ALTER INDEX IF EXISTS tower_db_events_pkey RENAME TO tower_web_events_pkey"
-    )
+    execute("ALTER INDEX IF EXISTS tower_db_events_pkey RENAME TO tower_web_events_pkey")
 
     execute(
       "ALTER INDEX IF EXISTS tower_db_events_datetime_index RENAME TO tower_web_events_datetime_index"
