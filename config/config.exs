@@ -74,7 +74,9 @@ config :toolbox, Oban,
   ],
   queues: [
     hexpm: [limit: 1],
-    category: [limit: 1],
+    # Jev: at most (1000 / 350) * 10 ~= 28.6 jobs/s. With ~2.6K input tokens per
+    # request that is ~75K tokens/s, 25% under Jev's 100K tokens/s limit.
+    category: [limit: 10, dispatch_cooldown: 350],
     # Use 750ms second dispatch cooldown to prevent Github's rate limit
     # We are doing 2 request in each job
     # 1 to the REST API, 1 to the GraphQL API
@@ -96,7 +98,8 @@ config :opentelemetry,
   ]
 
 config :toolbox,
-  gemini_base_url: "https://generativelanguage.googleapis.com"
+  gemini_base_url: "https://generativelanguage.googleapis.com",
+  jev_base_url: "https://api.typesafe.ai"
 
 config :toolbox, ToolboxWeb.PlugAttack, limit: 100
 

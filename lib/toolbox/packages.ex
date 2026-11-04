@@ -204,10 +204,19 @@ defmodule Toolbox.Packages do
     |> Repo.update()
   end
 
+  # The embedding includes the category name, so it is deleted to be recalculated.
   def update_package_category(package, attributes \\ %{}) do
-    package
-    |> Package.category_changeset(attributes)
-    |> Repo.update()
+    Ecto.Multi.new()
+    |> Ecto.Multi.update(:package, Package.category_changeset(package, attributes))
+    |> Ecto.Multi.delete_all(
+      :embedding,
+      from(e in PackageEmbedding, where: e.package_id == ^package.id)
+    )
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{package: package}} -> {:ok, package}
+      {:error, :package, changeset, _changes} -> {:error, changeset}
+    end
   end
 
   def update_package_latest_stable_version(package, attributes \\ %{}) do
