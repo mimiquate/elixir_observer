@@ -9,6 +9,7 @@ defmodule ToolboxWeb.PackageLive do
   import ToolboxWeb.Components.PackageActivity, only: [package_activity: 1]
   import ToolboxWeb.Components.PackageResource, only: [package_resource: 1]
   import ToolboxWeb.Components.CommunityResources, only: [community_resources: 1]
+  import ToolboxWeb.Components.ErrorBanner, only: [error_banner: 1]
 
   import ToolboxWeb.Components.VersionDownloadsChart,
     only: [version_downloads_chart: 1]
