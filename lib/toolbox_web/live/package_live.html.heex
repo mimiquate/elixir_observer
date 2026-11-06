@@ -78,12 +78,13 @@
     </div>
   </section>
 
-  <p
+  <.error_banner
     :if={Enum.all?(@package.versions, fn v -> v.is_retired? end)}
-    class="mt-4 rounded bg-red-300 dark:bg-red-900 p-4"
+    class="mb-2 sm:mb-8"
+    message="This package has no active versions available. Consider looking for an alternative package that is actively maintained."
   >
-    All versions are retired
-  </p>
+    All versions are retired.
+  </.error_banner>
 
   <section class="grid grid-cols-1 md:grid-cols-8 gap-2 sm:gap-8">
     <div class="p-3 sm:px-8 sm:py-5 md:col-span-3 flex border border-stroke rounded-md bg-surface justify-between">
@@ -270,17 +271,13 @@
           </div>
         </div>
 
-        <div
+        <.error_banner
           :if={@version.retirement}
-          class="mt-4 rounded bg-red-300 bg-error px-3 py-2 sm:px-5 sm:py-3"
+          class="mt-4"
+          message={@version.retirement.message}
         >
-          <p class="text-[14px] text-primary-text sm:text-[18px]">
-            Version {@version.version} was retired. Reason: {@version.retirement.reason}
-          </p>
-          <p class="text-[12px] text-secondary-text sm:text-[14px]">
-            {@version.retirement.message}
-          </p>
-        </div>
+          Version {@version.version} was retired. Reason: {@version.retirement.reason}
+        </.error_banner>
 
         <div class="mt-6 grid grid-cols-1 order-1 sm:grid-cols-2 gap-4 sm:gap-x-8 sm:gap-y-5">
           <div class="grid-cols-1 bg-surface sm:bg-surface-alt flex items-center px-3 py-2 sm:px-5 sm:py-3 rounded border border-stroke">
