@@ -82,4 +82,9 @@
     created_api_key={@created_api_key}
     token={@created_api_key_token}
   />
+
+  <ToolboxWeb.Components.RevokeApiKeyModal.revoke_api_key_modal
+    :if={@api_key_to_revoke}
+    api_key={@api_key_to_revoke}
+  />
 </article>

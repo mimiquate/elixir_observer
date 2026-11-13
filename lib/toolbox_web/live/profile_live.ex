@@ -18,7 +18,8 @@ defmodule ToolboxWeb.ProfileLive do
           api_keys: ApiKeys.list_api_keys(current_user.id),
           api_key_form: nil,
           created_api_key: nil,
-          created_api_key_token: nil
+          created_api_key_token: nil,
+          api_key_to_revoke: nil
         )
       }
     else
@@ -59,6 +60,42 @@ defmodule ToolboxWeb.ProfileLive do
       :noreply,
       assign(socket, api_key_form: nil, created_api_key: nil, created_api_key_token: nil)
     }
+  end
+
+  def handle_event("open_revoke_api_key_modal", %{"id" => id}, socket) do
+    api_key = Enum.find(socket.assigns.api_keys, &(to_string(&1.id) == id))
+
+    {:noreply, assign(socket, api_key_to_revoke: api_key)}
+  end
+
+  def handle_event("revoke_api_key", _params, socket) do
+    user_id = socket.assigns.current_user.id
+    key_id = socket.assigns.api_key_to_revoke.id
+
+    case ApiKeys.revoke_api_key(user_id, key_id) do
+      :ok ->
+        {
+          :noreply,
+          socket
+          |> put_flash(:info, "API key revoked")
+          |> assign(
+            api_key_to_revoke: nil,
+            api_keys: Enum.reject(socket.assigns.api_keys, &(&1.id == key_id))
+          )
+        }
+
+      {:error, :not_found} ->
+        {
+          :noreply,
+          socket
+          |> put_flash(:error, "API key not found")
+          |> assign(api_key_to_revoke: nil, api_keys: ApiKeys.list_api_keys(user_id))
+        }
+    end
+  end
+
+  def handle_event("close_revoke_api_key_modal", _params, socket) do
+    {:noreply, assign(socket, api_key_to_revoke: nil)}
   end
 
   def handle_info({:hide_dropdown, component_id}, socket) do
