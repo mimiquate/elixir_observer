@@ -1,5 +1,5 @@
 defmodule Toolbox.Factory do
-  alias Toolbox.{Packages, Users}
+  alias Toolbox.{ApiKeys, Packages, Users}
 
   def create(model, params \\ [])
 
@@ -74,5 +74,18 @@ defmodule Toolbox.Factory do
 
     {:ok, user} = Users.upsert_from_github(github_user_info)
     user
+  end
+
+  def create(:api_key, params) do
+    {user_id, params} = Keyword.pop!(params, :user_id)
+
+    attrs =
+      Map.merge(
+        %{name: "key_#{System.unique_integer([:positive])}", description: nil},
+        Enum.into(params, %{})
+      )
+
+    {:ok, api_key, _token} = ApiKeys.create_api_key(user_id, attrs)
+    api_key
   end
 end
