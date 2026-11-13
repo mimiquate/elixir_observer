@@ -67,7 +67,9 @@
   --color-text-secondary-button: var(--color-text-secondary-button-source);
 
   --color-violet: #6B3F8F;
+  --color-medium-violet: #AC7ED4;
   --color-light-violet: #CFB5E6;
+  --color-lightest-violet: #F5EFFA;
   --color-button-primary: #975EC9;
   --color-button-primary-hover: #8450B3;
   --color-button-primary-focus: #7A44AA;
