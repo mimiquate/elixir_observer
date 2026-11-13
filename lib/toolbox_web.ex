@@ -118,6 +118,13 @@ defmodule ToolboxWeb do
         )
       end
 
+      def humanized_datetime_with_day(%DateTime{} = datetime) do
+        Calendar.strftime(
+          datetime,
+          "%b %-d, %Y"
+        )
+      end
+
       @minute 60
       @hour @minute * 60
       @day @hour * 24
