@@ -1,8 +1,6 @@
 defmodule ToolboxWeb.Components.PackageList do
   use ToolboxWeb, :html
 
-  use ToolboxWeb, :verified_routes
-
   import ToolboxWeb.Components.Icons.StarIcon
   import ToolboxWeb.Components.Icons.DownloadIcon
   import ToolboxWeb.Components.Icons.BookmarkIcon

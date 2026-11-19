@@ -41,7 +41,7 @@ defmodule Toolbox.MixProject do
   defp deps do
     [
       {:bandit, "~> 1.5"},
-      {:dns_cluster, "~> 0.2.0"},
+      {:dns_cluster, "~> 0.3.1"},
       {:ecto_sql, "~> 3.10"},
       {:esbuild, "~> 0.10.0", runtime: Mix.env() == :dev},
       {:gettext, "~> 1.0"},
@@ -58,26 +58,25 @@ defmodule Toolbox.MixProject do
       {:phoenix, "~> 1.8.1"},
       {:phoenix_ecto, "~> 4.5"},
       {:phoenix_html, "~> 4.1"},
-      {:phoenix_live_dashboard, "~> 0.8.3"},
+      {:phoenix_live_dashboard, "~> 0.9.1"},
       {:phoenix_live_view, "~> 1.0"},
-      {:postgrex, "~> 0.20.0"},
-      {:tailwind, "~> 0.4.0", runtime: Mix.env() == :dev},
+      {:postgrex, "~> 0.22.0"},
+      {:tailwind, "~> 0.5.1", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
       {:number, "~> 1.0"},
-      {:nebulex, "~> 3.0.0-rc.1"},
-      {:nebulex_local, "~> 3.0.0-rc.1"},
+      {:nebulex, "~> 3.1.0"},
+      {:nebulex_local, "~> 3.1.0"},
       {:decorator, "~> 1.4"},
       {:oban, github: "mimiquate/oban", branch: "logger", override: true},
       {:oban_web, "~> 2.11"},
       {:logger_json, "~> 7.0"},
-      {:pgvector, "~> 0.3.0"},
-      {:req, "~> 0.5.15"},
+      {:pgvector, "~> 0.4.2"},
+      {:req, "~> 0.7.5"},
       {:uniq, "~> 0.6"},
       {:remote_ip, "~> 1.2"},
       {:plug_attack, "~> 0.4.3"},
-      {:tower_db, "~> 0.8.0"},
-      {:tower_web, "~> 0.6.0"},
+      {:tower_web, "~> 0.10"},
 
       # OpenTelemetry
       {:opentelemetry, "~> 1.3"},
@@ -96,12 +95,12 @@ defmodule Toolbox.MixProject do
       # Dev
       {:dotenv_parser, "~> 2.0", only: :dev},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:live_debugger, "~> 0.3.1", only: :dev},
+      {:live_debugger, "~> 1.0.3", only: :dev},
 
       # Test
-      {:wallaby, "~> 0.30.9", runtime: false, only: :test},
+      {:wallaby, "~> 0.31.0", runtime: false, only: :test},
       {:test_server, "~> 0.1.22", only: :test},
-      {:process_tree, "~> 0.2.1", only: :test},
+      {:process_tree, "~> 0.3.0", only: :test},
       # Needed by Phoenix.LiveViewTest
       {:lazy_html, "~> 0.1.0", only: :test}
     ]
