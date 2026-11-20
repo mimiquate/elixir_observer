@@ -263,6 +263,13 @@ defmodule Toolbox.Category do
         permalink: "files-and-directories"
       },
       %__MODULE__{
+        id: 66,
+        name: "Forms",
+        description:
+          "Form builders, validators, and form handling utilities for web applications",
+        permalink: "forms"
+      },
+      %__MODULE__{
         id: 37,
         name: "Formulars",
         description: "Form handling and validation libraries for web applications",
@@ -434,6 +441,13 @@ defmodule Toolbox.Category do
         permalink: "package-management"
       },
       %__MODULE__{
+        id: 92,
+        name: "Pagination",
+        description:
+          "Libraries for paginating query results and collections, including offset and cursor-based pagination",
+        permalink: "pagination"
+      },
+      %__MODULE__{
         id: 64,
         name: "PDF",
         description: "PDF document generation, parsing, and manipulation libraries",
@@ -444,13 +458,6 @@ defmodule Toolbox.Category do
         name: "Phoenix",
         description: "The Phoenix web framework and related Phoenix ecosystem libraries",
         permalink: "phoenix"
-      },
-      %__MODULE__{
-        id: 66,
-        name: "Forms",
-        description:
-          "Form builders, validators, and form handling utilities for web applications",
-        permalink: "forms"
       },
       %__MODULE__{
         id: 67,
@@ -602,13 +609,6 @@ defmodule Toolbox.Category do
         description:
           "YAML parsing and generation libraries for configuration and data serialization",
         permalink: "yaml"
-      },
-      %__MODULE__{
-        id: 92,
-        name: "Pagination",
-        description:
-          "Libraries for paginating query results and collections, including offset and cursor-based pagination",
-        permalink: "pagination"
       }
     ]
   end
