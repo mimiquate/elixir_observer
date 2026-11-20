@@ -92,7 +92,7 @@ defmodule ToolboxWeb.CoreComponents do
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
       class="relative z-50 hidden"
     >
-      <div id={"#{@id}-bg"} class="bg-zinc-50/90 fixed inset-0 transition-opacity" aria-hidden="true" />
+      <div id={"#{@id}-bg"} class="bg-black/60 fixed inset-0 transition-opacity" aria-hidden="true" />
       <div
         class="fixed inset-0 overflow-y-auto"
         aria-labelledby={"#{@id}-title"}
@@ -108,13 +108,13 @@ defmodule ToolboxWeb.CoreComponents do
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
               phx-key="escape"
               phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
-              class="shadow-zinc-700/10 ring-zinc-700/10 relative hidden rounded-2xl bg-white p-14 shadow-lg ring-1 transition"
+              class="relative hidden rounded-md border border-stroke bg-surface p-8 transition"
             >
-              <div class="absolute top-6 right-5">
+              <div class="absolute top-8 right-8">
                 <button
                   phx-click={JS.exec("data-cancel", to: "##{@id}")}
                   type="button"
-                  class="-m-3 flex-none p-3 opacity-20 hover:opacity-40"
+                  class="-m-3 flex-none p-3 text-accent cursor-pointer"
                   aria-label={gettext("close")}
                 >
                   <.icon name="hero-x-mark-solid" class="h-5 w-5" />
@@ -244,9 +244,9 @@ defmodule ToolboxWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-10 space-y-8">
+      <div class="mt-6 space-y-3">
         {render_slot(@inner_block, f)}
-        <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
+        <div :for={action <- @actions} class="mt-2 flex items-center justify-end gap-6">
           {render_slot(action, f)}
         </div>
       </div>
@@ -334,6 +334,8 @@ defmodule ToolboxWeb.CoreComponents do
     doc: "a form field struct retrieved from the form, for example: @form[:email]"
 
   attr :errors, :list, default: []
+  attr :hint, :string, default: nil, doc: "helper text rendered under the input"
+  attr :optional, :boolean, default: false, doc: "appends (optional) to the label"
   attr :checked, :boolean, doc: "the checked flag for checkbox inputs"
   attr :prompt, :string, default: nil, doc: "the prompt for select inputs"
   attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
@@ -402,18 +404,23 @@ defmodule ToolboxWeb.CoreComponents do
   def input(%{type: "textarea"} = assigns) do
     ~H"""
     <div>
-      <.label for={@id}>{@label}</.label>
+      <.label for={@id}>
+        {@label}<span :if={@optional} class="ml-2 text-[14px] text-secondary-text">(optional)</span>
+      </.label>
       <textarea
         id={@id}
         name={@name}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6 min-h-[6rem]",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
+          "mt-2 block w-full rounded-sm bg-surface text-primary-text placeholder:text-secondary-text focus:ring-0 sm:text-sm sm:leading-6 h-24 resize-none overflow-y-auto",
+          @errors == [] && "border-stroke focus:border-accent",
           @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
         {@rest}
       ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
-      <.error :for={msg <- @errors}>{msg}</.error>
+      <p :if={@hint} class="mt-2 text-[14px] text-secondary-text">{@hint}</p>
+      <div class="min-h-7">
+        <.error :for={msg <- @errors}>{msg}</.error>
+      </div>
     </div>
     """
   end
@@ -422,20 +429,25 @@ defmodule ToolboxWeb.CoreComponents do
   def input(assigns) do
     ~H"""
     <div>
-      <.label for={@id}>{@label}</.label>
+      <.label for={@id}>
+        {@label}<span :if={@optional} class="ml-2 text-[14px] text-secondary-text">(optional)</span>
+      </.label>
       <input
         type={@type}
         name={@name}
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
+          "mt-2 block w-full rounded-sm bg-surface text-primary-text placeholder:text-secondary-text focus:ring-0 sm:text-sm sm:leading-6",
+          @errors == [] && "border-stroke focus:border-accent",
           @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
         {@rest}
       />
-      <.error :for={msg <- @errors}>{msg}</.error>
+      <p :if={@hint} class="mt-2 text-[14px] text-secondary-text">{@hint}</p>
+      <div class="min-h-7">
+        <.error :for={msg <- @errors}>{msg}</.error>
+      </div>
     </div>
     """
   end
@@ -448,7 +460,7 @@ defmodule ToolboxWeb.CoreComponents do
 
   def label(assigns) do
     ~H"""
-    <label for={@for} class="block text-sm font-semibold leading-6 text-zinc-800">
+    <label for={@for} class="block text-[18px] leading-6 text-primary-text">
       {render_slot(@inner_block)}
     </label>
     """
@@ -461,7 +473,7 @@ defmodule ToolboxWeb.CoreComponents do
 
   def error(assigns) do
     ~H"""
-    <p class="mt-3 flex gap-3 text-sm leading-6 text-rose-600">
+    <p class="pt-1 flex gap-3 text-sm leading-6 text-rose-600">
       <.icon name="hero-exclamation-circle-mini" class="mt-0.5 h-5 w-5 flex-none" />
       {render_slot(@inner_block)}
     </p>
