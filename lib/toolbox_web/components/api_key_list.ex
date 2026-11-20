@@ -50,6 +50,18 @@ defmodule ToolboxWeb.Components.ApiKeyList do
             </span>
           </div>
         </div>
+
+        <div class="mt-4 md:mt-0 md:ml-4">
+          <button
+            type="button"
+            class="cursor-pointer text-[16px] text-accent hover:underline"
+            phx-click="open_revoke_api_key_modal"
+            phx-value-id={api_key.id}
+            {test_attrs(revoke_api_key: api_key.id)}
+          >
+            Revoke
+          </button>
+        </div>
       </li>
     </ul>
     """
