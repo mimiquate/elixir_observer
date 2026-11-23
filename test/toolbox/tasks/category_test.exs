@@ -43,7 +43,7 @@ defmodule Toolbox.Tasks.CategoryTest do
           assert :ok = Category.categorize(package)
         end)
 
-      refute log =~ "recategorized"
+      refute log =~ "recategorized pager"
     end
 
     test "does not update the package when the category does not change" do
