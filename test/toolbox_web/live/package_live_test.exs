@@ -49,6 +49,32 @@ defmodule ToolboxWeb.PackageLiveTest do
       Packages.get_package_by_name(package.name)
     end
 
+    defp create_package_with_retirements(versions, retired_versions) do
+      {:ok, package} = create(:package)
+
+      {:ok, _} =
+        Packages.create_hexpm_snapshot(%{
+          package_id: package.id,
+          data: %{
+            "meta" => %{"description" => "A pure Elixir HTTP server"},
+            "downloads" => %{"recent" => 1000},
+            "docs_html_url" => "https://hexdocs.pm/bandit/",
+            "releases" =>
+              Enum.map(
+                versions,
+                &%{"version" => &1, "inserted_at" => "2025-05-29T16:57:22.358745Z"}
+              ),
+            "retirements" =>
+              Map.new(retired_versions, &{&1, %{"reason" => "deprecated", "message" => nil}}),
+            "inserted_at" => "2020-11-05T17:11:46.440731Z",
+            "latest_version" => List.first(versions),
+            "latest_stable_version" => List.first(versions)
+          }
+        })
+
+      Packages.get_package_by_name(package.name)
+    end
+
     test "mounts successfully", %{conn: conn, package: package} do
       Packages.update_package_owners(package, %{
         hexpm_owners_sync_at: DateTime.utc_now(),
@@ -544,6 +570,117 @@ defmodule ToolboxWeb.PackageLiveTest do
       {:ok, _view, html} = live(conn, ~p"/packages/#{package.name}")
 
       assert html =~ "No documentation for 1.7.0"
+    end
+
+    test "shows the all versions retired banner when every version is retired", %{conn: conn} do
+      package = create_package_with_retirements(["1.0.0"], ["1.0.0"])
+
+      {:ok, _view, html} = live(conn, ~p"/packages/#{package.name}")
+
+      assert html =~ "All versions are retired"
+      assert html =~ "This package has no active versions available."
+    end
+
+    test "does not show the all versions retired banner when only some versions are retired", %{
+      conn: conn
+    } do
+      package = create_package_with_retirements(["2.0.0", "1.0.0"], ["1.0.0"])
+
+      {:ok, _view, html} = live(conn, ~p"/packages/#{package.name}")
+
+      refute html =~ "All versions are retired"
+    end
+
+    test "shows the retirement reason and message when the version is retired", %{
+      conn: conn,
+      package: package
+    } do
+      Packages.update_package_latest_stable_version(package, %{
+        hexpm_latest_stable_version_data: %{
+          published_at: DateTime.utc_now(),
+          published_by_username: "username",
+          version: "1.7.0",
+          retirement: %{reason: "deprecated", message: "it was never a good idea"}
+        }
+      })
+
+      {:ok, _view, html} = live(conn, ~p"/packages/#{package.name}")
+
+      assert html =~ "Version 1.7.0 was retired. Reason: deprecated"
+      assert html =~ "it was never a good idea"
+    end
+
+    test "shows the retirement reason when the retirement message is blank", %{
+      conn: conn,
+      package: package
+    } do
+      Packages.update_package_latest_stable_version(package, %{
+        hexpm_latest_stable_version_data: %{
+          published_at: DateTime.utc_now(),
+          published_by_username: "username",
+          version: "1.7.0",
+          retirement: %{reason: "other", message: nil}
+        }
+      })
+
+      {:ok, _view, html} = live(conn, ~p"/packages/#{package.name}")
+
+      assert html =~ "Version 1.7.0 was retired. Reason: other"
+    end
+
+    test "shows the retirement notice when a non-latest version is retired", %{
+      conn: conn,
+      package: package
+    } do
+      test_server = Helpers.test_server_hexpm()
+
+      Packages.update_package_latest_stable_version(package, %{
+        hexpm_latest_stable_version_data: %{
+          published_at: DateTime.utc_now(),
+          published_by_username: "username",
+          version: "1.7.0"
+        }
+      })
+
+      for _ <- 1..2 do
+        TestServer.add(test_server, "/packages/#{package.name}/releases/1.6.11",
+          to: fn conn ->
+            conn
+            |> Plug.Conn.put_resp_header("content-type", "application/json")
+            |> Plug.Conn.send_resp(200, ~s({
+              "version": "1.6.11",
+              "meta": {"elixir": "~> 1.14"},
+              "has_docs": true,
+              "retirement": {"reason": "invalid", "message": "Fails to compile"},
+              "requirements": {},
+              "inserted_at": "2025-03-31T15:51:08Z",
+              "publisher": {"username": "someuser", "email": "user@example.com"}
+            }))
+          end
+        )
+      end
+
+      {:ok, _view, html} = live(conn, ~p"/packages/#{package.name}/1.6.11")
+
+      assert html =~ "Version 1.6.11 was retired. Reason: invalid"
+      assert html =~ "Fails to compile"
+    end
+
+    test "does not show the retirement notice when the version is not retired", %{
+      conn: conn,
+      package: package
+    } do
+      Packages.update_package_latest_stable_version(package, %{
+        hexpm_latest_stable_version_data: %{
+          published_at: DateTime.utc_now(),
+          published_by_username: "username",
+          version: "1.7.0"
+        }
+      })
+
+      {:ok, _view, html} = live(conn, ~p"/packages/#{package.name}")
+
+      refute html =~ "was retired"
     end
   end
 

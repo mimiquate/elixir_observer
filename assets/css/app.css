@@ -75,6 +75,8 @@
   --color-accent: #975EC9;
   --color-dark-purple: rgba(33, 16, 90, 0.15);
   --color-error: #FDE8E7;
+  --color-error-200: #EEAFAC;
+  --color-grey-900: #161616;
 }
 
 html {
