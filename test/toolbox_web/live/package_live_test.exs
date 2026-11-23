@@ -468,6 +468,7 @@ defmodule ToolboxWeb.PackageLiveTest do
 
       assert has_element?(view, data_test_attr(:community_section))
       refute has_element?(view, data_test_attr(:community_section_empty))
+      assert has_element?(view, data_test_attr(:community_contribute_note))
     end
 
     test "does not display community section when package doesn't have resources", %{
@@ -478,6 +479,7 @@ defmodule ToolboxWeb.PackageLiveTest do
 
       assert has_element?(view, data_test_attr(:community_section))
       assert has_element?(view, data_test_attr(:community_section_empty))
+      refute has_element?(view, data_test_attr(:community_contribute_note))
     end
 
     @category Category.find_by_name("Actors")
