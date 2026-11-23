@@ -11,10 +11,7 @@ defmodule ToolboxWeb.Components.CommunityResources do
 
   def community_resources(assigns) do
     ~H"""
-    <ul
-      class="sm:col-span-2 sm:row-span-2 max-h-[253px] overflow-y-scroll show-scrollbar"
-      {test_attrs(resource_list: true)}
-    >
+    <ul class="max-h-[550px] overflow-y-auto show-scrollbar" {test_attrs(resource_list: true)}>
       <%= for resource <- @resources do %>
         <li {test_attrs(resource_item: true)}>
           <.link

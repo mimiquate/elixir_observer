@@ -30,6 +30,7 @@ defmodule ToolboxWeb.PackageLive do
   import ToolboxWeb.Components.Icons.InspectIcon
   import ToolboxWeb.Components.Icons.BookmarkIcon
   import ToolboxWeb.Components.Icons.ChartIcon
+  import ToolboxWeb.Components.Icons.CommunityIcon
 
   alias ToolboxWeb.Components.PackageOwners
 
@@ -421,5 +422,9 @@ defmodule ToolboxWeb.PackageLive do
 
   defp source_url(name, version) do
     "https://preview.hex.pm/preview/#{name}/#{version}"
+  end
+
+  defp community_resources_wiki_url do
+    "https://github.com/mimiquate/elixir_observer/wiki/%F0%9F%A7%A9-Community-Resources"
   end
 end

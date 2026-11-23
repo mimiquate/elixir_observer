@@ -225,6 +225,77 @@
         </p>
       </div>
     </div>
+
+    <div
+      class="md:col-span-8 bg-surface rounded-md py-6 px-4 border border-stroke"
+      {test_attrs(community_section: true)}
+    >
+      <div class="flex justify-between items-center w-full">
+        <h3 class="flex items-center gap-2 text-[20px] text-primary-text sm:text-[24px] font-medium">
+          <.community_icon class="w-5 h-5 sm:w-6 sm:h-6" /> Community
+        </h3>
+      </div>
+
+      <div
+        class="flex items-center justify-between gap-3 cursor-pointer mt-4"
+        phx-click={
+          JS.toggle(
+            to: "#community-content",
+            in:
+              {"transition-all ease-out duration-300", "hidden opacity-0 max-h-0",
+               "block opacity-100 max-h-[20000px]"},
+            out:
+              {"transition-all ease-in duration-200", "block opacity-100 max-h-[20000px]",
+               "hidden opacity-0 max-h-0"}
+          )
+          |> JS.toggle_class("rotate-90", to: "#community-chevron")
+          |> JS.toggle_class("-rotate-90", to: "#community-chevron")
+        }
+      >
+        <p class="text-[12px] sm:text-[14px] text-secondary-text">
+          Explore community content related to this package, including articles, videos, tutorials, and other resources shared by developers.
+        </p>
+        <.chevron_icon
+          id="community-chevron"
+          class="w-6 shrink-0 rotate-90 transform transition-transform duration-300"
+        />
+      </div>
+
+      <div id="community-content" class="hidden opacity-0 max-h-0 transition-all mt-4">
+        <div class="bg-surface-alt rounded-md border border-stroke p-3 sm:p-5">
+          <%= if Enum.any?(@package.community_resources) do %>
+            <.community_resources resources={@package.community_resources} />
+          <% else %>
+            <div class="flex justify-center" {test_attrs(community_section_empty: true)}>
+              <div class="p-3 sm:p-5 flex flex-col items-center">
+                <img src={~p"/images/empty-state-figure-alt.png"} />
+                <h4 class="text-primary-text text-[14px] sm:text-[18px] mt-3">
+                  Looks like this space is still empty… Want to be the first to contribute?
+                </h4>
+                <p class="text-secondary-text sm:text-[16px]">
+                  Share an article, talk, or podcast by <a
+                    class="underline"
+                    href={community_resources_wiki_url()}
+                  >adding resources to this package</a>.
+                </p>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        <p
+          :if={Enum.any?(@package.community_resources)}
+          class="text-[12px] sm:text-[14px] text-secondary-text mt-4 sm:mt-6"
+          {test_attrs(community_contribute_note: true)}
+        >
+          This space grows with the community.
+          <a
+            class="underline text-accent"
+            href={community_resources_wiki_url()}
+          >Contribute</a>
+          useful links, guides, or resources to help others explore and learn more about this package.
+        </p>
+      </div>
+    </div>
   </section>
 
   <section class="sm:mt-8">
@@ -458,34 +529,6 @@
         </div>
       </div>
     <% end %>
-  </section>
-
-  <section class="sm:mt-8" {test_attrs(community_section: true)}>
-    <div class="flex items-center justify-between mt-8 mb-3 sm:mb-8">
-      <h2 class="text-[20px] text-primary-text sm:text-[32px] font-semibold">
-        Community
-      </h2>
-    </div>
-    <div class="bg-surface py-6 px-4 border border-stroke rounded-md">
-      <%= if Enum.any?(@package.community_resources) do %>
-        <.community_resources resources={@package.community_resources} />
-      <% else %>
-        <div class="flex justify-center" {test_attrs(community_section_empty: true)}>
-          <div class="p-3 sm:p-5 col-span-2 sm:col-span-3 sm:row-span-2 flex flex-col items-center">
-            <img src={~p"/images/empty-state-figure-alt.png"} />
-            <h3 class="text-primary-text text-[14px] sm:text-[18px] mt-3">
-              Looks like this space is still empty… Want to be the first to contribute?
-            </h3>
-            <p class="text-secondary-text sm:text-[16px]">
-              Share an article, talk, or podcast by <a
-                class="underline"
-                href="https://github.com/mimiquate/elixir_observer/wiki/%F0%9F%A7%A9-Community-Resources"
-              >adding resources to this package</a>.
-            </p>
-          </div>
-        </div>
-      <% end %>
-    </div>
   </section>
 
   <%= if Enum.any?(@related_packages) do %>
