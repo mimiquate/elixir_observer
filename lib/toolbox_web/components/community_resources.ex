@@ -32,12 +32,8 @@ defmodule ToolboxWeb.Components.CommunityResources do
         phx-click={
           JS.toggle(
             to: "#community-content",
-            in:
-              {"transition-all ease-out duration-300", "hidden opacity-0 max-h-0",
-               "block opacity-100 max-h-[20000px]"},
-            out:
-              {"transition-all ease-in duration-200", "block opacity-100 max-h-[20000px]",
-               "hidden opacity-0 max-h-0"}
+            in: {"transition-all ease-out duration-300", "hidden opacity-0", "block opacity-100"},
+            out: {"transition-all ease-in duration-200", "block opacity-100", "hidden opacity-0"}
           )
           |> JS.toggle_class("rotate-90", to: "#community-chevron")
           |> JS.toggle_class("-rotate-90", to: "#community-chevron")
@@ -52,7 +48,7 @@ defmodule ToolboxWeb.Components.CommunityResources do
         />
       </div>
 
-      <div id="community-content" class="hidden opacity-0 max-h-0 transition-all mt-4">
+      <div id="community-content" class="hidden opacity-0 transition-all mt-4">
         <div class="bg-surface-alt rounded-md border border-stroke p-3 sm:p-5">
           <%= if Enum.any?(@resources) do %>
             <.resource_list resources={@resources} />
