@@ -6,6 +6,7 @@ defmodule ToolboxWeb.Components.CommunityResourcesTest do
 
   alias Toolbox.Package.CommunityResource
 
+  # Checks what's rendered, not what's visible (the toggle runs on the client)
   describe "community_resource/1" do
     test "renders community section with resources data" do
       resources = [
