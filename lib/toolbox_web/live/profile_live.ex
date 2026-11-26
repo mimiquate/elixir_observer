@@ -1,6 +1,6 @@
 defmodule ToolboxWeb.ProfileLive do
   use ToolboxWeb, :live_view
-  alias Toolbox.Packages
+  alias Toolbox.{ApiKeys, Packages}
 
   def mount(_params, _session, socket) do
     current_user = socket.assigns[:current_user]
@@ -14,7 +14,8 @@ defmodule ToolboxWeb.ProfileLive do
           socket,
           page_title: "Profile",
           search_term: "",
-          packages: packages
+          packages: packages,
+          api_keys: ApiKeys.list_api_keys(current_user.id)
         )
       }
     else

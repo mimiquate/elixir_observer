@@ -2,7 +2,7 @@ defmodule ToolboxWeb.ProfileLiveTest do
   use ToolboxWeb.ConnCase, async: true
   import Phoenix.LiveViewTest
 
-  alias Toolbox.Users
+  alias Toolbox.{ApiKeys, Repo, Users}
 
   describe "Profile Live View - Authenticated User" do
     setup do
@@ -77,6 +77,97 @@ defmodule ToolboxWeb.ProfileLiveTest do
       assert has_element?(view, data_test_attr(:package_link, package1.name), package1.name)
       assert has_element?(view, data_test_attr(:package_description), package1.description)
       assert has_element?(view, data_test_attr(:version, "1.7.0"), "1.7.0")
+    end
+  end
+
+  describe "API Keys" do
+    setup %{conn: conn} do
+      user = create(:user)
+      conn = init_test_session(conn, %{user_id: user.id})
+
+      [conn: conn, user: user]
+    end
+
+    test "shows the empty state when the user has no keys", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/profile")
+
+      assert has_element?(view, data_test_attr(:no_api_keys_title), "No API Keys created yet")
+
+      assert has_element?(
+               view,
+               data_test_attr(:no_api_keys_message),
+               "Click Create API key to generate your first key and start connecting Observer with external tools and AI assistants."
+             )
+
+      refute has_element?(view, data_test_attr(:profile_api_keys))
+    end
+
+    test "lists the user's keys masked", %{conn: conn, user: user} do
+      api_key =
+        create(:api_key,
+          user_id: user.id,
+          name: "Claude Desktop",
+          description: "Used for Claude Desktop integration."
+        )
+        |> Ecto.Changeset.change(inserted_at: ~U[2026-10-15 12:00:00Z])
+        |> Repo.update!()
+
+      {:ok, view, _html} = live(conn, ~p"/profile")
+
+      assert has_element?(view, data_test_attr(:profile_api_keys))
+      assert has_element?(view, data_test_attr(:api_keys_list))
+
+      item = data_test_attr(:api_key_item, api_key.id)
+
+      assert has_element?(view, item, "Claude Desktop")
+      assert has_element?(view, "#{item} #{data_test_attr(:api_key_status)}", "Unused")
+
+      assert has_element?(
+               view,
+               "#{item} #{data_test_attr(:api_key_masked)}",
+               ApiKeys.masked_key(api_key)
+             )
+
+      assert has_element?(
+               view,
+               "#{item} #{data_test_attr(:api_key_description)}",
+               "Used for Claude Desktop integration."
+             )
+
+      assert has_element?(
+               view,
+               "#{item} #{data_test_attr(:api_key_created_at)}",
+               "Created: Oct 15, 2026"
+             )
+
+      assert has_element?(
+               view,
+               "#{item} #{data_test_attr(:api_key_last_used)}",
+               "Last used: Never"
+             )
+
+      refute has_element?(view, data_test_attr(:no_api_keys_title))
+    end
+
+    test "shows Active and relative last use after authentication", %{conn: conn, user: user} do
+      {:ok, api_key, token} = ApiKeys.create_api_key(user.id, %{name: "Claude Desktop"})
+      {:ok, _user} = ApiKeys.authenticate(token)
+
+      {:ok, view, _html} = live(conn, ~p"/profile")
+
+      item = data_test_attr(:api_key_item, api_key.id)
+
+      assert has_element?(view, "#{item} #{data_test_attr(:api_key_status)}", "Active")
+      assert has_element?(view, "#{item} #{data_test_attr(:api_key_last_used)}", "Last used: now")
+    end
+
+    test "does not show other users' keys", %{conn: conn} do
+      other_api_key = create(:api_key, user_id: create(:user).id, name: "Other")
+
+      {:ok, view, _html} = live(conn, ~p"/profile")
+
+      refute has_element?(view, data_test_attr(:api_key_item, other_api_key.id))
+      assert has_element?(view, data_test_attr(:no_api_keys_title))
     end
   end
 
