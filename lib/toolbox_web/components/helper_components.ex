@@ -14,7 +14,7 @@ defmodule ToolboxWeb.HelperComponents do
       class={"text-accent #{@class}"}
       {@rest}
     >
-      {if @inner_block, do: render_slot(@inner_block), else: @username}
+      {if @inner_block != [], do: render_slot(@inner_block), else: @username}
     </.link>
     """
   end
