@@ -231,6 +231,40 @@ defmodule ToolboxWeb.ProfileLiveTest do
       view |> form("#api-key-form", api_key: %{name: "dup"}) |> render_submit()
       assert has_element?(view, "#api-key-form", "has already been taken")
     end
+
+    test "revokes a key after confirmation", %{conn: conn, user: user} do
+      api_key = create(:api_key, user_id: user.id, name: "Claude Desktop")
+
+      {:ok, view, _html} = live(conn, ~p"/profile")
+
+      view |> element(data_test_attr(:revoke_api_key, api_key.id)) |> render_click()
+
+      assert has_element?(view, "#revoke-api-key-modal", "Revoke API Key")
+      assert has_element?(view, "#revoke-api-key-modal", "Claude Desktop")
+
+      view |> element("#revoke-api-key-modal button", "Revoke") |> render_click()
+
+      refute has_element?(view, "#revoke-api-key-modal")
+      refute has_element?(view, data_test_attr(:api_key_item, api_key.id))
+      assert has_element?(view, "#flash-info", "API key revoked")
+      assert ApiKeys.list_api_keys(user.id) == []
+    end
+
+    test "handles a key already revoked elsewhere", %{conn: conn, user: user} do
+      api_key = create(:api_key, user_id: user.id, name: "Claude Desktop")
+
+      {:ok, view, _html} = live(conn, ~p"/profile")
+
+      view |> element(data_test_attr(:revoke_api_key, api_key.id)) |> render_click()
+
+      :ok = ApiKeys.revoke_api_key(user.id, api_key.id)
+
+      view |> element("#revoke-api-key-modal button", "Revoke") |> render_click()
+
+      refute has_element?(view, "#revoke-api-key-modal")
+      refute has_element?(view, data_test_attr(:api_key_item, api_key.id))
+      assert has_element?(view, "#flash-error", "API key not found")
+    end
   end
 
   test "redirects unauthenticated user to home page with error flash", %{conn: conn} do
