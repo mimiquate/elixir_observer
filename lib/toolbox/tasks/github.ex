@@ -9,6 +9,8 @@ defmodule Toolbox.Tasks.GitHub do
          {:ok, %{status: 200, body: repository_data}} <- Github.get_repo(owner, repository_name),
          {:ok, %{status: 200, body: activity_data}} <-
            Github.get_activity_and_changelog(owner, repository_name) do
+      Logger.metadata(tower: %{github_activity_response: activity_data})
+
       changelog = get_in(activity_data, ["data", "repository", "changelog"])
 
       repository_data =
