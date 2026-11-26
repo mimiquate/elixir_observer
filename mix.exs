@@ -55,6 +55,7 @@ defmodule Toolbox.MixProject do
         depth: 1
       },
       {:jason, "~> 1.2"},
+      {:nanoid, "~> 2.1"},
       {:phoenix, "~> 1.8.1"},
       {:phoenix_ecto, "~> 4.5"},
       {:phoenix_html, "~> 4.1"},
